@@ -1,0 +1,231 @@
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* ── Left ── */
+.left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px var(--section-px) 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.tag {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.3s forwards;
+}
+
+.title {
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.5s forwards;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--sage);
+}
+
+.desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 400px;
+  margin-bottom: 52px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.7s forwards;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.9s forwards;
+}
+
+.textLink {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color var(--dur-mid);
+}
+
+.textLink:hover { color: var(--sage); }
+
+.arrow {
+  display: inline-block;
+  transition: transform var(--dur-mid) var(--ease-out);
+}
+
+.textLink:hover .arrow { transform: translateX(5px); }
+
+.scrollHint {
+  position: absolute;
+  bottom: 40px;
+  left: var(--section-px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeIn 1s 1.5s forwards;
+}
+
+.scrollLine {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--sage-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollLine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--sage);
+  animation: scanLine 2.2s 2s infinite;
+}
+
+.scrollLabel {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage-light);
+}
+
+/* ── Right visual ── */
+.right {
+  opacity: 0;
+  animation: fadeIn 1.2s 0.4s forwards;
+}
+
+.visual {
+  width: 100%;
+  height: 100%;
+  background: var(--sage-pale);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.botanical {
+  position: absolute;
+  top: -10px; right: -10px;
+  width: 320px; height: 320px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* ── Floating cards ── */
+.card {
+  position: absolute;
+  top: 70px; left: 24px;
+  width: 260px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+}
+
+.cardDark {
+  position: absolute;
+  bottom: 60px; right: 24px;
+  width: 210px;
+  background: var(--charcoal);
+  border: none;
+  padding: 22px 26px;
+}
+
+.cardTag {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 14px;
+}
+
+.cardName {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+
+.barRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.barLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 58px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.barTrack {
+  flex: 1;
+  height: 2px;
+  background: var(--sage-pale);
+}
+
+.barFill {
+  height: 100%;
+  background: var(--sage);
+}
+
+.recoLabel {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage-light);
+  margin-bottom: 8px;
+}
+
+.recoText {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.6;
+}
+
+/* ── Animations ── */
+.floatA { animation: float 7s ease-in-out infinite; }
+.floatB { animation: floatB 9s ease-in-out 2s infinite; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .right { display: none; }
+
+  .left {
+    padding: 120px 1.5rem 80px;
+    min-height: 100vh;
+  }
+}
