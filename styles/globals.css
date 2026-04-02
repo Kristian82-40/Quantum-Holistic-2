@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+
+/* ─── Design Tokens ─── */
+:root {
+  /* Brand */
+  --sage:         #6B7C5E;
+  --sage-light:   #A8B89A;
+  --sage-pale:    #EEF1EA;
+  --earth:        #8B6F52;
+  --earth-light:  #C4A882;
+  --gold:         #C9A84C;
+  --gold-pale:    #F0E4C0;
+  --pro-dark:     #1E2B1A;
+
+  /* Neutrals */
+  --cream:        #F7F4EE;
+  --white:        #FDFCF9;
+  --charcoal:     #2C2C28;
+  --charcoal-mid: #4A4A44;
+
+  /* Typography */
+  --font-serif:   'Cormorant Garamond', Georgia, serif;
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  1.5rem;
+  --space-lg:  2.5rem;
+  --space-xl:  4rem;
+  --space-2xl: 7.5rem;
+
+  /* Layout */
+  --max-width:    1200px;
+  --section-px:   3.75rem;   /* 60px */
+
+  /* Transitions */
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:     0.2s;
+  --dur-mid:      0.35s;
+  --dur-slow:     0.6s;
+
+  /* Surface colors (light mode) */
+  --bg-primary:   var(--white);
+  --bg-secondary: var(--cream);
+  --bg-dark:      var(--charcoal);
+  --text-primary: var(--charcoal);
+  --text-muted:   var(--charcoal-mid);
+  --border:       rgba(107, 124, 94, 0.16);
+}
+
+/* ─── Dark Mode ─── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary:   #1a1c17;
+    --bg-secondary: #141610;
+    --bg-dark:      #0d0f0b;
+    --text-primary: #e8e6df;
+    --text-muted:   #9e9b92;
+    --white:        #1a1c17;
+    --cream:        #141610;
+    --charcoal:     #e8e6df;
+    --charcoal-mid: #9e9b92;
+    --sage-pale:    rgba(107,124,94,0.12);
+    --gold-pale:    rgba(201,168,76,0.1);
+    --border:       rgba(168, 184, 154, 0.12);
+  }
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  cursor: none;
+  line-height: 1.6;
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+h1 { font-size: clamp(3rem, 5.5vw, 5.25rem); }
+h2 { font-size: clamp(2.1rem, 3.8vw, 3.25rem); }
+h3 { font-size: clamp(1.3rem, 2vw, 1.5rem); }
+
+p { font-weight: 300; line-height: 1.82; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-sans);
+  border: none;
+  background: none;
+  cursor: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Layout Utilities ─── */
+.container {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--section-px);
+}
+
+.section {
+  padding-block: var(--space-2xl);
+}
+
+/* ─── Custom Cursor ─── */
+.cursor {
+  width: 10px;
+  height: 10px;
+  background: var(--sage);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
+  transition: background var(--dur-fast);
+  will-change: transform;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--sage-light);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  mix-blend-mode: multiply;
+  transition:
+    width var(--dur-mid) var(--ease-out),
+    height var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid);
+  will-change: transform;
+}
+
+.cursor-ring.hovered {
+  width: 56px;
+  height: 56px;
+  border-color: var(--sage);
+}
+
+.cursor-ring.clicked {
+  width: 22px;
+  height: 22px;
+  border-color: var(--gold);
+}
+
+/* ─── Animations ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-14px) rotate(1.5deg); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes scanLine {
+  0%   { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(1.5); }
+}
+
+/* Reveal on scroll — initial state set via JS */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.reveal-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 0.12s; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 0.19s; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 0.26s; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 0.33s; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 0.40s; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  :root { --section-px: 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}

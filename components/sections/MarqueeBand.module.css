@@ -1,0 +1,28 @@
+.band {
+  background: var(--charcoal);
+  padding: 26px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.track {
+  display: inline-flex;
+  gap: 0;
+  animation: marquee 28s linear infinite;
+}
+
+.item {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--sage-light);
+  letter-spacing: 0.04em;
+  padding-right: 48px;
+}
+
+.sep {
+  color: var(--gold);
+  font-style: normal;
+  margin-left: 48px;
+}
