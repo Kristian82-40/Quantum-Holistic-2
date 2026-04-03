@@ -1,23 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      // Redirect .io domain to .com (set NEXT_PUBLIC_DOMAIN in Vercel env)
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'quantumholistic.io' }],
-        destination: 'https://quantumholistic.com/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.quantumholistic.io' }],
-        destination: 'https://quantumholistic.com/:path*',
-        permanent: true,
-      },
-    ];
-  },
+  output: 'export',
+  basePath: '/Quantum-Holistic-2',
+  assetPrefix: '/Quantum-Holistic-2/',
+  trailingSlash: true,
   images: {
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
   },
 };
