@@ -7,6 +7,7 @@ import Pillars from '@/components/sections/Pillars';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
 import MarqueeBand from '@/components/sections/MarqueeBand';
+import ProfileCTA from '@/components/sections/ProfileCTA';
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
         <HowItWorks />
         <Pillars />
         <ProDetail />
+        <ProfileCTA />
         <Pricing />
         <BlogPreview />
       </main>
