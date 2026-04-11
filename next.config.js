@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: '/Quantum-Holistic-2',
-  assetPrefix: '/Quantum-Holistic-2/',
+  basePath: '',
   trailingSlash: true,
   images: {
     unoptimized: true,
