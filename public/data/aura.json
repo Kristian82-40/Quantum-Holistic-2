@@ -1,0 +1,9 @@
+{
+  "morning":   {"type":"Ejercicio","icon":"☀️","content":"Giro de columna sentado","tip":"Mantén 15 segundos por lado. Libera el trapecio y activa la circulación.","color":"#C9A84C"},
+  "afternoon": {"type":"Planta","icon":"🌿","content":"Romero silvestre","tip":"Frota una hoja entre los dedos y huele profundo. Aumenta la concentración un 12%.","color":"#6B7C5E"},
+  "night":     {"type":"Mineral","icon":"💎","content":"Amatista","tip":"Colócala cerca de tu pantalla. Absorbe las ondas electromagnéticas del estrés digital.","color":"#7C5E8B"},
+  "stress":    {"type":"Frase","icon":"🔮","content":"La inteligencia de tu cuerpo es el espejo de la inteligencia del universo.","tip":"— Deepak Chopra","color":"#A8B89A"},
+  "energy":    {"type":"Planta","icon":"🌱","content":"Jengibre fresco","tip":"Un trozo en agua caliente por la mañana activa el metabolismo y refuerza el sistema inmune.","color":"#C9A84C"},
+  "detox":     {"type":"Mineral","icon":"🪨","content":"Cuarzo ahumado","tip":"Piedra de protección y limpieza energética. Ideal en espacios de trabajo.","color":"#8B6F52"},
+  "default":   {"type":"Frase","icon":"✨","content":"El universo aún no conoce tu energía.","tip":"Completa tu perfil y descubre lo que los astros tienen para ti hoy.","color":"#6B7C5E"}
+}

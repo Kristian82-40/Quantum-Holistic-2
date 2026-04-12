@@ -209,3 +209,10 @@
 @media (max-width: 700px) {
   .grid { grid-template-columns: 1fr; max-width: 440px; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .planName { color: #e8e6df; }
+  .price { color: #e8e6df; }
+  .feature { color: #9e9b92; }
+  .card { background: #1a1c17; border-color: rgba(168,184,154,0.15); }
+}

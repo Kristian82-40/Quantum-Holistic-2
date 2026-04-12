@@ -7,6 +7,7 @@ import Pillars from '@/components/sections/Pillars';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
 import MarqueeBand from '@/components/sections/MarqueeBand';
+import QuantumAura from '@/components/ui/QuantumAura';
 import ProfileCTA from '@/components/sections/ProfileCTA';
 
 export default function HomePage() {
@@ -23,6 +24,7 @@ export default function HomePage() {
         <Pricing />
         <BlogPreview />
       </main>
+      <QuantumAura />
       <Footer />
     </>
   );

@@ -81,3 +81,10 @@
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .pillarTitle { color: #e8e6df; }
+  .desc { color: #9e9b92; }
+  .pillar { background: #1a1c17; }
+  .pillar:hover { background: #232618; }
+}

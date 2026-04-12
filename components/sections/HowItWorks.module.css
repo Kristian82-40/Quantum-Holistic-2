@@ -116,3 +116,9 @@
   }
   .visual { height: 360px; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .stepTitle { color: #e8e6df; }
+  .stepDesc { color: #9e9b92; }
+  .step { background: #1a1c17; }
+}
