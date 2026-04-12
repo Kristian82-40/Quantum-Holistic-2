@@ -45,14 +45,22 @@ export default function ProfileCTA() {
     }
   }
 
+  function renderPlan(text: string) {
+    return text.split('\n').map((line, i) => {
+      if (line.startsWith('# ')) return <h2 key={i} style={{fontSize:'1.3rem',marginTop:'16px'}}>{line.replace('# ','')}</h2>
+      if (line.startsWith('## ')) return <h3 key={i} style={{fontSize:'1.1rem',marginTop:'12px',color:'#6B7C5E'}}>{line.replace('## ','')}</h3>
+      if (line.startsWith('### ')) return <h4 key={i} style={{fontSize:'1rem',marginTop:'8px',fontWeight:500}}>{line.replace('### ','')}</h4>
+      if (line.startsWith('- ')) return <p key={i} style={{margin:'2px 0',paddingLeft:'12px'}}>• {line.replace('- ','')}</p>
+      if (line.startsWith('**')) return <p key={i} style={{margin:'2px 0',fontWeight:500}}>{line.replace(/\*\*/g,'')}</p>
+      return <p key={i} style={{margin:'2px 0'}}>{line}</p>
+    })
+  }
+
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <h2 className={styles.title}>Tu plan personalizado</h2>
-        <p className={styles.subtitle}>
-          Análisis holístico + computación cuántica + IA
-        </p>
-
+        <p className={styles.subtitle}>Análisis holístico + computación cuántica + IA</p>
         <div className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label}>¿Cuál es tu objetivo?</label>
@@ -66,7 +74,6 @@ export default function ProfileCTA() {
               <option value="refuerzo inmune">Refuerzo inmune</option>
             </select>
           </div>
-
           <div className={styles.field}>
             <label className={styles.label}>¿Qué tipo de alimentación sigues?</label>
             <select className={styles.select} value={diet} onChange={e => setDiet(e.target.value)}>
@@ -79,7 +86,6 @@ export default function ProfileCTA() {
               <option value="sin gluten">Sin gluten</option>
             </select>
           </div>
-
           <div className={styles.field}>
             <label className={styles.label}>¿Cómo es tu estilo de vida?</label>
             <select className={styles.select} value={lifestyle} onChange={e => setLifestyle(e.target.value)}>
@@ -91,18 +97,11 @@ export default function ProfileCTA() {
               <option value="muy_activo">Muy activo</option>
             </select>
           </div>
-
           {error && <p className={styles.error}>{error}</p>}
-
-          <button
-            className={styles.button}
-            onClick={handleSubmit}
-            disabled={loading}
-          >
+          <button className={styles.button} onClick={handleSubmit} disabled={loading}>
             {loading ? '⚛️ Analizando con IA cuántica...' : '🌿 Generar mi plan'}
           </button>
         </div>
-
         {result && (
           <div className={styles.result}>
             {result.quantum && (
@@ -127,9 +126,7 @@ export default function ProfileCTA() {
             <div className={styles.plan}>
               <h3 className={styles.planTitle}>🌿 Tu plan nutricional</h3>
               <div className={styles.planContent}>
-                {result.plan.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+                {renderPlan(result.plan)}
               </div>
             </div>
           </div>

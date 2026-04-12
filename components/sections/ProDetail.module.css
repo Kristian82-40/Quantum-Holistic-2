@@ -85,3 +85,9 @@
 @media (max-width: 600px) {
   .grid { grid-template-columns: 1fr; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .itemTitle { color: #e8e6df; }
+  .itemDesc { color: #9e9b92; }
+  .item { background: #1E2B1A; }
+}

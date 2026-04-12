@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next'
+import QuantumCursor from '@/components/ui/QuantumCursor';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body style={{cursor: "none"}}><QuantumCursor />{children}</body>
     </html>
   );
 }

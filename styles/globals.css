@@ -241,3 +241,9 @@ img, svg {
   body { cursor: auto; }
   .cursor, .cursor-ring { display: none; }
 }
+
+/* PARCHE QUANTUM HOLISTIC */
+:root{color-scheme:light only;}
+.reveal{opacity:1!important;transform:none!important;}
+body{cursor:auto!important;}
+button,a{cursor:pointer!important;}

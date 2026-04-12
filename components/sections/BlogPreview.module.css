@@ -141,3 +141,10 @@
 @media (max-width: 600px) {
   .grid { grid-template-columns: 1fr; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .postTitle { color: #e8e6df; }
+  .excerpt { color: #9e9b92; }
+  .postCard { background: #1a1c17; }
+  .meta { color: #6B7C5E; }
+}
