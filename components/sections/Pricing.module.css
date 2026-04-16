@@ -1,0 +1,218 @@
+.pricing { background: var(--bg-primary); }
+
+.label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.title em { font-style: italic; color: var(--sage); }
+
+/* Toggle */
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 64px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.toggleActive { color: var(--text-primary); font-weight: 500; }
+
+.toggleBtn {
+  width: 44px;
+  height: 24px;
+  background: var(--sage-pale);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  cursor: none;
+  transition: background var(--dur-mid);
+}
+
+.toggleBtn:has(.toggleKnobOn) { background: var(--sage); }
+
+.toggleKnob {
+  display: block;
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: var(--sage);
+  border-radius: 50%;
+  transition: transform var(--dur-mid) var(--ease-out), background var(--dur-mid);
+}
+
+.toggleKnobOn {
+  transform: translateX(20px);
+  background: #fff;
+}
+
+.saveBadge {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  background: var(--gold-pale);
+  color: var(--earth);
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-left: 6px;
+}
+
+/* Cards */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  max-width: 820px;
+  margin-inline: auto;
+}
+
+.card {
+  border: 1px solid var(--border);
+  padding: 52px 44px;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sage-pale);
+  transform: translateY(101%);
+  transition: transform 0.4s var(--ease-out);
+  z-index: 0;
+}
+
+.card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(107, 124, 94, 0.1); }
+.card:hover::before { transform: translateY(0); }
+.card > * { position: relative; z-index: 1; }
+
+/* Pro card */
+.proCard {
+  background: var(--pro-dark);
+  border-color: var(--pro-dark);
+}
+
+.proCard::before { background: rgba(255, 255, 255, 0.04); }
+.proCard:hover   { box-shadow: 0 24px 80px rgba(30, 43, 26, 0.45); }
+
+.badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: var(--gold);
+  color: var(--charcoal);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  z-index: 2;
+}
+
+.tier {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sage-light);
+  margin-bottom: 16px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.amount {
+  font-family: var(--font-serif);
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.proCard .amount { color: #fff; }
+
+.period {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.proCard .period { color: rgba(255, 255, 255, 0.5); }
+
+.annualNote {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 32px;
+}
+
+.features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-bottom: 40px;
+  margin-top: 24px;
+}
+
+.features li {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+  padding-left: 18px;
+  position: relative;
+}
+
+.features li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 7px;
+  width: 5px; height: 5px;
+  background: var(--sage-light);
+  border-radius: 50%;
+}
+
+.proCard .features li { color: rgba(255, 255, 255, 0.75); }
+.proCard .features li::before { background: var(--gold); }
+
+.highlight {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.proCard .highlight { color: #fff !important; }
+
+.note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 28px;
+  font-weight: 300;
+}
+
+.note strong { color: var(--sage); }
+
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; max-width: 440px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .planName { color: #e8e6df; }
+  .price { color: #e8e6df; }
+  .feature { color: #9e9b92; }
+  .card { background: #1a1c17; border-color: rgba(168,184,154,0.15); }
+}
