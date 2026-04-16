@@ -1,0 +1,45 @@
+# Dependencias — nunca leer
+node_modules/
+.pnp/
+.pnp.js
+
+# Build artifacts — generados, no útiles
+.next/
+out/
+build/
+dist/
+
+# Caché y temporales
+.cache/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+.swc/
+
+# Lock files — solo causan ruido de tokens
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Variables de entorno — no leer nunca
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor y OS
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# Imágenes y fuentes grandes (leer solo si se pide explícitamente)
+public/fonts/
+*.ttf
+*.woff
+*.woff2
+
+# README — ya está en CLAUDE.md
+README.md
