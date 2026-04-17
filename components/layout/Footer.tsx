@@ -1,29 +1,23 @@
 import { SITE_CONFIG } from '@/lib/config';
+import CincoElementos from '@/components/illustrations/CincoElementos';
 import styles from './Footer.module.css';
 
 const FOOTER_COLS = [
-  {
-    heading: 'Plataforma',
-    links: ['Mi perfil', 'Plan semanal', 'Herbología', 'Quantum Pro'],
-  },
-  {
-    heading: 'Empresa',
-    links: ['Sobre nosotros', 'Método', 'Blog', 'Contacto'],
-  },
-  {
-    heading: 'Legal',
-    links: ['Privacidad', 'Términos', 'Cookies'],
-  },
+  { heading: 'Plataforma', links: ['Mi perfil', 'Plan semanal', 'Herbología', 'Quantum Pro'] },
+  { heading: 'Empresa',    links: ['Sobre nosotros', 'Método', 'Blog', 'Contacto'] },
+  { heading: 'Legal',      links: ['Privacidad', 'Términos', 'Cookies'] },
 ];
 
 export default function Footer() {
   return (
     <footer className={styles.footer}>
+      <div className={styles.botanical} aria-hidden>
+        <CincoElementos size={150} />
+      </div>
+
       <div className={`container ${styles.top}`}>
         <div className={styles.brand}>
-          <p className={styles.name}>
-            Quantum <span>Holistic</span>
-          </p>
+          <p className={styles.name}>Quantum <span>Holistic</span></p>
           <p className={styles.desc}>{SITE_CONFIG.description}</p>
         </div>
 
@@ -32,9 +26,7 @@ export default function Footer() {
             <h4 className={styles.colTitle}>{col.heading}</h4>
             <ul>
               {col.links.map((link) => (
-                <li key={link}>
-                  <a href="#">{link}</a>
-                </li>
+                <li key={link}><a href="#">{link}</a></li>
               ))}
             </ul>
           </div>

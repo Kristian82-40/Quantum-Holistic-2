@@ -31,11 +31,20 @@ export const metadata: Metadata = {
     title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
     description:
       'Tu cuerpo tiene su propia inteligencia. Planes nutricionales km0 y bienestar holístico personalizados con IA.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Quantum Holistic',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
     description: 'Tu cuerpo tiene su propia inteligencia. Descubre tu perfil holístico.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -44,6 +53,14 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   manifest: '/site.webmanifest',
 };
@@ -62,9 +79,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
