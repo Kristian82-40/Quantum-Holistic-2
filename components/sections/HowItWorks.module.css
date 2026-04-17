@@ -122,3 +122,19 @@
   .stepDesc { color: #9e9b92; }
   .step { background: #1a1c17; }
 }
+
+.extraLines { margin-top: 36px; display: flex; flex-direction: column; gap: 12px; }
+.extraLine { display: flex; align-items: center; gap: 12px; padding-left: 16px; border-left: 2px solid #d4a853; font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+.alambiqueWrap { position: absolute; top: 16px; right: 16px; width: 100px; opacity: 0.65; pointer-events: none; }
+.alambique { width: 100%; height: auto; overflow: visible; }
+
+@keyframes liquidWave { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+.liquid { animation: liquidWave 2.8s ease-in-out infinite; }
+@keyframes bubbleRise { 0%{transform:translateY(0);opacity:.7} 100%{transform:translateY(-28px) scale(.3);opacity:0} }
+.bubble1 { animation: bubbleRise 2.2s 0s ease-in infinite; }
+.bubble2 { animation: bubbleRise 2.2s 0.7s ease-in infinite; }
+@keyframes vaporRise { 0%{transform:translateY(0);opacity:.25} 100%{transform:translateY(-20px);opacity:0} }
+.vapor1 { animation: vaporRise 2s 0s ease-out infinite; }
+.vapor2 { animation: vaporRise 2s 0.65s ease-out infinite; }
+@keyframes flicker { 0%,100%{transform:scaleY(1);opacity:.4} 50%{transform:scaleY(1.2);opacity:.55} }
+.flame { animation: flicker 0.9s ease-in-out infinite; transform-origin: center bottom; }

@@ -1,14 +1,13 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
+import MarqueeBand from '@/components/sections/MarqueeBand';
 import HowItWorks from '@/components/sections/HowItWorks';
-import ProDetail from '@/components/sections/ProDetail';
 import Pillars from '@/components/sections/Pillars';
+import ProDetail from '@/components/sections/ProDetail';
+import ProfileCTA from '@/components/sections/ProfileCTA';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
-import MarqueeBand from '@/components/sections/MarqueeBand';
-import QuantumAura from '@/components/ui/QuantumAura';
-import ProfileCTA from '@/components/sections/ProfileCTA';
 
 export default function HomePage() {
   return (
@@ -24,7 +23,6 @@ export default function HomePage() {
         <Pricing />
         <BlogPreview />
       </main>
-      <QuantumAura />
       <Footer />
     </>
   );
