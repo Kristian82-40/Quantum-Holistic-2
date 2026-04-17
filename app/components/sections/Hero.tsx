@@ -1,4 +1,5 @@
 import Button from '@/components/ui/Button';
+import PetalEffect from '@/components/ui/PetalEffect';
 import styles from './Hero.module.css';
 
 const BARS = [
@@ -11,6 +12,7 @@ const BARS = [
 export default function Hero() {
   return (
     <section className={styles.hero}>
+      <PetalEffect count={28} />
       {/* ── Left ── */}
       <div className={styles.left}>
         <p className={styles.tag}>Nutrición · Bienestar · Inteligencia holística</p>
