@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
-import Cursor from '@/components/ui/Cursor';
 
 const SITE_URL = 'https://quantumholistic.com';
 
@@ -64,7 +63,6 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body>
-        <Cursor />
         {children}
       </body>
     </html>

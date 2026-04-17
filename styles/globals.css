@@ -1,7 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Inter:wght@300;400;500&display=swap');
 
 /* ─── Design Tokens ─── */
 :root {
+  /* Quantum Holistic palette */
+  --color-tierra:  #2d5a27;
+  --color-crema:   #f5e6d3;
+  --color-dorado:  #d4a853;
+  --color-noche:   #0a1628;
+  --color-bosque:  #1a3a2a;
+  --font-titulo:   'Cormorant Garamond', Georgia, serif;
+  --font-cuerpo:   'Inter', system-ui, sans-serif;
+
   /* Brand */
   --sage:         #6B7C5E;
   --sage-light:   #A8B89A;
@@ -22,7 +31,7 @@
   --font-serif:   'Cormorant Garamond', Georgia, serif;
   --font-sans:    'DM Sans', system-ui, sans-serif;
 
-  /* Spacing scale */
+  /* Spacing */
   --space-xs:  0.5rem;
   --space-sm:  1rem;
   --space-md:  1.5rem;
@@ -32,7 +41,7 @@
 
   /* Layout */
   --max-width:    1200px;
-  --section-px:   3.75rem;   /* 60px */
+  --section-px:   3.75rem;
 
   /* Transitions */
   --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
@@ -40,7 +49,7 @@
   --dur-mid:      0.35s;
   --dur-slow:     0.6s;
 
-  /* Surface colors (light mode) */
+  /* Surface colors */
   --bg-primary:   var(--white);
   --bg-secondary: var(--cream);
   --bg-dark:      var(--charcoal);
@@ -85,9 +94,16 @@ body {
   background: var(--bg-secondary);
   color: var(--text-primary);
   overflow-x: hidden;
-  cursor: none;
   line-height: 1.6;
 }
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-dorado, #d4a853); border-radius: 3px; }
+
+/* ─── Text selection ─── */
+::selection { background: rgba(212, 168, 83, 0.28); color: inherit; }
 
 /* ─── Typography ─── */
 h1, h2, h3, h4 {
@@ -102,22 +118,16 @@ h3 { font-size: clamp(1.3rem, 2vw, 1.5rem); }
 
 p { font-weight: 300; line-height: 1.82; }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
 button {
   font-family: var(--font-sans);
   border: none;
   background: none;
-  cursor: none;
+  cursor: pointer;
 }
 
-img, svg {
-  display: block;
-  max-width: 100%;
-}
+img, svg { display: block; max-width: 100%; }
 
 /* ─── Layout Utilities ─── */
 .container {
@@ -126,53 +136,7 @@ img, svg {
   padding-inline: var(--section-px);
 }
 
-.section {
-  padding-block: var(--space-2xl);
-}
-
-/* ─── Custom Cursor ─── */
-.cursor {
-  width: 10px;
-  height: 10px;
-  background: var(--sage);
-  border-radius: 50%;
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: multiply;
-  transition: background var(--dur-fast);
-  will-change: transform;
-}
-
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--sage-light);
-  border-radius: 50%;
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  mix-blend-mode: multiply;
-  transition:
-    width var(--dur-mid) var(--ease-out),
-    height var(--dur-mid) var(--ease-out),
-    border-color var(--dur-mid);
-  will-change: transform;
-}
-
-.cursor-ring.hovered {
-  width: 56px;
-  height: 56px;
-  border-color: var(--sage);
-}
-
-.cursor-ring.clicked {
-  width: 22px;
-  height: 22px;
-  border-color: var(--gold);
-}
+.section { padding-block: var(--space-2xl); }
 
 /* ─── Animations ─── */
 @keyframes fadeUp {
@@ -210,7 +174,7 @@ img, svg {
   50%       { opacity: 0.45; transform: scale(1.5); }
 }
 
-/* Reveal on scroll — initial state set via JS */
+/* ─── Scroll reveal ─── */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -224,7 +188,6 @@ img, svg {
   transform: translateY(0);
 }
 
-/* Stagger children */
 .reveal-stagger > *:nth-child(1) { transition-delay: 0.05s; }
 .reveal-stagger > *:nth-child(2) { transition-delay: 0.12s; }
 .reveal-stagger > *:nth-child(3) { transition-delay: 0.19s; }
@@ -238,12 +201,7 @@ img, svg {
 }
 
 @media (max-width: 600px) {
-  body { cursor: auto; }
-  .cursor, .cursor-ring { display: none; }
+  :root { --section-px: 1.25rem; }
+  h2 { font-size: clamp(1.8rem, 6vw, 3.25rem); }
+  .section { padding-block: 5rem; }
 }
-
-/* PARCHE QUANTUM HOLISTIC */
-:root{color-scheme:light only;}
-.reveal{opacity:1!important;transform:none!important;}
-body{cursor:auto!important;}
-button,a{cursor:pointer!important;}
