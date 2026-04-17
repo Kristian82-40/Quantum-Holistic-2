@@ -79,7 +79,6 @@ export default function Hero() {
 
           {/* ── Seasonal badge ── */}
           <div className={`${styles.seasonBadge} ${styles.floatB}`}>
-            <span className={styles.seasonIcon}>🌸</span>
             <span className={styles.seasonLabel}>Primavera · Depuración</span>
           </div>
 
