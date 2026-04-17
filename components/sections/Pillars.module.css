@@ -43,6 +43,17 @@
 .pillar:hover { background: var(--sage-pale); }
 .pillar:hover::after { width: 100%; }
 
+.iconWrap {
+  margin-bottom: 20px;
+  opacity: 0.8;
+  transition: opacity 0.3s, transform 0.3s var(--ease-out);
+}
+
+.pillar:hover .iconWrap {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
 .num {
   display: block;
   font-family: var(--font-serif);

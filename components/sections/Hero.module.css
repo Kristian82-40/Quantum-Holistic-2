@@ -134,6 +134,73 @@
   pointer-events: none;
 }
 
+.bgBotanical {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ── Season badge ── */
+.seasonBadge {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 100px;
+  padding: 0.35rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+}
+
+.seasonIcon { font-size: 14px; }
+
+.seasonLabel {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── Bar pct ── */
+.barPct {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  color: var(--sage);
+  min-width: 20px;
+  text-align: right;
+}
+
+/* ── Reco badge ── */
+.recoBadge {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(168, 184, 154, 0.12);
+}
+
+.recoAI {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--sage-light);
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+/* ── Floating herb icon ── */
+.herbFloat {
+  position: absolute;
+  bottom: 80px;
+  left: 32px;
+  opacity: 0.45;
+}
+
 /* ── Floating cards ── */
 .card {
   position: absolute;
