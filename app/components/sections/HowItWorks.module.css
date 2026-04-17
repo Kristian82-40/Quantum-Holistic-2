@@ -116,3 +116,11 @@
   }
   .visual { height: 360px; }
 }
+
+/* LaboratorioNatural illustration above plan card */
+.labIllus {
+  display: flex;
+  justify-content: center;
+  opacity: 0.45;
+  margin-bottom: 1.5rem;
+}

@@ -87,3 +87,22 @@
 @media (max-width: 700px) {
   .grid { grid-template-columns: 1fr; }
 }
+
+/* Header with illustration */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.headerIllus {
+  opacity: 0.35;
+  flex-shrink: 0;
+  margin-top: -10px;
+}
+
+@media (max-width: 600px) {
+  .header { flex-direction: column; }
+  .headerIllus { display: none; }
+}
