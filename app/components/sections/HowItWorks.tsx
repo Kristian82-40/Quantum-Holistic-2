@@ -1,3 +1,4 @@
+import LaboratorioNatural from '@/components/illustrations/LaboratorioNatural';
 import styles from './HowItWorks.module.css';
 
 const STEPS = [
@@ -57,6 +58,9 @@ export default function HowItWorks() {
 
         {/* Visual */}
         <div className={styles.visual}>
+          <div className={styles.labIllus} aria-hidden>
+            <LaboratorioNatural size={160} />
+          </div>
           <div className={`${styles.planCard} reveal`}>
             <p className={styles.planTag}>Tu plan · Esta semana</p>
             {SAMPLE_PLAN.map((row) => (
