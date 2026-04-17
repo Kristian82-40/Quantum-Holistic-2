@@ -9,10 +9,14 @@ import BlogPreview from '@/components/sections/BlogPreview';
 import MarqueeBand from '@/components/sections/MarqueeBand';
 import QuantumAura from '@/components/ui/QuantumAura';
 import ProfileCTA from '@/components/sections/ProfileCTA';
-
+import SeasonalPetals from '@/components/ui/SeasonalPetals';
+import RomeroPopup from '@/components/ui/RomeroPopup';
+import ChatBot from '@/components/ui/ChatBot';
 export default function HomePage() {
   return (
     <>
+      <SeasonalPetals />
+      <RomeroPopup />
       <Navbar />
       <main>
         <Hero />
@@ -25,6 +29,7 @@ export default function HomePage() {
         <BlogPreview />
       </main>
       <QuantumAura />
+      <ChatBot />
       <Footer />
     </>
   );
