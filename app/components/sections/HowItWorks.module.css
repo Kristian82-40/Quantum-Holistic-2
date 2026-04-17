@@ -117,10 +117,75 @@
   .visual { height: 360px; }
 }
 
-/* LaboratorioNatural illustration above plan card */
-.labIllus {
+/* ── Extra content lines ── */
+.extraLines {
+  margin-top: 40px;
   display: flex;
-  justify-content: center;
-  opacity: 0.45;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 14px;
 }
+
+.extraLine {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 18px;
+  border-left: 2px solid #d4a853;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.extraEmoji {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Alambique SVG ── */
+.alambiqueWrap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 110px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.alambique {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Liquid bubbling */
+@keyframes liquidWave {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+.liquid { animation: liquidWave 2.8s ease-in-out infinite; }
+
+/* Bubbles */
+@keyframes bubbleRise {
+  0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-28px) scale(0.3); opacity: 0; }
+}
+.bubble1 { animation: bubbleRise 2.2s 0s ease-in infinite; }
+.bubble2 { animation: bubbleRise 2.2s 0.7s ease-in infinite; }
+.bubble3 { animation: bubbleRise 2.2s 1.4s ease-in infinite; }
+
+/* Vapor rising */
+@keyframes vaporRise {
+  0%   { transform: translateY(0) scaleX(1); opacity: 0.25; }
+  100% { transform: translateY(-20px) scaleX(1.4); opacity: 0; }
+}
+.vapor1 { animation: vaporRise 2s 0s ease-out infinite; }
+.vapor2 { animation: vaporRise 2s 0.65s ease-out infinite; }
+.vapor3 { animation: vaporRise 2s 1.3s ease-out infinite; }
+
+/* Flame flicker */
+@keyframes flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.4; }
+  33%       { transform: scaleY(1.15) scaleX(0.9); opacity: 0.55; }
+  66%       { transform: scaleY(0.9) scaleX(1.1); opacity: 0.35; }
+}
+.flame { animation: flicker 0.9s ease-in-out infinite; transform-origin: center bottom; }

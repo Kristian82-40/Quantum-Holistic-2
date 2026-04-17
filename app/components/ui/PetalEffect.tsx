@@ -3,85 +3,88 @@ import { useEffect, useState } from 'react'
 
 interface Petal {
   id: number
-  x: number
+  y: number
   delay: number
   duration: number
   size: number
   rotation: number
-  drift: number
   color: string
   shape: number
+  driftY: number
+  travel: number
 }
 
 const COLORS = [
-  'rgba(255,192,203,0.82)',
-  'rgba(255,218,224,0.88)',
-  'rgba(255,240,245,0.75)',
-  'rgba(248,200,220,0.80)',
-  'rgba(230,210,235,0.78)',
-  'rgba(245,225,215,0.85)',
-  'rgba(255,245,230,0.80)',
-  'rgba(210,195,230,0.72)',
+  'rgba(255,192,203,0.85)',
+  'rgba(255,218,224,0.90)',
+  'rgba(255,240,245,0.78)',
+  'rgba(248,200,220,0.82)',
+  'rgba(230,210,235,0.80)',
+  'rgba(245,225,215,0.88)',
+  'rgba(255,245,230,0.82)',
+  'rgba(210,195,230,0.75)',
 ]
 
 function makePetals(n: number): Petal[] {
   return Array.from({ length: n }, (_, i) => ({
     id: i,
-    x: Math.random() * 108 - 4,
-    delay: Math.random() * 20,
-    duration: 7 + Math.random() * 9,
-    size: 9 + Math.random() * 16,
+    y: Math.random() * 92 + 2,
+    delay: Math.random() * 1.6,
+    duration: 3.2 + Math.random() * 1.8,
+    size: 10 + Math.random() * 18,
     rotation: Math.random() * 360,
-    drift: (Math.random() - 0.5) * 130,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    color: COLORS[i % COLORS.length],
     shape: Math.floor(Math.random() * 4),
+    driftY: (Math.random() - 0.5) * 100,
+    travel: 115 + Math.floor(Math.random() * 25),
   }))
 }
 
-export default function PetalEffect({ count = 26 }: { count?: number }) {
+export default function PetalEffect({ count = 34 }: { count?: number }) {
   const [petals, setPetals] = useState<Petal[]>([])
+  const [gone, setGone] = useState(false)
 
   useEffect(() => {
     setPetals(makePetals(count))
+    const t = setTimeout(() => setGone(true), 5200)
+    return () => clearTimeout(t)
   }, [count])
 
-  if (petals.length === 0) return null
+  if (gone || petals.length === 0) return null
 
   return (
     <>
       <style>{`
-        @keyframes fall {
-          0%   { transform: translateY(-70px) translateX(0) rotate(0deg); opacity: 0; }
-          6%   { opacity: 1; }
-          88%  { opacity: 0.85; }
-          100% { transform: translateY(112vh) translateX(var(--petal-drift)) rotate(var(--petal-spin)); opacity: 0; }
+        @keyframes qhWindLeft {
+          0%   { opacity: 0; transform: translateX(0) translateY(0) rotate(0deg); }
+          7%   { opacity: 1; }
+          82%  { opacity: 0.9; }
+          100% { opacity: 0; transform: translateX(var(--travel)) translateY(var(--driftY)) rotate(var(--spin)); }
         }
-        @keyframes sway {
-          0%, 100% { margin-left: 0; }
-          33%       { margin-left: 14px; }
-          66%       { margin-left: -8px; }
-        }
-        .qh-petal-wrap {
+        .qh-petal {
           position: fixed;
-          top: -30px;
+          right: -70px;
           pointer-events: none;
           z-index: 9990;
-          animation:
-            fall  var(--petal-dur) var(--petal-delay) ease-in infinite,
-            sway  calc(var(--petal-dur) * 0.55) var(--petal-delay) ease-in-out infinite;
+          will-change: transform, opacity;
+          animation: qhWindLeft var(--dur) var(--delay) ease-out forwards;
+        }
+        .qh-petals-root {
+          animation: qhWindLeft 0s linear forwards;
         }
       `}</style>
       <div aria-hidden="true">
         {petals.map((p) => (
           <div
             key={p.id}
-            className="qh-petal-wrap"
+            className="qh-petal"
             style={{
-              left: `${p.x}vw`,
-              '--petal-dur':   `${p.duration}s`,
-              '--petal-delay': `${p.delay}s`,
-              '--petal-drift': `${p.drift}px`,
-              '--petal-spin':  `${p.rotation + 360}deg`,
+              top: `${p.y}vh`,
+              '--dur':    `${p.duration}s`,
+              '--delay':  `${p.delay}s`,
+              '--travel': `-${p.travel}vw`,
+              '--driftY': `${p.driftY}px`,
+              '--spin':   `${p.rotation + 540}deg`,
             } as React.CSSProperties}
           >
             {p.shape === 0 && (
@@ -105,7 +108,7 @@ export default function PetalEffect({ count = 26 }: { count?: number }) {
                 height: p.size * 1.2,
                 background: p.color,
                 borderRadius: '60% 40% 55% 45% / 50% 60% 40% 50%',
-              }} />
+              }}/>
             )}
           </div>
         ))}
