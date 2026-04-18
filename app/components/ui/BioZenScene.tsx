@@ -1,162 +1,209 @@
 export default function BioZenScene() {
   return (
-    <svg
-      viewBox="0 0 740 460"
-      width="100%"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{ display: 'block' }}
-    >
-      <defs>
-        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f4f0e8" />
-          <stop offset="100%" stopColor="#e8e2d4" />
-        </linearGradient>
-        <linearGradient id="stemGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#6b7c5c" />
-          <stop offset="100%" stopColor="#8a9a6e" />
-        </linearGradient>
-        <linearGradient id="dropGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#c8b89a" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#a89070" stopOpacity="0.6" />
-        </linearGradient>
-        <filter id="softBlur">
-          <feGaussianBlur stdDeviation="1.5" />
-        </filter>
-      </defs>
+    <div style={{ background: '#f5f2eb', borderRadius: '12px', padding: '8px' }}>
+      <svg width="100%" viewBox="0 0 740 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ display: 'block' }}>
+        <defs>
+          <marker id="dot-end" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4">
+            <circle cx="3" cy="3" r="2.5" fill="#9aaa7e"/>
+          </marker>
+          <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M1 2L8 5L1 8" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeLinecap="round"/>
+          </marker>
+        </defs>
 
-      {/* Fondo */}
-      <rect width="740" height="460" fill="url(#bgGrad)" rx="4" />
+        {/* fondo suave */}
+        <rect width="740" height="460" fill="#f5f2eb" rx="12"/>
 
-      {/* Suelo sutil */}
-      <ellipse cx="370" cy="400" rx="280" ry="18" fill="#d4c9b0" opacity="0.4" />
+        {/* título */}
+        <text x="370" y="30" textAnchor="middle" fontFamily="Georgia,serif" fontSize="11" fill="#b0aa96" letterSpacing="0.22em">DE LA SEMILLA AL EXTRACTO</text>
+        <line x1="160" y1="38" x2="580" y2="38" stroke="#d0caba" strokeWidth="0.6"/>
 
-      {/* ── SEMILLA (izquierda) ── */}
-      <g transform="translate(100, 310)">
-        {/* tierra */}
-        <ellipse cx="0" cy="60" rx="44" ry="8" fill="#b8a88a" opacity="0.5" />
-        {/* semilla */}
-        <ellipse cx="0" cy="34" rx="12" ry="16" fill="#8c7355" />
-        <ellipse cx="0" cy="34" rx="6" ry="10" fill="#a08060" opacity="0.6" />
-        {/* brote */}
-        <path d="M0 18 Q-8 4 -14 -8" stroke="#6b7c5c" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <ellipse cx="-14" cy="-8" rx="9" ry="5" fill="#7a9460" transform="rotate(-30 -14 -8)" />
-        <path d="M0 18 Q8 2 16 -6" stroke="#6b7c5c" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <ellipse cx="16" cy="-6" rx="9" ry="5" fill="#8aaa6e" transform="rotate(25 16 -6)" />
-        {/* raíces */}
-        <path d="M-4 50 Q-10 58 -14 66" stroke="#9a8060" strokeWidth="1.5" fill="none" opacity="0.7" strokeLinecap="round" />
-        <path d="M4 50 Q10 58 8 68" stroke="#9a8060" strokeWidth="1.5" fill="none" opacity="0.7" strokeLinecap="round" />
-        <path d="M0 50 Q0 60 2 70" stroke="#9a8060" strokeWidth="1.5" fill="none" opacity="0.6" strokeLinecap="round" />
-        {/* etiqueta */}
-        <text x="0" y="86" textAnchor="middle" fontFamily="serif" fontSize="9" fill="#7a6a50" letterSpacing="0.08em">SEMILLA</text>
-      </g>
+        {/* línea de suelo */}
+        <line x1="40" y1="360" x2="700" y2="360" stroke="#c8c0a8" strokeWidth="1" strokeDasharray="5 5"/>
 
-      {/* flecha 1 */}
-      <g opacity="0.45">
-        <path d="M168 354 Q200 340 228 354" stroke="#9a8a6e" strokeWidth="1.5" fill="none" strokeDasharray="4 3" />
-        <polygon points="228,349 235,354 228,359" fill="#9a8a6e" />
-      </g>
+        {/* ── 01 SEMILLA ── */}
+        <g transform="translate(72,300)">
+          <path d="M-22 55 Q0 48 22 55" fill="none" stroke="#b0a890" strokeWidth="2"/>
+          <path d="M-18 58 Q0 52 18 58" fill="none" stroke="#b0a890" strokeWidth="1" strokeDasharray="2 3"/>
+          <path d="M0 42 C-6 46 -10 52 -8 58" fill="none" stroke="#c4b898" strokeWidth="1.2"/>
+          <path d="M0 42 C6 46 10 52 8 58" fill="none" stroke="#c4b898" strokeWidth="1.2"/>
+          <path d="M0 42 C0 48 0 54 2 60" fill="none" stroke="#c4b898" strokeWidth="1.2"/>
+          <ellipse cx="0" cy="24" rx="13" ry="19" fill="none" stroke="#8a7a58" strokeWidth="2.5"/>
+          <ellipse cx="0" cy="24" rx="6" ry="9" fill="none" stroke="#8a7a58" strokeWidth="1" strokeDasharray="2 2"/>
+          <line x1="0" y1="5" x2="0" y2="43" stroke="#8a7a58" strokeWidth="0.8" strokeDasharray="2 2"/>
+          <path d="M0 5 C0 -8 0 -18 0 -28" fill="none" stroke="#6a8c5a" strokeWidth="2.2"/>
+          <path d="M0 -10 C-10 -18 -16 -28 -14 -36" fill="none" stroke="#6a8c5a" strokeWidth="1.8"/>
+          <path d="M0 -10 C10 -18 16 -28 14 -36" fill="none" stroke="#6a8c5a" strokeWidth="1.8"/>
+          <ellipse cx="-14" cy="-36" rx="9" ry="5" fill="none" stroke="#6a8c5a" strokeWidth="1.5" transform="rotate(-40 -14 -36)"/>
+          <ellipse cx="14" cy="-36" rx="9" ry="5" fill="none" stroke="#6a8c5a" strokeWidth="1.5" transform="rotate(40 14 -36)"/>
+          <circle cx="8" cy="18" r="1.5" fill="#8a7a58"/>
+          <circle cx="-7" cy="26" r="1.5" fill="#8a7a58"/>
+          <circle cx="5" cy="32" r="1.5" fill="#8a7a58"/>
+        </g>
+        <text x="72" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.1em">01 · SEMILLA</text>
 
-      {/* ── PLANTA (centro-izquierda) ── */}
-      <g transform="translate(280, 200)">
-        {/* tallo principal */}
-        <path d="M0 170 Q-2 120 0 80 Q2 40 0 0" stroke="url(#stemGrad)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-        {/* hoja izquierda grande */}
-        <path d="M-2 90 Q-50 60 -62 28 Q-30 34 -2 70" fill="#7a9460" opacity="0.85" />
-        <path d="M-2 90 Q-30 60 -32 38" stroke="#5a7040" strokeWidth="0.8" fill="none" opacity="0.5" />
-        {/* hoja derecha grande */}
-        <path d="M2 110 Q52 78 66 44 Q32 52 2 94" fill="#8aaa6e" opacity="0.85" />
-        <path d="M2 110 Q34 82 36 52" stroke="#6a8050" strokeWidth="0.8" fill="none" opacity="0.5" />
-        {/* hoja izquierda media */}
-        <path d="M-1 50 Q-38 26 -46 4 Q-20 14 -1 38" fill="#6a8c50" opacity="0.75" />
-        {/* hoja derecha media */}
-        <path d="M1 60 Q40 36 50 12 Q22 24 1 48" fill="#7a9c60" opacity="0.75" />
-        {/* flor en la punta */}
-        <circle cx="0" cy="-6" r="10" fill="#d4a855" opacity="0.9" />
-        <circle cx="0" cy="-6" r="5" fill="#e8c070" />
-        {[0,60,120,180,240,300].map((angle, i) => (
-          <ellipse
-            key={i}
-            cx={Math.cos((angle * Math.PI) / 180) * 13}
-            cy={-6 + Math.sin((angle * Math.PI) / 180) * 13}
-            rx="5"
-            ry="3"
-            fill="#d4b870"
-            opacity="0.7"
-            transform={`rotate(${angle} ${Math.cos((angle * Math.PI) / 180) * 13} ${-6 + Math.sin((angle * Math.PI) / 180) * 13})`}
-          />
-        ))}
-        {/* tierra */}
-        <ellipse cx="0" cy="175" rx="44" ry="8" fill="#b8a88a" opacity="0.45" />
-        {/* etiqueta */}
-        <text x="0" y="194" textAnchor="middle" fontFamily="serif" fontSize="9" fill="#7a6a50" letterSpacing="0.08em">PLANTA</text>
-      </g>
+        {/* flecha 1→2 */}
+        <path d="M104 318 C124 308 144 295 165 285" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
 
-      {/* flecha 2 */}
-      <g opacity="0.45">
-        <path d="M342 354 Q374 340 402 354" stroke="#9a8a6e" strokeWidth="1.5" fill="none" strokeDasharray="4 3" />
-        <polygon points="402,349 409,354 402,359" fill="#9a8a6e" />
-      </g>
+        {/* ── 02 ARTEMISA DULCE ── */}
+        <g transform="translate(225,95)">
+          <path d="M0 265 C-3 230 2 195 0 160 C-2 125 2 90 0 55 C-1 35 0 15 0 0" fill="none" stroke="#5a8448" strokeWidth="3"/>
+          <path d="M0 220 C-22 205 -40 188 -52 168" fill="none" stroke="#5a8448" strokeWidth="2"/>
+          <path d="M0 195 C22 178 38 160 46 140" fill="none" stroke="#5a8448" strokeWidth="2"/>
+          <path d="M0 165 C-18 148 -32 132 -40 112" fill="none" stroke="#5a8448" strokeWidth="1.8"/>
+          <path d="M0 140 C16 124 28 108 32 88" fill="none" stroke="#5a8448" strokeWidth="1.8"/>
+          <path d="M0 110 C-14 95 -24 80 -28 62" fill="none" stroke="#5a8448" strokeWidth="1.5"/>
+          <path d="M0 85 C12 70 20 56 22 38" fill="none" stroke="#5a8448" strokeWidth="1.5"/>
+          <ellipse cx="-50" cy="162" rx="16" ry="6" fill="none" stroke="#5a8448" strokeWidth="1.8" transform="rotate(-35 -50 162)"/>
+          <path d="M-44 168 C-52 162 -56 155 -50 162" fill="none" stroke="#5a8448" strokeWidth="1" strokeDasharray="2 2"/>
+          <ellipse cx="-38" cy="106" rx="14" ry="5" fill="none" stroke="#5a8448" strokeWidth="1.6" transform="rotate(-42 -38 106)"/>
+          <ellipse cx="-26" cy="56" rx="12" ry="4.5" fill="none" stroke="#5a8448" strokeWidth="1.4" transform="rotate(-38 -26 56)"/>
+          <ellipse cx="44" cy="134" rx="16" ry="6" fill="none" stroke="#5a8448" strokeWidth="1.8" transform="rotate(32 44 134)"/>
+          <ellipse cx="30" cy="82" rx="14" ry="5" fill="none" stroke="#5a8448" strokeWidth="1.6" transform="rotate(38 30 82)"/>
+          <ellipse cx="20" cy="34" rx="11" ry="4" fill="none" stroke="#5a8448" strokeWidth="1.4" transform="rotate(35 20 34)"/>
+          <line x1="-44" y1="168" x2="-56" y2="158" stroke="#5a8448" strokeWidth="0.8" strokeDasharray="1.5 2"/>
+          <line x1="38" y1="140" x2="50" y2="130" stroke="#5a8448" strokeWidth="0.8" strokeDasharray="1.5 2"/>
+          <line x1="0" y1="0" x2="0" y2="-32" stroke="#5a8448" strokeWidth="1.5"/>
+          <circle cx="0" cy="-32" r="6" fill="none" stroke="#d4a832" strokeWidth="2"/>
+          <circle cx="0" cy="-32" r="3" fill="#d4a832"/>
+          <line x1="0" y1="-38" x2="0" y2="-44" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="4" y1="-36" x2="7" y2="-42" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="-4" y1="-36" x2="-7" y2="-42" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="6" y1="-32" x2="12" y2="-32" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="-6" y1="-32" x2="-12" y2="-32" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="4" y1="-28" x2="7" y2="-22" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="-4" y1="-28" x2="-7" y2="-22" stroke="#d4a832" strokeWidth="1.5"/>
+          <line x1="0" y1="-10" x2="-12" y2="-22" stroke="#5a8448" strokeWidth="1.2"/>
+          <circle cx="-12" cy="-22" r="4.5" fill="none" stroke="#d4a832" strokeWidth="1.8"/>
+          <circle cx="-12" cy="-22" r="2" fill="#d4a832"/>
+          <line x1="0" y1="-10" x2="12" y2="-22" stroke="#5a8448" strokeWidth="1.2"/>
+          <circle cx="12" cy="-22" r="4.5" fill="none" stroke="#d4a832" strokeWidth="1.8"/>
+          <circle cx="12" cy="-22" r="2" fill="#d4a832"/>
+          <circle cx="-6" cy="-8" r="3" fill="none" stroke="#d4a832" strokeWidth="1.5"/>
+          <circle cx="6" cy="-8" r="3" fill="none" stroke="#d4a832" strokeWidth="1.5"/>
+          <circle cx="0" cy="-4" r="2.5" fill="none" stroke="#d4a832" strokeWidth="1.2"/>
+          <circle cx="28" cy="20" r="1.5" fill="#d4a832" opacity="0.7"/>
+          <circle cx="34" cy="10" r="1" fill="#d4a832" opacity="0.5"/>
+          <circle cx="-30" cy="18" r="1.5" fill="#d4a832" opacity="0.7"/>
+          <circle cx="-36" cy="8" r="1" fill="#d4a832" opacity="0.5"/>
+        </g>
+        <text x="225" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">02 · ARTEMISA DULCE</text>
 
-      {/* ── MORTERO Y MANO (centro-derecha) ── */}
-      <g transform="translate(470, 260)">
-        {/* mortero */}
-        <path d="M-48 70 Q-52 100 -40 108 L40 108 Q52 100 48 70 Z" fill="#c8b090" />
-        <ellipse cx="0" cy="70" rx="48" ry="12" fill="#d8c0a0" />
-        <ellipse cx="0" cy="70" rx="40" ry="8" fill="#e8d0b0" />
-        {/* contenido molido */}
-        <ellipse cx="0" cy="72" rx="30" ry="5" fill="#9a8050" opacity="0.7" />
-        {/* mano de mortero */}
-        <rect x="-6" y="20" width="12" height="50" rx="6" fill="#b8a080" />
-        <ellipse cx="0" cy="20" rx="10" ry="7" fill="#c8b090" />
-        {/* partículas */}
-        <circle cx="-22" cy="62" r="2" fill="#7a6040" opacity="0.6" />
-        <circle cx="18" cy="60" r="1.5" fill="#7a6040" opacity="0.5" />
-        <circle cx="-10" cy="58" r="1" fill="#8a7050" opacity="0.5" />
-        <circle cx="28" cy="65" r="1.5" fill="#6a5030" opacity="0.4" />
-        {/* hojas alrededor */}
-        <path d="M38 50 Q60 30 68 12 Q48 24 36 44" fill="#7a9460" opacity="0.6" />
-        <path d="M-36 46 Q-58 24 -64 8 Q-44 22 -34 42" fill="#6a8450" opacity="0.6" />
-        {/* tierra */}
-        <ellipse cx="0" cy="118" rx="50" ry="9" fill="#b8a88a" opacity="0.4" />
-        {/* etiqueta */}
-        <text x="0" y="136" textAnchor="middle" fontFamily="serif" fontSize="9" fill="#7a6a50" letterSpacing="0.08em">PREPARACIÓN</text>
-      </g>
+        {/* flecha 2→3 */}
+        <path d="M272 340 C292 342 308 344 325 345" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
 
-      {/* flecha 3 */}
-      <g opacity="0.45">
-        <path d="M544 354 Q576 340 604 354" stroke="#9a8a6e" strokeWidth="1.5" fill="none" strokeDasharray="4 3" />
-        <polygon points="604,349 611,354 604,359" fill="#9a8a6e" />
-      </g>
+        {/* ── 03 ALAMBIQUE ── */}
+        <g transform="translate(390,130)">
+          <path d="M-50 230 C-52 236 -48 240 -40 240 L40 240 C48 240 52 236 50 230" fill="none" stroke="#8a7255" strokeWidth="2"/>
+          <path d="M-46 230 L46 230" stroke="#8a7255" strokeWidth="1.5" strokeDasharray="3 3"/>
+          <rect x="-44" y="220" width="12" height="20" rx="2" fill="none" stroke="#8a7255" strokeWidth="1.8"/>
+          <rect x="-6" y="220" width="12" height="20" rx="2" fill="none" stroke="#8a7255" strokeWidth="1.8"/>
+          <rect x="32" y="220" width="12" height="20" rx="2" fill="none" stroke="#8a7255" strokeWidth="1.8"/>
+          <path d="M-24 222 C-18 202 -10 210 -4 196 C2 210 8 204 14 196 C20 210 26 202 30 214 C34 222 28 222 24 222" fill="none" stroke="#d4732a" strokeWidth="2"/>
+          <path d="M-12 222 C-8 208 -2 214 2 204 C6 214 10 208 14 214 C18 222 14 222 10 222" fill="none" stroke="#e8942a" strokeWidth="1.5"/>
+          <path d="M-44 220 C-48 188 -50 155 -42 122 C-34 90 -22 72 0 68 C22 72 34 90 42 122 C50 155 48 188 44 220 Z" fill="none" stroke="#8a6248" strokeWidth="2.8"/>
+          <path d="M-42 175 Q0 168 42 175" fill="none" stroke="#8a6248" strokeWidth="0.8" strokeDasharray="3 3"/>
+          <path d="M-46 150 Q0 142 46 150" fill="none" stroke="#8a6248" strokeWidth="0.8" strokeDasharray="3 3"/>
+          <path d="M-48 125 Q0 118 48 125" fill="none" stroke="#8a6248" strokeWidth="0.8" strokeDasharray="3 3"/>
+          <path d="M-36 155 Q0 148 36 155" fill="none" stroke="#a06838" strokeWidth="1.2" strokeDasharray="4 3"/>
+          <circle cx="-10" cy="148" r="3" fill="none" stroke="#a06838" strokeWidth="1.2"/>
+          <circle cx="8" cy="143" r="2" fill="none" stroke="#a06838" strokeWidth="1"/>
+          <circle cx="18" cy="150" r="2.5" fill="none" stroke="#a06838" strokeWidth="1"/>
+          <path d="M-16 68 C-14 48 -8 32 0 22" fill="none" stroke="#8a6248" strokeWidth="2.5"/>
+          <path d="M16 68 C14 48 8 32 0 22" fill="none" stroke="#8a6248" strokeWidth="2.5"/>
+          <path d="M-22 22 C-20 6 -10 -4 0 -8 C10 -4 20 6 22 22 C15 28 -15 28 -22 22 Z" fill="none" stroke="#8a6248" strokeWidth="2.5"/>
+          <path d="M-20 18 Q0 14 20 18" fill="none" stroke="#8a6248" strokeWidth="0.8" strokeDasharray="2 3"/>
+          <path d="M-22 22 Q0 18 22 22" fill="none" stroke="#8a6248" strokeWidth="0.8" strokeDasharray="2 3"/>
+          <path d="M18 8 C28 4 42 2 56 4" fill="none" stroke="#8a6248" strokeWidth="2.2"/>
+          <path d="M20 12 C30 10 44 8 56 10" fill="none" stroke="#8a6248" strokeWidth="1" strokeDasharray="2 2"/>
+          <path d="M-5 -8 C-8 -18 -4 -26 -6 -34" fill="none" stroke="#c4b898" strokeWidth="1" strokeDasharray="1.5 2.5"/>
+          <path d="M5 -8 C8 -18 4 -26 6 -34" fill="none" stroke="#c4b898" strokeWidth="1" strokeDasharray="1.5 2.5"/>
+          <circle cx="-6" cy="-36" r="2" fill="none" stroke="#c4b898" strokeWidth="1"/>
+          <circle cx="6" cy="-36" r="2" fill="none" stroke="#c4b898" strokeWidth="1"/>
+        </g>
+        <text x="390" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">03 · ALAMBIQUE</text>
 
-      {/* ── FRASCO / EXTRACTO (derecha) ── */}
-      <g transform="translate(648, 270)">
-        {/* frasco */}
-        <rect x="-20" y="0" width="40" height="10" rx="3" fill="#b0a888" />
-        <rect x="-16" y="10" width="32" height="4" rx="1" fill="#a09878" />
-        <path d="M-22 14 Q-26 20 -26 80 Q-26 96 0 96 Q26 96 26 80 Q26 20 22 14 Z" fill="#c8d4b0" opacity="0.75" />
-        <path d="M-22 14 Q-26 20 -26 80 Q-26 96 0 96 Q26 96 26 80 Q26 20 22 14 Z" fill="none" stroke="#90a070" strokeWidth="1.5" />
-        {/* liquido dentro */}
-        <path d="M-24 54 Q-24 94 0 94 Q24 94 24 54 Z" fill="#8aaa60" opacity="0.45" />
-        {/* reflejo */}
-        <path d="M-16 22 Q-18 50 -16 70" stroke="white" strokeWidth="2" opacity="0.35" strokeLinecap="round" />
-        {/* gotas cayendo */}
-        <path d="M0 96 Q1 106 0 112" stroke="#7a9450" strokeWidth="1.5" fill="none" opacity="0.6" />
-        <path d="M-2 112 Q0 120 2 112 Q1 107 -2 112" fill="#7a9450" opacity="0.7" />
-        {/* etiqueta frasco */}
-        <rect x="-14" y="36" width="28" height="18" rx="2" fill="white" opacity="0.55" />
-        <text x="0" y="47" textAnchor="middle" fontFamily="serif" fontSize="6" fill="#5a6a40" letterSpacing="0.06em">QH</text>
-        {/* tierra */}
-        <ellipse cx="0" cy="118" rx="38" ry="7" fill="#b8a88a" opacity="0.4" />
-        {/* etiqueta */}
-        <text x="0" y="136" textAnchor="middle" fontFamily="serif" fontSize="9" fill="#7a6a50" letterSpacing="0.08em">EXTRACTO</text>
-      </g>
+        {/* flecha 3→4 */}
+        <path d="M450 280 C468 278 480 276 495 275" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
 
-      {/* línea base decorativa */}
-      <line x1="60" y1="400" x2="680" y2="400" stroke="#c8b898" strokeWidth="1" opacity="0.4" />
+        {/* ── 04 SERPENTÍN ── */}
+        <g transform="translate(538,148)">
+          <path d="M-28 210 Q-30 218 -24 222 L24 222 Q30 218 28 210 Z" fill="none" stroke="#6a7a88" strokeWidth="1.8"/>
+          <path d="M-30 10 Q-30 4 -24 2 L24 2 Q30 4 30 10" fill="none" stroke="#6a7a88" strokeWidth="1.8"/>
+          <line x1="-30" y1="10" x2="-30" y2="210" stroke="#6a7a88" strokeWidth="1.8"/>
+          <line x1="30" y1="10" x2="30" y2="210" stroke="#6a7a88" strokeWidth="1.8"/>
+          <path d="M-30 50 Q0 44 30 50" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
+          <path d="M-30 110 Q0 104 30 110" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
+          <path d="M-30 170 Q0 164 30 170" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
+          <circle cx="-30" cy="50" r="2" fill="#6a7a88"/>
+          <circle cx="30" cy="50" r="2" fill="#6a7a88"/>
+          <circle cx="-30" cy="110" r="2" fill="#6a7a88"/>
+          <circle cx="30" cy="110" r="2" fill="#6a7a88"/>
+          <circle cx="-30" cy="170" r="2" fill="#6a7a88"/>
+          <circle cx="30" cy="170" r="2" fill="#6a7a88"/>
+          <path d="M-28 130 Q0 125 28 130" fill="none" stroke="#6a7a88" strokeWidth="0.8" strokeDasharray="3 3"/>
+          <text x="0" y="150" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fill="#8a9aaa" letterSpacing="0.05em">AGUA FRÍA</text>
+          <path d="M-72 18 C-58 16 -46 14 -32 12" fill="none" stroke="#8a6248" strokeWidth="2" markerEnd="url(#arr-green)"/>
+          <path d="M-24 18 C-10 14 10 22 18 36 C26 50 14 66 -18 72 C-26 74 -22 86 -10 92 C10 98 24 88 22 104 C20 118 4 126 -16 128 C-24 130 -20 142 -8 148 C12 154 26 146 24 162 C22 176 6 184 -14 186 C-22 188 -18 198 -8 202" fill="none" stroke="#8a7255" strokeWidth="2.2"/>
+          <circle cx="18" cy="36" r="2" fill="#8a7255" opacity="0.8"/>
+          <circle cx="-18" cy="72" r="2" fill="#8a7255" opacity="0.8"/>
+          <circle cx="22" cy="104" r="2" fill="#8a7255" opacity="0.8"/>
+          <circle cx="-16" cy="128" r="2" fill="#8a7255" opacity="0.8"/>
+          <circle cx="24" cy="162" r="2" fill="#8a7255" opacity="0.8"/>
+          <circle cx="-14" cy="186" r="2" fill="#8a7255" opacity="0.8"/>
+          <path d="M-8 202 C4 208 18 212 32 210" fill="none" stroke="#8a7255" strokeWidth="2"/>
+          <path d="M32 210 C44 208 54 205 62 200" fill="none" stroke="#8a7255" strokeWidth="2" markerEnd="url(#arr-green)"/>
+          <circle cx="48" cy="200" r="3" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
+          <circle cx="56" cy="207" r="2.5" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
+          <circle cx="60" cy="195" r="2" fill="none" stroke="#5a8aa8" strokeWidth="1.2"/>
+          <path d="M-32 12 Q0 6 32 12" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
+          <line x1="30" y1="135" x2="42" y2="135" stroke="#6a7a88" strokeWidth="1.5"/>
+          <circle cx="44" cy="135" r="2" fill="#6a7a88"/>
+        </g>
+        <text x="538" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">04 · SERPENTÍN</text>
 
-      {/* titulo superior sutil */}
-      <text x="370" y="36" textAnchor="middle" fontFamily="serif" fontSize="11" fill="#8a7a60" letterSpacing="0.2em" opacity="0.7">DE LA TIERRA · A TI</text>
-    </svg>
+        {/* flecha 4→5 */}
+        <path d="M610 310 C628 306 642 295 654 282" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
+
+        {/* ── 05 BIO-ZEN BOTELLA ── */}
+        <g transform="translate(672,155)">
+          <rect x="-36" y="-12" width="72" height="185" rx="8" fill="none" stroke="#4a6a9a" strokeWidth="1.2" strokeDasharray="4 3"/>
+          <rect x="-20" y="20" width="40" height="100" rx="6" fill="none" stroke="#2a4a8a" strokeWidth="2.8"/>
+          <line x1="-14" y1="30" x2="-14" y2="110" stroke="#4a6aaa" strokeWidth="0.8" opacity="0.6"/>
+          <line x1="-8" y1="25" x2="-8" y2="115" stroke="#4a6aaa" strokeWidth="0.8" opacity="0.4"/>
+          <path d="M-20 20 C-20 10 -14 4 -8 2 L8 2 C14 4 20 10 20 20" fill="none" stroke="#2a4a8a" strokeWidth="2.5"/>
+          <rect x="-8" y="-14" width="16" height="18" rx="3" fill="none" stroke="#2a4a8a" strokeWidth="2.2"/>
+          <rect x="-10" y="-26" width="20" height="14" rx="4" fill="none" stroke="#2a4a8a" strokeWidth="2.5"/>
+          <line x1="0" y1="-26" x2="0" y2="-36" stroke="#2a4a8a" strokeWidth="2"/>
+          <circle cx="0" cy="-38" r="3" fill="none" stroke="#2a4a8a" strokeWidth="2"/>
+          <rect x="-16" y="32" width="32" height="55" rx="3" fill="none" stroke="#2a4a8a" strokeWidth="1.2"/>
+          <line x1="-12" y1="44" x2="12" y2="44" stroke="#2a4a8a" strokeWidth="0.8"/>
+          <line x1="-10" y1="52" x2="10" y2="52" stroke="#2a4a8a" strokeWidth="0.6" strokeDasharray="2 2"/>
+          <text x="0" y="38" textAnchor="middle" fontFamily="Georgia,serif" fontStyle="italic" fontSize="8" fill="#2a4a8a" letterSpacing="0.04em">bio</text>
+          <text x="0" y="60" textAnchor="middle" fontFamily="Georgia,serif" fontStyle="italic" fontSize="11" fill="#2a4a8a" letterSpacing="0.06em" fontWeight="bold">Zen</text>
+          <circle cx="-8" cy="72" r="3" fill="none" stroke="#2a4a8a" strokeWidth="0.8"/>
+          <circle cx="0" cy="70" r="3" fill="none" stroke="#2a4a8a" strokeWidth="0.8"/>
+          <circle cx="8" cy="72" r="3" fill="none" stroke="#2a4a8a" strokeWidth="0.8"/>
+          <path d="M-20 120 Q-22 128 -16 132 L16 132 Q22 128 20 120" fill="none" stroke="#2a4a8a" strokeWidth="2"/>
+          <circle cx="-12" cy="35" r="2" fill="#6a8acc" opacity="0.6"/>
+          <circle cx="-16" cy="50" r="1.5" fill="#6a8acc" opacity="0.5"/>
+          <ellipse cx="-28" cy="85" rx="4" ry="6" fill="none" stroke="#2a4a8a" strokeWidth="1.5"/>
+          <ellipse cx="-28" cy="98" rx="3.5" ry="5" fill="none" stroke="#2a4a8a" strokeWidth="1.2"/>
+          <circle cx="-28" cy="107" r="2.5" fill="none" stroke="#2a4a8a" strokeWidth="1.2"/>
+          <circle cx="26" cy="40" r="1.5" fill="#4a6aaa" opacity="0.7"/>
+          <circle cx="30" cy="55" r="1.5" fill="#4a6aaa" opacity="0.7"/>
+          <circle cx="28" cy="70" r="1.5" fill="#4a6aaa" opacity="0.7"/>
+          <circle cx="26" cy="85" r="1.5" fill="#4a6aaa" opacity="0.7"/>
+        </g>
+        <text x="672" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">05 · BIO-ZEN</text>
+
+        {/* números flotantes */}
+        <text x="72" y="274" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">01</text>
+        <text x="200" y="80" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">02</text>
+        <text x="355" y="118" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">03</text>
+        <text x="510" y="136" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">04</text>
+        <text x="640" y="136" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">05</text>
+      </svg>
+    </div>
   );
 }
