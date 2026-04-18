@@ -1,97 +1,102 @@
 'use client';
 
 import { useState } from 'react';
-import { PLANS } from '@/lib/config';
+import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
 import styles from './Pricing.module.css';
 
+const PRO_PRICE = 9;
+const PRO_PRICE_ANNUAL = 79;
+
+type ProFeature = { text: string; highlight: boolean };
+
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const t = useTranslations('pricing');
+  const freeFeatures = t.raw('freeFeatures') as string[];
+  const proFeatures = t.raw('proFeatures') as ProFeature[];
 
   return (
     <section className={`section ${styles.pricing}`} id="pricing">
       <div className="container">
-        <p className={styles.label}>Planes</p>
+        <p className={styles.label}>{t('label')}</p>
         <h2 className={styles.title}>
-          Elige tu <em>camino</em>
+          {t.rich('title', { em: (chunks) => <em>{chunks}</em> })}
         </h2>
 
         {/* Toggle */}
         <div className={styles.toggle}>
-          <span className={!annual ? styles.toggleActive : ''}>Mensual</span>
+          <span className={!annual ? styles.toggleActive : ''}>{t('monthly')}</span>
           <button
             className={styles.toggleBtn}
             onClick={() => setAnnual((v) => !v)}
-            aria-label="Alternar facturación anual"
+            aria-label="Toggle annual billing"
           >
             <span className={`${styles.toggleKnob} ${annual ? styles.toggleKnobOn : ''}`} />
           </button>
           <span className={annual ? styles.toggleActive : ''}>
-            Anual <em className={styles.saveBadge}>2 meses gratis</em>
+            {t('annual')} <em className={styles.saveBadge}>{t('twoFree')}</em>
           </span>
         </div>
 
         {/* Cards */}
         <div className={styles.grid}>
-          {PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`${styles.card} ${plan.featured ? styles.proCard : ''} reveal`}
-            >
-              {plan.featured && (
-                <span className={styles.badge}>Recomendado</span>
-              )}
+          {/* Freemium */}
+          <div className={`${styles.card} reveal`}>
+            <p className={styles.tier}>{t('freeName')}</p>
 
-              <p className={styles.tier}>{plan.name}</p>
-
-              <div className={styles.priceRow}>
-                <span className={styles.amount}>
-                  €{plan.featured && annual && 'priceAnnual' in plan
-                    ? Math.round((plan.priceAnnual as number) / 12)
-                    : plan.price}
-                </span>
-                <span className={styles.period}>
-                  {plan.price === 0 ? 'para siempre' : '/ mes'}
-                </span>
-              </div>
-
-              {'priceAnnual' in plan && (
-                <p className={styles.annualNote}>
-                  {annual
-                    ? `Facturado €${plan.priceAnnual}/año`
-                    : `o €${plan.priceAnnual}/año — ahorra €${plan.price * 12 - (plan.priceAnnual as number)}`}
-                </p>
-              )}
-
-              <ul className={styles.features}>
-                {plan.features.map((f) => {
-                  const text    = typeof f === 'string' ? f : f.text;
-                  const isHigh  = typeof f === 'object' && f.highlight;
-                  return (
-                    <li key={text} className={isHigh ? styles.highlight : ''}>
-                      {text}
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {plan.featured ? (
-                <Button variant="gold" fullWidth>
-                  {plan.cta}
-                </Button>
-              ) : (
-                <Button variant="outline" fullWidth>
-                  {plan.cta}
-                </Button>
-              )}
+            <div className={styles.priceRow}>
+              <span className={styles.amount}>€0</span>
+              <span className={styles.period}>{t('forever')}</span>
             </div>
-          ))}
+
+            <p className={styles.annualNote}>{t('freeNote')}</p>
+
+            <ul className={styles.features}>
+              {freeFeatures.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ul>
+
+            <Button variant="outline" fullWidth>
+              {t('freeCta')}
+            </Button>
+          </div>
+
+          {/* Quantum Pro */}
+          <div className={`${styles.card} ${styles.proCard} reveal`}>
+            <span className={styles.badge}>{t('popular')}</span>
+
+            <p className={styles.tier}>{t('proName')}</p>
+
+            <div className={styles.priceRow}>
+              <span className={styles.amount}>
+                €{annual ? Math.round(PRO_PRICE_ANNUAL / 12) : PRO_PRICE}
+              </span>
+              <span className={styles.period}>{t('perMonth')}</span>
+            </div>
+
+            <p className={styles.annualNote}>
+              {annual
+                ? t('billedAnnual', { price: PRO_PRICE_ANNUAL })
+                : t('saveAnnual', { price: PRO_PRICE_ANNUAL, savings: PRO_PRICE * 12 - PRO_PRICE_ANNUAL })}
+            </p>
+
+            <ul className={styles.features}>
+              {proFeatures.map((f) => (
+                <li key={f.text} className={f.highlight ? styles.highlight : ''}>
+                  {f.text}
+                </li>
+              ))}
+            </ul>
+
+            <Button variant="gold" fullWidth>
+              {t('proCta')}
+            </Button>
+          </div>
         </div>
 
-        <p className={styles.note}>
-          Sin permanencia · Cancela cuando quieras ·{' '}
-          <strong>Sin tarjeta para empezar</strong>
-        </p>
+        <p className={styles.note}>{t('note')}</p>
       </div>
     </section>
   );

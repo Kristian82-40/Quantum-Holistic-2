@@ -1,8 +1,14 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
 import QuantumCircle from '@/components/illustrations/QuantumCircle';
 import styles from './Hero.module.css';
 
 export default function Hero() {
+  const t = useTranslations('hero');
+  const elements = t.raw('elements') as string[];
+
   return (
     <section className={styles.hero}>
       {/* ── CSS Art Background ── */}
@@ -26,43 +32,36 @@ export default function Hero() {
 
       {/* ── Contenido centrado ── */}
       <div className={styles.content}>
-        <p className={styles.badge}>✦ Medicina Integrativa Cuántica ✦</p>
+        <p className={styles.badge}>{t('badge')}</p>
 
         <h1 className={styles.title}>
-          Tu cuerpo tiene<br />
-          su <em>propia</em><br />
-          inteligencia
+          {t('line1')}<br />
+          {t('line2')} <em>{t('line2em')}</em><br />
+          {t('line3')}
         </h1>
 
         <div className={styles.elements}>
-          <span>Tierra</span>
-          <span className={styles.elemDiv}>·</span>
-          <span>Agua</span>
-          <span className={styles.elemDiv}>·</span>
-          <span>Fuego</span>
-          <span className={styles.elemDiv}>·</span>
-          <span>Aire</span>
-          <span className={styles.elemDiv}>·</span>
-          <span>Éter</span>
+          {elements.map((el, i) => (
+            <span key={el}>
+              {i > 0 && <span className={styles.elemDiv}>·</span>}
+              {el}
+            </span>
+          ))}
         </div>
 
-        <p className={styles.desc}>
-          Planes nutricionales km0, herbología y bienestar personalizado,
-          potenciados por inteligencia artificial y arraigados en la
-          sabiduría de la tierra.
-        </p>
+        <p className={styles.desc}>{t('desc')}</p>
 
         <div className={styles.actions}>
-          <Button as="a" href="/#pricing">Descubrir mi perfil</Button>
+          <Button as="a" href="/#pricing">{t('cta')}</Button>
           <a href="#how" className={styles.textLink}>
-            Ver cómo funciona <span className={styles.arrow}>→</span>
+            {t('howLink')} <span className={styles.arrow}>→</span>
           </a>
         </div>
       </div>
 
       <div className={styles.scrollHint} aria-hidden>
         <span className={styles.scrollLine} />
-        <span className={styles.scrollLabel}>Explorar</span>
+        <span className={styles.scrollLabel}>{t('scroll')}</span>
       </div>
     </section>
   );

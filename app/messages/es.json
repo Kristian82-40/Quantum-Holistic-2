@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "method": "Método",
+    "process": "Proceso",
+    "quantumPro": "Quantum Pro",
+    "plans": "Planes",
+    "blog": "Blog",
+    "startFree": "Empezar gratis"
+  },
+  "hero": {
+    "badge": "✦ Medicina Integrativa Cuántica ✦",
+    "line1": "Tu cuerpo tiene",
+    "line2": "su",
+    "line2em": "propia",
+    "line3": "inteligencia",
+    "elements": ["Tierra", "Agua", "Fuego", "Aire", "Éter"],
+    "desc": "Planes nutricionales km0, herbología y bienestar personalizado, potenciados por inteligencia artificial y arraigados en la sabiduría de la tierra.",
+    "cta": "Descubrir mi perfil",
+    "howLink": "Ver cómo funciona",
+    "scroll": "Explorar"
+  },
+  "pillars": {
+    "label": "Nuestro método",
+    "title": "Cuatro pilares para una vida <em>verdaderamente</em> equilibrada",
+    "items": [
+      { "num": "01", "title": "Nutrición de proximidad", "desc": "Alimentos locales, estacionales y de kilómetro cero. Tu cuerpo y la tierra que pisas comparten el mismo ritmo.", "tags": ["KM0", "ESTACIONAL"] },
+      { "num": "02", "title": "Perfil holístico real", "desc": "Biométrica, hábitos, energía y objetivos. Un sistema de bienestar construido desde tus datos, no desde estadísticas genéricas.", "tags": ["IA", "BIOMÉTRICA"] },
+      { "num": "03", "title": "Plantas & sabiduría ancestral", "desc": "Herbología, macrobiótica y tradiciones milenarias integradas en recomendaciones que puedes aplicar hoy.", "tags": ["HERBOLOGÍA", "TRADICIÓN"] },
+      { "num": "04", "title": "Tu plan. Tu ritmo. Tu vida.", "desc": "Quantum unifica todo en un plan diario completamente personalizado. Organiza tu calendario, te manda avisos cuando los necesitas, adapta cada recomendación a tu bolsillo y a quién eres — si tienes 17 años, un bebé en brazos o 70 primaveras vividas.", "tags": ["PERSONAL", "ADAPTATIVO", "REAL"] }
+    ]
+  },
+  "how": {
+    "label": "El proceso",
+    "titleLine1": "Simple por fuera.",
+    "titleLine2em": "Profundo",
+    "titleLine2rest": " por dentro.",
+    "steps": [
+      { "num": "01", "title": "Crea tu perfil holístico", "desc": "10 preguntas sobre tu cuerpo, hábitos, entorno y objetivos. En 5 minutos, tu mapa de bienestar personalizado." },
+      { "num": "02", "title": "La IA analiza y conecta", "desc": "Ciencia nutricional + herbología local + tus datos. El sistema construye un protocolo que ningún otro usuario tiene." },
+      { "num": "03", "title": "Recibe tu plan personalizado", "desc": "Plan nutricional semanal, plantas para tu zona y rituales adaptados a tu perfil, tu estación y tu objetivo real." },
+      { "num": "04", "title": "Evoluciona con el tiempo", "desc": "El sistema aprende contigo. Con Quantum Pro, además, hablas directamente con el especialista cada mes." }
+    ],
+    "line1": "Ciencia ancestral validada por la evidencia moderna",
+    "line2": "Tecnología cuántica aplicada al bienestar integral",
+    "planCard": "Tu plan · Esta semana",
+    "samplePlan": [
+      { "bg": "sage", "label": "Lunes · Depuración", "body": "Caldo de ortiga + arroz integral con sésamo" },
+      { "bg": "gold", "label": "Planta recomendada", "body": "Romero local · Digestión y claridad mental" },
+      { "bg": "sage", "label": "Ritual matinal", "body": "Agua tibia + limón + jengibre fresco rallado" },
+      { "bg": "pro", "label": "Quantum Pro · Sesión", "body": "Videollamada jueves 18h · 45 min" }
+    ]
+  },
+  "pro": {
+    "label": "Quantum Pro — Lo que incluye",
+    "titleLine1": "Bienestar sin",
+    "titleEm": "humo",
+    "titleLine2": "Resultados reales.",
+    "items": [
+      { "icon": "◈", "title": "Protocolo depurativo mes a mes", "desc": "Cada mes un ciclo diferente: depuración, refuerzo inmune, regeneración. Adaptado a tu estado, no a un calendario genérico.", "tag": "Detox · Regeneración" },
+      { "icon": "◉", "title": "Optimización según tu perfil", "desc": "Deportista de élite, rendimiento cognitivo o equilibrio vital. Las técnicas se segmentan exactamente donde tú necesitas.", "tag": "Élite · Rendimiento" },
+      { "icon": "◎", "title": "Videollamada con el especialista", "desc": "Sesión mensual para revisar tu evolución, ajustar el protocolo y resolver lo que ninguna IA puede gestionar sola.", "tag": "1:1 · Humano" },
+      { "icon": "◇", "title": "Seguimiento adaptativo", "desc": "El sistema detecta si estás en fase de estrés, fatiga o pico de forma. Ajusta el protocolo de forma automática.", "tag": "IA · Adaptativo" },
+      { "icon": "✦", "title": "Potenciación de habilidades únicas", "desc": "Músico, atleta, emprendedor o investigador: el plan potencia las capacidades específicas que tu vida requiere.", "tag": "Personalizado · Enfocado" },
+      { "icon": "◐", "title": "Guías descargables & recursos", "desc": "PDFs depurativos, recetarios estacionales, guías de plantas medicinales. Generados con IA y revisados por el especialista.", "tag": "PDF · Recursos" }
+    ]
+  },
+  "pricing": {
+    "label": "Planes",
+    "title": "Elige tu <em>camino</em>",
+    "monthly": "Mensual",
+    "annual": "Anual",
+    "twoFree": "2 meses gratis",
+    "popular": "Recomendado",
+    "forever": "para siempre",
+    "perMonth": "/ mes",
+    "billedAnnual": "Facturado €{price}/año",
+    "saveAnnual": "o €{price}/año — ahorra €{savings}",
+    "note": "Sin permanencia · Cancela cuando quieras · Sin tarjeta para empezar",
+    "freeName": "Freemium",
+    "freeNote": "Sin tarjeta de crédito",
+    "freeFeatures": [
+      "Perfil holístico básico",
+      "Plan semanal generado por IA",
+      "Recetas km0 estacionales",
+      "Biblioteca de plantas medicinales",
+      "Blog y recursos gratuitos"
+    ],
+    "freeCta": "Empezar gratis",
+    "proName": "Quantum Pro",
+    "proFeatures": [
+      { "text": "Protocolo depurativo mes a mes", "highlight": true },
+      { "text": "Optimización según tu perfil único", "highlight": true },
+      { "text": "Videollamada mensual 1:1", "highlight": true },
+      { "text": "Seguimiento adaptativo con IA", "highlight": false },
+      { "text": "Potenciación de habilidades específicas", "highlight": false },
+      { "text": "Guías PDF descargables", "highlight": false },
+      { "text": "Plan nutricional avanzado", "highlight": false },
+      { "text": "Herbología y rituales personalizados", "highlight": false }
+    ],
+    "proCta": "Activar Quantum Pro"
+  },
+  "footer": {
+    "desc": "Planes nutricionales km0 personalizados, herbología y bienestar holístico potenciados por inteligencia artificial.",
+    "platform": "Plataforma",
+    "platformLinks": ["Mi perfil", "Plan semanal", "Herbología", "Quantum Pro"],
+    "company": "Empresa",
+    "companyLinks": ["Sobre nosotros", "Método", "Blog", "Contacto"],
+    "legal": "Legal",
+    "legalLinks": ["Privacidad", "Términos", "Cookies"],
+    "newsletter": "Newsletter"
+  }
+}
