@@ -126,41 +126,60 @@ export default function BioZenScene() {
         {/* flecha 3→4 */}
         <path d="M450 280 C468 278 480 276 495 275" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
 
-        {/* ── 04 SERPENTÍN ── */}
-        <g transform="translate(538,148)">
-          <path d="M-28 210 Q-30 218 -24 222 L24 222 Q30 218 28 210 Z" fill="none" stroke="#6a7a88" strokeWidth="1.8"/>
-          <path d="M-30 10 Q-30 4 -24 2 L24 2 Q30 4 30 10" fill="none" stroke="#6a7a88" strokeWidth="1.8"/>
-          <line x1="-30" y1="10" x2="-30" y2="210" stroke="#6a7a88" strokeWidth="1.8"/>
-          <line x1="30" y1="10" x2="30" y2="210" stroke="#6a7a88" strokeWidth="1.8"/>
-          <path d="M-30 50 Q0 44 30 50" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
-          <path d="M-30 110 Q0 104 30 110" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
-          <path d="M-30 170 Q0 164 30 170" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
-          <circle cx="-30" cy="50" r="2" fill="#6a7a88"/>
-          <circle cx="30" cy="50" r="2" fill="#6a7a88"/>
-          <circle cx="-30" cy="110" r="2" fill="#6a7a88"/>
-          <circle cx="30" cy="110" r="2" fill="#6a7a88"/>
-          <circle cx="-30" cy="170" r="2" fill="#6a7a88"/>
-          <circle cx="30" cy="170" r="2" fill="#6a7a88"/>
-          <path d="M-28 130 Q0 125 28 130" fill="none" stroke="#6a7a88" strokeWidth="0.8" strokeDasharray="3 3"/>
-          <text x="0" y="150" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fill="#8a9aaa" letterSpacing="0.05em">AGUA FRÍA</text>
+        {/* ── 04 CONDENSADOR LIEBIG ── */}
+        <g transform="translate(538,80)">
+          {/* camisa exterior doble pared */}
+          <rect x="-30" y="0" width="60" height="220" rx="8" fill="none" stroke="#6a7a88" strokeWidth="2.5"/>
+          <rect x="-24" y="5" width="48" height="210" rx="5" fill="none" stroke="#6a7a88" strokeWidth="0.7" strokeDasharray="3 3"/>
+
+          {/* junta superior */}
+          <rect x="-8" y="-22" width="16" height="24" rx="3" fill="none" stroke="#6a7a88" strokeWidth="2"/>
+          {/* junta inferior */}
+          <rect x="-8" y="220" width="16" height="24" rx="3" fill="none" stroke="#6a7a88" strokeWidth="2"/>
+
+          {/* entrada agua lateral superior derecha */}
+          <path d="M30 30 L50 24" fill="none" stroke="#5a8aa8" strokeWidth="1.8"/>
+          <ellipse cx="53" cy="23" rx="4" ry="3" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
+
+          {/* salida agua lateral inferior izquierda */}
+          <path d="M-30 190 L-50 196" fill="none" stroke="#5a8aa8" strokeWidth="1.8"/>
+          <ellipse cx="-53" cy="197" rx="4" ry="3" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
+
+          {/* espiral interior — 5 bucles Liebig */}
+          <line x1="0" y1="-22" x2="0" y2="18" stroke="#8a7255" strokeWidth="2"/>
+          <path d="M0 18 C-14 21 -20 26 -18 31 C-16 36 16 39 18 44 C20 49 14 54 0 58 C-14 61 -20 66 -18 71 C-16 76 16 79 18 84 C20 89 14 94 0 98 C-14 101 -20 106 -18 111 C-16 116 16 119 18 124 C20 129 14 134 0 138 C-14 141 -20 146 -18 151 C-16 156 16 159 18 164 C20 169 14 174 0 178 C-14 181 -20 186 -18 191 C-16 196 16 199 18 204 C20 209 14 214 0 218"
+            fill="none" stroke="#8a7255" strokeWidth="2.2"/>
+          <line x1="0" y1="218" x2="0" y2="244" stroke="#8a7255" strokeWidth="2"/>
+
+          {/* puntos de inflexión */}
+          <circle cx="-18" cy="31" r="2" fill="#8a7255"/>
+          <circle cx="18" cy="44" r="2" fill="#8a7255"/>
+          <circle cx="0" cy="58" r="2" fill="#8a7255"/>
+          <circle cx="-18" cy="71" r="2" fill="#8a7255"/>
+          <circle cx="18" cy="84" r="2" fill="#8a7255"/>
+          <circle cx="0" cy="98" r="2" fill="#8a7255"/>
+          <circle cx="-18" cy="111" r="2" fill="#8a7255"/>
+          <circle cx="18" cy="124" r="2" fill="#8a7255"/>
+          <circle cx="0" cy="138" r="2" fill="#8a7255"/>
+          <circle cx="-18" cy="151" r="2" fill="#8a7255"/>
+          <circle cx="18" cy="164" r="2" fill="#8a7255"/>
+          <circle cx="0" cy="178" r="2" fill="#8a7255"/>
+          <circle cx="-18" cy="191" r="2" fill="#8a7255"/>
+          <circle cx="18" cy="204" r="2" fill="#8a7255"/>
+          <circle cx="0" cy="218" r="2" fill="#8a7255"/>
+
+          {/* texto */}
+          <text x="0" y="114" textAnchor="middle" fontFamily="Georgia,serif" fontSize="7" fill="#8a9aaa" letterSpacing="0.05em">AGUA FRÍA</text>
+
+          {/* gotas saliendo por abajo de la junta inferior */}
+          <ellipse cx="-6" cy="253" rx="3" ry="4" fill="none" stroke="#5a8aa8" strokeWidth="1.2"/>
+          <ellipse cx="0" cy="260" rx="2.5" ry="3.5" fill="none" stroke="#5a8aa8" strokeWidth="1.2"/>
+          <ellipse cx="6" cy="255" rx="2" ry="3" fill="none" stroke="#5a8aa8" strokeWidth="1"/>
+
+          {/* pipe desde alambique */}
           <path d="M-72 18 C-58 16 -46 14 -32 12" fill="none" stroke="#8a6248" strokeWidth="2" markerEnd="url(#arr-green)"/>
-          <path d="M-24 18 C-10 14 10 22 18 36 C26 50 14 66 -18 72 C-26 74 -22 86 -10 92 C10 98 24 88 22 104 C20 118 4 126 -16 128 C-24 130 -20 142 -8 148 C12 154 26 146 24 162 C22 176 6 184 -14 186 C-22 188 -18 198 -8 202" fill="none" stroke="#8a7255" strokeWidth="2.2"/>
-          <circle cx="18" cy="36" r="2" fill="#8a7255" opacity="0.8"/>
-          <circle cx="-18" cy="72" r="2" fill="#8a7255" opacity="0.8"/>
-          <circle cx="22" cy="104" r="2" fill="#8a7255" opacity="0.8"/>
-          <circle cx="-16" cy="128" r="2" fill="#8a7255" opacity="0.8"/>
-          <circle cx="24" cy="162" r="2" fill="#8a7255" opacity="0.8"/>
-          <circle cx="-14" cy="186" r="2" fill="#8a7255" opacity="0.8"/>
-          <path d="M-8 202 C4 208 18 212 32 210" fill="none" stroke="#8a7255" strokeWidth="2"/>
-          <path d="M32 210 C44 208 54 205 62 200" fill="none" stroke="#8a7255" strokeWidth="2" markerEnd="url(#arr-green)"/>
-          <circle cx="48" cy="200" r="3" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
-          <circle cx="56" cy="207" r="2.5" fill="none" stroke="#5a8aa8" strokeWidth="1.5"/>
-          <circle cx="60" cy="195" r="2" fill="none" stroke="#5a8aa8" strokeWidth="1.2"/>
-          <path d="M-32 12 Q0 6 32 12" fill="none" stroke="#6a7a88" strokeWidth="1.5"/>
-          <line x1="30" y1="135" x2="42" y2="135" stroke="#6a7a88" strokeWidth="1.5"/>
-          <circle cx="44" cy="135" r="2" fill="#6a7a88"/>
         </g>
-        <text x="538" y="388" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">04 · SERPENTÍN</text>
+        <text x="538" y="390" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#9a9480" letterSpacing="0.08em">04 · LIEBIG</text>
 
         {/* flecha 4→5 */}
         <path d="M610 310 C628 306 642 295 654 282" fill="none" stroke="#9aaa7e" strokeWidth="1.5" strokeDasharray="3 4" markerEnd="url(#arr-green)"/>
@@ -201,7 +220,7 @@ export default function BioZenScene() {
         <text x="72" y="274" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">01</text>
         <text x="200" y="80" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">02</text>
         <text x="355" y="118" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">03</text>
-        <text x="510" y="136" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">04</text>
+        <text x="510" y="68" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">04</text>
         <text x="640" y="136" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8c0a8" letterSpacing="0.15em">05</text>
       </svg>
     </div>
