@@ -97,7 +97,20 @@
       { "text": "Plan nutricional avanzado", "highlight": false },
       { "text": "Herbología y rituales personalizados", "highlight": false }
     ],
-    "proCta": "Activar Quantum Pro"
+    "proCta": "Activar Quantum Pro",
+    "therapistName": "Terapeuta",
+    "therapistBadge": "FASE BETA",
+    "therapistPriceLabel": "GRATIS",
+    "therapistNote": "Gratis mientras dure la fase beta",
+    "therapistFeatures": [
+      "Perfil público verificado",
+      "Gestión de pacientes",
+      "Herramientas de seguimiento",
+      "Comisiones solo cuando hay ingresos"
+    ],
+    "therapistCta": "Unirme como terapeuta",
+    "paymentTitle": "Métodos de pago aceptados",
+    "paymentComingSoon": "próximamente"
   },
   "footer": {
     "desc": "Planes nutricionales km0 personalizados, herbología y bienestar holístico potenciados por inteligencia artificial.",
