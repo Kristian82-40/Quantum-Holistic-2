@@ -66,25 +66,19 @@ export const PILLARS = [
     num:   '01',
     title: 'Nutrición de proximidad',
     desc:  'Alimentos locales, estacionales y de kilómetro cero. Tu cuerpo y la tierra que pisas comparten el mismo ritmo.',
-    tags:  ['KM0', 'ESTACIONAL'],
+    tag:   'KM0 · Estacional',
   },
   {
     num:   '02',
-    title: 'Perfil holístico real',
-    desc:  'Biométrica, hábitos, energía y objetivos. Un sistema de bienestar construido desde tus datos, no desde estadísticas genéricas.',
-    tags:  ['IA', 'BIOMÉTRICA'],
+    title: 'Perfil holístico personalizado',
+    desc:  'Biométrica, hábitos, energía y objetivos. Un sistema de bienestar único construido desde tus datos reales.',
+    tag:   'IA · Biométrica',
   },
   {
     num:   '03',
     title: 'Plantas & sabiduría ancestral',
-    desc:  'Herbología, macrobiótica y tradiciones milenarias integradas en recomendaciones que puedes aplicar hoy.',
-    tags:  ['HERBOLOGÍA', 'TRADICIÓN'],
-  },
-  {
-    num:   '04',
-    title: 'Tu plan. Tu ritmo. Tu vida.',
-    desc:  'Quantum unifica todo en un plan diario completamente personalizado. Organiza tu calendario, te manda avisos cuando los necesitas, adapta cada recomendación a tu bolsillo y a quién eres — si tienes 17 años, un bebé en brazos o 70 primaveras vividas.',
-    tags:  ['PERSONAL', 'ADAPTATIVO', 'REAL'],
+    desc:  'Herbología, macrobiótica y tradiciones milenarias integradas en recomendaciones prácticas.',
+    tag:   'Herbología · Tradición',
   },
 ] as const;
 

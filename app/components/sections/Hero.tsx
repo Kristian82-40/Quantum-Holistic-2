@@ -34,6 +34,18 @@ export default function Hero() {
           inteligencia
         </h1>
 
+        <div className={styles.elements}>
+          <span>Tierra</span>
+          <span className={styles.elemDiv}>·</span>
+          <span>Agua</span>
+          <span className={styles.elemDiv}>·</span>
+          <span>Fuego</span>
+          <span className={styles.elemDiv}>·</span>
+          <span>Aire</span>
+          <span className={styles.elemDiv}>·</span>
+          <span>Éter</span>
+        </div>
+
         <p className={styles.desc}>
           Planes nutricionales km0, herbología y bienestar personalizado,
           potenciados por inteligencia artificial y arraigados en la
