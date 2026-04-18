@@ -97,7 +97,20 @@
       { "text": "Advanced nutrition plan", "highlight": false },
       { "text": "Personalized herbology & rituals", "highlight": false }
     ],
-    "proCta": "Activate Quantum Pro"
+    "proCta": "Activate Quantum Pro",
+    "therapistName": "Therapist",
+    "therapistBadge": "BETA PHASE",
+    "therapistPriceLabel": "FREE",
+    "therapistNote": "Free during the beta phase",
+    "therapistFeatures": [
+      "Verified public profile",
+      "Patient management",
+      "Follow-up tools",
+      "Commissions only when there is income"
+    ],
+    "therapistCta": "Join as therapist",
+    "paymentTitle": "Accepted payment methods",
+    "paymentComingSoon": "coming soon"
   },
   "footer": {
     "desc": "Personalized km0 nutrition plans, herbology and holistic wellness powered by artificial intelligence.",

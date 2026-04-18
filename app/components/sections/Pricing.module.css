@@ -1,4 +1,4 @@
-.pricing { background: var(--bg-primary); }
+.pricing { background: var(--bg-secondary); }
 
 .label {
   font-size: 10px;
@@ -16,7 +16,7 @@
 
 .title em { font-style: italic; color: var(--sage); }
 
-/* Toggle */
+/* ── Toggle ─────────────────────────────────────── */
 .toggle {
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   position: relative;
-  cursor: none;
+  cursor: pointer;
   transition: background var(--dur-mid);
 }
 
@@ -68,18 +68,18 @@
   margin-left: 6px;
 }
 
-/* Cards */
+/* ── Cards grid ─────────────────────────────────── */
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  max-width: 820px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
   margin-inline: auto;
 }
 
 .card {
   border: 1px solid var(--border);
-  padding: 52px 44px;
+  padding: 44px 36px;
   position: relative;
   overflow: hidden;
   transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid);
@@ -95,19 +95,29 @@
   z-index: 0;
 }
 
-.card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(107, 124, 94, 0.1); }
+.card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(107, 124, 94, 0.1); }
 .card:hover::before { transform: translateY(0); }
 .card > * { position: relative; z-index: 1; }
 
-/* Pro card */
+/* ── Pro card (centro) ───────────────────────────── */
 .proCard {
   background: var(--pro-dark);
-  border-color: var(--pro-dark);
+  border-color: var(--gold);
+  border-width: 1.5px;
 }
 
 .proCard::before { background: rgba(255, 255, 255, 0.04); }
-.proCard:hover   { box-shadow: 0 24px 80px rgba(30, 43, 26, 0.45); }
+.proCard:hover   { box-shadow: 0 24px 80px rgba(201, 168, 76, 0.2); }
 
+/* ── Therapist card ──────────────────────────────── */
+.therapistCard {
+  background: var(--sage-pale);
+  border-color: rgba(107, 124, 94, 0.3);
+}
+
+.therapistCard::before { background: rgba(107, 124, 94, 0.08); }
+
+/* ── Badge ───────────────────────────────────────── */
 .badge {
   position: absolute;
   top: 20px; right: 20px;
@@ -116,10 +126,17 @@
   font-size: 9px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 4px 14px;
+  padding: 4px 12px;
   z-index: 2;
+  font-family: var(--font-sans);
 }
 
+.betaBadge {
+  background: var(--sage);
+  color: #fff;
+}
+
+/* ── Tier / Name ─────────────────────────────────── */
 .tier {
   font-size: 10px;
   letter-spacing: 0.28em;
@@ -128,6 +145,7 @@
   margin-bottom: 16px;
 }
 
+/* ── Price row ───────────────────────────────────── */
 .priceRow {
   display: flex;
   align-items: baseline;
@@ -137,10 +155,16 @@
 
 .amount {
   font-family: var(--font-serif);
-  font-size: 64px;
+  font-size: 56px;
   font-weight: 300;
   line-height: 1;
   color: var(--text-primary);
+}
+
+.therapistAmount {
+  font-size: 40px;
+  color: var(--sage);
+  letter-spacing: 0.05em;
 }
 
 .proCard .amount { color: #fff; }
@@ -153,20 +177,25 @@
 
 .proCard .period { color: rgba(255, 255, 255, 0.5); }
 
+/* ── Annual note ─────────────────────────────────── */
 .annualNote {
   font-size: 11px;
   color: var(--gold);
   letter-spacing: 0.05em;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  min-height: 16px;
 }
 
+.therapistCard .annualNote { color: var(--sage); }
+
+/* ── Features ────────────────────────────────────── */
 .features {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  margin-bottom: 40px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-bottom: 36px;
+  margin-top: 20px;
 }
 
 .features li {
@@ -175,6 +204,7 @@
   font-weight: 300;
   padding-left: 18px;
   position: relative;
+  line-height: 1.45;
 }
 
 .features li::before {
@@ -189,6 +219,9 @@
 .proCard .features li { color: rgba(255, 255, 255, 0.75); }
 .proCard .features li::before { background: var(--gold); }
 
+.therapistCard .features li { color: var(--text-muted); }
+.therapistCard .features li::before { background: var(--sage); }
+
 .highlight {
   color: var(--text-primary) !important;
   font-weight: 500 !important;
@@ -196,6 +229,7 @@
 
 .proCard .highlight { color: #fff !important; }
 
+/* ── Bottom note ─────────────────────────────────── */
 .note {
   text-align: center;
   font-size: 12px;
@@ -206,13 +240,87 @@
 
 .note strong { color: var(--sage); }
 
-@media (max-width: 700px) {
-  .grid { grid-template-columns: 1fr; max-width: 440px; }
+/* ── Payment methods ─────────────────────────────── */
+.paymentSection {
+  margin-top: 72px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.paymentTitle {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.paymentGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.payMethod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  min-width: 100px;
+  transition: border-color var(--dur-mid), transform var(--dur-mid);
+}
+
+.payMethod:hover {
+  border-color: var(--sage-light);
+  transform: translateY(-2px);
+}
+
+.payMethodSoon {
+  opacity: 0.5;
+}
+
+.payMethodSoon:hover {
+  transform: none;
+  border-color: var(--border);
+}
+
+.payIcon {
+  width: 48px;
+  height: 28px;
+  color: var(--text-muted);
+}
+
+.payLabel {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.payComingSoon {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--earth-light);
+  font-style: italic;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-  .planName { color: #e8e6df; }
-  .price { color: #e8e6df; }
-  .feature { color: #9e9b92; }
-  .card { background: #1a1c17; border-color: rgba(168,184,154,0.15); }
+  .therapistCard { background: rgba(107,124,94,0.08); }
+  .card { border-color: rgba(168,184,154,0.15); }
 }
