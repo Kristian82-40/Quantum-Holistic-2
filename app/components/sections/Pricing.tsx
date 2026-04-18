@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import Button from '@/components/ui/Button';
 import styles from './Pricing.module.css';
 
@@ -76,10 +77,34 @@ const PAYMENT_METHODS = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loading, setLoading] = useState(false);
   const t = useTranslations('pricing');
+  const { locale } = useLanguage();
   const freeFeatures      = t.raw('freeFeatures')      as string[];
   const proFeatures       = t.raw('proFeatures')       as ProFeature[];
   const therapistFeatures = t.raw('therapistFeatures') as string[];
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          billingCycle: annual ? 'annual' : 'monthly',
+          locale,
+        }),
+      });
+      const data = await res.json() as { url?: string; error?: string };
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Checkout error:', data.error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className={`section ${styles.pricing}`} id="pricing">
@@ -141,7 +166,9 @@ export default function Pricing() {
                 <li key={f.text} className={f.highlight ? styles.highlight : ''}>{f.text}</li>
               ))}
             </ul>
-            <Button variant="gold" fullWidth>{t('proCta')}</Button>
+            <Button variant="gold" fullWidth onClick={handleCheckout} disabled={loading}>
+              {loading ? '…' : t('proCta')}
+            </Button>
           </div>
 
           {/* Terapeuta */}

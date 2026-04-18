@@ -112,6 +112,17 @@
     "paymentTitle": "Accepted payment methods",
     "paymentComingSoon": "coming soon"
   },
+  "gracias": {
+    "badge": "✦ Welcome to Quantum Pro ✦",
+    "title": "Your access is <em>active</em>",
+    "desc": "We've received your subscription. You'll get a confirmation email shortly at the address you used for payment.",
+    "next": "What's next?",
+    "step1": "Complete your holistic profile",
+    "step2": "You'll receive your first personalized plan within 24h",
+    "step3": "Access the papu-pro chat from your dashboard",
+    "cta": "Go to home",
+    "support": "Any issues? Write to us at"
+  },
   "footer": {
     "desc": "Personalized km0 nutrition plans, herbology and holistic wellness powered by artificial intelligence.",
     "platform": "Platform",
