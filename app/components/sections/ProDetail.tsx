@@ -1,19 +1,27 @@
-import { PRO_ITEMS } from '@/lib/config';
+'use client';
+
+import { useTranslations } from 'next-intl';
 import styles from './ProDetail.module.css';
 
+type ProItem = { icon: string; title: string; desc: string; tag: string };
+
 export default function ProDetail() {
+  const t = useTranslations('pro');
+  const items = t.raw('items') as ProItem[];
+
   return (
     <section className={`section ${styles.pro}`} id="pro-detail">
       <div className="container">
-        <p className={styles.label}>Quantum Pro — Lo que incluye</p>
+        <p className={styles.label}>{t('label')}</p>
         <h2 className={styles.title}>
-          Bienestar sin <em>humo</em>.<br />Resultados reales.
+          {t('titleLine1')} <em>{t('titleEm')}</em>.<br />
+          {t('titleLine2')}
         </h2>
       </div>
 
       <div className="container">
         <div className={styles.grid}>
-          {PRO_ITEMS.map((item) => (
+          {items.map((item) => (
             <article key={item.title} className={`${styles.item} reveal`}>
               <span className={styles.icon} aria-hidden>{item.icon}</span>
               <h3 className={styles.itemTitle}>{item.title}</h3>
