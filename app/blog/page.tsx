@@ -1,19 +1,87 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { POSTS } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'Blog — Nutrición KM0, Herbología & Bienestar',
+  title: 'Blog — Nutrición KM0, Herbología & Bienestar | Quantum Holistic',
   description:
     'Artículos sobre nutrición de proximidad, herbología, depuración y bienestar holístico basados en ciencia y tradición.',
 };
 
-export default function BlogPage() {
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  slug: string;
+  category: string;
+  image_url: string | null;
+  created_at: string;
+}
+
+async function getPublishedPosts(): Promise<BlogPost[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) return [];
+
+  try {
+    const res = await fetch(
+      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,image_url,created_at&published=eq.true&order=created_at.desc`,
+      {
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+        },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+export default async function BlogPage() {
+  const supabasePosts = await getPublishedPosts();
+
+  const posts =
+    supabasePosts.length > 0
+      ? supabasePosts.map((p) => ({
+          slug: p.slug,
+          cat: p.category,
+          title: p.title,
+          excerpt: p.excerpt,
+          date: formatDate(p.created_at),
+          image: p.image_url,
+          fromSupabase: true,
+        }))
+      : POSTS.map((p) => ({
+          slug: p.slug,
+          cat: p.cat,
+          title: p.title,
+          excerpt: p.excerpt,
+          date: p.date,
+          image: null,
+          fromSupabase: false,
+        }));
+
   return (
     <>
       <Navbar />
       <main style={{ paddingTop: '120px', minHeight: '60vh' }}>
         <div className="container section">
+          {/* Header */}
           <p
             style={{
               fontSize: '10px',
@@ -25,14 +93,129 @@ export default function BlogPage() {
           >
             Blog
           </p>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, marginBottom: '24px' }}>
-            Próximamente
+          <h1
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontWeight: 300,
+              marginBottom: '12px',
+              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            }}
+          >
+            Sabiduría holística
           </h1>
-          <p style={{ color: 'var(--text-muted)', maxWidth: '480px', fontWeight: 300 }}>
-            Estamos preparando contenido de alta calidad sobre nutrición km0,
-            herbología y bienestar holístico. Suscríbete a la newsletter para
-            ser el primero en leerlo.
+          <p
+            style={{
+              color: 'var(--text-muted)',
+              maxWidth: '520px',
+              fontWeight: 300,
+              marginBottom: '64px',
+            }}
+          >
+            Nutrición km0, herbología, bienestar y medicina tradicional.
+            Conocimiento práctico para vivir en equilibrio.
           </p>
+
+          {/* Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '32px',
+            }}
+          >
+            {posts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <article
+                  style={{
+                    border: '1px solid var(--border)',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    transition: 'border-color 0.2s, transform 0.2s',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--sage)';
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
+                    (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                  }}
+                >
+                  {post.image && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      style={{
+                        width: '100%',
+                        height: '200px',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  )}
+                  <div style={{ padding: '24px' }}>
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        letterSpacing: '0.2em',
+                        textTransform: 'uppercase',
+                        color: 'var(--sage)',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {post.cat}
+                    </span>
+                    <h2
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontWeight: 300,
+                        fontSize: '1.25rem',
+                        margin: '10px 0 12px',
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {post.title}
+                    </h2>
+                    <p
+                      style={{
+                        color: 'var(--text-muted)',
+                        fontSize: '0.9rem',
+                        lineHeight: 1.6,
+                        fontWeight: 300,
+                        marginBottom: '16px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {post.excerpt}
+                    </p>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-muted)',
+                        opacity: 0.7,
+                      }}
+                    >
+                      {post.date}
+                    </span>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+
+          {posts.length === 0 && (
+            <p style={{ color: 'var(--text-muted)', fontWeight: 300 }}>
+              Próximamente — estamos preparando contenido de alta calidad.
+            </p>
+          )}
         </div>
       </main>
       <Footer />

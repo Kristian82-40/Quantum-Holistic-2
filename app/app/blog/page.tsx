@@ -10,7 +10,53 @@ export const metadata: Metadata = {
   description: 'Artículos sobre nutrición de proximidad, herbología, depuración y bienestar holístico basados en ciencia y tradición.',
 };
 
-export default function BlogPage() {
+interface SupabasePost {
+  id: string;
+  title: string;
+  excerpt: string;
+  slug: string;
+  category: string;
+  created_at: string;
+}
+
+async function getPublishedPosts(): Promise<SupabasePost[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return [];
+  try {
+    const res = await fetch(
+      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,created_at&published=eq.true&order=created_at.desc`,
+      {
+        headers: { apikey: key, Authorization: `Bearer ${key}` },
+        next: { revalidate: 300 },
+      }
+    );
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+export default async function BlogPage() {
+  const supabasePosts = await getPublishedPosts();
+
+  const posts =
+    supabasePosts.length > 0
+      ? supabasePosts.map((p) => ({
+          slug: p.slug,
+          cat: p.category,
+          title: p.title,
+          excerpt: p.excerpt,
+          date: formatDate(p.created_at),
+          readingTime: '5 min',
+        }))
+      : POSTS;
+
   return (
     <>
       <Navbar />
@@ -30,7 +76,7 @@ export default function BlogPage() {
 
           {/* Posts grid */}
           <div className={styles.grid}>
-            {POSTS.map((post) => (
+            {posts.map((post) => (
               <article key={post.slug} className={styles.card}>
                 <div className={styles.thumb}>
                   <LeafSVG />
