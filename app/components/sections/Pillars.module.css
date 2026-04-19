@@ -94,8 +94,8 @@
 }
 
 .pillarWideText {
-  flex: 0 0 340px;
-  padding: 52px 36px;
+  flex: 0 0 290px;
+  padding: 52px 32px;
 }
 
 .pillarWideVisual {
@@ -105,8 +105,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 32px;
-  min-height: 280px;
+  padding: 8px 12px;
+  min-height: 340px;
 }
 
 .pillarIllus { position: absolute; bottom: -10px; right: -10px; opacity: 0.07; pointer-events: none; transition: opacity 0.3s; }

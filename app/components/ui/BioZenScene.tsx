@@ -1,6 +1,6 @@
 export default function BioZenScene() {
   return (
-    <div style={{ background: '#f5f2eb', borderRadius: '12px', padding: '8px' }}>
+    <div style={{ background: '#f5f2eb', borderRadius: '12px', padding: '0', width: '100%' }}>
       <svg width="100%" viewBox="0 0 740 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ display: 'block' }}>
         <defs>
           <marker id="dot-end" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4">
