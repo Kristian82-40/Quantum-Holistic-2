@@ -2,20 +2,36 @@
 
 import { useEffect, useState } from 'react';
 
+type PostStatus = 'draft' | 'published' | 'rejected';
+
 interface Post {
   id: string;
   title: string;
   excerpt: string;
   category: string;
-  published: boolean;
+  status: PostStatus;
   created_at: string;
 }
+
+const STATUS_COLOR: Record<PostStatus, string> = {
+  draft: '#FF9800',
+  published: '#4CAF50',
+  rejected: '#c0392b',
+};
+
+const STATUS_LABEL: Record<PostStatus, string> = {
+  draft: 'Borrador',
+  published: 'Publicado',
+  rejected: 'Rechazado',
+};
+
+type FilterType = 'draft' | 'published' | 'all';
 
 export default function AdminBlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'pending' | 'published' | 'all'>('pending');
+  const [filter, setFilter] = useState<FilterType>('draft');
 
   useEffect(() => {
     fetch('/api/admin/blog')
@@ -24,16 +40,14 @@ export default function AdminBlogPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  async function action(id: string, published: boolean) {
+  async function updateStatus(id: string, status: PostStatus) {
     setActing(id);
     await fetch(`/api/admin/blog/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ published }),
+      body: JSON.stringify({ status }),
     });
-    setPosts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, published } : p))
-    );
+    setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
     setActing(null);
   }
 
@@ -46,12 +60,12 @@ export default function AdminBlogPage() {
   }
 
   const visible = posts.filter((p) => {
-    if (filter === 'pending') return !p.published;
-    if (filter === 'published') return p.published;
+    if (filter === 'draft') return p.status === 'draft';
+    if (filter === 'published') return p.status === 'published';
     return true;
   });
 
-  const pending = posts.filter((p) => !p.published).length;
+  const draftCount = posts.filter((p) => p.status === 'draft').length;
 
   return (
     <div style={{ padding: '40px 32px', maxWidth: '1000px', margin: '0 auto', fontFamily: 'var(--font-sans, sans-serif)' }}>
@@ -63,13 +77,13 @@ export default function AdminBlogPage() {
           Panel de Blog
         </h1>
         <p style={{ color: 'var(--text-muted, #888)', fontWeight: 300 }}>
-          {pending} post{pending !== 1 ? 's' : ''} pendiente{pending !== 1 ? 's' : ''} de revisión · {posts.length} total
+          {draftCount} post{draftCount !== 1 ? 's' : ''} pendiente{draftCount !== 1 ? 's' : ''} de revisión · {posts.length} total
         </p>
       </div>
 
       {/* Filtros */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
-        {(['pending', 'published', 'all'] as const).map((f) => (
+        {(['draft', 'published', 'all'] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -85,7 +99,7 @@ export default function AdminBlogPage() {
               letterSpacing: '0.05em',
             }}
           >
-            {f === 'pending' ? 'Pendientes' : f === 'published' ? 'Publicados' : 'Todos'}
+            {f === 'draft' ? 'Pendientes' : f === 'published' ? 'Publicados' : 'Todos'}
           </button>
         ))}
       </div>
@@ -117,7 +131,7 @@ export default function AdminBlogPage() {
             <div style={{ paddingTop: '4px' }}>
               <div style={{
                 width: '8px', height: '8px', borderRadius: '50%',
-                background: post.published ? '#4CAF50' : '#FF9800',
+                background: STATUS_COLOR[post.status] ?? '#888',
                 flexShrink: 0,
               }} />
             </div>
@@ -130,6 +144,12 @@ export default function AdminBlogPage() {
                   color: 'var(--sage, #6B7C5E)', fontWeight: 500,
                 }}>
                   {post.category}
+                </span>
+                <span style={{
+                  fontSize: '10px', color: STATUS_COLOR[post.status],
+                  fontWeight: 500, letterSpacing: '0.05em',
+                }}>
+                  {STATUS_LABEL[post.status]}
                 </span>
                 <span style={{ fontSize: '10px', color: 'var(--text-muted, #888)' }}>
                   {new Date(post.created_at).toLocaleDateString('es-ES')}
@@ -145,9 +165,9 @@ export default function AdminBlogPage() {
 
             {/* Actions */}
             <div style={{ display: 'flex', gap: '8px', flexShrink: 0, paddingTop: '2px' }}>
-              {!post.published ? (
+              {post.status !== 'published' && (
                 <button
-                  onClick={() => action(post.id, true)}
+                  onClick={() => updateStatus(post.id, 'published')}
                   disabled={acting === post.id}
                   style={{
                     padding: '6px 14px', borderRadius: '6px', border: 'none',
@@ -157,9 +177,10 @@ export default function AdminBlogPage() {
                 >
                   Publicar
                 </button>
-              ) : (
+              )}
+              {post.status === 'published' && (
                 <button
-                  onClick={() => action(post.id, false)}
+                  onClick={() => updateStatus(post.id, 'draft')}
                   disabled={acting === post.id}
                   style={{
                     padding: '6px 14px', borderRadius: '6px',
@@ -170,13 +191,26 @@ export default function AdminBlogPage() {
                   Despublicar
                 </button>
               )}
+              {post.status !== 'rejected' && (
+                <button
+                  onClick={() => updateStatus(post.id, 'rejected')}
+                  disabled={acting === post.id}
+                  style={{
+                    padding: '6px 10px', borderRadius: '6px',
+                    border: '1px solid #c0392b55', background: 'transparent',
+                    color: '#c0392b', cursor: 'pointer', fontSize: '12px',
+                  }}
+                >
+                  Rechazar
+                </button>
+              )}
               <button
                 onClick={() => deletePost(post.id)}
                 disabled={acting === post.id}
                 style={{
                   padding: '6px 10px', borderRadius: '6px',
-                  border: '1px solid #c0392b33', background: 'transparent',
-                  color: '#c0392b', cursor: 'pointer', fontSize: '12px',
+                  border: '1px solid var(--border, #333)', background: 'transparent',
+                  color: 'var(--text-muted, #555)', cursor: 'pointer', fontSize: '12px',
                 }}
               >
                 ✕

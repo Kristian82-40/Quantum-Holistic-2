@@ -22,7 +22,7 @@ async function getSupabasePost(slug: string): Promise<SupabasePost | null> {
   if (!url || !key) return null;
   try {
     const res = await fetch(
-      `${url}/rest/v1/blog_posts?select=*&slug=eq.${encodeURIComponent(slug)}&published=eq.true&limit=1`,
+      `${url}/rest/v1/blog_posts?select=*&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 300 } }
     );
     if (!res.ok) return null;
