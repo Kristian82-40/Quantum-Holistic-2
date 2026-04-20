@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
-import { LanguageProvider } from '@/components/providers/LanguageProvider';
 
 const SITE_URL = 'https://quantumholistic.com';
 
@@ -64,9 +63,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        {children}
       </body>
     </html>
   );
