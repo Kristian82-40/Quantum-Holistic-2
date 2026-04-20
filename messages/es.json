@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "blog": "Blog",
+    "about": "Nosotros",
+    "services": "Servicios",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Leer más",
+    "noArticles": "No hay artículos disponibles"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "register": "Registrarse",
+    "email": "Email",
+    "password": "Contraseña"
+  },
+  "gracias": {
+    "badge": "Pago completado",
+    "title": "¡Gracias por unirte a <em>Quantum Holistic</em>!",
+    "desc": "Tu suscripción está activa. Revisa tu email para los próximos pasos.",
+    "next": "¿Qué sigue?",
+    "step1": "Accede a tu panel de usuario",
+    "step2": "Completa tu perfil de bienestar",
+    "step3": "Inicia tu protocolo personalizado",
+    "cta": "Ir al inicio"
+  }
+}
