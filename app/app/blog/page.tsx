@@ -25,7 +25,7 @@ async function getPublishedPosts(): Promise<SupabasePost[]> {
   if (!url || !key) return [];
   try {
     const res = await fetch(
-      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,created_at&published=eq.true&order=created_at.desc`,
+      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,created_at&status=eq.published&order=created_at.desc`,
       {
         headers: { apikey: key, Authorization: `Bearer ${key}` },
         next: { revalidate: 300 },

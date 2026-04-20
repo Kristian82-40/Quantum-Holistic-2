@@ -28,7 +28,7 @@ export async function PATCH(
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { id } = await params;
-  const { published } = await req.json();
+  const { status } = await req.json();
 
   const res = await fetch(`${BASE}/rest/v1/blog_posts?id=eq.${id}`, {
     method: 'PATCH',
@@ -38,7 +38,7 @@ export async function PATCH(
       'Content-Type': 'application/json',
       Prefer: 'return=minimal',
     },
-    body: JSON.stringify({ published }),
+    body: JSON.stringify({ status }),
   });
 
   if (!res.ok) return NextResponse.json({ error: 'Supabase error' }, { status: 500 });

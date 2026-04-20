@@ -22,7 +22,7 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/blog_posts?select=id,title,excerpt,category,published,created_at&order=created_at.desc`,
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/blog_posts?select=id,title,excerpt,category,status,created_at&order=created_at.desc`,
     {
       headers: {
         apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
