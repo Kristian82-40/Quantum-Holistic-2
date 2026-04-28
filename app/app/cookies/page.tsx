@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
+
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import styles from '../legal/layout.module.css';

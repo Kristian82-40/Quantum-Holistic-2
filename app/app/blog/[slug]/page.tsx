@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { POSTS, getPostBySlug } from '@/lib/posts';
+import { getPostBySlug } from '@/lib/posts';
 import styles from './page.module.css';
 
 interface SupabasePost {
@@ -35,10 +37,6 @@ async function getSupabasePost(slug: string): Promise<SupabasePost | null> {
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-export function generateStaticParams() {
-  return POSTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata(
