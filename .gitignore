@@ -7,3 +7,13 @@ node_modules/
 .DS_Store
 .vercel
 .env*.local
+
+# Archivos locales de configuración y herramientas
+CLAUDE.md
+
+# Datos de contenido sin procesar
+app/fichas-50.json
+
+# Supabase CLI local
+supabase/.temp/
+tsconfig.tsbuildinfo

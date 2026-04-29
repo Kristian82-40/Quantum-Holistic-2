@@ -18,6 +18,7 @@ export const NAV_LINKS = [
   { label: 'Quantum Pro',  href: '/#pro-detail' },
   { label: 'Planes',       href: '/#pricing' },
   { label: 'Blog',         href: '/blog' },
+  { label: 'Plantas',      href: '/plantas' },
 ] as const;
 
 // ─── Pricing ─────────────────────────────────────────────────
