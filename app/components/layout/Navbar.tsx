@@ -23,6 +23,7 @@ export default function Navbar() {
     { label: t('quantumPro'), href: '/#pro-detail' },
     { label: t('plans'),      href: '/#pricing' },
     { label: t('blog'),       href: '/blog' },
+    { label: 'Plantas',       href: '/plantas' },
   ];
 
   return (
