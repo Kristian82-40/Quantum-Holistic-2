@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import PlantaMedicinal from '@/components/illustrations/PlantaMedicinal';
-import BioZenScene from '@/components/ui/BioZenScene';
+import BioZenScene from '../ui/BioZenScene';
 import styles from './Pillars.module.css';
 
 type PillarItem = {
