@@ -7,7 +7,8 @@ import messagesEn from '@/messages/en.json';
 
 type Locale = 'es' | 'en';
 
-const MESSAGES = { es: messagesEs, en: messagesEn };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MESSAGES: Record<Locale, any> = { es: messagesEs, en: messagesEn };
 
 interface LanguageContextType {
   locale: Locale;

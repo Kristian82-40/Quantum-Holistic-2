@@ -1,30 +1,49 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { NextIntlClientProvider } from 'next-intl';
+import messagesEs from '@/messages/es.json';
+import messagesEn from '@/messages/en.json';
 
-type Language = 'es' | 'en';
+type Locale = 'es' | 'en';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MESSAGES: Record<Locale, any> = { es: messagesEs, en: messagesEn };
 
 interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
+  locale: Locale;
+  setLocale: (l: Locale) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  language: 'es',
-  setLanguage: () => {},
+  locale: 'es',
+  setLocale: () => {},
 });
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('es');
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>('es');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('qh-locale') as Locale;
+    if (saved === 'es' || saved === 'en') {
+      setLocaleState(saved);
+      document.documentElement.lang = saved;
+    }
+  }, []);
+
+  const setLocale = (l: Locale) => {
+    setLocaleState(l);
+    localStorage.setItem('qh-locale', l);
+    document.documentElement.lang = l;
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage }}>
-      {children}
+    <LanguageContext.Provider value={{ locale, setLocale }}>
+      <NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="Europe/Madrid">
+        {children}
+      </NextIntlClientProvider>
     </LanguageContext.Provider>
   );
 }
 
-export function useLanguage() {
-  return useContext(LanguageContext);
-}
-
-export default LanguageProvider;
+export const useLanguage = () => useContext(LanguageContext);
