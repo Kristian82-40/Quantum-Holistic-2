@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { POSTS } from '@/lib/posts';
+import BlogCard from './BlogCard';
 
 export const metadata: Metadata = {
   title: 'Blog — Nutrición KM0, Herbología & Bienestar | Quantum Holistic',
@@ -124,90 +124,7 @@ export default async function BlogPage() {
             }}
           >
             {posts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <article
-                  style={{
-                    border: '1px solid var(--border)',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    transition: 'border-color 0.2s, transform 0.2s',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--sage)';
-                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
-                    (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                  }}
-                >
-                  {post.image && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      style={{
-                        width: '100%',
-                        height: '200px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  )}
-                  <div style={{ padding: '24px' }}>
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        letterSpacing: '0.2em',
-                        textTransform: 'uppercase',
-                        color: 'var(--sage)',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {post.cat}
-                    </span>
-                    <h2
-                      style={{
-                        fontFamily: 'var(--font-serif)',
-                        fontWeight: 300,
-                        fontSize: '1.25rem',
-                        margin: '10px 0 12px',
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {post.title}
-                    </h2>
-                    <p
-                      style={{
-                        color: 'var(--text-muted)',
-                        fontSize: '0.9rem',
-                        lineHeight: 1.6,
-                        fontWeight: 300,
-                        marginBottom: '16px',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {post.excerpt}
-                    </p>
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        color: 'var(--text-muted)',
-                        opacity: 0.7,
-                      }}
-                    >
-                      {post.date}
-                    </span>
-                  </div>
-                </article>
-              </Link>
+              <BlogCard key={post.slug} {...post} />
             ))}
           </div>
 
