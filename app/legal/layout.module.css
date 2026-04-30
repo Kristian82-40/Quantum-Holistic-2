@@ -1,0 +1,115 @@
+.main {
+  padding-top: 120px;
+  min-height: 80vh;
+  background: var(--bg-primary);
+}
+
+.inner {
+  max-width: 720px;
+  padding-bottom: 100px;
+}
+
+.header {
+  padding: 60px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 56px;
+}
+
+.label {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.updated {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── Contenido ── */
+.content h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 2.5rem 0 0.75rem;
+}
+
+.content h3 {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.content p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.82;
+  margin-bottom: 1rem;
+}
+
+.content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.content ul li {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.7;
+  padding-left: 1.25rem;
+  position: relative;
+  margin-bottom: 0.4rem;
+}
+
+.content ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--sage-light);
+  font-size: 0.85rem;
+}
+
+.content a {
+  color: var(--sage);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.content strong {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.back {
+  display: inline-block;
+  margin-top: 3rem;
+  font-size: 0.8rem;
+  color: var(--sage);
+  letter-spacing: 0.05em;
+  transition: opacity var(--dur-fast);
+}
+
+.back:hover { opacity: 0.7; }
+
+@media (max-width: 600px) {
+  .header { padding: 40px 0 36px; }
+}

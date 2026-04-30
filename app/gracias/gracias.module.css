@@ -1,0 +1,118 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  padding: 72px 64px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.badge {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--sage);
+}
+
+.desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.steps {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 36px 0;
+  margin-bottom: 48px;
+  text-align: left;
+}
+
+.stepsLabel {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 20px;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 20px;
+}
+
+.stepList li {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.cta {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 14px 40px;
+  transition: background var(--dur-mid), color var(--dur-mid), border-color var(--dur-mid);
+  margin-bottom: 28px;
+}
+
+.cta:hover {
+  background: var(--sage);
+  color: #fff;
+  border-color: var(--sage);
+}
+
+.support {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.support a {
+  color: var(--sage);
+  text-decoration: none;
+}
+
+.support a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .card { padding: 48px 28px; }
+}

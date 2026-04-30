@@ -1,39 +1,35 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { POSTS } from '@/lib/posts';
-import BlogCard from './BlogCard';
+import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Blog — Nutrición KM0, Herbología & Bienestar | Quantum Holistic',
-  description:
-    'Artículos sobre nutrición de proximidad, herbología, depuración y bienestar holístico basados en ciencia y tradición.',
+  title: 'Blog — Nutrición KM0, Herbología & Bienestar',
+  description: 'Artículos sobre nutrición de proximidad, herbología, depuración y bienestar holístico basados en ciencia y tradición.',
 };
 
-interface BlogPost {
+interface SupabasePost {
   id: string;
   title: string;
   excerpt: string;
   slug: string;
   category: string;
-  image_url: string | null;
   created_at: string;
 }
 
-async function getPublishedPosts(): Promise<BlogPost[]> {
+async function getPublishedPosts(): Promise<SupabasePost[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
   if (!url || !key) return [];
-
   try {
     const res = await fetch(
-      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,image_url,created_at&published=eq.true&order=created_at.desc`,
+      `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,created_at&status=eq.published&order=created_at.desc`,
       {
-        headers: {
-          apikey: key,
-          Authorization: `Bearer ${key}`,
-        },
+        headers: { apikey: key, Authorization: `Bearer ${key}` },
         next: { revalidate: 300 },
       }
     );
@@ -45,11 +41,7 @@ async function getPublishedPosts(): Promise<BlogPost[]> {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  return new Date(iso).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 export default async function BlogPage() {
@@ -63,79 +55,66 @@ export default async function BlogPage() {
           title: p.title,
           excerpt: p.excerpt,
           date: formatDate(p.created_at),
-          image: p.image_url,
-          fromSupabase: true,
+          readingTime: '5 min',
         }))
-      : POSTS.map((p) => ({
-          slug: p.slug,
-          cat: p.cat,
-          title: p.title,
-          excerpt: p.excerpt,
-          date: p.date,
-          image: null,
-          fromSupabase: false,
-        }));
+      : POSTS;
 
   return (
     <>
       <Navbar />
-      <main style={{ paddingTop: '120px', minHeight: '60vh' }}>
-        <div className="container section">
+      <main className={styles.main}>
+        <div className={`container ${styles.inner}`}>
           {/* Header */}
-          <p
-            style={{
-              fontSize: '10px',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: 'var(--sage)',
-              marginBottom: '18px',
-            }}
-          >
-            Blog
-          </p>
-          <h1
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontWeight: 300,
-              marginBottom: '12px',
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-            }}
-          >
-            Sabiduría holística
-          </h1>
-          <p
-            style={{
-              color: 'var(--text-muted)',
-              maxWidth: '520px',
-              fontWeight: 300,
-              marginBottom: '64px',
-            }}
-          >
-            Nutrición km0, herbología, bienestar y medicina tradicional.
-            Conocimiento práctico para vivir en equilibrio.
-          </p>
-
-          {/* Grid */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: '32px',
-            }}
-          >
-            {posts.map((post) => (
-              <BlogCard key={post.slug} {...post} />
-            ))}
+          <div className={styles.header}>
+            <p className={styles.label}>Conocimiento libre</p>
+            <h1 className={styles.title}>
+              Aprende. Aplica. <em>Transforma.</em>
+            </h1>
+            <p className={styles.subtitle}>
+              Artículos sobre nutrición km0, herbología y bienestar holístico —
+              escritos por especialistas, basados en evidencia y adaptados a la vida real.
+            </p>
           </div>
 
-          {posts.length === 0 && (
-            <p style={{ color: 'var(--text-muted)', fontWeight: 300 }}>
-              Próximamente — estamos preparando contenido de alta calidad.
-            </p>
-          )}
+          {/* Posts grid */}
+          <div className={styles.grid}>
+            {posts.map((post) => (
+              <article key={post.slug} className={styles.card}>
+                <div className={styles.thumb}>
+                  <LeafSVG />
+                  <span className={styles.cat}>{post.cat}</span>
+                </div>
+                <div className={styles.body}>
+                  <div className={styles.meta}>
+                    <span>{post.date}</span>
+                    <span className={styles.dot}>·</span>
+                    <span>{post.readingTime} lectura</span>
+                  </div>
+                  <h2 className={styles.postTitle}>{post.title}</h2>
+                  <p className={styles.excerpt}>{post.excerpt}</p>
+                  <Link href={`/blog/${post.slug}`} className={styles.read}>
+                    Leer artículo →
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </main>
       <Footer />
     </>
+  );
+}
+
+function LeafSVG() {
+  return (
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden>
+      <path d="M40 72V20" stroke="#6B7C5E" strokeWidth="1.4"/>
+      <path d="M40 55C40 55 20 44 12 30" stroke="#A8B89A" strokeWidth="1"/>
+      <path d="M40 55C40 55 60 44 68 30" stroke="#A8B89A" strokeWidth="1"/>
+      <path d="M40 40C40 40 25 33 18 22" stroke="#A8B89A" strokeWidth=".7"/>
+      <path d="M40 40C40 40 55 33 62 22" stroke="#A8B89A" strokeWidth=".7"/>
+      <ellipse cx="40" cy="72" rx="10" ry="3.5" stroke="#6B7C5E" strokeWidth=".6"/>
+    </svg>
   );
 }
