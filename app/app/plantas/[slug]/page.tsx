@@ -58,9 +58,16 @@ async function getPlant(slug: string): Promise<Plant | null> {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const plant = await getPlant(params.slug);
   if (!plant) return { title: 'Planta no encontrada' };
+  const desc = `${plant.nombre_es} (${plant.nombre_latino}): ${plant.ficha_cientifica.propiedades.slice(0, 3).join(', ')}. Chakra ${plant.ficha_mistica.chakra} · Elemento ${plant.ficha_mistica.elemento}.`;
   return {
-    title: `${plant.nombre_es} (${plant.nombre_latino}) — Ficha Botánica`,
-    description: plant.ficha_cientifica.propiedades.join(', '),
+    title: `${plant.nombre_es} — Propiedades, Usos y Sabiduría Ancestral | Quantum Holistic`,
+    description: desc,
+    openGraph: {
+      title: `${plant.nombre_es} (${plant.nombre_latino})`,
+      description: desc,
+      images: plant.image_cientifica_url ? [{ url: plant.image_cientifica_url }] : [],
+    },
+    alternates: { canonical: `https://quantumholistic.com/plantas/${plant.slug}` },
   };
 }
 
@@ -70,8 +77,26 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
 
   const { ficha_cientifica: fc, ficha_mistica: fm } = plant;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${plant.nombre_es} — Propiedades medicinales y usos`,
+    name: plant.nombre_es,
+    description: `${plant.nombre_es} (${plant.nombre_latino}): ${fc.propiedades.join(', ')}.`,
+    image: plant.image_cientifica_url ?? undefined,
+    author: { '@type': 'Organization', name: 'Quantum Holistic' },
+    publisher: { '@type': 'Organization', name: 'Quantum Holistic', url: 'https://quantumholistic.com' },
+    url: `https://quantumholistic.com/plantas/${plant.slug}`,
+    about: {
+      '@type': 'Thing',
+      name: plant.nombre_latino,
+      sameAs: `https://en.wikipedia.org/wiki/${encodeURIComponent(plant.nombre_latino)}`,
+    },
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navbar />
       <main style={{ paddingTop: '120px', minHeight: '60vh' }}>
         <div className="container section" style={{ maxWidth: '900px' }}>
