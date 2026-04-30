@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
+import { sendWelcomeEmail, sendPaymentFailedEmail } from '@/lib/email';
 import type Stripe from 'stripe';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -38,6 +39,12 @@ export async function POST(req: NextRequest) {
         stripe_customer_id: customerId,
       });
 
+      if (email) {
+        await sendWelcomeEmail(email, billingCycle as 'monthly' | 'annual').catch(
+          err => console.error('[webhook] Email bienvenida fallido:', err)
+        );
+      }
+
       notifyN8n('checkout.session.completed', { email, subscriptionId, billingCycle, sessionId: session.id });
       break;
     }
@@ -64,9 +71,15 @@ export async function POST(req: NextRequest) {
 
     case 'invoice.payment_failed': {
       const invoice = event.data.object as Stripe.Invoice;
+      const customerEmail = invoice.customer_email ?? '';
+      if (customerEmail) {
+        await sendPaymentFailedEmail(customerEmail, invoice.id ?? '').catch(
+          err => console.error('[webhook] Email pago fallido no enviado:', err)
+        );
+      }
       notifyN8n('invoice.payment_failed', {
         invoiceId: invoice.id,
-        customerEmail: invoice.customer_email ?? '',
+        customerEmail,
         attemptCount: invoice.attempt_count ?? 0,
       });
       break;
