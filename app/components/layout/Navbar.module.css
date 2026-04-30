@@ -107,9 +107,102 @@
   user-select: none;
 }
 
+/* ── Hamburger ───────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text-primary);
+  transition: transform 0.25s var(--ease-out), opacity 0.2s;
+  transform-origin: center;
+}
+
+.barOpen1 { transform: translateY(6.5px) rotate(45deg); }
+.barOpen2 { opacity: 0; }
+.barOpen3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Mobile overlay ───────────────────────────────── */
+.mobileMenu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.mobileNav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100%;
+  background: var(--bg-primary, #f7f4ee);
+  padding: 80px 32px 40px;
+  overflow-y: auto;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+}
+
+.mobileLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobileLink {
+  display: block;
+  padding: 12px 0;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color var(--dur-mid);
+}
+
+.mobileLink:hover { color: var(--sage); }
+
+.mobileCta {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--sage);
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--font-serif);
+}
+
+.mobileLang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
 @media (max-width: 900px) {
   .nav      { padding: 20px 24px; }
   .links    { display: none; }
   .scrolled { padding: 14px 24px; }
   .actions  { gap: 12px; }
+  .ctaDesktop { display: none; }
+  .hamburger  { display: flex; }
+  .mobileMenu { display: block; }
 }

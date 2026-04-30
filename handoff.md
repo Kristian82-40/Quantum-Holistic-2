@@ -1,39 +1,39 @@
-# Handoff — 2026-04-20
+# Handoff — 2026-04-30
 
 ## Estado
-**Capa 2 en progreso** — Blog + Admin + Webhook n8n completados hoy.
+**Capa 2 en progreso** — Web live en Vercel ✅ · Diccionario Botánico completo ✅ · Repo limpio ✅
 
-## Completado hoy
-1. **Columna `status` en blog_posts** ✅ — Migración ejecutada (Chrome). `draft`/`published`/`rejected`. 84 posts en draft.
-2. **Blog público `/blog`** ✅ — Filtra por `status=eq.published`. Fallback a posts estáticos si Supabase vacío.
-3. **Blog individual `/blog/[slug]`** ✅ — Ídem, filtro actualizado.
-4. **Panel `/admin/blog`** ✅ — Botones Publicar/Rechazar/Despublicar. Filtros por status. `role=admin` ya asignado a kristiantroncoso@gmail.com.
-5. **API admin `/api/admin/blog`** ✅ — GET devuelve `status`, PATCH acepta `{ status }`.
-6. **Prompt agente nocturno** ✅ — Instrucción estricta JSON al inicio del prompt en `agente-nocturno.sh`.
-7. **Webhook n8n `chat-holistic`** ✅ — Workflow insertado en SQLite, activo, test exitoso con respuesta completa de papu-pro.
+## Completado (acumulado)
+1. **Web en Vercel** ✅ — Build limpio, todas las rutas compilando.
+2. **Diccionario Botánico `/plantas`** ✅ — Grid 50 plantas + buscador por nombre/propiedad/elemento.
+3. **Fichas individuales `/plantas/[slug]`** ✅ — Ficha científica + sabiduría ancestral.
+4. **Tabla `plants` en Supabase** ✅ — 50 plantas IDs 1-50, slug, imagen, ficha_cientifica/mistica (JSONB).
+5. **50 imágenes botánicas** ✅ — `public/images/plants/plant-01 a plant-50-cientifica.jpg`.
+6. **Migration profiles** ✅ — role, verified, bio, especialidad.
+7. **Blog público + admin** ✅ — `/blog`, `/admin/blog` con publicar/rechazar/despublicar.
+8. **Agente Plantas local** ✅ — `qb` → genera 3 posts herbología/sesión con papu-pro.
+9. **Rutina remota nocturna** ✅ — L-V 2am Madrid, Haiku detecta plantas sin post → email `qb`.
+10. **Cleanup repo** ✅ — Eliminados app_next/, archive/, docs/, bitacora/, supabase/.temp/. .gitignore ampliado.
+11. **NAV_LINKS sincronizado** ✅ — config.ts raíz incluye Plantas (ROOT ↔ app/).
 
-## Detalles técnicos workflow n8n
-- **ID:** `chat-holistic-wf`
-- **Path:** `POST /webhook/chat-holistic`
-- **Flujo:** Webhook → Ollama (`host.docker.internal:11434`, timeout 120s) → Code (extraer response) → Respond to Webhook → Log Supabase (`agent_logs`, keypair)
-- **Creado via:** INSERT directo en SQLite (n8n API key inválida, sesión expirada)
-- Nota: `localhost:11434` no funciona desde Docker — usar siempre `host.docker.internal:11434`
+## Agente nocturno activo
+- **Rutina remota:** `trig_01PEZYnHF2xwrXR5ZjCJJuc7` — https://claude.ai/code/routines/trig_01PEZYnHF2xwrXR5ZjCJJuc7
+- **Script local:** `qb` → `/Volumes/Papu Ext/scripts/agente-plantas.sh`
+- **Logs:** `/Volumes/Papu Ext/logs/agente-plantas-YYYY-MM-DD.log`
 
-## Pendientes
-1. **Stripe activación** — acción manual Kristian: completar formulario en dashboard.stripe.com → claves `sk_live_`
-2. **Supabase email redirect** — configurar Site URL + Redirect URLs para confirmación de email
-3. **n8n workflow `Auto-Bitacora Inactividad`** (PPchw62Xzdnvf9pT) — credenciales del nodo `UltimaActividad` caducadas (pendiente desde sesión anterior)
-4. **Push git** — código en main, pendiente push a GitHub
+## Próximos pasos (por prioridad)
+1. **Fichas plantas 31–50** — insertar en Supabase (IDs 31-50 pendientes de generar)
+2. **Panel /admin/plantas** — editar fichas sin SQL
+3. **Recomendador holístico** — matchear `profiles.dosha` con `plants.ficha_mistica.afinidad_ayurvedica`
+4. **Stripe activación** — Manual: dashboard.stripe.com → claves `sk_live_`
+5. **Paywall /chat** — 5 msg/día free, ilimitado pro
+6. **Navbar móvil** — hamburger menu
 
-## Archivos modificados
-- `app/app/blog/page.tsx` — filtro status=published
-- `app/app/blog/[slug]/page.tsx` — filtro status=published
-- `app/app/admin/blog/page.tsx` — UI status con Publicar/Rechazar/Despublicar
-- `app/app/api/admin/blog/route.ts` — devuelve status
-- `app/app/api/admin/blog/[id]/route.ts` — PATCH usa { status }
-- `/Volumes/Papu Ext/scripts/agente-nocturno.sh` — prompt JSON estricto
+## Estado DB (Supabase vctetjugbvyllwjpxcxh)
+- `plants`: 50 filas ✅ | `profiles`: role/verified/bio/especialidad ✅ | `blog_posts`: draft/published/rejected ✅
 
 ## Decisiones técnicas
-- Workflow n8n creado via SQLite directo (no UI/API) porque sesión n8n expiró y API key tenía firma inválida
-- "Respond to Webhook" va ANTES del "Log en Supabase" — usuario no espera al log
-- Log Supabase usa `specifyBody: keypair` para evitar JSON inválido con respuestas que contienen comillas
+- ROOT Navbar usa NAV_LINKS de config.ts raíz (no inline como app/components/layout/Navbar.tsx)
+- Two-project: ROOT (dev+next-intl), APP (Vercel, rootDir=app/)
+- `@/` en ROOT → raíz repo; en APP → app/
+- `localhost:11434` para Ollama desde Next.js; `host.docker.internal:11434` desde Docker/n8n
