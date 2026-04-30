@@ -17,3 +17,6 @@ app/fichas-50.json
 # Supabase CLI local
 supabase/.temp/
 tsconfig.tsbuildinfo
+
+# Directorio redundante eliminado de git pero aún en disco
+app/app/
