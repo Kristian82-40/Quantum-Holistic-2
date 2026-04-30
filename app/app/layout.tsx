@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 import { LanguageProvider } from '@/components/providers/LanguageProvider';
+import { Analytics } from '@vercel/analytics/react';
 
 const SITE_URL = 'https://quantumholistic.com';
 
@@ -67,6 +68,7 @@ export default function RootLayout({
         <LanguageProvider>
           {children}
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
