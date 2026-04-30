@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 interface Plant {
   id: number;
@@ -121,6 +123,8 @@ export default function RecomendadorPage() {
   }
 
   return (
+    <>
+    <Navbar />
     <div style={{ minHeight: '100vh', background: 'var(--bg-secondary, #f0ece3)', fontFamily: 'var(--font-sans, sans-serif)' }}>
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '80px 24px 60px' }}>
         {/* Header */}
@@ -265,5 +269,7 @@ export default function RecomendadorPage() {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
