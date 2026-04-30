@@ -6,6 +6,7 @@ import Link from 'next/link';
 type Message = { role: 'user' | 'assistant'; text: string };
 
 const FREE_LIMIT = 5;
+const LEAD_TRIGGER = 4; // mostrar captura de email al llegar al 4º mensaje
 
 function getSessionId() {
   if (typeof window === 'undefined') return '';
@@ -34,6 +35,10 @@ function incrementDailyCount() {
   localStorage.setItem('qh_chat_usage', JSON.stringify({ date: today, count: getDailyCount() + 1 }));
 }
 
+function hasSubmittedEmail(): boolean {
+  return localStorage.getItem('qh_lead_captured') === '1';
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', text: '¡Hola! Soy papu-pro, tu asistente holístico. ¿En qué te puedo ayudar hoy?' },
@@ -41,9 +46,17 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [msgCount, setMsgCount] = useState(0);
+  const [showLeadModal, setShowLeadModal] = useState(false);
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadSent, setLeadSent] = useState(false);
+  const [leadLoading, setLeadLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMsgCount(getDailyCount()); }, []);
+  useEffect(() => {
+    const count = getDailyCount();
+    setMsgCount(count);
+    if (count >= LEAD_TRIGGER && !hasSubmittedEmail()) setShowLeadModal(true);
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -61,7 +74,9 @@ export default function ChatPage() {
     setInput('');
     setLoading(true);
     incrementDailyCount();
-    setMsgCount(getDailyCount());
+    const newCount = getDailyCount();
+    setMsgCount(newCount);
+    if (newCount >= LEAD_TRIGGER && !hasSubmittedEmail()) setShowLeadModal(true);
 
     try {
       const res = await fetch('/api/chat', {
@@ -78,8 +93,67 @@ export default function ChatPage() {
     }
   };
 
+  async function submitLead(e: React.FormEvent) {
+    e.preventDefault();
+    if (!leadEmail || leadLoading) return;
+    setLeadLoading(true);
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: leadEmail, source: 'chat_paywall' }),
+      });
+      localStorage.setItem('qh_lead_captured', '1');
+      setLeadSent(true);
+      setTimeout(() => setShowLeadModal(false), 2000);
+    } finally {
+      setLeadLoading(false);
+    }
+  }
+
   return (
     <div style={s.page}>
+      {/* Lead capture modal */}
+      {showLeadModal && (
+        <div style={s.modalOverlay} onClick={() => setShowLeadModal(false)}>
+          <div style={s.modal} onClick={e => e.stopPropagation()}>
+            {leadSent ? (
+              <p style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1rem', textAlign: 'center', color: 'var(--sage)' }}>
+                ✓ ¡Listo! Te avisaremos cuando tengamos novedades.
+              </p>
+            ) : (
+              <>
+                <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: '12px' }}>
+                  Antes de continuar
+                </p>
+                <p style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.3rem', marginBottom: '8px', lineHeight: 1.3 }}>
+                  Guarda tus consultas sin límite
+                </p>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px', fontWeight: 300, lineHeight: 1.6 }}>
+                  Déjanos tu email y te enviamos una guía de plantas para tu dosha + acceso anticipado a Quantum Pro.
+                </p>
+                <form onSubmit={submitLead} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <input
+                    type="email"
+                    value={leadEmail}
+                    onChange={e => setLeadEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    required
+                    style={{ padding: '10px 14px', border: '1px solid var(--border)', background: 'var(--bg-secondary)', outline: 'none', fontSize: '14px', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}
+                  />
+                  <button type="submit" disabled={leadLoading} style={{ padding: '10px', background: 'var(--sage)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: 'var(--font-serif)' }}>
+                    {leadLoading ? '…' : 'Quiero la guía gratis'}
+                  </button>
+                  <button type="button" onClick={() => setShowLeadModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: 'var(--text-muted)' }}>
+                    No, continuar sin guardar
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div style={s.header}>
         <a href="/" style={s.back}>← Inicio</a>
@@ -118,15 +192,22 @@ export default function ChatPage() {
       {/* Paywall bloqueado */}
       {isBlocked ? (
         <div style={s.paywallBlock}>
-          <p style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.1rem', marginBottom: '8px' }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.2rem', marginBottom: '8px' }}>
             Has usado tus {FREE_LIMIT} mensajes gratuitos de hoy
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px', fontWeight: 300 }}>
-            Vuelve mañana o hazte Pro para conversaciones ilimitadas.
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px', fontWeight: 300, lineHeight: 1.6 }}>
+            Vuelve mañana · o hazte Pro para conversaciones ilimitadas, planes personalizados y acceso prioritario.
           </p>
-          <Link href="/#pricing" style={{ padding: '12px 28px', background: 'var(--sage)', color: '#fff', textDecoration: 'none', fontSize: '13px', letterSpacing: '0.1em', fontFamily: 'var(--font-serif)' }}>
-            Ver planes Pro
-          </Link>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/#pricing" style={{ padding: '12px 28px', background: 'var(--sage)', color: '#fff', textDecoration: 'none', fontSize: '13px', letterSpacing: '0.1em', fontFamily: 'var(--font-serif)' }}>
+              Ver planes Pro
+            </Link>
+            {!hasSubmittedEmail() && (
+              <button onClick={() => setShowLeadModal(true)} style={{ padding: '12px 20px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'inherit' }}>
+                Avísame cuando sea gratuito →
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <form onSubmit={send} style={s.form}>
@@ -149,6 +230,8 @@ export default function ChatPage() {
 
 const s: Record<string, React.CSSProperties> = {
   page: { display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-secondary)', fontFamily: 'var(--font-sans)' },
+  modalOverlay: { position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' },
+  modal: { background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '32px', maxWidth: '380px', width: '100%' },
   header: { display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 24px', background: 'var(--bg-primary)', borderBottom: '1px solid var(--border)' },
   back: { fontSize: '12px', color: 'var(--text-muted)', textDecoration: 'none', letterSpacing: '0.05em', marginRight: 'auto' },
   headerTitle: { fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '18px', color: 'var(--text-primary)', letterSpacing: '0.1em' },
