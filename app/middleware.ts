@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   const { data: { session } } = await supabase.auth.getSession();
   const { pathname } = req.nextUrl;
 
-  const needsAuth = ['/chat', '/mi-cuenta', '/terapeuta', '/admin'].some(
+  const needsAuth = ['/mi-cuenta', '/terapeuta', '/admin'].some(
     (p) => pathname.startsWith(p)
   );
 
@@ -56,5 +56,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/chat/:path*', '/mi-cuenta/:path*', '/terapeuta/:path*', '/admin/:path*'],
+  matcher: ['/mi-cuenta/:path*', '/terapeuta/:path*', '/admin/:path*'],
 };
