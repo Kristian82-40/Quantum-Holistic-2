@@ -25,13 +25,13 @@ export async function sendWelcomeEmail(
           al chat con nuestra IA holística, al diccionario completo de plantas y a todas
           las herramientas de bienestar.
         </p>
-        <a href="https://quantum-holistic.vercel.app/chat"
+        <a href="https://quantum-holistic.com/chat"
            style="display:inline-block;margin-top:24px;padding:12px 28px;background:#2d6a4f;
                   color:#fff;border-radius:8px;text-decoration:none;font-size:15px">
           Empezar ahora →
         </a>
         <p style="margin-top:32px;color:#888;font-size:13px">
-          Si tienes dudas, responde a este email o visita <a href="https://quantum-holistic.vercel.app">quantumholistic.com</a>.
+          Si tienes dudas, responde a este email o visita <a href="https://quantum-holistic.com">quantum-holistic.com</a>.
         </p>
       </div>
     `,
@@ -57,7 +57,7 @@ export async function sendPaymentFailedEmail(
         <p style="color:#444;font-size:16px;line-height:1.6">
           Por favor actualiza tu método de pago para seguir disfrutando de acceso ilimitado.
         </p>
-        <a href="https://quantum-holistic.vercel.app/perfil"
+        <a href="https://quantum-holistic.com/perfil"
            style="display:inline-block;margin-top:24px;padding:12px 28px;background:#c0392b;
                   color:#fff;border-radius:8px;text-decoration:none;font-size:15px">
           Actualizar método de pago →
