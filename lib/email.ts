@@ -1,12 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = 'Quantum Holistic <hola@quantumholistic.com>';
+
+function getResend(): Resend {
+  if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY no configurada');
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export async function sendWelcomeEmail(
   to: string,
   billingCycle: 'monthly' | 'annual'
 ): Promise<void> {
+  const resend = getResend();
   const plan = billingCycle === 'annual' ? 'anual' : 'mensual';
   await resend.emails.send({
     from: FROM,
@@ -37,6 +42,7 @@ export async function sendPaymentFailedEmail(
   to: string,
   invoiceId: string
 ): Promise<void> {
+  const resend = getResend();
   await resend.emails.send({
     from: FROM,
     to,
