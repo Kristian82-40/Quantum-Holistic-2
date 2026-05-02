@@ -3,9 +3,32 @@ import CincoElementos from '@/components/illustrations/CincoElementos';
 import styles from './Footer.module.css';
 
 const FOOTER_COLS = [
-  { heading: 'Plataforma', links: ['Mi perfil', 'Plan semanal', 'Herbología', 'Quantum Pro'] },
-  { heading: 'Empresa',    links: ['Sobre nosotros', 'Método', 'Blog', 'Contacto'] },
-  { heading: 'Legal',      links: ['Privacidad', 'Términos', 'Cookies'] },
+  {
+    heading: 'Plataforma',
+    links: [
+      { label: 'Mi perfil holístico', href: '/recomendador' },
+      { label: 'Herbología',          href: '/plantas' },
+      { label: 'Blog',                href: '/blog' },
+      { label: 'Quantum Pro',         href: '/#pricing' },
+    ],
+  },
+  {
+    heading: 'Empresa',
+    links: [
+      { label: 'Método',   href: '/#pillars' },
+      { label: 'Proceso',  href: '/#how' },
+      { label: 'Contacto', href: `mailto:${SITE_CONFIG.email}` },
+      { label: 'Chat IA',  href: '/chat' },
+    ],
+  },
+  {
+    heading: 'Legal',
+    links: [
+      { label: 'Privacidad', href: '/privacidad' },
+      { label: 'Términos',   href: '/terminos' },
+      { label: 'Cookies',    href: '/cookies' },
+    ],
+  },
 ];
 
 export default function Footer() {
@@ -26,7 +49,9 @@ export default function Footer() {
             <h4 className={styles.colTitle}>{col.heading}</h4>
             <ul>
               {col.links.map((link) => (
-                <li key={link}><a href="#">{link}</a></li>
+                <li key={link.label}>
+                  <a href={link.href}>{link.label}</a>
+                </li>
               ))}
             </ul>
           </div>
@@ -37,7 +62,7 @@ export default function Footer() {
         <span>© {new Date().getFullYear()} Quantum Holistic · Bristol, UK</span>
         <div className={styles.social}>
           <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="#">Newsletter</a>
+          <a href={`mailto:${SITE_CONFIG.email}`}>Newsletter</a>
           <a href={SITE_CONFIG.social.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
         </div>
       </div>
