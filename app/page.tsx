@@ -14,6 +14,9 @@ import Testimonials from '@/components/sections/Testimonials';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
 import ScrollReveal from '@/components/ui/ScrollReveal';
+import RomeroPopup from '@/components/ui/RomeroPopup';
+import SeasonalPetals from '@/components/ui/SeasonalPetals';
+import QuoteRail from '@/components/ui/QuoteRail';
 
 export const metadata: Metadata = {
   title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar con IA',
@@ -22,10 +25,13 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <RomeroPopup />
+      <SeasonalPetals />
       <Navbar />
       <main>
         <Hero />
         <MarqueeBand />
+        <QuoteRail />
         <StatsBar />
         <ScrollReveal>
           <Pillars />
