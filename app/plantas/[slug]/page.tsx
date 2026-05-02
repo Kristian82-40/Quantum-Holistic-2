@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import styles from './page.module.css';
 
 interface FichaCientifica {
   familia_botanica: string;
@@ -37,7 +38,7 @@ interface Plant {
 
 async function getPlant(slug: string): Promise<Plant | null> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
   try {
     const res = await fetch(
@@ -83,15 +84,19 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
           </p>
 
           {/* Hero */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start', marginBottom: '64px' }}>
+          <div className={styles.hero}>
             <div>
-              {plant.image_cientifica_url && (
-                /* eslint-disable-next-line @next/next/no-img-element */
+              {plant.image_cientifica_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={plant.image_cientifica_url}
                   alt={`Ilustración botánica de ${plant.nombre_es}`}
-                  style={{ width: '100%', borderRadius: '12px', border: '1px solid var(--border)' }}
+                  className={styles.heroImg}
                 />
+              ) : (
+                <div style={{ background: 'var(--sage-pale)', borderRadius: '12px', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.5, fontSize: '48px' }}>
+                  ◈
+                </div>
               )}
             </div>
             <div>
@@ -105,7 +110,6 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
                 {plant.nombre_latino}
               </p>
 
-              {/* Propiedades */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                 {fc.propiedades?.map(p => (
                   <span key={p} style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', padding: '4px 10px', border: '1px solid var(--sage)', borderRadius: '20px', color: 'var(--sage)' }}>
@@ -128,7 +132,7 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
             <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.6rem', marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               Ficha científica
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+            <div className={styles.fichaGrid}>
               <FichaBlock title="Indicaciones">
                 <ul style={{ paddingLeft: '18px', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.8 }}>
                   {fc.indicaciones?.map(i => <li key={i}>{i}</li>)}
@@ -149,11 +153,11 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
           </section>
 
           {/* Ficha mística */}
-          <section style={{ marginBottom: '64px', padding: '32px', background: 'var(--bg-subtle, #f8f6f2)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+          <section style={{ marginBottom: '64px', padding: '32px', background: 'var(--sage-pale)', borderRadius: '12px', border: '1px solid var(--border)' }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.6rem', marginBottom: '24px' }}>
               Sabiduría ancestral
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '20px', marginBottom: '24px' }}>
               {[
                 { label: 'Elemento', value: fm.elemento },
                 { label: 'Planeta', value: fm.planeta_regente },
@@ -167,10 +171,10 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
               ))}
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.7, marginBottom: '12px' }}>
-              <strong style={{ color: 'var(--text)' }}>Energía:</strong> {fm.energia}
+              <strong>Energía:</strong> {fm.energia}
             </p>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.7, marginBottom: '12px' }}>
-              <strong style={{ color: 'var(--text)' }}>Uso ceremonial:</strong> {fm.uso_ceremonial}
+              <strong>Uso ceremonial:</strong> {fm.uso_ceremonial}
             </p>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.7, fontStyle: 'italic' }}>
               {fm.simbolismo}
