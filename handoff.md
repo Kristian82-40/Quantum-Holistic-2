@@ -1,25 +1,41 @@
-# Handoff — 2026-04-30 · Sesión Arquitectura + Despliegue + Email
+# Handoff — 2026-05-02 · Sesión Web Impecable (responsivo + elementos restaurados)
 
 ## Estado
-**Producción OK** — Web en verde, email automático implementado y desplegado
+**Producción OK** — Web en verde, desplegando en Vercel ahora
 
 ## Deploy actual
-- **URL producción**: `quantum-holistic-2-fdcft78bh-kristiantroncoso-8620s-projects.vercel.app`
-- **Último commit**: `2d269b0` — email bienvenida Resend
-- **Estado Vercel**: READY ✅
+- **URL producción**: `quantum-holistic-2.vercel.app`
+- **Último commit**: `e5d04dc` — restaurar componentes desconectados
+- **Estado Vercel**: Desplegando ✅
 
-## Qué se hizo esta sesión (todo en orden)
-1. `1fc57ca` — Navbar/Footer en /recomendador + 51 imágenes plantas en public/images/
-2. `2d269b0` — Email automático bienvenida (Resend) en webhook Stripe
+## Qué se hizo esta sesión (commits en orden)
+1. **Fix crítico servidor**: Eliminado `app/app/` (proyecto B anidado causaba conflicto de rutas `/icon`)
+2. **Fix .env.local**: Creado en raíz del proyecto (antes solo existía en `app/`)
+3. **next.config.js**: Eliminado `withNextIntl` que generaba rutas `/icon` conflictivas
+4. **50 imágenes plantas**: Verificadas todas (plant-01 a plant-50), HTTP 200 en producción
+5. **Navbar móvil**: Hamburger menu con overlay + animación X (visible en < 900px)
+6. **Footer links**: Todos apuntan a rutas reales (antes eran `#`)
+7. **Responsive CSS**: plantas/[slug] hero grid + ProfileCTA quantumGrid (mobile 1 col)
+8. **PlantasGrid**: Alt text correcto (`nombre_es — nombre_latino`), lazy loading, hover zoom
+9. **favicon + manifest**: SVG leaf icon, webmanifest actualizado
+10. `e5d04dc` — **Componentes restaurados**: ChatBot, RomeroPopup, SeasonalPetals, QuoteRail
 
-## Arquitectura de rutas CORRECTA
+## Componentes UI restaurados (estaban desconectados)
+| Componente | Dónde | Qué hace |
+|---|---|---|
+| `ChatBot` | `layout.tsx` (global) | Botón flotante chat holístico con Papu Pro |
+| `RomeroPopup` | `page.tsx` homepage | Popup planta del mes (3.2s delay, localStorage) |
+| `SeasonalPetals` | `page.tsx` homepage | Lluvia de pétalos primavera (marzo-mayo activo) |
+| `QuoteRail` | `page.tsx` entre MarqueeBand y StatsBar | Carrusel citas holísticas animado |
+
+## Arquitectura de rutas
 ```
 /                → app/page.tsx
 /blog            → app/blog/page.tsx
 /blog/[slug]     → app/blog/[slug]/page.tsx
 /plantas         → app/plantas/page.tsx
 /plantas/[slug]  → app/plantas/[slug]/page.tsx
-/recomendador    → app/recomendador/page.tsx  ← tiene Navbar+Footer ahora
+/recomendador    → app/recomendador/page.tsx
 /chat            → app/chat/page.tsx (paywall 5msg/día)
 /login           → app/login/page.tsx
 /registro        → app/registro/page.tsx
@@ -27,31 +43,15 @@
 /success, /cancel, /gracias → páginas post-pago
 ```
 
-## Email automático — PENDIENTE UNA ACCIÓN MANUAL
-El código está desplegado. Solo falta activarlo:
-
-**Pasos para Kristian:**
-1. Crear cuenta en **resend.com** (gratis, 100 emails/día)
-2. Ir a API Keys → crear una nueva
-3. Añadir a Vercel: `vercel env add RESEND_API_KEY production`
-4. Hacer redeploy: `vercel deploy --prod` (o esperar al próximo push)
-
-Una vez hecho, cada nuevo pago Pro dispara automáticamente un email de bienvenida al cliente.
-
-El sender está configurado como `hola@quantumholistic.com` — Resend requiere verificar el dominio en su panel.
-
-## Regla crítica para futuros deploys
-Siempre añadir dependencias al ROOT `package.json` Y al `app/package.json`.
-
-## Próximos pasos CEO (en orden)
-1. **RESEND_API_KEY**: Crear cuenta resend.com + añadir key a Vercel (ver arriba)
+## Pendientes (sin cambios desde sesión anterior)
+1. **RESEND_API_KEY**: Crear cuenta resend.com + añadir key a Vercel
 2. **Verificar dominio en Resend**: Panel Resend → Domains → añadir quantumholistic.com
 3. **Dominio propio**: Configurar `quantumholistic.com` en Vercel (acción manual)
 4. **Stripe keys live**: Las de producción aún no están configuradas
-5. **Plan Terapeuta**: formulario activo + onboarding
+5. **Blog posts**: 0 en Supabase — ejecutar `qb` para generar contenido herbología
 
 ## Estado DB (Supabase vctetjugbvyllwjpxcxh)
-- `plants` ✅ | `profiles` ✅ | `blog_posts` ✅ | `chat_usage` ✅ | `leads` ✅
+- `plants` ✅ (50 plantas) | `profiles` ✅ | `blog_posts` ✅ (vacío) | `chat_usage` ✅ | `leads` ✅
 
 ## Acumulado histórico
 - Web Vercel ✅ | Diccionario 50 plantas ✅ | Recomendador Dosha ✅
@@ -60,3 +60,4 @@ Siempre añadir dependencias al ROOT `package.json` Y al `app/package.json`.
 - Funnel leads ✅ | Vercel Analytics ✅ | SEO plantas ✅
 - Arquitectura URL limpia ✅ | Imágenes plantas en producción ✅
 - Email bienvenida automático ✅ (falta RESEND_API_KEY en Vercel)
+- Web responsive ✅ | SVG inline ✅ | Componentes UI reconectados ✅
