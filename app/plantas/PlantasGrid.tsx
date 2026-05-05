@@ -54,7 +54,7 @@ export default function PlantasGrid({ plants }: { plants: Plant[] }) {
             outline: 'none',
           }}
         />
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '2px', flexShrink: 0 }}>
           {ELEMENTOS.map(el => (
             <button
               key={el}
@@ -107,13 +107,22 @@ export default function PlantasGrid({ plants }: { plants: Plant[] }) {
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >
-              <div style={{ height: '200px', background: 'var(--bg-subtle, #f8f6f2)', overflow: 'hidden' }}>
+              <div style={{ height: '200px', background: 'var(--sage-pale)', overflow: 'hidden', position: 'relative' }}>
                 {plant.image_cientifica_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={plant.image_cientifica_url} alt={plant.nombre_es}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={plant.image_cientifica_url}
+                    alt={`${plant.nombre_es} — ${plant.nombre_latino}`}
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.04)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)'; }}
+                  />
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.3, fontSize: '40px' }}>◈</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.4, gap: '8px' }}>
+                    <span style={{ fontSize: '32px' }}>◈</span>
+                    <span style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--sage)' }}>{plant.ficha_cientifica.familia_botanica}</span>
+                  </div>
                 )}
               </div>
               <div style={{ padding: '18px' }}>
