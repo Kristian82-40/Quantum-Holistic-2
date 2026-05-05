@@ -16,6 +16,7 @@ import BlogPreview from '@/components/sections/BlogPreview';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import RomeroPopup from '@/components/ui/RomeroPopup';
 import QuoteRail from '@/components/ui/QuoteRail';
+import BioZenScene from '@/components/ui/BioZenScene';
 
 export const metadata: Metadata = {
   title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar con IA',
@@ -34,6 +35,9 @@ export default function HomePage() {
         <ScrollReveal>
           <Pillars />
         </ScrollReveal>
+        <section id="biozen-scene" className="section">
+          <BioZenScene />
+        </section>
         <ScrollReveal>
           <HowItWorks />
         </ScrollReveal>
