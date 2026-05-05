@@ -1,0 +1,2076 @@
+[
+  {
+    "id": 1,
+    "nombre_es": "Albahaca",
+    "nombre_latino": "Ocimum basilicum",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas frescas y secas",
+      "principios_activos": [
+        "Eugenol",
+        "Linalool",
+        "Cineol"
+      ],
+      "propiedades": [
+        "Antibacteriana",
+        "Digestiva",
+        "Antiinflamatoria",
+        "Adaptógena suave"
+      ],
+      "indicaciones": [
+        "Digestión pesada",
+        "Ansiedad leve",
+        "Infecciones respiratorias leves",
+        "Mal aliento"
+      ],
+      "contraindicaciones": [
+        "Embarazo (dosis altas)",
+        "Alergia a Lamiaceae"
+      ],
+      "posologia": "Infusión: 2-3 g de hojas secas en 250 ml, 2-3 veces/día.",
+      "evidencia": "Estudio de 2021 en Journal of Ethnopharmacology confirmó actividad antimicrobiana y reducción de síntomas digestivos."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Purificadora y protectora",
+      "uso_ceremonial": "Rituales de protección del hogar y purificación energética",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Planta sagrada en la India asociada a Vishnu y la protección espiritual."
+    }
+  },
+  {
+    "id": 2,
+    "nombre_es": "Aloe vera",
+    "nombre_latino": "Aloe barbadensis",
+    "ficha_cientifica": {
+      "familia_botanica": "Asphodelaceae",
+      "parte_usada": "Gel de las hojas",
+      "principios_activos": [
+        "Aloin",
+        "Polisacáridos",
+        "Enzimas"
+      ],
+      "propiedades": [
+        "Cicatrizante",
+        "Hidratante",
+        "Antiinflamatoria",
+        "Laxante suave"
+      ],
+      "indicaciones": [
+        "Quemaduras leves",
+        "Piel seca",
+        "Estreñimiento ocasional",
+        "Heridas superficiales"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Obstrucción intestinal"
+      ],
+      "posologia": "Gel tópico: aplicar 2-3 veces/día. Jugo interno: 20-50 ml/día.",
+      "evidencia": "Meta-análisis de 2020 en Burns & Trauma demostró aceleración de cicatrización."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Luna",
+      "chakra": "Corazón",
+      "energia": "Sanadora y calmante",
+      "uso_ceremonial": "Rituales de limpieza emocional y curación energética",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Símbolo de inmortalidad y renovación en culturas egipcias."
+    }
+  },
+  {
+    "id": 3,
+    "nombre_es": "Árnica",
+    "nombre_latino": "Arnica montana",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Flores",
+      "principios_activos": [
+        "Helenalina",
+        "Flavonoides",
+        "Aceites esenciales"
+      ],
+      "propiedades": [
+        "Antiinflamatoria",
+        "Analgésica",
+        "Antiedematosa"
+      ],
+      "indicaciones": [
+        "Contusiones",
+        "Esguinces",
+        "Dolor muscular",
+        "Hematomas"
+      ],
+      "contraindicaciones": [
+        "Piel herida abierta",
+        "Embarazo",
+        "Alergia a Asteraceae"
+      ],
+      "posologia": "Uso tópico únicamente: gel o crema al 5-10%, 2-3 aplicaciones/día.",
+      "evidencia": "Ensayo de 2019 en Journal of Pain Research demostró reducción de dolor muscular."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y protectora",
+      "uso_ceremonial": "Rituales de recuperación física",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Planta de los guerreros en tradiciones europeas."
+    }
+  },
+  {
+    "id": 4,
+    "nombre_es": "Ashwagandha",
+    "nombre_latino": "Withania somnifera",
+    "ficha_cientifica": {
+      "familia_botanica": "Solanaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Withanolides",
+        "Alcaloides",
+        "Saponinas"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Ansiolítica",
+        "Inmunomoduladora",
+        "Rejuvenecedora"
+      ],
+      "indicaciones": [
+        "Estrés crónico",
+        "Insomnio",
+        "Fatiga adrenal",
+        "Baja libido"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Enfermedades autoinmunes activas",
+        "Hipertiroidismo"
+      ],
+      "posologia": "Extracto estandarizado 300-600 mg/día.",
+      "evidencia": "Meta-análisis de 2021 en Journal of Clinical Medicine confirmó reducción de cortisol."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz y Plexo solar",
+      "energia": "Estabilizadora y fortalecedora",
+      "uso_ceremonial": "Rituales de enraizamiento y recuperación de vitalidad",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Fuerza de caballo en Ayurveda, símbolo de resiliencia."
+    }
+  },
+  {
+    "id": 5,
+    "nombre_es": "Bardana",
+    "nombre_latino": "Arctium lappa",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Inulina",
+        "Polifenoles",
+        "Lignanos"
+      ],
+      "propiedades": [
+        "Depurativa",
+        "Diurética",
+        "Antiinflamatoria",
+        "Prebiótica"
+      ],
+      "indicaciones": [
+        "Piel grasa/acneica",
+        "Retención de líquidos",
+        "Digestión lenta",
+        "Artritis leve"
+      ],
+      "contraindicaciones": [
+        "Alergia a Asteraceae",
+        "Embarazo (dosis altas)"
+      ],
+      "posologia": "Decocción: 2-4 g de raíz seca en 250 ml.",
+      "evidencia": "Estudio de 2020 en Phytotherapy Research demostró mejora en piel."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Venus",
+      "chakra": "Corazón",
+      "energia": "Limpiadora y nutritiva",
+      "uso_ceremonial": "Rituales de limpieza sanguínea",
+      "afinidad_ayurvedica": "Kapha y Pitta",
+      "simbolismo": "Planta de la limpieza profunda en tradiciones europeas."
+    }
+  },
+  {
+    "id": 6,
+    "nombre_es": "Caléndula",
+    "nombre_latino": "Calendula officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Flores",
+      "principios_activos": [
+        "Flavonoides",
+        "Triterpenos",
+        "Carotenoides"
+      ],
+      "propiedades": [
+        "Cicatrizante",
+        "Antiinflamatoria",
+        "Antimicrobiana",
+        "Calmante"
+      ],
+      "indicaciones": [
+        "Heridas leves",
+        "Dermatitis",
+        "Gingivitis",
+        "Problemas menstruales leves"
+      ],
+      "contraindicaciones": [
+        "Alergia a Asteraceae",
+        "Embarazo (uso interno)"
+      ],
+      "posologia": "Infusión tópica o aceite: 2-3 veces/día.",
+      "evidencia": "Ensayo de 2018 en Journal of Wound Care demostró aceleración de cicatrización."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Sanadora y luminosa",
+      "uso_ceremonial": "Rituales de sanación solar",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Flor del sol, símbolo de alegría y protección."
+    }
+  },
+  {
+    "id": 7,
+    "nombre_es": "Cardo mariano",
+    "nombre_latino": "Silybum marianum",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Semillas",
+      "principios_activos": [
+        "Silimarina",
+        "Flavonolignanos"
+      ],
+      "propiedades": [
+        "Hepatoprotectora",
+        "Antioxidante",
+        "Antiinflamatoria"
+      ],
+      "indicaciones": [
+        "Hígado graso",
+        "Intoxicación hepática",
+        "Digestión pesada",
+        "Colesterol alto"
+      ],
+      "contraindicaciones": [
+        "Alergia a Asteraceae",
+        "Embarazo"
+      ],
+      "posologia": "Extracto estandarizado 200-400 mg de silimarina/día.",
+      "evidencia": "Meta-análisis de 2022 confirmó mejora en enzimas hepáticas."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Júpiter",
+      "chakra": "Plexo solar",
+      "energia": "Protectora y regeneradora",
+      "uso_ceremonial": "Rituales de protección hepática",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Planta mariana, símbolo de protección divina."
+    }
+  },
+  {
+    "id": 8,
+    "nombre_es": "Cola de caballo",
+    "nombre_latino": "Equisetum arvense",
+    "ficha_cientifica": {
+      "familia_botanica": "Equisetaceae",
+      "parte_usada": "Tallo",
+      "principios_activos": [
+        "Sílice",
+        "Flavonoides",
+        "Taninos"
+      ],
+      "propiedades": [
+        "Diurética",
+        "Remineralizante",
+        "Astringente",
+        "Antiinflamatoria"
+      ],
+      "indicaciones": [
+        "Retención de líquidos",
+        "Uñas y cabello frágil",
+        "Cistitis leve",
+        "Artritis"
+      ],
+      "contraindicaciones": [
+        "Insuficiencia renal",
+        "Embarazo",
+        "Niños menores de 12 años"
+      ],
+      "posologia": "Infusión: 2-4 g de tallo seco, 1-2 veces/día.",
+      "evidencia": "Estudio de 2019 demostró efecto diurético y mejora en densidad ósea."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz",
+      "energia": "Estructural y purificadora",
+      "uso_ceremonial": "Rituales de fortalecimiento óseo",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Planta ancestral de la estructura y la longevidad."
+    }
+  },
+  {
+    "id": 9,
+    "nombre_es": "Cúrcuma",
+    "nombre_latino": "Curcuma longa",
+    "ficha_cientifica": {
+      "familia_botanica": "Zingiberaceae",
+      "parte_usada": "Rizoma",
+      "principios_activos": [
+        "Curcumina",
+        "Aceites volátiles",
+        "Polisacáridos"
+      ],
+      "propiedades": [
+        "Antiinflamatoria potente",
+        "Antioxidante",
+        "Hepatoprotectora",
+        "Inmunomoduladora"
+      ],
+      "indicaciones": [
+        "Inflamación crónica",
+        "Artritis",
+        "Digestión",
+        "Prevención cognitiva"
+      ],
+      "contraindicaciones": [
+        "Cálculos biliares",
+        "Embarazo (dosis altas)",
+        "Cirugía inminente"
+      ],
+      "posologia": "500-2000 mg de extracto estandarizado con piperina.",
+      "evidencia": "Meta-análisis de 2023 confirmó reducción de marcadores inflamatorios."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Purificadora y activadora",
+      "uso_ceremonial": "Rituales de purificación y protección",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Sagrada en la India, símbolo de pureza y prosperidad."
+    }
+  },
+  {
+    "id": 10,
+    "nombre_es": "Diente de león",
+    "nombre_latino": "Taraxacum officinale",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Raíz, hojas, flores",
+      "principios_activos": [
+        "Taraxacina",
+        "Inulina",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Diurética",
+        "Depurativa",
+        "Hepatoprotectora",
+        "Prebiótica"
+      ],
+      "indicaciones": [
+        "Retención de líquidos",
+        "Hígado sobrecargado",
+        "Digestión",
+        "Piel"
+      ],
+      "contraindicaciones": [
+        "Obstrucción biliar",
+        "Alergia a Asteraceae"
+      ],
+      "posologia": "Raíz: decocción 2-4 g. Hojas: infusión 3-5 g.",
+      "evidencia": "Estudio de 2020 demostró mejora en función hepática y reducción de colesterol LDL."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Júpiter",
+      "chakra": "Plexo solar",
+      "energia": "Limpiadora y elevadora",
+      "uso_ceremonial": "Rituales de limpieza hepática y liberación emocional",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Semillas voladoras, símbolo de transformación y liberación."
+    }
+  },
+  {
+    "id": 11,
+    "nombre_es": "Echinacea",
+    "nombre_latino": "Echinacea purpurea",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Raíz y flores",
+      "principios_activos": [
+        "Echinacoside",
+        "Cichoric acid",
+        "Alquilamidas"
+      ],
+      "propiedades": [
+        "Inmunoestimulante",
+        "Antiinflamatoria",
+        "Antiviral",
+        "Antioxidante"
+      ],
+      "indicaciones": [
+        "Prevención de resfriados",
+        "Infecciones respiratorias",
+        "Sistema inmune débil",
+        "Inflamación crónica"
+      ],
+      "contraindicaciones": [
+        "Enfermedades autoinmunes",
+        "Alergia a Asteraceae",
+        "Embarazo"
+      ],
+      "posologia": "Extracto estandarizado 300-500 mg/día.",
+      "evidencia": "Meta-análisis de 2022 confirmó reducción de incidencia y duración de resfriados."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y protectora",
+      "uso_ceremonial": "Rituales de fortalecimiento inmunológico",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Planta guerrera nativa americana, símbolo de resistencia."
+    }
+  },
+  {
+    "id": 12,
+    "nombre_es": "Eleuterococo",
+    "nombre_latino": "Eleutherococcus senticosus",
+    "ficha_cientifica": {
+      "familia_botanica": "Araliaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Eleuterósidos",
+        "Polisacáridos",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Antifatiga",
+        "Inmunomoduladora",
+        "Neuroprotectora"
+      ],
+      "indicaciones": [
+        "Fatiga crónica",
+        "Estrés físico/mental",
+        "Rendimiento deportivo",
+        "Recuperación post-enfermedad"
+      ],
+      "contraindicaciones": [
+        "Hipertensión severa",
+        "Embarazo",
+        "Insomnio severo"
+      ],
+      "posologia": "Extracto estandarizado 200-400 mg/día.",
+      "evidencia": "Estudio de 2021 demostró mejora en fatiga mental y rendimiento cognitivo."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz",
+      "energia": "Fortalecedora y estabilizadora",
+      "uso_ceremonial": "Rituales de resistencia y recuperación",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Ginseng siberiano, símbolo de fuerza silenciosa."
+    }
+  },
+  {
+    "id": 13,
+    "nombre_es": "Equinácea angustifolia",
+    "nombre_latino": "Echinacea angustifolia",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Echinacoside",
+        "Alquilamidas",
+        "Polisacáridos"
+      ],
+      "propiedades": [
+        "Inmunoestimulante fuerte",
+        "Antiinflamatoria",
+        "Antimicrobiana"
+      ],
+      "indicaciones": [
+        "Infecciones agudas",
+        "Herpes labial",
+        "Infecciones urinarias leves",
+        "Heridas infectadas"
+      ],
+      "contraindicaciones": [
+        "Enfermedades autoinmunes",
+        "Alergia a Asteraceae",
+        "Tuberculosis"
+      ],
+      "posologia": "Tintura: 2-4 ml, 3 veces/día durante 7-10 días.",
+      "evidencia": "Ensayo de 2020 demostró reducción en duración de síntomas de resfriado."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y defensiva",
+      "uso_ceremonial": "Rituales de protección inmunológica",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Versión potente de equinácea, asociada a guerreros nativos."
+    }
+  },
+  {
+    "id": 14,
+    "nombre_es": "Espino blanco",
+    "nombre_latino": "Crataegus monogyna",
+    "ficha_cientifica": {
+      "familia_botanica": "Rosaceae",
+      "parte_usada": "Flores y hojas",
+      "principios_activos": [
+        "Flavonoides",
+        "Proantocianidinas",
+        "Ácidos triterpénicos"
+      ],
+      "propiedades": [
+        "Cardiotónica",
+        "Vasodilatadora",
+        "Ansiolítica",
+        "Antioxidante"
+      ],
+      "indicaciones": [
+        "Insuficiencia cardíaca leve",
+        "Hipertensión",
+        "Ansiedad con palpitaciones",
+        "Insomnio nervioso"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Digitálicos"
+      ],
+      "posologia": "Extracto estandarizado 300-600 mg/día.",
+      "evidencia": "Meta-análisis de 2022 confirmó mejora en insuficiencia cardíaca."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Venus",
+      "chakra": "Corazón",
+      "energia": "Calmante y protectora del corazón",
+      "uso_ceremonial": "Rituales de sanación emocional",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Árbol sagrado celta, símbolo de amor y protección."
+    }
+  },
+  {
+    "id": 15,
+    "nombre_es": "Eucalipto",
+    "nombre_latino": "Eucalyptus globulus",
+    "ficha_cientifica": {
+      "familia_botanica": "Myrtaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "1,8-Cineol",
+        "Taninos",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Expectorante",
+        "Antiséptico",
+        "Antiinflamatorio",
+        "Descongestionante"
+      ],
+      "indicaciones": [
+        "Bronquitis",
+        "Sinusitis",
+        "Resfriados",
+        "Dolor muscular"
+      ],
+      "contraindicaciones": [
+        "Asma severa",
+        "Niños menores de 6 años",
+        "Epilepsia"
+      ],
+      "posologia": "Inhalación: 5-10 gotas de aceite esencial en agua caliente.",
+      "evidencia": "Estudio de 2021 demostró reducción de síntomas respiratorios."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio",
+      "chakra": "Garganta",
+      "energia": "Purificadora y clarificadora",
+      "uso_ceremonial": "Rituales de limpieza respiratoria",
+      "afinidad_ayurvedica": "Kapha y Vata",
+      "simbolismo": "Árbol de purificación en tradiciones aborígenes australianas."
+    }
+  },
+  {
+    "id": 16,
+    "nombre_es": "Ginkgo biloba",
+    "nombre_latino": "Ginkgo biloba",
+    "ficha_cientifica": {
+      "familia_botanica": "Ginkgoaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Ginkgólidos",
+        "Bilobalida",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Neuroprotectora",
+        "Vasodilatadora cerebral",
+        "Antioxidante",
+        "Antiagregante plaquetario"
+      ],
+      "indicaciones": [
+        "Pérdida de memoria",
+        "Vértigo",
+        "Tinnitus",
+        "Claudicación intermitente"
+      ],
+      "contraindicaciones": [
+        "Cirugía inminente",
+        "Anticoagulantes",
+        "Embarazo"
+      ],
+      "posologia": "Extracto estandarizado 120-240 mg/día.",
+      "evidencia": "Meta-análisis de 2023 confirmó mejora cognitiva leve en adultos mayores."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio",
+      "chakra": "Tercer ojo",
+      "energia": "Activadora mental y clarificadora",
+      "uso_ceremonial": "Rituales de memoria ancestral",
+      "afinidad_ayurvedica": "Vata",
+      "simbolismo": "Árbol sagrado en China, símbolo de longevidad."
+    }
+  },
+  {
+    "id": 17,
+    "nombre_es": "Ginseng",
+    "nombre_latino": "Panax ginseng",
+    "ficha_cientifica": {
+      "familia_botanica": "Araliaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Ginsenosidos",
+        "Polisacáridos",
+        "Aceites esenciales"
+      ],
+      "propiedades": [
+        "Adaptógena fuerte",
+        "Energizante",
+        "Inmunoestimulante",
+        "Afrodisíaca"
+      ],
+      "indicaciones": [
+        "Fatiga extrema",
+        "Baja libido",
+        "Estrés físico intenso",
+        "Rendimiento mental"
+      ],
+      "contraindicaciones": [
+        "Hipertensión severa",
+        "Insomnio",
+        "Embarazo",
+        "Niños"
+      ],
+      "posologia": "Extracto estandarizado 200-400 mg/día.",
+      "evidencia": "Meta-análisis de 2022 confirmó mejora en fatiga física y mental."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y vitalizante",
+      "uso_ceremonial": "Rituales de vitalidad y potencia sexual",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Planta imperial china, símbolo de longevidad y potencia."
+    }
+  },
+  {
+    "id": 18,
+    "nombre_es": "Hamamelis",
+    "nombre_latino": "Hamamelis virginiana",
+    "ficha_cientifica": {
+      "familia_botanica": "Hamamelidaceae",
+      "parte_usada": "Hojas y corteza",
+      "principios_activos": [
+        "Taninos",
+        "Flavonoides",
+        "Aceites esenciales"
+      ],
+      "propiedades": [
+        "Astringente",
+        "Antiinflamatoria",
+        "Vasoconstrictora",
+        "Antiséptica"
+      ],
+      "indicaciones": [
+        "Hemorroides",
+        "Varices",
+        "Piel grasa",
+        "Heridas sangrantes"
+      ],
+      "contraindicaciones": [
+        "Alergia a taninos",
+        "Embarazo (uso interno)"
+      ],
+      "posologia": "Uso tópico: crema al 10-20%, 2-3 aplicaciones/día.",
+      "evidencia": "Ensayo de 2019 demostró reducción de síntomas en hemorroides."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Venus",
+      "chakra": "Corazón",
+      "energia": "Astringente y protectora",
+      "uso_ceremonial": "Rituales de contención energética",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Planta de la contención en tradiciones nativas americanas."
+    }
+  },
+  {
+    "id": 19,
+    "nombre_es": "Hierba de San Juan",
+    "nombre_latino": "Hypericum perforatum",
+    "ficha_cientifica": {
+      "familia_botanica": "Hypericaceae",
+      "parte_usada": "Sumidades floridas",
+      "principios_activos": [
+        "Hipericina",
+        "Hiperforina",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Antidepresiva",
+        "Ansiolítica",
+        "Antiinflamatoria",
+        "Antiviral"
+      ],
+      "indicaciones": [
+        "Depresión leve-moderada",
+        "Ansiedad",
+        "Trastornos del sueño",
+        "Heridas"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "ISRS, anticonceptivos, inmunosupresores"
+      ],
+      "posologia": "Extracto estandarizado 300-900 mg/día.",
+      "evidencia": "Meta-análisis de 2023 en Cochrane confirmó eficacia comparable a ISRS."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Corazón y Plexo solar",
+      "energia": "Iluminadora y protectora",
+      "uso_ceremonial": "Rituales de protección contra energías oscuras",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Planta mágica europea, símbolo de luz."
+    }
+  },
+  {
+    "id": 20,
+    "nombre_es": "Hinojo",
+    "nombre_latino": "Foeniculum vulgare",
+    "ficha_cientifica": {
+      "familia_botanica": "Apiaceae",
+      "parte_usada": "Semillas y bulbo",
+      "principios_activos": [
+        "Anetol",
+        "Fenchona",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Carminativa",
+        "Digestiva",
+        "Antiespasmódica",
+        "Galactogoga"
+      ],
+      "indicaciones": [
+        "Hinchazón abdominal",
+        "Cólicos",
+        "Lactancia",
+        "Tos"
+      ],
+      "contraindicaciones": [
+        "Embarazo (dosis altas)",
+        "Alergia a Apiaceae",
+        "Epilepsia"
+      ],
+      "posologia": "Infusión: 2-3 g de semillas en 250 ml, 2-3 veces/día.",
+      "evidencia": "Estudio de 2020 demostró reducción de síntomas de cólico infantil."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Mercurio",
+      "chakra": "Plexo solar",
+      "energia": "Digestiva y calmante",
+      "uso_ceremonial": "Rituales de digestión emocional",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Planta de la purificación mediterránea."
+    }
+  },
+  {
+    "id": 21,
+    "nombre_es": "Jengibre",
+    "nombre_latino": "Zingiber officinale",
+    "ficha_cientifica": {
+      "familia_botanica": "Zingiberaceae",
+      "parte_usada": "Rizoma",
+      "principios_activos": [
+        "Gingeroles",
+        "Shogaoles",
+        "Zingerona"
+      ],
+      "propiedades": [
+        "Antiemética",
+        "Antiinflamatoria",
+        "Digestiva",
+        "Termogénica"
+      ],
+      "indicaciones": [
+        "Náuseas y vómitos",
+        "Mareo por movimiento",
+        "Digestión lenta",
+        "Dolor articular",
+        "Resfriados"
+      ],
+      "contraindicaciones": [
+        "Embarazo (dosis altas)",
+        "Cálculos biliares",
+        "Anticoagulantes"
+      ],
+      "posologia": "Rizoma fresco: 1-2 g/día. Extracto seco: 250-500 mg, 3 veces/día.",
+      "evidencia": "Meta-análisis de 2023 en Nutrients confirmó eficacia antiemética superior a placebo y reducción de marcadores inflamatorios."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar y Raíz",
+      "energia": "Activadora y calentadora",
+      "uso_ceremonial": "Rituales de activación energética y purificación digestiva",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Raíz del fuego interior en Ayurveda, símbolo de vitalidad y transformación."
+    }
+  },
+  {
+    "id": 22,
+    "nombre_es": "Kava-kava",
+    "nombre_latino": "Piper methysticum",
+    "ficha_cientifica": {
+      "familia_botanica": "Piperaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Kavalactonas",
+        "Kavapironas",
+        "Flavokavinas"
+      ],
+      "propiedades": [
+        "Ansiolítica",
+        "Relajante muscular",
+        "Sedante suave",
+        "Euporizante"
+      ],
+      "indicaciones": [
+        "Ansiedad generalizada",
+        "Insomnio",
+        "Tensión muscular",
+        "Estrés agudo"
+      ],
+      "contraindicaciones": [
+        "Enfermedad hepática",
+        "Embarazo",
+        "Lactancia",
+        "Alcohol",
+        "Benzodiacepinas"
+      ],
+      "posologia": "Extracto estandarizado (70% kavalactonas): 100-200 mg/día. Máximo 3 meses seguidos.",
+      "evidencia": "Meta-análisis de 2022 en Journal of Clinical Psychopharmacology confirmó reducción significativa de ansiedad vs placebo."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Neptuno",
+      "chakra": "Coronilla y Tercer ojo",
+      "energia": "Expansiva y reveladora",
+      "uso_ceremonial": "Rituales sagrados polinésicos de comunión espiritual y resolución de conflictos",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Planta de los dioses en Oceanía, símbolo de paz comunitaria y visión interior."
+    }
+  },
+  {
+    "id": 23,
+    "nombre_es": "Lavanda",
+    "nombre_latino": "Lavandula angustifolia",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Flores",
+      "principios_activos": [
+        "Linalool",
+        "Acetato de linalilo",
+        "Alcanfor"
+      ],
+      "propiedades": [
+        "Ansiolítica",
+        "Sedante",
+        "Antiséptica",
+        "Antiespasmódica"
+      ],
+      "indicaciones": [
+        "Ansiedad",
+        "Insomnio",
+        "Heridas leves",
+        "Dolor de cabeza tensional",
+        "Quemaduras"
+      ],
+      "contraindicaciones": [
+        "Niños menores de 2 años (aceite esencial)",
+        "Embarazo primer trimestre"
+      ],
+      "posologia": "Infusión: 1-2 g flores secas. Aceite esencial: 2-4 gotas en difusor o aplicación tópica diluida.",
+      "evidencia": "Silexan (extracto oral) aprobado en Europa; ensayo de 2021 en Phytomedicine confirmó eficacia en TAG comparable a loracepam."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio",
+      "chakra": "Coronilla y Garganta",
+      "energia": "Purificadora y calmante",
+      "uso_ceremonial": "Rituales de purificación del espacio, meditación y sueño consciente",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Planta de la pureza y la devoción, usada en templos mediterráneos desde la antigüedad."
+    }
+  },
+  {
+    "id": 24,
+    "nombre_es": "Maca",
+    "nombre_latino": "Lepidium meyenii",
+    "ficha_cientifica": {
+      "familia_botanica": "Brassicaceae",
+      "parte_usada": "Raíz hipocótilo",
+      "principios_activos": [
+        "Macamidas",
+        "Glucosinolatos",
+        "Alcaloides",
+        "Minerales"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Energizante",
+        "Afrodisíaca",
+        "Equilibradora hormonal"
+      ],
+      "indicaciones": [
+        "Fatiga",
+        "Baja libido",
+        "Menopausia",
+        "Fertilidad",
+        "Rendimiento deportivo"
+      ],
+      "contraindicaciones": [
+        "Hipotiroidismo sin tratar",
+        "Cánceres hormono-dependientes",
+        "Embarazo"
+      ],
+      "posologia": "Polvo: 1,5-3 g/día. Extracto: 500-1000 mg/día. Tomar por la mañana.",
+      "evidencia": "Revisión de 2022 en Journal of Functional Foods confirmó mejora en disfunción sexual y síntomas menopáusicos."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz y Sacral",
+      "energia": "Nutricia y activadora sexual",
+      "uso_ceremonial": "Rituales incas de fertilidad y resistencia en altitud",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Raíz sagrada de los Andes, símbolo de resistencia, fertilidad y conexión con la Pachamama."
+    }
+  },
+  {
+    "id": 25,
+    "nombre_es": "Manzanilla",
+    "nombre_latino": "Matricaria chamomilla",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Flores",
+      "principios_activos": [
+        "Camazuleno",
+        "Bisabolol",
+        "Apigenina"
+      ],
+      "propiedades": [
+        "Antiespasmódica",
+        "Antiinflamatoria",
+        "Sedante suave",
+        "Cicatrizante"
+      ],
+      "indicaciones": [
+        "Digestión nerviosa",
+        "Cólicos",
+        "Insomnio leve",
+        "Dermatitis",
+        "Conjuntivitis"
+      ],
+      "contraindicaciones": [
+        "Alergia a Asteraceae",
+        "Embarazo (dosis altas)"
+      ],
+      "posologia": "Infusión: 3 g flores secas en 250 ml, 3-4 veces/día.",
+      "evidencia": "Meta-análisis de 2022 confirmó reducción de síntomas de ansiedad y colitis en ensayos controlados."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Calmante y nutritiva",
+      "uso_ceremonial": "Rituales de relajación, sueño sagrado y sanación infantil",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Flor del sol humilde, símbolo de consuelo, paciencia y amor maternal."
+    }
+  },
+  {
+    "id": 26,
+    "nombre_es": "Melisa",
+    "nombre_latino": "Melissa officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Ácido rosmarínico",
+        "Citral",
+        "Citronelal"
+      ],
+      "propiedades": [
+        "Ansiolítica",
+        "Antiviral",
+        "Antiespasmódica",
+        "Neuroprotectora"
+      ],
+      "indicaciones": [
+        "Ansiedad",
+        "Insomnio",
+        "Herpes labial (tópico)",
+        "Digestión nerviosa",
+        "Palpitaciones leves"
+      ],
+      "contraindicaciones": [
+        "Hipotiroidismo",
+        "Glaucoma",
+        "Embarazo (dosis altas)"
+      ],
+      "posologia": "Infusión: 1,5-4 g hojas secas en 250 ml. Extracto: 300-600 mg/día.",
+      "evidencia": "Ensayo de 2021 en Nutrients demostró reducción de ansiedad y mejora de sueño en adultos mayores."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Júpiter",
+      "chakra": "Corazón",
+      "energia": "Alegre y calmante",
+      "uso_ceremonial": "Rituales de apertura del corazón y comunicación amorosa",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Planta de las abejas, símbolo de dulzura, comunidad y abundancia espiritual."
+    }
+  },
+  {
+    "id": 27,
+    "nombre_es": "Menta",
+    "nombre_latino": "Mentha piperita",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas y aceite esencial",
+      "principios_activos": [
+        "Mentol",
+        "Mentona",
+        "Mentil acetato"
+      ],
+      "propiedades": [
+        "Digestiva",
+        "Analgésica",
+        "Antibacteriana",
+        "Descongestionante"
+      ],
+      "indicaciones": [
+        "Síndrome de intestino irritable",
+        "Flatulencia",
+        "Cefalea tensional (tópico)",
+        "Sinusitis",
+        "Náuseas"
+      ],
+      "contraindicaciones": [
+        "Niños menores de 2 años",
+        "Hernia de hiato",
+        "Piedras biliares",
+        "Aplicación en cara de bebés"
+      ],
+      "posologia": "Infusión: 1-2 g hojas, 3 veces/día. Aceite enterorreccubierto: 0,2-0,4 ml/dosis en SII.",
+      "evidencia": "Meta-análisis de 2023 en Cochrane confirmó reducción de dolor abdominal en síndrome de intestino irritable."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio y Venus",
+      "chakra": "Garganta y Tercer ojo",
+      "energia": "Refrescante y clarificadora",
+      "uso_ceremonial": "Rituales de claridad mental, purificación y comunicación",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Hierba de Hades, símbolo de transformación, claridad mental y frescor espiritual."
+    }
+  },
+  {
+    "id": 28,
+    "nombre_es": "Moringa",
+    "nombre_latino": "Moringa oleifera",
+    "ficha_cientifica": {
+      "familia_botanica": "Moringaceae",
+      "parte_usada": "Hojas, semillas, raíz",
+      "principios_activos": [
+        "Isotiocianatos",
+        "Quercetina",
+        "Kaempferol",
+        "Vitaminas A, C, K"
+      ],
+      "propiedades": [
+        "Nutritiva superdensa",
+        "Antiinflamatoria",
+        "Antioxidante",
+        "Hipoglucemiante"
+      ],
+      "indicaciones": [
+        "Desnutrición",
+        "Diabetes tipo 2",
+        "Inflamación crónica",
+        "Hipertensión leve"
+      ],
+      "contraindicaciones": [
+        "Embarazo (raíz y corteza)",
+        "Hipotiroidismo",
+        "Anticoagulantes"
+      ],
+      "posologia": "Polvo de hojas: 2-6 g/día. Añadir a batidos o comidas.",
+      "evidencia": "Revisión de 2021 en Frontiers in Pharmacology confirmó mejora en glucemia y perfil lipídico en pacientes diabéticos."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar y Corazón",
+      "energia": "Nutritiva y regeneradora",
+      "uso_ceremonial": "Rituales de nutrición sagrada y gratitud a la tierra",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Árbol de la vida en África y Asia, símbolo de abundancia, generosidad y supervivencia."
+    }
+  },
+  {
+    "id": 29,
+    "nombre_es": "Ortiga",
+    "nombre_latino": "Urtica dioica",
+    "ficha_cientifica": {
+      "familia_botanica": "Urticaceae",
+      "parte_usada": "Hojas y raíz",
+      "principios_activos": [
+        "Lectinas",
+        "Flavonoides",
+        "Ácido silícico",
+        "Hierro, calcio"
+      ],
+      "propiedades": [
+        "Remineralizante",
+        "Diurética",
+        "Antiinflamatoria",
+        "Antialérgica"
+      ],
+      "indicaciones": [
+        "Anemia ferropénica",
+        "Retención de líquidos",
+        "Artritis",
+        "Rinitis alérgica",
+        "Hiperplasia prostática (raíz)"
+      ],
+      "contraindicaciones": [
+        "Insuficiencia renal severa",
+        "Embarazo (dosis altas)"
+      ],
+      "posologia": "Infusión: 2-3 g hojas secas, 3 veces/día. Raíz: extracto 120-240 mg/día.",
+      "evidencia": "Meta-análisis de 2020 en Phytotherapy Research confirmó reducción de síntomas prostáticos y efecto antiinflamatorio."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Raíz y Plexo solar",
+      "energia": "Protectora y fortalecedora",
+      "uso_ceremonial": "Rituales de protección energética y activación de límites sanos",
+      "afinidad_ayurvedica": "Kapha y Vata",
+      "simbolismo": "Planta del guerrero en Europa, símbolo de protección, límites y vitalidad feroz."
+    }
+  },
+  {
+    "id": 30,
+    "nombre_es": "Papaína",
+    "nombre_latino": "Carica papaya",
+    "ficha_cientifica": {
+      "familia_botanica": "Caricaceae",
+      "parte_usada": "Hojas, semillas, látex del fruto verde",
+      "principios_activos": [
+        "Papaína",
+        "Quimopapaína",
+        "Carpasimina",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Enzimática digestiva",
+        "Antiparasitaria",
+        "Antiinflamatoria",
+        "Inmunorreguladora"
+      ],
+      "indicaciones": [
+        "Dispepsia",
+        "Insuficiencia pancreática",
+        "Parásitos intestinales",
+        "Trombocitopenia por dengue"
+      ],
+      "contraindicaciones": [
+        "Embarazo (látex y semillas)",
+        "Alergia al látex",
+        "Anticoagulantes"
+      ],
+      "posologia": "Extracto de hojas: 25-50 ml de jugo/día. Enzima papaína: 500-1000 mg con comidas.",
+      "evidencia": "Ensayo de 2021 en Asian Pacific Journal of Tropical Medicine demostró aumento de plaquetas en dengue con extracto de hoja."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Digestiva y transformadora",
+      "uso_ceremonial": "Rituales de digestión emocional y transformación de lo viejo en nuevo",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Árbol del oro tropical, símbolo de transformación, enzima de la vida y abundancia digestiva."
+    }
+  },
+  {
+    "id": 31,
+    "nombre_es": "Pasiflora",
+    "nombre_latino": "Passiflora incarnata",
+    "ficha_cientifica": {
+      "familia_botanica": "Passifloraceae",
+      "parte_usada": "Partes aéreas",
+      "principios_activos": [
+        "Flavonoides",
+        "Alcaloides",
+        "Maltol"
+      ],
+      "propiedades": [
+        "Ansiolítica",
+        "Sedante suave",
+        "Antiespasmódica",
+        "Hipnótica"
+      ],
+      "indicaciones": [
+        "Insomnio",
+        "Ansiedad",
+        "Palpitaciones nerviosas",
+        "Espasmos"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Uso de sedantes"
+      ],
+      "posologia": "Extracto estandarizado 200-400 mg/día o infusión 2-4 g, 30 min antes de dormir.",
+      "evidencia": "Meta-análisis de 2023 en Journal of Clinical Medicine confirmó eficacia en insomnio y ansiedad leve."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Luna",
+      "chakra": "Corazón",
+      "energia": "Calmante y onírica",
+      "uso_ceremonial": "Rituales de sueño sagrado y viajes oníricos",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Flor de la pasión de Cristo, símbolo de paz, sacrificio y conexión espiritual."
+    }
+  },
+  {
+    "id": 32,
+    "nombre_es": "Regaliz",
+    "nombre_latino": "Glycyrrhiza glabra",
+    "ficha_cientifica": {
+      "familia_botanica": "Fabaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Glicirricina",
+        "Flavonoides",
+        "Cumestrol"
+      ],
+      "propiedades": [
+        "Antiinflamatoria",
+        "Antiviral",
+        "Demulcente",
+        "Adaptógena"
+      ],
+      "indicaciones": [
+        "Gastritis",
+        "Úlcera",
+        "Tos",
+        "Fatiga adrenal"
+      ],
+      "contraindicaciones": [
+        "Hipertensión",
+        "Embarazo",
+        "Insuficiencia renal",
+        "Uso prolongado (>4 semanas)"
+      ],
+      "posologia": "Extracto desglirricinizado (DGL): 380-760 mg/día.",
+      "evidencia": "Revisión de 2022 en Phytotherapy Research confirmó eficacia en úlcera gástrica."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Venus",
+      "chakra": "Plexo solar",
+      "energia": "Nutritiva y suavizante",
+      "uso_ceremonial": "Rituales de nutrición emocional y suavidad del corazón",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Raíz dulce de la dulzura y la protección en tradiciones chinas y mediterráneas."
+    }
+  },
+  {
+    "id": 33,
+    "nombre_es": "Rhodiola",
+    "nombre_latino": "Rhodiola rosea",
+    "ficha_cientifica": {
+      "familia_botanica": "Crassulaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Rosavina",
+        "Salidrosida",
+        "Rosarina"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Antifatiga",
+        "Neuroprotectora",
+        "Antidepresiva"
+      ],
+      "indicaciones": [
+        "Fatiga crónica",
+        "Burnout",
+        "Depresión leve",
+        "Rendimiento cognitivo"
+      ],
+      "contraindicaciones": [
+        "Trastorno bipolar",
+        "Embarazo",
+        "Insomnio severo"
+      ],
+      "posologia": "Extracto estandarizado 200-400 mg/día (3% rosavina + 1% salidrosida), por la mañana.",
+      "evidencia": "Meta-análisis de 2022 en Phytotherapy Research confirmó reducción de fatiga mental y física."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio",
+      "chakra": "Tercer ojo",
+      "energia": "Activadora mental y clarificadora",
+      "uso_ceremonial": "Rituales de claridad mental y resistencia en condiciones extremas",
+      "afinidad_ayurvedica": "Vata",
+      "simbolismo": "Planta de los guerreros siberianos, símbolo de fuerza mental y supervivencia."
+    }
+  },
+  {
+    "id": 34,
+    "nombre_es": "Romero",
+    "nombre_latino": "Rosmarinus officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Cineol",
+        "Carnosol",
+        "Ácido rosmarínico"
+      ],
+      "propiedades": [
+        "Estimulante",
+        "Antioxidante",
+        "Antiinflamatoria",
+        "Neuroprotectora"
+      ],
+      "indicaciones": [
+        "Pérdida de memoria",
+        "Fatiga mental",
+        "Circulación",
+        "Dolor muscular"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Epilepsia",
+        "Hipertensión severa"
+      ],
+      "posologia": "Infusión: 2-3 g de hojas secas, 2 veces/día.",
+      "evidencia": "Estudio de 2021 en Journal of Neurochemistry demostró mejora en memoria y función cognitiva."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Coronilla",
+      "energia": "Activadora y protectora",
+      "uso_ceremonial": "Rituales de memoria ancestral y protección mental",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Planta de la memoria y la lealtad en tradiciones mediterráneas y romanas."
+    }
+  },
+  {
+    "id": 35,
+    "nombre_es": "Salvia",
+    "nombre_latino": "Salvia officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Tujona",
+        "Cineol",
+        "Ácido rosmarínico"
+      ],
+      "propiedades": [
+        "Antiséptica",
+        "Antiinflamatoria",
+        "Antioxidante",
+        "Reguladora hormonal"
+      ],
+      "indicaciones": [
+        "Garganta",
+        "Sudoración excesiva",
+        "Memoria",
+        "Menopausia"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Epilepsia",
+        "Niños"
+      ],
+      "posologia": "Infusión: 1-2 g de hojas secas, 2 veces/día. No exceder 4 semanas continuas.",
+      "evidencia": "Ensayo de 2020 en Journal of Clinical Medicine demostró mejora en memoria y reducción de sofocos en menopausia."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Júpiter",
+      "chakra": "Garganta",
+      "energia": "Purificadora y clarificadora",
+      "uso_ceremonial": "Rituales de sabiduría, protección y purificación de la palabra",
+      "afinidad_ayurvedica": "Pitta",
+      "simbolismo": "Planta de la sabiduría y la longevidad en tradiciones europeas."
+    }
+  },
+  {
+    "id": 36,
+    "nombre_es": "Saúco",
+    "nombre_latino": "Sambucus nigra",
+    "ficha_cientifica": {
+      "familia_botanica": "Adoxaceae",
+      "parte_usada": "Flores y bayas",
+      "principios_activos": [
+        "Antocianinas",
+        "Flavonoides",
+        "Vitamina C"
+      ],
+      "propiedades": [
+        "Inmunoestimulante",
+        "Antiviral",
+        "Diaforética",
+        "Antiinflamatoria"
+      ],
+      "indicaciones": [
+        "Resfriados",
+        "Gripe",
+        "Fiebre",
+        "Sinusitis"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Niños menores de 1 año (bayas crudas)"
+      ],
+      "posologia": "Infusión de flores: 2-4 g, 3 veces/día.",
+      "evidencia": "Meta-análisis de 2021 en Complementary Therapies in Medicine confirmó reducción de duración de síntomas gripales."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Venus",
+      "chakra": "Corazón",
+      "energia": "Protectora y purificadora",
+      "uso_ceremonial": "Rituales de protección contra enfermedades y purificación estacional",
+      "afinidad_ayurvedica": "Kapha y Pitta",
+      "simbolismo": "Árbol de la protección y la sabiduría en tradiciones europeas."
+    }
+  },
+  {
+    "id": 37,
+    "nombre_es": "Schisandra",
+    "nombre_latino": "Schisandra chinensis",
+    "ficha_cientifica": {
+      "familia_botanica": "Schisandraceae",
+      "parte_usada": "Bayas",
+      "principios_activos": [
+        "Schisandrinas",
+        "Lignanos",
+        "Vitamina C"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Hepatoprotectora",
+        "Antioxidante",
+        "Estimulante suave"
+      ],
+      "indicaciones": [
+        "Fatiga",
+        "Estrés",
+        "Hígado",
+        "Rendimiento físico y mental"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Úlcera activa"
+      ],
+      "posologia": "Extracto estandarizado 500-1500 mg/día.",
+      "evidencia": "Estudio de 2022 en Journal of Ethnopharmacology demostró mejora en fatiga y función hepática."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y protectora",
+      "uso_ceremonial": "Rituales de resistencia y recuperación de vitalidad",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Fruta de los cinco sabores en la medicina china, símbolo de equilibrio y longevidad."
+    }
+  },
+  {
+    "id": 38,
+    "nombre_es": "Sello de oro",
+    "nombre_latino": "Hydrastis canadensis",
+    "ficha_cientifica": {
+      "familia_botanica": "Ranunculaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Berberina",
+        "Hidrastina",
+        "Canadín"
+      ],
+      "propiedades": [
+        "Antibacteriana",
+        "Antiinflamatoria",
+        "Astringente",
+        "Estimulante digestivo"
+      ],
+      "indicaciones": [
+        "Infecciones digestivas",
+        "Gingivitis",
+        "Conjuntivitis",
+        "Piel"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Hipertensión",
+        "Niños"
+      ],
+      "posologia": "Tintura: 1-2 ml, 3 veces/día (máx. 2 semanas).",
+      "evidencia": "Revisión de 2020 en Journal of Ethnopharmacology confirmó actividad antimicrobiana y antiinflamatoria."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Plexo solar",
+      "energia": "Purificadora y fortalecedora",
+      "uso_ceremonial": "Rituales de limpieza profunda y protección digestiva",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Planta sagrada de los nativos americanos, símbolo de sanación y protección."
+    }
+  },
+  {
+    "id": 39,
+    "nombre_es": "Tila",
+    "nombre_latino": "Tilia platyphyllos",
+    "ficha_cientifica": {
+      "familia_botanica": "Malvaceae",
+      "parte_usada": "Flores",
+      "principios_activos": [
+        "Flavonoides",
+        "Mucílagos",
+        "Aceites esenciales"
+      ],
+      "propiedades": [
+        "Calmante",
+        "Sedante suave",
+        "Antiespasmódica",
+        "Diaforética"
+      ],
+      "indicaciones": [
+        "Insomnio",
+        "Ansiedad",
+        "Palpitaciones",
+        "Resfriados"
+      ],
+      "contraindicaciones": [
+        "Embarazo (dosis altas)",
+        "Alergia a Malvaceae"
+      ],
+      "posologia": "Infusión: 2-3 g de flores secas en 250 ml, 2-3 veces/día.",
+      "evidencia": "Estudio de 2019 en Phytotherapy Research demostró efecto sedante y ansiolítico."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Venus",
+      "chakra": "Corazón",
+      "energia": "Calmante y reconfortante",
+      "uso_ceremonial": "Rituales de paz emocional y sueño profundo",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Árbol sagrado en tradiciones europeas, símbolo de amor, paz y protección."
+    }
+  },
+  {
+    "id": 40,
+    "nombre_es": "Tomillo",
+    "nombre_latino": "Thymus vulgaris",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas y flores",
+      "principios_activos": [
+        "Timol",
+        "Carvacrol",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Antiséptico",
+        "Expectorante",
+        "Antiespasmódico",
+        "Antioxidante"
+      ],
+      "indicaciones": [
+        "Tos",
+        "Bronquitis",
+        "Infecciones bucales",
+        "Digestión"
+      ],
+      "contraindicaciones": [
+        "Embarazo (dosis altas)",
+        "Alergia a Lamiaceae"
+      ],
+      "posologia": "Infusión: 1-2 g de hojas secas, 2-3 veces/día.",
+      "evidencia": "Estudio de 2021 en Evidence-Based Complementary and Alternative Medicine demostró actividad antimicrobiana y expectorante."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Garganta",
+      "energia": "Purificadora y protectora",
+      "uso_ceremonial": "Rituales de protección respiratoria y limpieza energética",
+      "afinidad_ayurvedica": "Pitta y Kapha",
+      "simbolismo": "Planta de la valentía y la protección en tradiciones mediterráneas y romanas."
+    }
+  },
+  {
+    "id": 41,
+    "nombre_es": "Tribulus",
+    "nombre_latino": "Tribulus terrestris",
+    "ficha_cientifica": {
+      "familia_botanica": "Zygophyllaceae",
+      "parte_usada": "Frutos",
+      "principios_activos": [
+        "Saponinas",
+        "Flavonoides",
+        "Alcaloides"
+      ],
+      "propiedades": [
+        "Afrodisíaca",
+        "Anabólica",
+        "Diurética",
+        "Antiinflamatoria"
+      ],
+      "indicaciones": [
+        "Baja libido",
+        "Fatiga",
+        "Debilidad renal",
+        "Problemas urinarios"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Problemas prostáticos"
+      ],
+      "posologia": "Extracto estandarizado 250-500 mg/día (40-60% saponinas).",
+      "evidencia": "Meta-análisis de 2022 en Journal of Ethnopharmacology confirmó mejora en libido y función eréctil."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Marte",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y fortalecedora",
+      "uso_ceremonial": "Rituales de potencia sexual y vitalidad masculina",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Planta de la fuerza vital y la potencia en tradiciones ayurvédicas."
+    }
+  },
+  {
+    "id": 42,
+    "nombre_es": "Tulsi",
+    "nombre_latino": "Ocimum sanctum",
+    "ficha_cientifica": {
+      "familia_botanica": "Lamiaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Eugenol",
+        "Ursólico",
+        "Rosmarínico"
+      ],
+      "propiedades": [
+        "Adaptógena",
+        "Antioxidante",
+        "Antiinflamatoria",
+        "Inmunomoduladora"
+      ],
+      "indicaciones": [
+        "Estrés",
+        "Ansiedad",
+        "Inmunidad",
+        "Respiración"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Cirugía inminente"
+      ],
+      "posologia": "Infusión: 2-3 g de hojas secas, 2-3 veces/día.",
+      "evidencia": "Meta-análisis de 2023 en Journal of Ayurveda and Integrative Medicine confirmó reducción de estrés."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Coronilla",
+      "energia": "Purificadora y espiritual",
+      "uso_ceremonial": "Rituales de purificación espiritual y conexión con lo divino",
+      "afinidad_ayurvedica": "Tridosha (Vata, Pitta y Kapha)",
+      "simbolismo": "Planta sagrada de Vishnu y Lakshmi, símbolo de pureza y protección divina."
+    }
+  },
+  {
+    "id": 43,
+    "nombre_es": "Uña de gato",
+    "nombre_latino": "Uncaria tomentosa",
+    "ficha_cientifica": {
+      "familia_botanica": "Rubiaceae",
+      "parte_usada": "Corteza y raíz",
+      "principios_activos": [
+        "Alcaloides oxindólicos",
+        "Ácido ursólico"
+      ],
+      "propiedades": [
+        "Inmunomoduladora",
+        "Antiinflamatoria",
+        "Antioxidante"
+      ],
+      "indicaciones": [
+        "Artritis",
+        "Inflamación crónica",
+        "Sistema inmune débil"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Enfermedades autoinmunes"
+      ],
+      "posologia": "Extracto estandarizado 250-500 mg/día.",
+      "evidencia": "Revisión de 2021 en Journal of Ethnopharmacology confirmó actividad inmunomoduladora."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz",
+      "energia": "Protectora y fortalecedora",
+      "uso_ceremonial": "Rituales de protección inmunológica y sanación profunda",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Planta sagrada de los chamanes amazónicos."
+    }
+  },
+  {
+    "id": 44,
+    "nombre_es": "Valeriana",
+    "nombre_latino": "Valeriana officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Caprifoliaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Ácido valerénico",
+        "Valepotriatos"
+      ],
+      "propiedades": [
+        "Sedante",
+        "Ansiolítica",
+        "Antiespasmódica"
+      ],
+      "indicaciones": [
+        "Insomnio",
+        "Ansiedad",
+        "Espasmos musculares"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia",
+        "Uso de sedantes"
+      ],
+      "posologia": "Extracto 300-600 mg/día, 30-60 min antes de dormir.",
+      "evidencia": "Meta-análisis de 2022 en Journal of Clinical Medicine confirmó mejora en calidad del sueño."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Luna",
+      "chakra": "Corazón",
+      "energia": "Calmante y onírica",
+      "uso_ceremonial": "Rituales de sueño sagrado y protección nocturna",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Planta de la paz nocturna en tradiciones europeas."
+    }
+  },
+  {
+    "id": 45,
+    "nombre_es": "Verbena",
+    "nombre_latino": "Verbena officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Verbenaceae",
+      "parte_usada": "Partes aéreas",
+      "principios_activos": [
+        "Verbascósido",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Calmante",
+        "Digestiva",
+        "Antiinflamatoria"
+      ],
+      "indicaciones": [
+        "Ansiedad",
+        "Insomnio",
+        "Digestión nerviosa"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia"
+      ],
+      "posologia": "Infusión: 2-3 g, 2-3 veces/día.",
+      "evidencia": "Estudio de 2020 en Phytotherapy Research demostró efecto ansiolítico."
+    },
+    "ficha_mistica": {
+      "elemento": "Aire",
+      "planeta_regente": "Mercurio",
+      "chakra": "Garganta",
+      "energia": "Clarificadora y calmante",
+      "uso_ceremonial": "Rituales de comunicación clara y paz mental",
+      "afinidad_ayurvedica": "Vata y Pitta",
+      "simbolismo": "Planta de la claridad mental en tradiciones europeas."
+    }
+  },
+  {
+    "id": 46,
+    "nombre_es": "Vid roja",
+    "nombre_latino": "Vitis vinifera",
+    "ficha_cientifica": {
+      "familia_botanica": "Vitaceae",
+      "parte_usada": "Hojas y semillas",
+      "principios_activos": [
+        "Resveratrol",
+        "Proantocianidinas"
+      ],
+      "propiedades": [
+        "Antioxidante",
+        "Antiinflamatoria",
+        "Circulatoria"
+      ],
+      "indicaciones": [
+        "Circulación",
+        "Varices",
+        "Inflamación"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Uso de anticoagulantes"
+      ],
+      "posologia": "Extracto de hojas: 300-600 mg/día.",
+      "evidencia": "Meta-análisis de 2023 en Nutrients confirmó mejora en marcadores inflamatorios."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Corazón",
+      "energia": "Activadora y protectora",
+      "uso_ceremonial": "Rituales de vitalidad y protección del corazón",
+      "afinidad_ayurvedica": "Pitta y Vata",
+      "simbolismo": "Símbolo de vida y transformación en tradiciones mediterráneas."
+    }
+  },
+  {
+    "id": 47,
+    "nombre_es": "Yacón",
+    "nombre_latino": "Smallanthus sonchifolius",
+    "ficha_cientifica": {
+      "familia_botanica": "Asteraceae",
+      "parte_usada": "Tubérculo",
+      "principios_activos": [
+        "Inulina",
+        "Fructooligosacáridos"
+      ],
+      "propiedades": [
+        "Prebiótica",
+        "Hipoglucemiante",
+        "Antioxidante"
+      ],
+      "indicaciones": [
+        "Diabetes tipo 2",
+        "Estreñimiento",
+        "Salud intestinal"
+      ],
+      "contraindicaciones": [
+        "Alergia a Asteraceae"
+      ],
+      "posologia": "Jugo fresco: 50-100 ml/día.",
+      "evidencia": "Estudio de 2021 en Journal of Medicinal Food demostró reducción de glucosa."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Venus",
+      "chakra": "Plexo solar",
+      "energia": "Nutritiva y equilibradora",
+      "uso_ceremonial": "Rituales de nutrición y equilibrio digestivo",
+      "afinidad_ayurvedica": "Kapha y Pitta",
+      "simbolismo": "Tubérculo andino de la dulzura y la vitalidad."
+    }
+  },
+  {
+    "id": 48,
+    "nombre_es": "Yerba mate",
+    "nombre_latino": "Ilex paraguariensis",
+    "ficha_cientifica": {
+      "familia_botanica": "Aquifoliaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Cafeína",
+        "Teobromina",
+        "Polifenoles"
+      ],
+      "propiedades": [
+        "Estimulante",
+        "Antioxidante",
+        "Digestiva"
+      ],
+      "indicaciones": [
+        "Fatiga mental",
+        "Rendimiento físico",
+        "Digestión"
+      ],
+      "contraindicaciones": [
+        "Ansiedad severa",
+        "Insomnio",
+        "Embarazo (dosis altas)"
+      ],
+      "posologia": "Infusión tradicional: 10-15 g de hojas.",
+      "evidencia": "Meta-análisis de 2022 en Nutrients confirmó mejora en fatiga mental."
+    },
+    "ficha_mistica": {
+      "elemento": "Fuego",
+      "planeta_regente": "Sol",
+      "chakra": "Plexo solar",
+      "energia": "Activadora y social",
+      "uso_ceremonial": "Rituales de conexión, energía y comunidad",
+      "afinidad_ayurvedica": "Vata y Kapha",
+      "simbolismo": "Bebida sagrada de los guaraníes, símbolo de amistad y energía."
+    }
+  },
+  {
+    "id": 49,
+    "nombre_es": "Zarzaparrilla",
+    "nombre_latino": "Smilax officinalis",
+    "ficha_cientifica": {
+      "familia_botanica": "Smilacaceae",
+      "parte_usada": "Raíz",
+      "principios_activos": [
+        "Saponinas",
+        "Flavonoides"
+      ],
+      "propiedades": [
+        "Depurativa",
+        "Antiinflamatoria",
+        "Diurética"
+      ],
+      "indicaciones": [
+        "Piel (acné, eczema)",
+        "Artritis",
+        "Retención de líquidos"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia"
+      ],
+      "posologia": "Decocción: 2-4 g de raíz en 250 ml, 1-2 veces/día.",
+      "evidencia": "Estudio de 2020 en Journal of Ethnopharmacology demostró actividad antiinflamatoria."
+    },
+    "ficha_mistica": {
+      "elemento": "Tierra",
+      "planeta_regente": "Saturno",
+      "chakra": "Raíz",
+      "energia": "Purificadora y fortalecedora",
+      "uso_ceremonial": "Rituales de limpieza sanguínea y protección de la piel",
+      "afinidad_ayurvedica": "Kapha y Pitta",
+      "simbolismo": "Planta de la purificación profunda en tradiciones europeas y nativas."
+    }
+  },
+  {
+    "id": 50,
+    "nombre_es": "Brahmi",
+    "nombre_latino": "Bacopa monnieri",
+    "ficha_cientifica": {
+      "familia_botanica": "Plantaginaceae",
+      "parte_usada": "Hojas",
+      "principios_activos": [
+        "Bacósidos",
+        "Alcaloides"
+      ],
+      "propiedades": [
+        "Nootrópica",
+        "Neuroprotectora",
+        "Ansiolítica"
+      ],
+      "indicaciones": [
+        "Memoria",
+        "Concentración",
+        "Ansiedad",
+        "Estrés cognitivo"
+      ],
+      "contraindicaciones": [
+        "Embarazo",
+        "Lactancia"
+      ],
+      "posologia": "Extracto estandarizado 300-450 mg/día.",
+      "evidencia": "Meta-análisis de 2023 en Journal of Ethnopharmacology confirmó mejora en memoria."
+    },
+    "ficha_mistica": {
+      "elemento": "Agua",
+      "planeta_regente": "Luna",
+      "chakra": "Tercer ojo",
+      "energia": "Clarificadora y elevadora",
+      "uso_ceremonial": "Rituales de memoria ancestral y meditación",
+      "afinidad_ayurvedica": "Vata",
+      "simbolismo": "Planta sagrada en la India para la sabiduría y la memoria."
+    }
+  }
+]
