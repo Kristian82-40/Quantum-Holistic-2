@@ -1,0 +1,235 @@
+QH_ASSETS_MASTER — Quantum Holistic
+Generado: 2026-05-05
+Source of truth para componentes, SVGs, imágenes y dependencias.
+====================================================================
+
+⚠️  REGLA CRÍTICA
+SeasonalPetals fue eliminado en commit a902c03.
+BANNED. NUNCA restaurar bajo ningún concepto.
+
+⚠️  DUPLICACIÓN CONOCIDA
+- app/components/ → ACTIVO (alias @/* → app/*)
+- /components/     → MUERTO (copias antiguas, no importadas)
+Toda edición va en app/components/.
+
+====================================================================
+1. RUTAS DEL PROYECTO (Next.js App Router)
+====================================================================
+
+Ruta          Archivo                                 Descripción
+/             app/page.tsx                            Home
+/blog         app/blog/page.tsx                       Listado blog
+/blog/[slug]  app/blog/[slug]/page.tsx                Post individual
+/plantas      app/plantas/page.tsx                    Diccionario botánico
+/plantas/[s]  app/plantas/[slug]/page.tsx             Ficha de planta
+/recomendador app/recomendador/page.tsx               Test Dosha
+/chat         app/chat/page.tsx                       Chat Papu Pro (paywall 5msg/día)
+/login        app/login/page.tsx                      Auth
+/registro     app/registro/page.tsx                   Registro usuario
+/registro/t   app/registro/terapeuta/page.tsx         Registro terapeuta
+/terapeuta    app/terapeuta/page.tsx                  Perfil terapeuta
+/admin/blog   app/admin/blog/page.tsx                 Admin blog
+/admin/leads  app/admin/leads/page.tsx                Admin leads
+/admin/plantas app/admin/plantas/page.tsx             Admin plantas
+/success      app/success/page.tsx                    Post-pago OK
+/cancel       app/cancel/page.tsx                     Post-pago cancelado
+/gracias      app/gracias/page.tsx                    Confirmación
+
+====================================================================
+2. COMPONENTES ACTIVOS (app/components/)
+====================================================================
+
+--- LAYOUT ---
+app/components/layout/Navbar.tsx          Barra de navegación principal
+app/components/layout/Footer.tsx          Pie de página
+
+--- SECTIONS (home) ---
+app/components/sections/Hero.tsx          Hero principal con CTA
+app/components/sections/MarqueeBand.tsx   Banda marquee de textos
+app/components/sections/StatsBar.tsx      Barra de estadísticas
+app/components/sections/Pillars.tsx       Pilares holísticos
+app/components/sections/HowItWorks.tsx    Cómo funciona — contiene SVG Alambique (PENDIENTE extraer)
+app/components/sections/ProDetail.tsx     Detalle plan Pro
+app/components/sections/ProfileCTA.tsx    CTA perfil/dosha
+app/components/sections/Testimonials.tsx  Testimonios
+app/components/sections/Pricing.tsx       Planes y precios (SVGs inline de métodos de pago)
+app/components/sections/BlogPreview.tsx   Preview de últimos posts (SVG inline)
+
+--- UI ---
+app/components/ui/Button.tsx              Botón reutilizable
+app/components/ui/ScrollReveal.tsx        Animación reveal al scroll
+app/components/ui/ChatBot.tsx             Botón flotante chat (SVG inline)
+app/components/ui/RomeroPopup.tsx         Popup planta del mes (3.2s delay, localStorage)
+app/components/ui/QuoteRail.tsx           Carrusel de citas holísticas
+app/components/ui/BioZenScene.tsx         Escena SVG decorativa (solo en app/components/)
+
+--- ILLUSTRATIONS (SVG components) ---
+app/components/illustrations/CincoElementos.tsx   SVG cinco elementos ayurvédicos
+app/components/illustrations/LaboratorioNatural.tsx SVG laboratorio natural
+app/components/illustrations/ManoSanadora.tsx      SVG mano sanadora
+app/components/illustrations/PlantaMedicinal.tsx   SVG planta medicinal
+app/components/illustrations/QuantumCircle.tsx     SVG círculo cuántico
+
+--- PROVIDERS ---
+app/components/providers/LanguageProvider.tsx  Proveedor de idioma (next-intl)
+
+====================================================================
+3. SVGs INLINE — PENDIENTE EXTRACCIÓN
+====================================================================
+
+Archivo                                   SVG a extraer
+app/components/sections/HowItWorks.tsx    Alambique → illustrations/Alambique.tsx  ← TAREA PENDIENTE
+app/components/sections/BlogPreview.tsx   Icono blog inline
+app/components/sections/Pricing.tsx       Iconos métodos de pago (Stripe, BTC)
+app/components/ui/ChatBot.tsx             Icono chat bubble
+app/components/ui/RomeroPopup.tsx         Icono planta
+
+====================================================================
+4. IMÁGENES ESTÁTICAS (app/public/)
+====================================================================
+
+app/public/images/plants/
+  plant-00-cientifica.jpg   → sin asignar (huérfana)
+  plant-01-cientifica.jpg   → ID 1  Albahaca
+  plant-02-cientifica.jpg   → ID 2  Aloe vera
+  plant-03-cientifica.jpg   → ID 3  Árnica
+  plant-04-cientifica.jpg   → ID 4  Ashwagandha
+  plant-05-cientifica.jpg   → ID 5  Bardana
+  plant-06-cientifica.jpg   → ID 6  Caléndula
+  plant-07-cientifica.jpg   → ID 7  Cardo mariano
+  plant-08-cientifica.jpg   → ID 8  Cola de caballo
+  plant-09-cientifica.jpg   → ID 9  Cúrcuma
+  plant-10-cientifica.jpg   → ID 10 Diente de león
+  plant-11-cientifica.jpg   → ID 11 Echinacea
+  plant-12-cientifica.jpg   → ID 12 Eleuterococo
+  plant-13-cientifica.jpg   → ID 13 Equinácea angustifolia
+  plant-14-cientifica.jpg   → ID 14 Espino blanco
+  plant-15-cientifica.jpg   → ID 15 Eucalipto
+  plant-16-cientifica.jpg   → ID 16 Ginkgo biloba
+  plant-17-cientifica.jpg   → ID 17 Ginseng
+  plant-18-cientifica.jpg   → ID 18 Hamamelis
+  plant-19-cientifica.jpg   → ID 19 Hierba de San Juan
+  plant-20-cientifica.jpg   → ID 20 Hinojo
+  plant-21-cientifica.jpg   → ID 21 Jengibre
+  plant-22-cientifica.jpg   → ID 22 Kava-kava
+  plant-23-cientifica.jpg   → ID 23 Lavanda
+  plant-24-cientifica.jpg   → ID 24 Maca
+  plant-25-cientifica.jpg   → ID 25 Manzanilla
+  plant-26-cientifica.jpg   → ID 26 Melisa
+  plant-27-cientifica.jpg   → ID 27 Menta
+  plant-28-cientifica.jpg   → ID 28 Moringa
+  plant-29-cientifica.jpg   → ID 29 Ortiga
+  plant-30-cientifica.jpg   → ID 30 Papaína
+  plant-31-cientifica.jpg   → ID 31 Pasiflora
+  plant-32-cientifica.jpg   → ID 32 Regaliz
+  plant-33-cientifica.jpg   → ID 33 Rhodiola
+  plant-34-cientifica.jpg   → ID 34 Romero
+  plant-35-cientifica.jpg   → ID 35 Salvia
+  plant-36-cientifica.jpg   → ID 36 Saúco
+  plant-37-cientifica.jpg   → ID 37 Schisandra
+  plant-38-cientifica.jpg   → ID 38 Sello de oro
+  plant-39-cientifica.jpg   → ID 39 Tila
+  plant-40-cientifica.jpg   → ID 40 Tomillo
+  plant-41-cientifica.jpg   → ID 41 Tribulus
+  plant-42-cientifica.jpg   → ID 42 Tulsi
+  plant-43-cientifica.jpg   → ID 43 Uña de gato
+  plant-44-cientifica.jpg   → ID 44 Valeriana
+  plant-45-cientifica.jpg   → ID 45 Verbena
+  plant-46-cientifica.jpg   → ID 46 Vid roja
+  plant-47-cientifica.jpg   → ID 47 Yacón
+  plant-48-cientifica.jpg   → ID 48 Yerba mate
+  plant-49-cientifica.jpg   → ID 49 Zarzaparrilla
+  plant-50-cientifica.jpg   → ID 50 Brahmi
+
+app/public/site.webmanifest
+
+====================================================================
+5. API ROUTES (app/api/)
+====================================================================
+
+/api/chat/route.ts              Chat con Papu Pro (Ollama fallback)
+/api/chat/usage/route.ts        Control límite 5 msgs/día
+/api/checkout/route.ts          Stripe checkout session
+/api/leads/route.ts             Captura de leads
+/api/perfil/dosha/route.ts      Guardar perfil dosha
+/api/profile/route.ts           Gestión perfil usuario
+/api/webhooks/stripe/route.ts   Webhook pago completado
+/api/admin/blog/route.ts        CRUD blog (admin)
+/api/admin/blog/[id]/route.ts   Operaciones por post
+/api/admin/leads/route.ts       Leads admin
+/api/admin/plantas/route.ts     Plantas admin
+
+====================================================================
+6. LIB / SERVICIOS
+====================================================================
+
+app/lib/supabase.ts         Cliente Supabase server-side
+app/lib/supabase-client.ts  Cliente Supabase browser
+app/lib/claude.ts           SDK Anthropic (@anthropic-ai/sdk)
+app/lib/stripe.ts           Stripe SDK
+app/lib/email.ts            Resend (email transaccional)
+app/lib/posts.ts            Helpers blog posts
+app/lib/config.ts           Configuración global
+app/config.ts               Config raíz
+app/middleware.ts            Auth middleware (rutas protegidas /admin)
+
+====================================================================
+7. DEPENDENCIAS
+====================================================================
+
+Producción:
+  next 14.2.5              Framework
+  react 18                 UI
+  @supabase/supabase-js    DB + Auth
+  @supabase/ssr            SSR helpers
+  @anthropic-ai/sdk        Claude API (chat)
+  @google/generative-ai    Gemini (no activo aún)
+  next-intl 3.x            i18n ES/EN
+  stripe 22.x              Pagos
+  resend 6.x               Email (requiere RESEND_API_KEY en Vercel)
+  @vercel/analytics        Analytics
+
+Dev:
+  typescript 5
+  eslint + eslint-config-next
+
+====================================================================
+8. VARIABLES DE ENTORNO REQUERIDAS
+====================================================================
+
+NEXT_PUBLIC_SUPABASE_URL        → vctetjugbvyllwjpxcxh.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY   → clave pública
+SUPABASE_SERVICE_ROLE_KEY       → clave admin (server only)
+ANTHROPIC_API_KEY               → Claude API
+STRIPE_SECRET_KEY               → Stripe (usar live en prod)
+STRIPE_WEBHOOK_SECRET           → Webhook Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE  → Stripe public
+RESEND_API_KEY                  → ⚠️ PENDIENTE — sin configurar en Vercel
+OLLAMA_URL                      → http://localhost:11434 (local dev)
+OLLAMA_MODEL                    → papu-pro:latest
+
+====================================================================
+9. COMMITS CLAVE RECIENTES
+====================================================================
+
+a902c03  chore: remove SeasonalPetals (BANNED — no restaurar)
+acabc69  fix: update 50 plants correct names latino image urls
+c28dc79  fix: update plants image URLs mapping plant-01..50
+e5d04dc  restore: ChatBot, RomeroPopup, QuoteRail components
+
+====================================================================
+10. TAREAS PENDIENTES (sincronizadas con Notion Code Tasks)
+====================================================================
+
+[ ] Extract Alambique SVG → app/components/illustrations/Alambique.tsx
+    Fuente: app/components/sections/HowItWorks.tsx
+    Acción: cortar SVG, crear componente, actualizar import
+
+[ ] Configurar RESEND_API_KEY en Vercel
+    Email bienvenida implementado pero inactivo por falta de key
+
+[ ] Dominio propio quantumholistic.com → configurar en Vercel
+
+[ ] Stripe keys live → producción
+
+[ ] Blog posts → ejecutar `qb` para generar contenido herbología
