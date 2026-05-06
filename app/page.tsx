@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 import Navbar from '@/components/layout/Navbar';
@@ -36,16 +35,7 @@ export default function HomePage() {
         <ScrollReveal>
           <Pillars />
         </ScrollReveal>
-        <section id="biozen-scene" className="section">
-          <Image
-            src="/images/biozen-hydrosol-journey-cientifica.jpg"
-            alt="BioZen hydrosol journey: Artemisia annua seed to final product"
-            width={2560}
-            height={1440}
-            priority={false}
-            className="w-full h-auto"
-          />
-        </section>
+        <BioZenScene />
         <ScrollReveal>
           <HowItWorks />
         </ScrollReveal>
