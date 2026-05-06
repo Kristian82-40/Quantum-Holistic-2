@@ -35,7 +35,7 @@ export default function HomePage() {
         <ScrollReveal>
           <Pillars />
         </ScrollReveal>
-          <BioZenScene />
+        <section id="biozen-scene" className="section">
         </section>
         <ScrollReveal>
           <HowItWorks />
