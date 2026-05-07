@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "generated_date": "2026-05-07",
+  "total_plants": 70,
+  "description": "Atlas completo de 70 plantas maestras, sagradas y medicinales.",
+  "atlas_images": [
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Beleño negro",
+      "scientific_name": "Hyoscyamus niger"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Datura / Estramonio",
+      "scientific_name": "Datura stramonium"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Adormidera",
+      "scientific_name": "Papaver somniferum"
+    }
+  ]
+}
