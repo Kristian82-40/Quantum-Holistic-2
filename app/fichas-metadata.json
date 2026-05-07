@@ -2,22 +2,6 @@
   "version": "1.0",
   "generated_date": "2026-05-07",
   "total_plants": 70,
-  "description": "Atlas completo de 70 plantas maestras, sagradas y medicinales.",
-  "atlas_images": [
-    {
-      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
-      "group": "🌀 Maestras",
-      "plant_name": "Beleño negro",
-      "scientific_name": "Hyoscyamus niger",
-      "image_prompt": "..."
-    },
-    import json
-
-atlas_data = {
-  "version": "1.0",
-  "generated_date": "2026-05-07",
-  "total_plants": 70,
-  "description": "Atlas completo de 70 plantas maestras, sagradas y medicinales con imágenes generadas. Incluye region, group, plant_name, scientific_name e image_prompt exacto usado.",
   "atlas_images": [
     {
       "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
@@ -509,6 +493,5 @@ atlas_data = {
       "scientific_name": "Protium copal",
       "image_prompt": "Realistic high-quality botanical photograph of copal tree (Protium copal) with resin droplets on bark, compound leaves and small white flowers in Mesoamerican sacred forest, detailed realistic texture and resin, soft golden hour light, photorealistic, sharp focus, no text, no symbols, no labels"
     }
-    # Nota: Se incluyen solo las primeras 70 plantas generadas en los batches. El total es 70.
   ]
 }
