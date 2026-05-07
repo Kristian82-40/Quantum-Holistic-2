@@ -1,12 +1,12 @@
-# Handoff — 2026-05-02 · Sesión Web Impecable (responsivo + elementos restaurados)
+# Handoff — 2026-05-07 · Diccionario Atlas + Capa 2 pendiente
 
 ## Estado
-**Producción OK** — Web en verde, desplegando en Vercel ahora
+**Producción OK** — Diccionario `/diccionario` añadido hoy (atlas 70 plantas con tabs).
 
 ## Deploy actual
 - **URL producción**: `quantum-holistic-2.vercel.app`
-- **Último commit**: `e5d04dc` — restaurar componentes desconectados
-- **Estado Vercel**: Desplegando ✅
+- **Último commit**: `8fb2197` — fix: move BioZenScene to correct alias path (@/components)
+- **Estado Vercel**: estable ✅
 
 ## Qué se hizo esta sesión (commits en orden)
 1. **Fix crítico servidor**: Eliminado `app/app/` (proyecto B anidado causaba conflicto de rutas `/icon`)
@@ -43,15 +43,23 @@
 /success, /cancel, /gracias → páginas post-pago
 ```
 
-## Pendientes (sin cambios desde sesión anterior)
-1. **RESEND_API_KEY**: Crear cuenta resend.com + añadir key a Vercel
-2. **Verificar dominio en Resend**: Panel Resend → Domains → añadir quantumholistic.com
-3. **Dominio propio**: Configurar `quantumholistic.com` en Vercel (acción manual)
-4. **Stripe keys live**: Las de producción aún no están configuradas
-5. **Blog posts**: 0 en Supabase — ejecutar `qb` para generar contenido herbología
+## Hecho hoy (2026-05-07)
+- **`/diccionario`** ✅ creado — `app/diccionario/{page.tsx, Catalogo.tsx, diccionario.module.css}`. Atlas 70 plantas con tabs Maestras 🌀 / Medicinales 💊 / Sagradas 🕊️. Bento grid 4/2/1, hover zoom + overlay con `scientific_name`, fonts Cormorant Garamond + Inter Tight, paleta sage/dorado/crema.
+- **`fichas-metadata.json`** ✅ reparado — el archivo mezclaba JSON + Python; reescrito como JSON válido con las 70 entradas (`atlas_images`).
+- **Verificación DB**: tabla `plants` ya tiene 50 rows ✅ (no faltaba SQL — handoff anterior estaba desactualizado).
+
+## Pendientes — Capa 2 (foco actual)
+1. **Middleware route protection** — proteger `/admin` y rutas auth-only en `middleware.ts` con session check Supabase.
+2. **Resend** — crear cuenta resend.com, añadir `RESEND_API_KEY` a Vercel y verificar dominio `quantumholistic.com`.
+3. **Stripe live** — configurar keys de producción en Vercel (hoy solo test).
+
+## Pendientes — más adelante
+- **Capa 5 — BTCPay Server**: NO TOCAR todavía. Posterior a Capa 2 + 3.
+- **Dominio propio** `quantumholistic.com` en Vercel (acción manual).
+- **Blog posts**: 0 en Supabase — ejecutar `qb` para generar contenido.
 
 ## Estado DB (Supabase vctetjugbvyllwjpxcxh)
-- `plants` ✅ (50 plantas) | `profiles` ✅ | `blog_posts` ✅ (vacío) | `chat_usage` ✅ | `leads` ✅
+- `plants` ✅ (50 rows) | `profiles` ✅ | `blog_posts` ✅ (vacío) | `chat_usage` ✅ | `leads` ✅
 
 ## Acumulado histórico
 - Web Vercel ✅ | Diccionario 50 plantas ✅ | Recomendador Dosha ✅
@@ -61,3 +69,4 @@
 - Arquitectura URL limpia ✅ | Imágenes plantas en producción ✅
 - Email bienvenida automático ✅ (falta RESEND_API_KEY en Vercel)
 - Web responsive ✅ | SVG inline ✅ | Componentes UI reconectados ✅
+- Diccionario Atlas 70 plantas con tabs ✅ (2026-05-07)

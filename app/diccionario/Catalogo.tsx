@@ -19,13 +19,67 @@ const TABS: { key: TabKey; label: string; emoji: string; match: string }[] = [
   { key: 'sagradas', label: 'Sagradas', emoji: '🕊️', match: 'Sagradas' },
 ];
 
-// Imágenes existentes en /public/images/plants (índices 0–50)
-const MAX_IMAGE_INDEX = 50;
+// Slugs exactos de los archivos en disco (0-indexed, 51 entradas: plant-00..plant-50).
+// Mantienen tildes y ñ tal cual están en el filesystem. NO slugificar runtime.
+const PLANT_SLUGS: string[] = [
+  'beleño-negro',
+  'datura-estramonio',
+  'adormidera',
+  'mandrágora',
+  'belladona',
+  'laurel',
+  'olivo',
+  'mirra',
+  'hisopo',
+  'salvia',
+  'lavanda',
+  'orégano',
+  'hinojo',
+  'valeriana',
+  'milenrama',
+  'saúco',
+  'muérdago',
+  'roble',
+  'tejo',
+  'acónito',
+  'equinácea',
+  'abedul',
+  'cornezuelo-del-centeno',
+  'amanita-muscaria',
+  'nigela-semilla-negra',
+  'granada',
+  'azafrán',
+  'higo',
+  'sidr',
+  'incienso-olíbano',
+  'áloe-vera',
+  'ajo',
+  'rosa-de-jericó',
+  'harmal-ruda-siria',
+  'cannabis',
+  'ashwagandha',
+  'cúrcuma',
+  'amla',
+  'neem',
+  'brahmi',
+  'tulsi',
+  'loto',
+  'árbol-bodhi',
+  'sándalo',
+  'bilva-bael',
+  'bhang-cannabis',
+  'datura-dhatura',
+  'soma',
+  'ginseng',
+  'astrágalo',
+  'dong-quai',
+];
 
 function imageSrc(index: number): string | null {
-  if (index < 0 || index > MAX_IMAGE_INDEX) return null;
+  const slug = PLANT_SLUGS[index];
+  if (!slug) return null;
   const id = String(index).padStart(2, '0');
-  return `/images/plants/plant-${id}-cientifica.jpg`;
+  return `/images/plants/plant-${id}-${slug}-cientifica.jpg`;
 }
 
 export default function Catalogo({ plants }: { plants: Plant[] }) {
