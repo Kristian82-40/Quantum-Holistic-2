@@ -7,6 +7,29 @@ import styles from './Pricing.module.css';
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  async function handleCheckout(planId: string) {
+    if (planId !== 'plan_crypto') return;
+    try {
+      setLoadingId(planId);
+      const res = await fetch('/api/checkout', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          paymentMethod: 'crypto',
+          billingCycle:  annual ? 'annual' : 'monthly',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout falló');
+      window.location.href = data.url;
+    } catch (err) {
+      console.error('[checkout/crypto]', err);
+      alert(err instanceof Error ? err.message : 'Error iniciando pago');
+      setLoadingId(null);
+    }
+  }
 
   return (
     <section className={`section ${styles.pricing}`} id="pricing">
@@ -80,8 +103,13 @@ export default function Pricing() {
                   {plan.cta}
                 </Button>
               ) : (
-                <Button variant="outline" fullWidth>
-                  {plan.cta}
+                <Button
+                  variant="outline"
+                  fullWidth
+                  onClick={() => handleCheckout(plan.id)}
+                  disabled={loadingId === plan.id}
+                >
+                  {loadingId === plan.id ? 'Procesando…' : plan.cta}
                 </Button>
               )}
             </div>

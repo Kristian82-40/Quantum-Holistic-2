@@ -59,6 +59,23 @@ export const PLANS = [
     ],
     cta: 'Activar Quantum Pro',
   },
+  {
+    id:       'plan_crypto',
+    name:     'Quantum Crypto',
+    price:    9,
+    priceAnnual: 90,
+    period:   '/ mes',
+    note:     'Pago soberano · Bitcoin / Lightning',
+    featured: false,
+    features: [
+      { text: 'Todo lo de Quantum Pro',                 highlight: true },
+      { text: 'Pago con Bitcoin / Lightning (BTCPay)',  highlight: true },
+      { text: 'Sin intermediarios financieros',         highlight: true },
+      { text: 'Privacidad reforzada',                   highlight: false },
+      { text: 'Confirmación on-chain instantánea',      highlight: false },
+    ],
+    cta: 'Pagar con Crypto',
+  },
 ] as const;
 
 // ─── Pillars ─────────────────────────────────────────────────
