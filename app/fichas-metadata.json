@@ -8,19 +8,507 @@
       "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
       "group": "🌀 Maestras",
       "plant_name": "Beleño negro",
-      "scientific_name": "Hyoscyamus niger"
+      "scientific_name": "Hyoscyamus niger",
+      "image_prompt": "..."
+    },
+    import json
+
+atlas_data = {
+  "version": "1.0",
+  "generated_date": "2026-05-07",
+  "total_plants": 70,
+  "description": "Atlas completo de 70 plantas maestras, sagradas y medicinales con imágenes generadas. Incluye region, group, plant_name, scientific_name e image_prompt exacto usado.",
+  "atlas_images": [
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Beleño negro",
+      "scientific_name": "Hyoscyamus niger",
+      "image_prompt": "Realistic high-quality botanical photograph of fresh black henbane (Hyoscyamus niger) plant in natural Mediterranean habitat, detailed leaves and flowers, soft natural lighting, no text, no symbols, no labels"
     },
     {
       "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
       "group": "🌀 Maestras",
       "plant_name": "Datura / Estramonio",
-      "scientific_name": "Datura stramonium"
+      "scientific_name": "Datura stramonium",
+      "image_prompt": "Realistic high-quality botanical photograph of sacred datura (Datura stramonium) plant with white trumpet flowers in ancient Mediterranean landscape, detailed realistic petals and leaves, natural sunlight, no text, no symbols"
     },
     {
       "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
       "group": "🌀 Maestras",
       "plant_name": "Adormidera",
-      "scientific_name": "Papaver somniferum"
+      "scientific_name": "Papaver somniferum",
+      "image_prompt": "Realistic high-quality botanical photograph of opium poppy (Papaver somniferum) with mature seed pods and delicate flowers in Cretan-style field, soft golden hour light, detailed realistic, no text, no symbols"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Mandrágora",
+      "scientific_name": "Mandragora officinarum",
+      "image_prompt": "Realistic high-quality botanical photograph of mandrake (Mandragora officinarum) root and leaves emerging from soil in medieval Iberian setting, dramatic natural lighting, highly detailed, no text, no symbols, photorealistic"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🌀 Maestras",
+      "plant_name": "Belladona",
+      "scientific_name": "Atropa belladonna",
+      "image_prompt": "Realistic high-quality botanical photograph of belladonna (Atropa belladonna) with shiny black berries and purple flowers in European woodland, natural soft light, detailed realistic foliage, no text, no symbols"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Laurel",
+      "scientific_name": "Laurus nobilis",
+      "image_prompt": "Realistic high-quality botanical photograph of fresh laurel plant (Laurus nobilis) with glossy dark green leaves and small cream flowers in natural Mediterranean hillside setting, detailed realistic foliage and branches, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Olivo",
+      "scientific_name": "Olea europaea",
+      "image_prompt": "Realistic high-quality botanical photograph of ancient olive tree (Olea europaea) with silver-green leaves, ripe olives and gnarled trunk in classic Mediterranean landscape, detailed realistic bark and fruits, golden hour natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Mirra",
+      "scientific_name": "Commiphora myrrha",
+      "image_prompt": "Realistic high-quality botanical photograph of myrrh tree (Commiphora myrrha) with thorny branches, small leaves and resin droplets in arid Mediterranean/Arabian rocky terrain, detailed realistic texture, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Hisopo",
+      "scientific_name": "Hyssopus officinalis",
+      "image_prompt": "Realistic high-quality botanical photograph of hyssop plant (Hyssopus officinalis) with vibrant blue-purple flowers and narrow green leaves in Mediterranean herb garden, detailed realistic petals and foliage, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "💊 Medicinales",
+      "plant_name": "Salvia",
+      "scientific_name": "Salvia officinalis",
+      "image_prompt": "Realistic high-quality botanical photograph of common sage (Salvia officinalis) with soft grey-green velvety leaves and purple flower spikes in Mediterranean setting, detailed realistic texture, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "💊 Medicinales",
+      "plant_name": "Lavanda",
+      "scientific_name": "Lavandula angustifolia",
+      "image_prompt": "Realistic high-quality botanical photograph of lavender plant (Lavandula angustifolia) with vibrant purple flower spikes and narrow grey-green leaves in classic Mediterranean rocky hillside, detailed realistic petals and foliage, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "💊 Medicinales",
+      "plant_name": "Orégano",
+      "scientific_name": "Origanum vulgare",
+      "image_prompt": "Realistic high-quality botanical photograph of oregano plant (Origanum vulgare) with small pinkish-purple flowers and aromatic green leaves in Mediterranean herb garden setting, detailed realistic texture and flowers, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🫒 MEDITERRÁNEO / IBERIA / SUR DE EUROPA",
+      "group": "💊 Medicinales",
+      "plant_name": "Hinojo",
+      "scientific_name": "Foeniculum vulgare",
+      "image_prompt": "Realistic high-quality botanical photograph of fennel plant (Foeniculum vulgare) with feathery green leaves, yellow umbel flowers and seeds in Mediterranean coastal field, detailed realistic foliage and flowers, golden hour natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "💊 Medicinales",
+      "plant_name": "Valeriana",
+      "scientific_name": "Valeriana officinalis",
+      "image_prompt": "Realistic high-quality botanical photograph of valerian plant (Valeriana officinalis) with clusters of small white-pink flowers and feathery leaves in European Central woodland clearing, detailed realistic petals and roots visible, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "💊 Medicinales",
+      "plant_name": "Milenrama",
+      "scientific_name": "Achillea millefolium",
+      "image_prompt": "Realistic high-quality botanical photograph of yarrow plant (Achillea millefolium) with flat white flower clusters and feathery leaves in Central European meadow, detailed realistic flowers and foliage, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "💊 Medicinales",
+      "plant_name": "Saúco",
+      "scientific_name": "Sambucus nigra",
+      "image_prompt": "Realistic high-quality botanical photograph of elderberry plant (Sambucus nigra) with clusters of small white flowers turning to dark berries and green compound leaves in Central European woodland clearing, detailed realistic foliage, flowers and berries, soft natural sunlight filtering through trees, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Muérdago",
+      "scientific_name": "Viscum album",
+      "image_prompt": "Realistic high-quality botanical photograph of mistletoe plant (Viscum album) with glossy green leaves and white berries growing on ancient oak branch in Central European forest, detailed realistic parasitic growth and berries, soft diffused natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Roble",
+      "scientific_name": "Quercus robur",
+      "image_prompt": "Realistic high-quality botanical photograph of majestic oak tree (Quercus robur) with broad green leaves and acorns in Central European sacred grove setting, detailed realistic bark, leaves and fruits, golden hour natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Tejo",
+      "scientific_name": "Taxus baccata",
+      "image_prompt": "Realistic high-quality botanical photograph of yew tree (Taxus baccata) with dark green needle-like leaves and bright red fleshy arils in ancient Central European woodland, detailed realistic foliage and berries, soft natural forest light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Acónito",
+      "scientific_name": "Aconitum napellus",
+      "image_prompt": "Realistic high-quality botanical photograph of monkshood plant (Aconitum napellus) with tall spikes of deep blue-purple hooded flowers and deeply lobed leaves in Central European mountain meadow, detailed realistic petals and foliage, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "💊 Medicinales",
+      "plant_name": "Equinácea",
+      "scientific_name": "Echinacea purpurea",
+      "image_prompt": "Realistic high-quality botanical photograph of purple coneflower plant (Echinacea purpurea) with large pink-purple daisy-like flowers and spiky central cone in Central European sunny meadow, detailed realistic petals, leaves and stems, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Abedul",
+      "scientific_name": "Betula pendula",
+      "image_prompt": "Realistic high-quality botanical photograph of silver birch tree (Betula pendula) with white peeling bark, delicate green leaves and catkins in Central European spring forest clearing, detailed realistic trunk texture and foliage, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🌀 Maestras",
+      "plant_name": "Cornezuelo del centeno",
+      "scientific_name": "Claviceps purpurea",
+      "image_prompt": "Realistic high-quality botanical photograph of ergot fungus (Claviceps purpurea) showing dark purple sclerotia growing on rye grain heads in Central European cereal field, detailed realistic close-up of infected spikes and fungus, natural field lighting, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌲 EUROPA CENTRAL Y DEL NORTE / CELTAS Y GERMÁNICOS",
+      "group": "🌀 Maestras",
+      "plant_name": "Amanita muscaria",
+      "scientific_name": "Amanita muscaria",
+      "image_prompt": "Realistic high-quality botanical photograph of fly agaric mushroom (Amanita muscaria) with bright red cap and white spots growing at the base of a pine tree in Central European forest floor, detailed realistic gills and stem, soft diffused forest light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "💊 Medicinales",
+      "plant_name": "Nigela / Semilla negra",
+      "scientific_name": "Nigella sativa",
+      "image_prompt": "Realistic high-quality botanical photograph of nigella sativa plant (black cumin) with delicate blue-white flowers, feathery leaves and developing seed pods in arid Middle Eastern / Persian garden setting, detailed realistic flowers and seeds, bright natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "💊 Medicinales",
+      "plant_name": "Granada",
+      "scientific_name": "Punica granatum",
+      "image_prompt": "Realistic high-quality botanical photograph of pomegranate tree (Punica granatum) with ripe red fruits hanging from branches, glossy green leaves in arid Middle Eastern / Persian orchard setting, detailed realistic fruits, bark and foliage, bright natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "💊 Medicinales",
+      "plant_name": "Azafrán",
+      "scientific_name": "Crocus sativus",
+      "image_prompt": "Realistic high-quality botanical photograph of saffron crocus flowers (Crocus sativus) with vibrant purple petals and bright red stigmas emerging from soil in Persian highland field, detailed realistic flowers and saffron threads visible, soft morning natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Higo",
+      "scientific_name": "Ficus carica",
+      "image_prompt": "Realistic high-quality botanical photograph of common fig tree (Ficus carica) with large lobed green leaves and clusters of ripe purple figs in Mediterranean / Middle Eastern garden, detailed realistic bark, leaves and fruits, golden hour natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Sidr",
+      "scientific_name": "Ziziphus spina-christi",
+      "image_prompt": "Realistic high-quality botanical photograph of Sidr tree (Ziziphus spina-christi) with thorny branches, small oval green leaves and yellow-red fruits in arid Arabian rocky terrain, detailed realistic thorns, foliage and fruits, bright natural desert sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Incienso / Olíbano",
+      "scientific_name": "Boswellia sacra",
+      "image_prompt": "Realistic high-quality botanical photograph of frankincense tree (Boswellia sacra) with papery bark, small compound leaves and droplets of golden resin oozing from trunk in arid Arabian desert landscape, detailed realistic texture and resin, harsh natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "💊 Medicinales",
+      "plant_name": "Áloe vera",
+      "scientific_name": "Aloe vera",
+      "image_prompt": "Realistic high-quality botanical photograph of aloe vera plant (Aloe vera) with thick succulent spiky green leaves and tall spikes of orange-yellow tubular flowers in arid Middle Eastern / Persian rocky garden setting, detailed realistic leaf texture, sap visible and flowers, bright natural desert sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "💊 Medicinales",
+      "plant_name": "Ajo",
+      "scientific_name": "Allium sativum",
+      "image_prompt": "Realistic high-quality botanical photograph of garlic plant (Allium sativum) with tall green stalks, white bulbous flower umbels and developing bulbs at base in Middle Eastern / Persian cultivated field, detailed realistic leaves, flowers and bulbs, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Rosa de Jericó",
+      "scientific_name": "Anastatica hierochuntica",
+      "image_prompt": "Realistic high-quality botanical photograph of Rose of Jericho plant (Anastatica hierochuntica) in its dry rolled-up resurrection form and open green hydrated state side by side in arid Arabian desert sand, detailed realistic branching and texture, harsh natural desert sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🌀 Maestras",
+      "plant_name": "Harmal / Ruda siria",
+      "scientific_name": "Peganum harmala",
+      "image_prompt": "Realistic high-quality botanical photograph of Harmal / Syrian rue plant (Peganum harmala) with small white flowers, feathery leaves and developing seed capsules in rocky Middle Eastern / Arabian desert terrain, detailed realistic flowers and seeds, bright natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🕌 MUNDO ÁRABE / PERSA / ORIENTE MEDIO",
+      "group": "🌀 Maestras",
+      "plant_name": "Cannabis",
+      "scientific_name": "Cannabis sativa",
+      "image_prompt": "Realistic high-quality botanical photograph of cannabis plant (Cannabis sativa) with large serrated green leaves, male and female flowers in full bloom in ancient Persian / Middle Eastern cultivated field, detailed realistic foliage and flowers, golden hour natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Ashwagandha",
+      "scientific_name": "Withania somnifera",
+      "image_prompt": "Realistic high-quality botanical photograph of ashwagandha plant (Withania somnifera) with small oval green leaves, delicate yellow-green flowers and bright red-orange berries in traditional Indian Ayurvedic garden setting with soft Himalayan foothills background, detailed realistic foliage, flowers and fruits, warm natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Cúrcuma",
+      "scientific_name": "Curcuma longa",
+      "image_prompt": "Realistic high-quality botanical photograph of turmeric plant (Curcuma longa) with long lance-shaped green leaves, elegant white-pink flower spikes and bright yellow-orange rhizomes partially visible at base in lush Indian Ayurvedic field, detailed realistic leaves, flowers and roots, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Amla",
+      "scientific_name": "Phyllanthus emblica",
+      "image_prompt": "Realistic high-quality botanical photograph of amla tree (Phyllanthus emblica) with small oval green leaves and clusters of round pale-green sour fruits hanging on branches in Indian sacred grove setting, detailed realistic bark, foliage and fruits, golden hour natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Neem",
+      "scientific_name": "Azadirachta indica",
+      "image_prompt": "Realistic high-quality botanical photograph of neem tree (Azadirachta indica) with compound green leaves, small white fragrant flowers and green-to-yellow fruits in classic Indian village landscape, detailed realistic foliage, flowers and bark texture, bright natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Brahmi",
+      "scientific_name": "Bacopa monnieri",
+      "image_prompt": "Realistic high-quality botanical photograph of brahmi plant (Bacopa monnieri) with small succulent green leaves, tiny white five-petaled flowers and creeping stems in wet Indian Ayurvedic herb garden near water, detailed realistic foliage and delicate flowers, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Tulsi",
+      "scientific_name": "Ocimum tenuiflorum",
+      "image_prompt": "Realistic high-quality botanical photograph of holy basil plant (Tulsi, Ocimum tenuiflorum) with aromatic green leaves, purple flower spikes and small white-purple blossoms in traditional Indian temple garden setting with soft Himalayan light, detailed realistic foliage, flowers and stems, warm natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Loto",
+      "scientific_name": "Nelumbo nucifera",
+      "image_prompt": "Realistic high-quality botanical photograph of sacred lotus flower (Nelumbo nucifera) with large pink lotus bloom emerging from still pond water, huge round green leaves and yellow center in Indian sacred pond setting, detailed realistic petals, leaves and water reflection, soft morning natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Árbol Bodhi",
+      "scientific_name": "Ficus religiosa",
+      "image_prompt": "Realistic high-quality botanical photograph of Bodhi tree (Ficus religiosa) with large heart-shaped green leaves, distinctive long petioles and hanging aerial roots in ancient Indian sacred grove, detailed realistic bark, foliage and roots, golden hour natural sunlight filtering through canopy, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Sándalo",
+      "scientific_name": "Santalum album",
+      "image_prompt": "Realistic high-quality botanical photograph of sandalwood tree (Santalum album) with slender branches, small oval green leaves and clusters of small purplish flowers in fragrant Indian forest setting, detailed realistic bark texture and foliage, soft diffused natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Bilva / Bael",
+      "scientific_name": "Aegle marmelos",
+      "image_prompt": "Realistic high-quality botanical photograph of bael tree (Aegle marmelos / Bilva) with trifoliate green leaves, fragrant white flowers and large round green-to-yellow fruits on branches in Indian sacred grove, detailed realistic leaves, flowers and fruits, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🌀 Maestras",
+      "plant_name": "Bhang / Cannabis",
+      "scientific_name": "Cannabis sativa",
+      "image_prompt": "Realistic high-quality botanical photograph of bhang cannabis plant (Cannabis sativa) with large serrated green leaves and dense flowering tops in traditional Indian Ayurvedic / Shiva ritual garden setting with Himalayan foothills background, detailed realistic foliage and flowers, warm natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🌀 Maestras",
+      "plant_name": "Datura / Dhatura",
+      "scientific_name": "Datura metel",
+      "image_prompt": "Realistic high-quality botanical photograph of datura / dhatura plant (Datura metel) with large white trumpet flowers, spiky seed pods and broad green leaves in sacred Indian temple garden near Shiva shrine, detailed realistic petals, thorns and foliage, soft golden hour natural light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌸 INDIA (AYURVEDA + TANTRA)",
+      "group": "🌀 Maestras",
+      "plant_name": "Soma",
+      "scientific_name": "Amanita muscaria",
+      "image_prompt": "Realistic high-quality botanical photograph of soma plant (Amanita muscaria mushroom) with bright red cap and white spots growing among moss and pine needles in Himalayan Indian mountain forest floor, detailed realistic gills, stem and cap texture, soft diffused forest light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "💊 Medicinales",
+      "plant_name": "Ginseng",
+      "scientific_name": "Panax ginseng",
+      "image_prompt": "Realistic high-quality botanical photograph of ginseng plant (Panax ginseng) with compound green leaves, small white flower umbels and thick forked root partially visible in ancient Chinese forest understory, detailed realistic foliage and root texture, soft natural dappled sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "💊 Medicinales",
+      "plant_name": "Astrágalo",
+      "scientific_name": "Astragalus membranaceus",
+      "image_prompt": "Realistic high-quality botanical photograph of astragalus plant (Astragalus membranaceus) with small pinnate green leaves, yellow pea-like flowers and long fibrous roots in traditional Chinese medicinal herb garden, detailed realistic flowers, leaves and roots, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "💊 Medicinales",
+      "plant_name": "Dong Quai",
+      "scientific_name": "Angelica sinensis",
+      "image_prompt": "Realistic high-quality botanical photograph of Dong Quai plant (Angelica sinensis) with tall stems, delicate white umbel flowers and large feathery compound leaves in misty Chinese mountain herb garden, detailed realistic flowers, foliage and roots partially visible, soft natural diffused sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "💊 Medicinales",
+      "plant_name": "Jengibre",
+      "scientific_name": "Zingiber officinale",
+      "image_prompt": "Realistic high-quality botanical photograph of fresh ginger plant (Zingiber officinale) with long lance-shaped green leaves, yellow-green flower cones and thick aromatic rhizomes emerging from soil in traditional Chinese medicinal garden, detailed realistic leaves, flowers and roots, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "💊 Medicinales",
+      "plant_name": "Coptis",
+      "scientific_name": "Coptis chinensis",
+      "image_prompt": "Realistic high-quality botanical photograph of Coptis plant (Coptis chinensis) with small yellow star-shaped flowers, glossy dark green leaves and creeping rhizomes in shaded Chinese forest understory, detailed realistic petals, foliage and roots, soft dappled natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "🌀 Maestras",
+      "plant_name": "Reishi",
+      "scientific_name": "Ganoderma lucidum",
+      "image_prompt": "Realistic high-quality botanical photograph of Reishi mushroom (Ganoderma lucidum) with shiny reddish-brown kidney-shaped caps and woody texture growing on ancient tree trunk in misty Chinese mountain forest, detailed realistic cap surface, pores and stem, soft diffused forest light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Crisantemo",
+      "scientific_name": "Chrysanthemum morifolium",
+      "image_prompt": "Realistic high-quality botanical photograph of chrysanthemum flowers (Chrysanthemum morifolium) with vibrant yellow and white layered petals in full bloom in classic Chinese garden setting, detailed realistic petals and green foliage, warm natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Melocotón",
+      "scientific_name": "Prunus persica",
+      "image_prompt": "Realistic high-quality botanical photograph of peach tree (Prunus persica) with clusters of ripe pinkish-orange peaches, delicate pink blossoms and glossy green leaves in ancient Chinese Taoist immortality garden with misty mountains, detailed realistic fruits, bark and foliage, soft golden hour natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Bambú",
+      "scientific_name": "Phyllostachys edulis",
+      "image_prompt": "Realistic high-quality botanical photograph of bamboo grove (Phyllostachys edulis) with tall green culms, delicate leaves and fresh shoots in classic Chinese mountain forest setting, detailed realistic texture of stalks and foliage, soft diffused natural sunlight filtering through canopy, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🐉 CHINA (TCM — Shennong Bencao Jing)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Pino",
+      "scientific_name": "Pinus massoniana",
+      "image_prompt": "Realistic high-quality botanical photograph of ancient pine tree (Pinus massoniana) with twisted trunk, dark green needles and pine cones in misty Chinese sacred mountain landscape, detailed realistic bark, needles and cones, soft natural diffused light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Sakura",
+      "scientific_name": "Prunus serrulata",
+      "image_prompt": "Realistic high-quality botanical photograph of cherry blossom tree (Sakura, Prunus serrulata) with delicate pink flowers in full bloom on graceful branches in traditional Japanese Shinto temple garden, detailed realistic petals and bark, soft spring natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Hinoki",
+      "scientific_name": "Chamaecyparis obtusa",
+      "image_prompt": "Realistic high-quality botanical photograph of Hinoki cypress tree (Chamaecyparis obtusa) with scale-like evergreen foliage and reddish-brown bark in sacred Japanese Shinto shrine forest, detailed realistic texture of leaves and trunk, soft natural forest light, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Criptomeria / Sugi",
+      "scientific_name": "Cryptomeria japonica",
+      "image_prompt": "Realistic high-quality botanical photograph of Japanese cedar tree (Cryptomeria japonica / Sugi) with tall straight trunk, scale-like evergreen foliage and small brown cones in sacred Shinto shrine forest in Japan, detailed realistic bark texture and needles, soft natural forest light with mist, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "🕊️ Sagradas",
+      "plant_name": "Camellia / Tsubaki",
+      "scientific_name": "Camellia japonica",
+      "image_prompt": "Realistic high-quality botanical photograph of Camellia / Tsubaki tree (Camellia japonica) with glossy dark green leaves, large vibrant red or white camellia flowers and buds in traditional Japanese Shinto temple garden, detailed realistic petals, leaves and bark, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "💊 Medicinales",
+      "plant_name": "Kudzu",
+      "scientific_name": "Pueraria montana var. lobata",
+      "image_prompt": "Realistic high-quality botanical photograph of Kudzu vine (Pueraria montana var. lobata) with large trifoliate green leaves, purple pea-like flower clusters and climbing tendrils in Japanese Kampo medicinal garden setting, detailed realistic foliage and flowers, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "💊 Medicinales",
+      "plant_name": "Artemisa / Moxa",
+      "scientific_name": "Artemisia princeps",
+      "image_prompt": "Realistic high-quality botanical photograph of Japanese mugwort / Moxa plant (Artemisia princeps) with silvery-green feathery leaves and small inconspicuous flower spikes in traditional Japanese moxibustion herb garden, detailed realistic foliage texture, soft natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "⛩️ JAPÓN (KAMPO + SHINTO)",
+      "group": "💊 Medicinales",
+      "plant_name": "Regaliz / Kanzo",
+      "scientific_name": "Glycyrrhiza uralensis",
+      "image_prompt": "Realistic high-quality botanical photograph of licorice plant (Glycyrrhiza uralensis / Kanzo) with pinnate green leaves, small purple-white flower spikes and thick woody roots partially visible in Japanese Kampo medicinal field, detailed realistic leaves, flowers and roots, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌺 MESOAMÉRICA (AZTECA / MAYA / ZAPOTECA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Cacao",
+      "scientific_name": "Theobroma cacao",
+      "image_prompt": "Realistic high-quality botanical photograph of cacao tree (Theobroma cacao) with large green pods growing directly on the trunk and branches in lush Mesoamerican rainforest setting, detailed realistic leaves, flowers and pods, soft dappled sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌺 MESOAMÉRICA (AZTECA / MAYA / ZAPOTECA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Chía",
+      "scientific_name": "Salvia hispanica",
+      "image_prompt": "Realistic high-quality botanical photograph of chia plant (Salvia hispanica) with tall spikes of blue-purple flowers and tiny seeds in ancient Aztec cultivated field, detailed realistic foliage and flowers, bright natural sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌺 MESOAMÉRICA (AZTECA / MAYA / ZAPOTECA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Nopal",
+      "scientific_name": "Opuntia ficus-indica",
+      "image_prompt": "Realistic high-quality botanical photograph of nopal cactus (Opuntia ficus-indica) with green pads, yellow flowers and red tunas in Mesoamerican arid landscape, detailed realistic spines and fruits, harsh natural desert sunlight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌺 MESOAMÉRICA (AZTECA / MAYA / ZAPOTECA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Epazote",
+      "scientific_name": "Dysphania ambrosioides",
+      "image_prompt": "Realistic high-quality botanical photograph of epazote plant (Dysphania ambrosioides) with serrated green leaves and small green flower clusters in traditional Mesoamerican herb garden, detailed realistic foliage, bright natural daylight, photorealistic, sharp focus, no text, no symbols, no labels"
+    },
+    {
+      "region": "🌺 MESOAMÉRICA (AZTECA / MAYA / ZAPOTECA)",
+      "group": "💊 Medicinales",
+      "plant_name": "Copal blanco",
+      "scientific_name": "Protium copal",
+      "image_prompt": "Realistic high-quality botanical photograph of copal tree (Protium copal) with resin droplets on bark, compound leaves and small white flowers in Mesoamerican sacred forest, detailed realistic texture and resin, soft golden hour light, photorealistic, sharp focus, no text, no symbols, no labels"
     }
+    # Nota: Se incluyen solo las primeras 70 plantas generadas en los batches. El total es 70.
   ]
 }
