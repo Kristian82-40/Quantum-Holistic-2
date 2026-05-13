@@ -1,0 +1,54 @@
+# PROMPT: Generar Script de Validación
+
+**Instrucciones:** Copia. Reemplaza `[QUÉ_VALIDAR]`. Pega en Claude Code.
+
+---
+
+## ✅ Validador: [QUÉ_VALIDAR]
+
+### Objetivo
+Crear script `.js` o `.ts` en `scripts/` que valide [QUÉ_VALIDAR].
+
+### Requisitos
+1. Lee dato desde: [Supabase API / archivos locales / Vercel API]
+2. Compara contra schema esperado: [SCHEMA]
+3. Si hay error: imprime lista de issues + sugerencias de fix
+4. Exit code: 0 (pass) o 1 (fail)
+
+### Estructura esperada
+```javascript
+// scripts/validate-[nombre].js
+const validateXXX = async () => {
+  try {
+    // 1. Fetch data
+    // 2. Validate against schema
+    // 3. Collect errors
+    // 4. Output report
+    // 5. process.exit(errors.length > 0 ? 1 : 0)
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+validateXXX()
+```
+
+### Invocación
+```bash
+node scripts/validate-[nombre].js
+```
+
+### Integración con GitHub Actions
+Será ejecutado por **QH-CI-VALIDATE** en cada push. Output debe ser:
+```
+✅ PASS: [X] items validados
+o
+❌ FAIL: [Y] errores encontrados:
+  - Error 1
+  - Error 2
+```
+
+---
+
+**Output esperado:** archivo en `scripts/validate-[nombre].js` + documentación en script mismo.

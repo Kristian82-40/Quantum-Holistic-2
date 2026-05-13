@@ -1,0 +1,24 @@
+🔍 FLOW STATE — 2026-05-12T19:12:25
+
+✅ Estado:
+   Proyecto en producción. Última entrega hace 5 días.
+   Diccionario: 70 plantas en DB. Web estable en Vercel.
+
+⚠️ Problemas detectados:
+   - n8n Auto-Bitacora: credencial caducada (2026-05-06)
+   - Stripe: aún en test mode, paywall no activo
+   - Supabase: Email redirect URLs no configuradas
+
+→ PRÓXIMOS 3 PASOS (por impacto + dependencias):
+   1. 🔧 Middleware protection (/admin routes) — bloquea 2 features
+   2. 📧 Resend email setup — depende de URL config en Supabase
+   3. 💳 Stripe live keys — manual en dashboard, habilita paywall
+
+—— Fuentes Verificadas ——
+handoff.md: ✓ (2026-05-12 09:00)
+git: ✓ (10 commits)
+Notion: ✓ (3 entries)
+Vercel: ✓ (5 deployments, último: c2e18f4 READY)
+Supabase: ✓ (plants: 45 rows)
+
+Duración: 5s | Tokens: 850

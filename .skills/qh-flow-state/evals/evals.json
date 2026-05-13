@@ -1,0 +1,23 @@
+{
+  "skill_name": "qh-flow-state",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "¿Cuál es el estado actual del proyecto? Dame un resumen ejecutivo de 200 palabras máximo y los próximos 3 pasos.",
+      "expected_output": "Estado comprimido con: línea de status, problemas detectados (max 3), próximos 3 pasos ordenados. Debe incluir data de handoff.md, git log, Vercel, Notion, Supabase.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/flow-state",
+      "expected_output": "Mismo output que eval 1 pero triggered por comando explícito. Formato: ✅ Estado, ⚠️ Problemas, → Pasos. Auto-actualiza PROJECT_CONTEXT.md.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Acabo de abrir Cowork. Dame el estado del proyecto en 30 segundos sin que tenga que leer nada.",
+      "expected_output": "Flow state comprimido listo para tomar decisión. Incluye: qué pasó último (git), dónde quedó (handoff), qué bloquea (Notion), deploy status (Vercel), datos (Supabase). Prioridad: info accionable, no ruido.",
+      "files": []
+    }
+  ]
+}
