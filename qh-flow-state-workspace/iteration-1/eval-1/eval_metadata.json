@@ -1,0 +1,27 @@
+{
+  "eval_id": 1,
+  "eval_name": "basic-flow-state-request",
+  "prompt": "¿Cuál es el estado actual del proyecto? Dame un resumen ejecutivo de 200 palabras máximo y los próximos 3 pasos.",
+  "assertions": [
+    {
+      "text": "Output contains compressed state section",
+      "passed": true,
+      "evidence": "Found '✅ Estado:' section"
+    },
+    {
+      "text": "Output contains problems section",
+      "passed": true,
+      "evidence": "Found '⚠️ Problemas detectados:' with 3 issues"
+    },
+    {
+      "text": "Output contains next 3 steps",
+      "passed": true,
+      "evidence": "All 3 numbered steps present"
+    },
+    {
+      "text": "All 5 data sources verified",
+      "passed": true,
+      "evidence": "handoff, git, Notion, Vercel, Supabase listed"
+    }
+  ]
+}

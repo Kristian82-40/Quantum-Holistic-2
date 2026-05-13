@@ -1,0 +1,22 @@
+{
+  "eval_id": 2,
+  "eval_name": "explicit-trigger-slash-command",
+  "prompt": "/flow-state",
+  "assertions": [
+    {
+      "text": "Skill triggers on /flow-state command",
+      "passed": true,
+      "evidence": "Command recognized and executed"
+    },
+    {
+      "text": "Output format matches specification",
+      "passed": true,
+      "evidence": "Contains ✅, ⚠️, → sections as spec"
+    },
+    {
+      "text": "PROJECT_CONTEXT.md would be updated",
+      "passed": true,
+      "evidence": "Script shows update message"
+    }
+  ]
+}
