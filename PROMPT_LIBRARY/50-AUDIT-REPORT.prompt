@@ -1,0 +1,54 @@
+# PROMPT: Generar Reporte de Auditoría
+
+**Instrucciones:** Copia. Reemplaza `[QUÉ_AUDITAR]`, `[FUENTES]`. Pega en Claude.ai.
+
+---
+
+## 📊 Auditoría: [QUÉ_AUDITAR]
+
+### Objetivo
+Comparar estado esperado vs estado actual en [FUENTES] y generar reporte ejecutivo.
+
+### Fuentes de verdad
+- **Supabase:** `plants` table schema + data
+- **Archivos:** `fichas-metadata.json`, `/public/images/plants/`
+- **Código:** `/app/plantas/`, `components/PlantasGrid.tsx`, etc
+- **Vercel Analytics:** imagen HTTP status, performance
+
+### Checklist de Auditoría
+- [ ] Supabase schema: ¿está íntegro? (columnas, tipos, constraints)
+- [ ] Datos: ¿50 plantas en DB?
+- [ ] Imágenes: ¿todas 50 en Vercel y HTTP 200?
+- [ ] Metadata: ¿fichas-metadata.json válido + sync con DB?
+- [ ] Slugs: ¿todos únicos, sin duplicados?
+- [ ] Alt text: ¿presentes en todas imágenes?
+- [ ] Código: ¿referencias a imágenes apuntan a URLs correctas?
+- [ ] Performance: ¿Lighthouse score en últimos 3 deploys?
+
+### Salida esperada
+```
+AUDIT REPORT — [FECHA]
+======================
+
+✅ PASS: [X/N] checks
+❌ FAIL: [Y/N] checks
+
+PROBLEMAS DETECTADOS:
+1. Imagen plant-07: 404 en Vercel
+   → Sugerencia: Reuploaderla o consolidar con plant-06
+2. Slug duplicado: "malva" x 2
+   → Sugerencia: Renombrar malva-menor → malva_menor
+
+ACCIONES RECOMENDADAS (ordenadas por impacto):
+1. [Acción 1] — impacto CRÍTICA
+2. [Acción 2] — impacto IMPORTANTE
+3. [Acción 3] — impacto MENOR
+
+Auto-fix disponibles:
+- QH-SYNC-METADATA: auto-sincronizar fichas con DB
+- QH-IMAGE-HEAL: consolidar imágenes duplicadas
+```
+
+---
+
+**Nota:** Este reporte se ejecuta automáticamente cada noche (n8n cron). Papu lo ve en Notion sin pedir.

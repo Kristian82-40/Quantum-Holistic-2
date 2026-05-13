@@ -1,0 +1,43 @@
+# PROMPT: Generar Rollback
+
+**Instrucciones:** Copia. Reemplaza `[PROBLEMA]`, `[COMMIT_TARGET]`. Pega en Claude Code.
+
+---
+
+## 🔄 Rollback: [PROBLEMA]
+
+### Situación
+- **Problema:** [PROBLEMA en prod]
+- **Afectado:** [Qué funcionalidad]
+- **Detectado en:** [tiempo]
+- **Revertir a commit:** [COMMIT_TARGET o "último deploy estable"]
+
+### Pasos
+1. Lee historial git:
+   ```bash
+   git log --oneline -20
+   ```
+2. Identifica commit previo a breaking change: `[SHA]`
+3. Genera rollback.sh:
+   ```bash
+   git reset --hard [SHA]
+   git push --force-with-lease origin main
+   ```
+4. **Verifica en Vercel:** quantum-holistic-2.vercel.app debe redeploy automáticamente
+5. **Test crítico:** [PASO_QUE_VALIDA_FIX]
+6. **Comunica:** actualiza Notion bitácora + PR comment
+
+### Si no compila después del rollback
+- Verifica .env.local, vercel.json, next.config.js
+- Check: node_modules no corrupto (`rm -rf node_modules && npm ci`)
+
+### Al terminar
+```bash
+git log --oneline -5  # Confirma estado
+```
+
+**Nota:** Rollback es último recurso. Si posible, revertir commit individual en lugar de force-push.
+
+---
+
+**Salida esperada:** rollback.sh ejecutable + confirmación en prod.

@@ -1,0 +1,50 @@
+# PROMPT: Implementar Feature
+
+**Instrucciones:** Copia este prompt entero. Reemplaza `[DESCRIPCIÓN]`, `[DÓNDE]`, `[ESQUEMA]` con detalles. Pega en Claude Code.
+
+---
+
+## 📌 Feature: [DESCRIPCIÓN]
+
+### Contexto
+- **Proyecto:** Quantum Holistic
+- **Stack:** Next.js 14 (App Router) + Supabase + Vercel
+- **Repo:** Kristian82-40/Quantum-Holistic-2
+- **Local:** `/Volumes/Papu Ext/Dev/QuantumHolistic/project/quantum-holistic`
+
+### Tarea
+Implementa [DESCRIPCIÓN] en [DÓNDE].
+
+### Schema / Dependencias
+[ESQUEMA]
+
+Ejemplo:
+```typescript
+// Si toca Supabase:
+- Tabla: plants (id, slug, nombre_es, nombre_latino, imagen_url, alt_text, ...)
+- Permisos: RLS enabled, public read, authenticated write
+
+// Si toca componentes:
+- Location: app/components/[ComponentName].tsx
+- Imports: next/image, lucide-react, @/components/ui
+```
+
+### Requisitos de aceptación
+1. [ ] Código tipado (TypeScript strict)
+2. [ ] Tests si aplica
+3. [ ] Responsive (mobile-first)
+4. [ ] Build local limpio (`npm run build`)
+5. [ ] Commit mensaje claro: `feat: [descripción]`
+
+### Al terminar
+```bash
+git add .
+git commit -m "feat: [descripción corta]"
+git push origin [rama]
+```
+
+Luego **QH-DEPLOY-GATE** validará antes de merge a main.
+
+---
+
+**Nota:** Si encuentras ambigüedad en schema, detente y pide aclaración. No adivines nombres de columna.

@@ -1,0 +1,22 @@
+{
+  "eval_id": 3,
+  "eval_name": "auto-trigger-session-start",
+  "prompt": "Acabo de abrir Cowork. Dame el estado del proyecto en 30 segundos sin que tenga que leer nada.",
+  "assertions": [
+    {
+      "text": "Response time under 30 seconds",
+      "passed": true,
+      "evidence": "Script execution ~5s"
+    },
+    {
+      "text": "No extra reading required",
+      "passed": true,
+      "evidence": "Single summary output, no follow-ups needed"
+    },
+    {
+      "text": "Actionable next steps provided",
+      "passed": true,
+      "evidence": "3 prioritized steps with emoji + description"
+    }
+  ]
+}
