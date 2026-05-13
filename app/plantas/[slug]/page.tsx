@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import styles from './page.module.css';
@@ -87,11 +88,13 @@ export default async function PlantaPage({ params }: { params: { slug: string } 
           <div className={styles.hero}>
             <div>
               {plant.image_cientifica_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={plant.image_cientifica_url}
                   alt={`Ilustración botánica de ${plant.nombre_es}`}
+                  width={400}
+                  height={500}
                   className={styles.heroImg}
+                  priority={true}
                 />
               ) : (
                 <div style={{ background: 'var(--sage-pale)', borderRadius: '12px', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.5, fontSize: '48px' }}>
