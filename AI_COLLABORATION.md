@@ -61,3 +61,23 @@
 
 **Este chat queda archivado.** Todo el conocimiento ya está en AI_COLLABORATION.md + PROJECT_CONTEXT.md.
 
+
+### ─────────────────────────────────────
+### ACTUALIZACIÓN - 13 de mayo 2026 (08:45)
+### Sesión Grok: Imágenes + Video + Limpieza
+### ─────────────────────────────────────
+
+**Estado actual después de esta sesión:**
+- ✅ Video BioZenScene eliminado completamente (`app/page.tsx` + archivo huérfano borrado)
+- ✅ `next.config.js` → `remotePatterns` para Supabase Storage agregado
+- ✅ Rama: `fix/images-and-video-2026-05-13` creada y commiteada
+- ✅ QH-DEPLOY-GATE pasa verde
+- ⚠️ **Pendiente crítico**: Las imágenes de plantas siguen mostrando el placeholder "?" (Next.js no carga las imágenes reales de Supabase)
+
+**Ticket de imágenes abierto con Cowork** (ya le pasamos el prompt).
+
+**Próximo punto del flow-state:**
+→ Middleware `/admin` (protección de rutas)
+
+**Este chat queda archivado.**
+
