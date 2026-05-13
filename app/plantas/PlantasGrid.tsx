@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Plant {
   id: number;
@@ -109,14 +110,13 @@ export default function PlantasGrid({ plants }: { plants: Plant[] }) {
             >
               <div style={{ height: '200px', background: 'var(--sage-pale)', overflow: 'hidden', position: 'relative' }}>
                 {plant.image_cientifica_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={plant.image_cientifica_url}
                     alt={`${plant.nombre_es} — ${plant.nombre_latino}`}
-                    loading="lazy"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.transform = 'scale(1.04)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.transform = 'scale(1)'; }}
+                    fill
+                    priority={false}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: 'cover' }}
                   />
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.4, gap: '8px' }}>

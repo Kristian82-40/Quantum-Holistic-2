@@ -1,0 +1,48 @@
+# PROMPT: Arreglar Bug
+
+**Instrucciones:** Copia este prompt. Reemplaza `[SÍNTOMA]`, `[STACK]`, `[CONTEXTO]`. Pega en Claude Code.
+
+---
+
+## 🐛 Bug: [SÍNTOMA]
+
+### Contexto
+- **Dónde se ve:** [ej: `/plantas/[slug]` en móvil]
+- **Browser:** [Chrome, Safari, etc o N/A si es backend]
+- **Entorno:** [prod, staging, local]
+
+### Stack Trace (si aplica)
+```
+[STACK TRACE O ERROR MESSAGE]
+```
+
+### Pasos para reproducir
+1. [Paso 1]
+2. [Paso 2]
+3. [Paso 3]
+→ **Resultado esperado:** [X]
+→ **Resultado actual:** [Y]
+
+### Contexto adicional
+[CONTEXTO: versiones, archivos tocados recientemente, cambios recientes, etc]
+
+### Approach sugerido
+- [ ] Verificar schema Supabase (si toca DB)
+- [ ] Buscar en codebase: `grep -r "[término]" app/`
+- [ ] Reproducir localmente: `npm run dev`
+- [ ] Revisar commits recientes: `git log --oneline -10`
+- [ ] Check RLS policies si toca auth
+
+### Al terminar
+```bash
+git add .
+git commit -m "fix: [descripción corta del bug]"
+npm run build  # Verifica que compile
+git push origin [rama]
+```
+
+**QH-CI-VALIDATE** correrá automáticamente en GitHub.
+
+---
+
+**Si no logras reproducir:** devuelve exactamente qué pasos intentaste + qué no pasó.
