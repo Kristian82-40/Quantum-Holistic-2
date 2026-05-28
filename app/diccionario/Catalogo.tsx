@@ -4,126 +4,66 @@ import { useMemo, useState } from 'react';
 import styles from './diccionario.module.css';
 
 export type Plant = {
-  region: string;
-  group: string;
-  plant_name: string;
-  scientific_name: string;
-  image_prompt?: string;
+  id: number;
+  nombre_es: string;
+  slug: string;
+  categoria: string | null;
+  descripcion_corta: string | null;
+  image_cientifica_url: string | null;
+  nombre_latino: string | null;
 };
 
-type TabKey = 'maestras' | 'medicinales' | 'sagradas';
+type TabKey = 'maestras' | 'sagradas' | 'magicas';
 
-const TABS: { key: TabKey; label: string; emoji: string; match: string }[] = [
-  { key: 'maestras', label: 'Maestras', emoji: '🌀', match: 'Maestras' },
-  { key: 'medicinales', label: 'Medicinales', emoji: '💊', match: 'Medicinales' },
-  { key: 'sagradas', label: 'Sagradas', emoji: '🕊️', match: 'Sagradas' },
+const TABS: { key: TabKey; label: string; match: string; color: string }[] = [
+  { key: 'maestras', label: 'Maestras',  match: 'Maestras',  color: '#8A9A7B' },
+  { key: 'sagradas', label: 'Sagradas',  match: 'Sagradas',  color: '#B8935A' },
+  { key: 'magicas',  label: 'Mágicas',   match: 'Magicas',   color: '#9C5A3C' },
 ];
-
-// Slugs exactos de los archivos en disco (0-indexed, 51 entradas: plant-00..plant-50).
-// Mantienen tildes y ñ tal cual están en el filesystem. NO slugificar runtime.
-const PLANT_SLUGS: string[] = [
-  'beleño-negro',
-  'datura-estramonio',
-  'adormidera',
-  'mandrágora',
-  'belladona',
-  'laurel',
-  'olivo',
-  'mirra',
-  'hisopo',
-  'salvia',
-  'lavanda',
-  'orégano',
-  'hinojo',
-  'valeriana',
-  'milenrama',
-  'saúco',
-  'muérdago',
-  'roble',
-  'tejo',
-  'acónito',
-  'equinácea',
-  'abedul',
-  'cornezuelo-del-centeno',
-  'amanita-muscaria',
-  'nigela-semilla-negra',
-  'granada',
-  'azafrán',
-  'higo',
-  'sidr',
-  'incienso-olíbano',
-  'áloe-vera',
-  'ajo',
-  'rosa-de-jericó',
-  'harmal-ruda-siria',
-  'cannabis',
-  'ashwagandha',
-  'cúrcuma',
-  'amla',
-  'neem',
-  'brahmi',
-  'tulsi',
-  'loto',
-  'árbol-bodhi',
-  'sándalo',
-  'bilva-bael',
-  'bhang-cannabis',
-  'datura-dhatura',
-  'soma',
-  'ginseng',
-  'astrágalo',
-  'dong-quai',
-];
-
-function imageSrc(index: number): string | null {
-  const slug = PLANT_SLUGS[index];
-  if (!slug) return null;
-  const id = String(index).padStart(2, '0');
-  return `/images/plants/plant-${id}-${slug}-cientifica.jpg`;
-}
 
 export default function Catalogo({ plants }: { plants: Plant[] }) {
   const [active, setActive] = useState<TabKey>('maestras');
 
-  const indexed = useMemo(
-    () => plants.map((p, i) => ({ ...p, _index: i })),
-    [plants]
-  );
+  const activeColor = TABS.find((t) => t.key === active)!.color;
 
   const counts = useMemo(() => {
-    const c: Record<TabKey, number> = { maestras: 0, medicinales: 0, sagradas: 0 };
-    indexed.forEach((p) => {
-      for (const t of TABS) if (p.group.includes(t.match)) c[t.key]++;
-    });
+    const c: Record<TabKey, number> = { maestras: 0, sagradas: 0, magicas: 0 };
+    for (const p of plants) {
+      const cat = p.categoria ?? '';
+      for (const t of TABS) if (cat === t.match) c[t.key]++;
+    }
     return c;
-  }, [indexed]);
+  }, [plants]);
 
   const visible = useMemo(() => {
     const tab = TABS.find((t) => t.key === active)!;
-    return indexed.filter((p) => p.group.includes(tab.match));
-  }, [indexed, active]);
+    return plants.filter((p) => p.categoria === tab.match);
+  }, [plants, active]);
 
   return (
     <main className={styles.wrap}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Diccionario de Plantas</h1>
+        <h1 className={styles.title}>Diccionario Botánico</h1>
         <p className={styles.subtitle}>Atlas viviente · {plants.length} especies</p>
       </header>
 
       <nav className={styles.tabs} role="tablist" aria-label="Categorías">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            role="tab"
-            aria-selected={active === t.key}
-            className={`${styles.tab} ${active === t.key ? styles.tabActive : ''}`}
-            onClick={() => setActive(t.key)}
-          >
-            <span aria-hidden>{t.emoji}</span>
-            {t.label}
-            <span className={styles.count}>{counts[t.key]}</span>
-          </button>
-        ))}
+        {TABS.map((t) => {
+          const isActive = active === t.key;
+          return (
+            <button
+              key={t.key}
+              role="tab"
+              aria-selected={isActive}
+              className={`${styles.tab} ${isActive ? styles.tabActive : ''}`}
+              style={isActive ? { background: t.color, borderColor: t.color } : undefined}
+              onClick={() => setActive(t.key)}
+            >
+              {t.label}
+              <span className={styles.count}>{counts[t.key]}</span>
+            </button>
+          );
+        })}
       </nav>
 
       {visible.length === 0 ? (
@@ -131,30 +71,39 @@ export default function Catalogo({ plants }: { plants: Plant[] }) {
       ) : (
         <section className={styles.grid}>
           {visible.map((p) => {
-            const src = imageSrc(p._index);
+            const src =
+              p.image_cientifica_url ||
+              `/images/plants/${p.slug}-cientifica.jpg`;
             return (
-              <article key={`${p._index}-${p.scientific_name}`} className={styles.card}>
+              <article key={p.id} className={styles.card}>
                 <div className={styles.imgWrap}>
-                  {src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={src}
-                      alt={p.plant_name}
-                      loading="lazy"
-                      className={styles.img}
-                    />
-                  ) : (
-                    <div className={styles.placeholder} aria-label="Sin imagen">
-                      ☘
-                    </div>
-                  )}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={src}
+                    alt={p.nombre_es}
+                    loading="lazy"
+                    className={styles.img}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      const ph = e.currentTarget.nextElementSibling as HTMLElement | null;
+                      if (ph) ph.style.display = 'flex';
+                    }}
+                  />
+                  <div className={styles.placeholder} style={{ display: 'none' }} aria-hidden>
+                    ☘
+                  </div>
                   <div className={styles.overlay}>
-                    <span className={styles.overlayText}>{p.scientific_name}</span>
+                    <span className={styles.overlayText}>{p.nombre_latino}</span>
                   </div>
                 </div>
                 <div className={styles.body}>
-                  <h3 className={styles.name}>{p.plant_name}</h3>
-                  <p className={styles.scientific}>{p.scientific_name}</p>
+                  <h3 className={styles.name}>{p.nombre_es}</h3>
+                  {p.nombre_latino && (
+                    <p className={styles.scientific}>{p.nombre_latino}</p>
+                  )}
+                  {p.descripcion_corta && (
+                    <p className={styles.desc}>{p.descripcion_corta}</p>
+                  )}
                 </div>
               </article>
             );
