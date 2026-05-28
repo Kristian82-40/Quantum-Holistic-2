@@ -17,6 +17,7 @@ export const NAV_LINKS = [
   { label: 'Proceso',      href: '/#how' },
   { label: 'Quantum Pro',  href: '/#pro-detail' },
   { label: 'Planes',       href: '/#pricing' },
+  { label: 'Diccionario',  href: '/diccionario' },
   { label: 'Blog',         href: '/blog' },
   { label: 'Plantas',      href: '/plantas' },
 ] as const;

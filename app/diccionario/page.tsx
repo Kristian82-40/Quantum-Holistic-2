@@ -1,5 +1,5 @@
 import { Cormorant_Garamond, Inter_Tight } from 'next/font/google';
-import metadata from '../fichas-metadata.json';
+import { createClient } from '@supabase/supabase-js';
 import Catalogo, { type Plant } from './Catalogo';
 
 export const dynamic = 'force-dynamic';
@@ -20,8 +20,25 @@ const interTight = Inter_Tight({
   display: 'swap',
 });
 
-export default function DiccionarioPage() {
-  const plants = (metadata as { atlas_images: Plant[] }).atlas_images;
+async function fetchPlants(): Promise<Plant[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const sb = createClient(url, key);
+
+  const { data, error } = await sb
+    .from('plants')
+    .select('id, nombre_es, slug, categoria, descripcion_corta, image_cientifica_url, nombre_latino')
+    .order('nombre_es', { ascending: true });
+
+  if (error) {
+    console.error('[Diccionario] Supabase error:', error.message);
+    return [];
+  }
+  return (data ?? []) as Plant[];
+}
+
+export default async function DiccionarioPage() {
+  const plants = await fetchPlants();
 
   return (
     <div className={`${cormorant.variable} ${interTight.variable}`}>
