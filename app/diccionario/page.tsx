@@ -1,6 +1,7 @@
 import { Cormorant_Garamond, Inter_Tight } from 'next/font/google';
 import { createClient } from '@supabase/supabase-js';
 import Catalogo, { type Plant } from './Catalogo';
+import { PlantsSchema } from '@/lib/schemas/plant';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +35,11 @@ async function fetchPlants(): Promise<Plant[]> {
     console.error('[Diccionario] Supabase error:', error.message);
     return [];
   }
-  return (data ?? []) as Plant[];
+  const raw = (data ?? []) as Plant[];
+  // Valida id/slug/categoria — detecta tildes/ñ en slugs antes de llegar a Vercel
+  PlantsSchema.parse(raw.map(({ id, slug, categoria }) => ({ id, slug, categoria })));
+  // Fuente de verdad: URL derivada del slug, no la columna de Supabase
+  return raw.map(p => ({ ...p, image_cientifica_url: `/images/plants/${p.slug}-cientifica.jpg` }));
 }
 
 export default async function DiccionarioPage() {
