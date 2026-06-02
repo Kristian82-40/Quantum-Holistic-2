@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "slug": "albahaca",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 2,
+    "slug": "beleno-negro",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 3,
+    "slug": "arnica",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 4,
+    "slug": "ashwagandha",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 5,
+    "slug": "hierba-mora",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 6,
+    "slug": "boldo",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 7,
+    "slug": "olivo",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 8,
+    "slug": "sidr",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 9,
+    "slug": "castano-de-indias",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 10,
+    "slug": "salvia",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 11,
+    "slug": "lavanda",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 12,
+    "slug": "tomillo",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 13,
+    "slug": "hinojo",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 14,
+    "slug": "valeriana",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 15,
+    "slug": "milenrama",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 16,
+    "slug": "sauco",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 17,
+    "slug": "muerdago",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 18,
+    "slug": "roble",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 19,
+    "slug": "tejo",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 20,
+    "slug": "aconito",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 21,
+    "slug": "echinacea",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 22,
+    "slug": "abedul",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 23,
+    "slug": "cornezuelo-centeno",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 24,
+    "slug": "llantan",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 25,
+    "slug": "nigela",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 26,
+    "slug": "granada",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 27,
+    "slug": "azafran",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 28,
+    "slug": "higuera",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 29,
+    "slug": "azufaifo",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 30,
+    "slug": "incienso",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 31,
+    "slug": "aloe-vera",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 32,
+    "slug": "ajo",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 33,
+    "slug": "rosa-de-jerico",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 34,
+    "slug": "frankenia",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 35,
+    "slug": "cannabis",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 36,
+    "slug": "ashwagandha-fruto",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 37,
+    "slug": "jengibre",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 38,
+    "slug": "amla",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 39,
+    "slug": "neem",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 40,
+    "slug": "brahmi",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 41,
+    "slug": "tulsi",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 42,
+    "slug": "loto",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 43,
+    "slug": "arbol-bodhi",
+    "categoria": "Sagradas"
+  },
+  {
+    "id": 44,
+    "slug": "cinamomo",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 45,
+    "slug": "guayaba",
+    "categoria": "Magicas"
+  },
+  {
+    "id": 46,
+    "slug": "datura",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 47,
+    "slug": "datura-metel",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 48,
+    "slug": "amanita-muscaria",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 49,
+    "slug": "ginseng",
+    "categoria": "Maestras"
+  },
+  {
+    "id": 50,
+    "slug": "tribulus",
+    "categoria": "Maestras"
+  }
+]

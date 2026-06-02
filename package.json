@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen:manifest": "tsx scripts/gen-plants-manifest.ts",
+    "verify": "tsx scripts/check-plants.ts",
+    "prebuild": "tsx scripts/check-plants.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.87.0",
@@ -19,14 +23,22 @@
     "react": "^18",
     "react-dom": "^18",
     "resend": "^6.12.2",
-    "stripe": "^22.0.2"
+    "stripe": "^22.0.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "tsx": "^4.22.4",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --max-warnings=0"
   }
 }
