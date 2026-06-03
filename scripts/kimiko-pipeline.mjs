@@ -110,6 +110,13 @@ async function main() {
   const base = sh('git', ['rev-parse', '--abbrev-ref', 'HEAD']) || 'main';
   sh('git', ['checkout', '-b', branch]);
   sh('git', ['add', 'public/images/plants', 'data/pending-images.json']);
+  const staged = sh('git', ['diff', '--cached', '--name-only']);
+  if (!staged) {
+    log('Imágenes ya presentes en HEAD — Supabase actualizado, sin cambios nuevos en git. Fin.');
+    sh('git', ['checkout', base === branch ? 'main' : base]);
+    sh('git', ['branch', '-d', branch]);
+    return;
+  }
   const msg = `feat(kimiko): ${landed.length} imágenes botánicas + Supabase URLs\n\n${landed.map((s) => `- ${s}`).join('\n')}\n\nGenerado autónomamente por Kimiko. Revisión visual antes de merge.`;
   sh('git', ['commit', '-m', msg]);
   sh('git', ['push', '-u', 'origin', branch]);
