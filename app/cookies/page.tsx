@@ -85,7 +85,7 @@ export default function CookiesPage() {
 
             <h2>Cambios en esta política</h2>
             <p>
-              Actualizaremos esta política si cambia nuestro uso de cookies. La fecha de "última actualización" al inicio indica la versión vigente.
+              Actualizaremos esta política si cambia nuestro uso de cookies. La fecha de &quot;última actualización&quot; al inicio indica la versión vigente.
             </p>
 
             <p>

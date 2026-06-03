@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, STRIPE_PRICE_IDS } from '@/lib/stripe';
+import { stripe, STRIPE_PRICE_IDS } from '@/app/lib/stripe';
 
 const CRYPTO_PRICES_EUR = { monthly: 9, annual: 90 } as const;
 
