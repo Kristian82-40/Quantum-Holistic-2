@@ -73,7 +73,7 @@ export default function PrivacidadPage() {
             <ul>
               <li>Acceso a tus datos personales.</li>
               <li>Rectificación de datos inexactos.</li>
-              <li>Supresión ("derecho al olvido").</li>
+              <li>Supresión (&quot;derecho al olvido&quot;).</li>
               <li>Limitación del tratamiento.</li>
               <li>Portabilidad de datos.</li>
               <li>Oposición al tratamiento basado en interés legítimo.</li>
@@ -94,7 +94,7 @@ export default function PrivacidadPage() {
 
             <h2>9. Cambios en esta política</h2>
             <p>
-              Podemos actualizar esta política ocasionalmente. Te notificaremos por email si los cambios son significativos. La fecha de "última actualización" al inicio de esta página indica cuándo fue revisada por última vez.
+              Podemos actualizar esta política ocasionalmente. Te notificaremos por email si los cambios son significativos. La fecha de &quot;última actualización&quot; al inicio de esta página indica cuándo fue revisada por última vez.
             </p>
 
             <Link href="/" className={styles.back}>← Volver al inicio</Link>

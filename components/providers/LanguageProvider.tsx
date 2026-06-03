@@ -1,14 +1,13 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider, AbstractIntlMessages } from 'next-intl';
 import messagesEs from '@/messages/es.json';
 import messagesEn from '@/messages/en.json';
 
 type Locale = 'es' | 'en';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const MESSAGES: Record<Locale, any> = { es: messagesEs, en: messagesEn };
+const MESSAGES = { es: messagesEs, en: messagesEn };
 
 interface LanguageContextType {
   locale: Locale;
@@ -39,7 +38,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
-      <NextIntlClientProvider locale={locale} messages={MESSAGES[locale]} timeZone="Europe/Madrid">
+      <NextIntlClientProvider locale={locale} messages={MESSAGES[locale] as AbstractIntlMessages} timeZone="Europe/Madrid">
         {children}
       </NextIntlClientProvider>
     </LanguageContext.Provider>

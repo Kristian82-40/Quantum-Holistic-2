@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { stripe } from '@/app/lib/stripe';
 import { sendWelcomeEmail, sendPaymentFailedEmail } from '@/lib/email';
 import type Stripe from 'stripe';
 

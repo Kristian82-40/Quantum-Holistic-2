@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { stripe } from '@/lib/stripe';
+import { stripe } from '@/app/lib/stripe';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
