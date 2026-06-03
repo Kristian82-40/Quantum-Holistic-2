@@ -3,9 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import { PlantsSchema } from '../lib/schemas/plant'
 
 const env = Object.fromEntries(
-  readFileSync('.env.local', 'utf8')
-    .split('\n')
-    .filter(l => l.includes('=') && !l.startsWith('#'))
+  readFileSync('.env.local', 'utf8').split('\n')
+    .filter(l => l.includes('='))
     .map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()] })
 )
 
