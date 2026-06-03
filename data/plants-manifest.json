@@ -1,252 +1,52 @@
 [
-  {
-    "id": 1,
-    "slug": "albahaca",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 2,
-    "slug": "beleno-negro",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 3,
-    "slug": "arnica",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 4,
-    "slug": "ashwagandha",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 5,
-    "slug": "hierba-mora",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 6,
-    "slug": "boldo",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 7,
-    "slug": "olivo",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 8,
-    "slug": "sidr",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 9,
-    "slug": "castano-de-indias",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 10,
-    "slug": "salvia",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 11,
-    "slug": "lavanda",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 12,
-    "slug": "tomillo",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 13,
-    "slug": "hinojo",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 14,
-    "slug": "valeriana",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 15,
-    "slug": "milenrama",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 16,
-    "slug": "sauco",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 17,
-    "slug": "muerdago",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 18,
-    "slug": "roble",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 19,
-    "slug": "tejo",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 20,
-    "slug": "aconito",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 21,
-    "slug": "echinacea",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 22,
-    "slug": "abedul",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 23,
-    "slug": "cornezuelo-centeno",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 24,
-    "slug": "llantan",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 25,
-    "slug": "nigela",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 26,
-    "slug": "granada",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 27,
-    "slug": "azafran",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 28,
-    "slug": "higuera",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 29,
-    "slug": "azufaifo",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 30,
-    "slug": "incienso",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 31,
-    "slug": "aloe-vera",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 32,
-    "slug": "ajo",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 33,
-    "slug": "rosa-de-jerico",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 34,
-    "slug": "frankenia",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 35,
-    "slug": "cannabis",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 36,
-    "slug": "ashwagandha-fruto",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 37,
-    "slug": "jengibre",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 38,
-    "slug": "amla",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 39,
-    "slug": "neem",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 40,
-    "slug": "brahmi",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 41,
-    "slug": "tulsi",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 42,
-    "slug": "loto",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 43,
-    "slug": "arbol-bodhi",
-    "categoria": "Sagradas"
-  },
-  {
-    "id": 44,
-    "slug": "cinamomo",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 45,
-    "slug": "guayaba",
-    "categoria": "Magicas"
-  },
-  {
-    "id": 46,
-    "slug": "datura",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 47,
-    "slug": "datura-metel",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 48,
-    "slug": "amanita-muscaria",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 49,
-    "slug": "ginseng",
-    "categoria": "Maestras"
-  },
-  {
-    "id": 50,
-    "slug": "tribulus",
-    "categoria": "Maestras"
-  }
+  { "id": 1,  "slug": "albahaca",            "categoria": "Magicas",  "nombre_latino": "Ocimum basilicum",         "familia": "Lamiaceae",       "status": "rename",    "source": "plant-01-albahaca-cientifica.jpg",             "target": "albahaca-cientifica.jpg" },
+  { "id": 2,  "slug": "beleno-negro",        "categoria": "Maestras", "nombre_latino": "Hyoscyamus niger",         "familia": "Solanaceae",      "status": "dangerous", "source": "plant-00-beleno-negro-cientifica.jpg",         "target": "beleno-negro-cientifica.jpg" },
+  { "id": 3,  "slug": "arnica",              "categoria": "Magicas",  "nombre_latino": "Arnica montana",           "familia": "Asteraceae",      "status": "rename",    "source": "plant-03-arnica-cientifica.jpg",               "target": "arnica-cientifica.jpg" },
+  { "id": 4,  "slug": "ashwagandha",         "categoria": "Maestras", "nombre_latino": "Withania somnifera",       "familia": "Solanaceae",      "status": "rename",    "source": "plant-04-ashwagandha-cientifica.jpg",          "target": "ashwagandha-cientifica.jpg" },
+  { "id": 5,  "slug": "hierba-mora",         "categoria": "Magicas",  "nombre_latino": "Solanum nigrum",           "familia": "Solanaceae",      "status": "dangerous", "source": null,                                           "target": "hierba-mora-cientifica.jpg" },
+  { "id": 6,  "slug": "boldo",               "categoria": "Maestras", "nombre_latino": "Peumus boldus",            "familia": "Monimiaceae",     "status": "rename",    "source": "plant-06-boldo-cientifica.jpg",                "target": "boldo-cientifica.jpg" },
+  { "id": 7,  "slug": "olivo",               "categoria": "Sagradas", "nombre_latino": "Olea europaea",            "familia": "Oleaceae",        "status": "rename",    "source": "plant-30-olivo-cientifica.jpg",                "target": "olivo-cientifica.jpg" },
+  { "id": 8,  "slug": "sidr",                "categoria": "Sagradas", "nombre_latino": "Ziziphus spina-christi",   "familia": "Rhamnaceae",      "status": "generate", "source": null,                                            "target": "sidr-cientifica.jpg" },
+  { "id": 9,  "slug": "castano-de-indias",   "categoria": "Magicas",  "nombre_latino": "Aesculus hippocastanum",   "familia": "Sapindaceae",     "status": "rename",    "source": "plant-09-castano-de-indias-cientifica.jpg",    "target": "castano-de-indias-cientifica.jpg" },
+  { "id": 10, "slug": "salvia",              "categoria": "Sagradas", "nombre_latino": "Salvia officinalis",       "familia": "Lamiaceae",       "status": "rename",    "source": "plant-37-salvia-cientifica.jpg",               "target": "salvia-cientifica.jpg" },
+  { "id": 11, "slug": "lavanda",             "categoria": "Sagradas", "nombre_latino": "Lavandula angustifolia",   "familia": "Lamiaceae",       "status": "rename",    "source": "plant-23-lavanda-cientifica.jpg",              "target": "lavanda-cientifica.jpg" },
+  { "id": 12, "slug": "tomillo",             "categoria": "Magicas",  "nombre_latino": "Thymus vulgaris",          "familia": "Lamiaceae",       "status": "rename",    "source": "plant-40-tomillo-cientifica.jpg",              "target": "tomillo-cientifica.jpg" },
+  { "id": 13, "slug": "hinojo",              "categoria": "Magicas",  "nombre_latino": "Foeniculum vulgare",       "familia": "Apiaceae",        "status": "generate", "source": null,                                            "target": "hinojo-cientifica.jpg" },
+  { "id": 14, "slug": "valeriana",           "categoria": "Magicas",  "nombre_latino": "Valeriana officinalis",    "familia": "Caprifoliaceae",  "status": "rename",    "source": "plant-44-valeriana-cientifica.jpg",            "target": "valeriana-cientifica.jpg" },
+  { "id": 15, "slug": "milenrama",           "categoria": "Magicas",  "nombre_latino": "Achillea millefolium",     "familia": "Asteraceae",      "status": "generate", "source": null,                                            "target": "milenrama-cientifica.jpg" },
+  { "id": 16, "slug": "sauco",               "categoria": "Maestras", "nombre_latino": "Sambucus nigra",           "familia": "Adoxaceae",       "status": "rename",    "source": "plant-38-sauco-cientifica.jpg",                "target": "sauco-cientifica.jpg" },
+  { "id": 17, "slug": "muerdago",            "categoria": "Sagradas", "nombre_latino": "Viscum album",             "familia": "Santalaceae",     "status": "rename",    "source": "plant-29-muerdago-cientifica.jpg",             "target": "muerdago-cientifica.jpg" },
+  { "id": 18, "slug": "roble",               "categoria": "Sagradas", "nombre_latino": "Quercus robur",            "familia": "Fagaceae",        "status": "generate", "source": null,                                            "target": "roble-cientifica.jpg" },
+  { "id": 19, "slug": "tejo",                "categoria": "Sagradas", "nombre_latino": "Taxus baccata",            "familia": "Taxaceae",        "status": "dangerous", "source": null,                                           "target": "tejo-cientifica.jpg" },
+  { "id": 20, "slug": "aconito",             "categoria": "Maestras", "nombre_latino": "Aconitum napellus",        "familia": "Ranunculaceae",   "status": "dangerous", "source": null,                                           "target": "aconito-cientifica.jpg" },
+  { "id": 21, "slug": "echinacea",           "categoria": "Maestras", "nombre_latino": "Echinacea purpurea",       "familia": "Asteraceae",      "status": "rename",    "source": "plant-12-echinacea-cientifica.jpg",            "target": "echinacea-cientifica.jpg" },
+  { "id": 22, "slug": "abedul",              "categoria": "Sagradas", "nombre_latino": "Betula pendula",           "familia": "Betulaceae",      "status": "generate", "source": null,                                            "target": "abedul-cientifica.jpg" },
+  { "id": 23, "slug": "cornezuelo-centeno",  "categoria": "Maestras", "nombre_latino": "Claviceps purpurea",       "familia": "Clavicipitaceae", "status": "dangerous", "source": null,                                           "target": "cornezuelo-centeno-cientifica.jpg" },
+  { "id": 24, "slug": "llantan",             "categoria": "Magicas",  "nombre_latino": "Plantago major",           "familia": "Plantaginaceae",  "status": "rename",    "source": "plant-24-llantan-cientifica.jpg",              "target": "llantan-cientifica.jpg" },
+  { "id": 25, "slug": "nigela",              "categoria": "Magicas",  "nombre_latino": "Nigella sativa",           "familia": "Ranunculaceae",   "status": "generate", "source": null,                                            "target": "nigela-cientifica.jpg" },
+  { "id": 26, "slug": "granada",             "categoria": "Sagradas", "nombre_latino": "Punica granatum",          "familia": "Lythraceae",      "status": "generate", "source": null,                                            "target": "granada-cientifica.jpg" },
+  { "id": 27, "slug": "azafran",             "categoria": "Sagradas", "nombre_latino": "Crocus sativus",           "familia": "Iridaceae",       "status": "generate", "source": null,                                            "target": "azafran-cientifica.jpg" },
+  { "id": 28, "slug": "higuera",             "categoria": "Sagradas", "nombre_latino": "Ficus carica",             "familia": "Moraceae",        "status": "generate", "source": null,                                            "target": "higuera-cientifica.jpg" },
+  { "id": 29, "slug": "azufaifo",            "categoria": "Magicas",  "nombre_latino": "Ziziphus lotus",           "familia": "Rhamnaceae",      "status": "generate", "source": null,                                            "target": "azufaifo-cientifica.jpg" },
+  { "id": 30, "slug": "incienso",            "categoria": "Sagradas", "nombre_latino": "Boswellia sacra",          "familia": "Burseraceae",     "status": "generate", "source": null,                                            "target": "incienso-cientifica.jpg" },
+  { "id": 31, "slug": "aloe-vera",           "categoria": "Maestras", "nombre_latino": "Aloe vera",                "familia": "Asphodelaceae",   "status": "rename",    "source": "plant-02-aloe-vera-cientifica.jpg",            "target": "aloe-vera-cientifica.jpg" },
+  { "id": 32, "slug": "ajo",                 "categoria": "Magicas",  "nombre_latino": "Allium sativum",           "familia": "Amaryllidaceae",  "status": "generate", "source": null,                                            "target": "ajo-cientifica.jpg" },
+  { "id": 33, "slug": "rosa-de-jerico",      "categoria": "Sagradas", "nombre_latino": "Anastatica hierochuntica", "familia": "Brassicaceae",    "status": "generate", "source": null,                                            "target": "rosa-de-jerico-cientifica.jpg" },
+  { "id": 34, "slug": "frankenia",           "categoria": "Magicas",  "nombre_latino": "Frankenia thymifolia",     "familia": "Frankeniaceae",   "status": "generate", "source": null,                                            "target": "frankenia-cientifica.jpg" },
+  { "id": 35, "slug": "cannabis",            "categoria": "Maestras", "nombre_latino": "Cannabis sativa",          "familia": "Cannabaceae",     "status": "dangerous", "source": null,                                           "target": "cannabis-cientifica.jpg" },
+  { "id": 36, "slug": "ashwagandha-fruto",   "categoria": "Maestras", "nombre_latino": "Withania somnifera",       "familia": "Solanaceae",      "status": "generate", "source": null,                                            "target": "ashwagandha-fruto-cientifica.jpg" },
+  { "id": 37, "slug": "jengibre",            "categoria": "Magicas",  "nombre_latino": "Zingiber officinale",      "familia": "Zingiberaceae",   "status": "rename",    "source": "plant-22-jengibre-cientifica.jpg",             "target": "jengibre-cientifica.jpg" },
+  { "id": 38, "slug": "amla",                "categoria": "Maestras", "nombre_latino": "Phyllanthus acidus",       "familia": "Phyllanthaceae",  "status": "generate", "source": null,                                            "target": "amla-cientifica.jpg" },
+  { "id": 39, "slug": "neem",                "categoria": "Maestras", "nombre_latino": "Azadirachta indica",       "familia": "Meliaceae",       "status": "generate", "source": null,                                            "target": "neem-cientifica.jpg" },
+  { "id": 40, "slug": "brahmi",              "categoria": "Maestras", "nombre_latino": "Bacopa monnieri",          "familia": "Plantaginaceae",  "status": "rename",    "source": "plant-50-brahmi-bacopa-cientifica.jpg",        "target": "brahmi-cientifica.jpg" },
+  { "id": 41, "slug": "tulsi",               "categoria": "Sagradas", "nombre_latino": "Ocimum tenuiflorum",       "familia": "Lamiaceae",       "status": "rename",    "source": "plant-42-tulsi-albahaca-sagrada-cientifica.jpg","target": "tulsi-cientifica.jpg" },
+  { "id": 42, "slug": "loto",                "categoria": "Sagradas", "nombre_latino": "Nelumbo nucifera",         "familia": "Nelumbonaceae",   "status": "generate", "source": null,                                            "target": "loto-cientifica.jpg" },
+  { "id": 43, "slug": "arbol-bodhi",         "categoria": "Sagradas", "nombre_latino": "Ficus religiosa",          "familia": "Moraceae",        "status": "generate", "source": null,                                            "target": "arbol-bodhi-cientifica.jpg" },
+  { "id": 44, "slug": "cinamomo",            "categoria": "Magicas",  "nombre_latino": "Melia azedarach",          "familia": "Meliaceae",       "status": "generate", "source": null,                                            "target": "cinamomo-cientifica.jpg" },
+  { "id": 45, "slug": "guayaba",             "categoria": "Magicas",  "nombre_latino": "Syzygium jambos",          "familia": "Myrtaceae",       "status": "generate", "source": null,                                            "target": "guayaba-cientifica.jpg" },
+  { "id": 46, "slug": "datura",              "categoria": "Maestras", "nombre_latino": "Datura stramonium",        "familia": "Solanaceae",      "status": "dangerous", "source": null,                                           "target": "datura-cientifica.jpg" },
+  { "id": 47, "slug": "datura-metel",        "categoria": "Maestras", "nombre_latino": "Datura metel",             "familia": "Solanaceae",      "status": "dangerous", "source": null,                                           "target": "datura-metel-cientifica.jpg" },
+  { "id": 48, "slug": "amanita-muscaria",    "categoria": "Maestras", "nombre_latino": "Amanita muscaria",         "familia": "Amanitaceae",     "status": "dangerous", "source": null,                                           "target": "amanita-muscaria-cientifica.jpg" },
+  { "id": 49, "slug": "ginseng",             "categoria": "Maestras", "nombre_latino": "Panax ginseng",            "familia": "Araliaceae",      "status": "rename",    "source": "plant-18-ginseng-cientifica.jpg",              "target": "ginseng-cientifica.jpg" },
+  { "id": 50, "slug": "tribulus",            "categoria": "Maestras", "nombre_latino": "Tribulus terrestris",      "familia": "Zygophyllaceae",  "status": "rename",    "source": "plant-41-tribulus-cientifica.jpg",             "target": "tribulus-cientifica.jpg" }
 ]

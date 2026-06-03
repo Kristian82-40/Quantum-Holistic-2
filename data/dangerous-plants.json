@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "policy": "NO generar a ciegas. Requieren aprobación visual manual antes de renombrar/publicar.",
+    "pattern": "{slug}-cientifica.jpg"
+  },
+  "plants": [
+    { "slug": "beleno-negro",       "nombre_latino": "Hyoscyamus niger",   "familia": "Solanaceae",      "source": "plant-00-beleno-negro-cientifica.jpg", "note": "Archivo SuperGrok existe; aprobar visualmente y renombrar." },
+    { "slug": "hierba-mora",        "nombre_latino": "Solanum nigrum",     "familia": "Solanaceae",      "source": null, "note": "Sin archivo. Generar solo tras aprobación." },
+    { "slug": "tejo",               "nombre_latino": "Taxus baccata",      "familia": "Taxaceae",        "source": null, "note": "Sin archivo." },
+    { "slug": "aconito",            "nombre_latino": "Aconitum napellus",  "familia": "Ranunculaceae",   "source": null, "note": "Sin archivo." },
+    { "slug": "cornezuelo-centeno", "nombre_latino": "Claviceps purpurea", "familia": "Clavicipitaceae", "source": null, "note": "Hongo, no planta. Sin archivo." },
+    { "slug": "cannabis",          "nombre_latino": "Cannabis sativa",    "familia": "Cannabaceae",     "source": null, "note": "Sin archivo. Riesgo de bloqueo de provider." },
+    { "slug": "datura",            "nombre_latino": "Datura stramonium",  "familia": "Solanaceae",      "source": null, "note": "Sin archivo." },
+    { "slug": "datura-metel",      "nombre_latino": "Datura metel",       "familia": "Solanaceae",      "source": null, "note": "Sin archivo." },
+    { "slug": "amanita-muscaria",  "nombre_latino": "Amanita muscaria",   "familia": "Amanitaceae",     "source": null, "note": "Hongo. Sin archivo." }
+  ]
+}
