@@ -13,10 +13,17 @@
 6. **LaunchAgent** `com.qh.weekend-agent` → `com.qh.kimiko` (unload/load activo).
 7. `data/pending-images.json` vaciado (0 pendientes).
 
+## Kimiko ahora es autónoma end-to-end (pipeline)
+- **NUEVO** `scripts/kimiko-pipeline.mjs`: `generar → UPDATE Supabase → git rama/commit/push → abrir PR`.
+- Credenciales ya presentes en `.env.local`: `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`. `@supabase/supabase-js` instalado. Sin `gh` CLI → uso GitHub REST API.
+- **NUNCA** pushea a main → rama `kimiko/images-<ts>` + PR. El **merge** del PR dispara el deploy (= supervisión humana).
+- Falta SOLO: reapuntar LaunchAgent `com.qh.kimiko` para correr el pipeline en vez del generador suelto (prompt para Code abajo).
+
 ## Próximos pasos (Cowork, ordenados)
-1. **UPDATE Supabase Fase 1:** 20 plants del manifest status="rename" → `image_cientifica_url = '/images/plants/{slug}-cientifica.jpg'`
-2. **UPDATE/INSERT Supabase Fase 2:** 21 plants nuevas (sidr, hinojo, milenrama, etc.) con URL correcta
-3. Verificar `/diccionario` en Vercel tras el deploy
+1. ✅ **UPDATE Supabase Fase 1+2 hechas** — 41/50 en patrón `{slug}-cientifica.jpg`, 9 peligrosas legacy intencional.
+2. Reapuntar LaunchAgent al pipeline (Code).
+3. Test autonomía: meter 1 slug a `pending-images.json` y dejar que Kimiko dispare sola.
+4. Verificar `/diccionario` en Vercel tras el deploy
 4. Aprobación manual 9 dangerous (beleno-negro, hierba-mora, tejo, aconito, cornezuelo, cannabis, datura, datura-metel, amanita-muscaria)
 5. Playwright E2E contra prod cuando esté up
 
