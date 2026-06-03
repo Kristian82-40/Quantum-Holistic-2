@@ -1,8 +1,17 @@
 # Handoff — 2026-06-03
 
 ## Estado del proyecto
-- **Deploy Vercel:** commit `99ef0ca` pusheado → desplegando.
+- **Deploy Vercel:** main hasta `7fb0700` READY. PR #2 (equinácea) abierto, pendiente merge de Papu.
 - Módulo cerrado: imágenes botánicas + columna verificación + Kimiko.
+- **Kimiko AUTÓNOMA confirmada** (pipeline + LaunchAgent + idempotencia + git/PR validados end-to-end).
+
+## Validación autonomía Kimiko (esta sesión)
+- LaunchAgent ya reapuntado al pipeline (commit `f6773da`, deploy READY).
+- Guard idempotencia `nothing staged` añadido (`7fb0700`) tras caso manzanilla (imagen ya en HEAD).
+- **manzanilla** id 51 → INSERT Supabase + imagen ya existente (caso "sin diff", guard OK).
+- **equinacea** id 52 → INSERT Supabase + ciclo COMPLETO: genera → UPDATE → rama `kimiko/images-2026-06-03-13-58` → push → PR #2.
+- PR #2: solo añade `equinacea-cientifica.jpg` (540KB). Limpio. https://github.com/Kristian82-40/Quantum-Holistic-2/pull/2
+- **Pendiente Papu:** mergear PR #2 (= deploy).
 
 ## Completado en esta sesión (Claude Code)
 1. **21 imágenes generadas** vía Wikimedia Commons (Pollinations bloqueado HTTP 402 / x402 payment protocol).
