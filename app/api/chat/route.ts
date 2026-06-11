@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const N8N_CHAT_WEBHOOK = process.env.N8N_CHAT_WEBHOOK_URL || 'http://localhost:5678/webhook/chat-holistic';
-const OLLAMA_URL       = process.env.OLLAMA_URL            || 'http://172.17.0.2:11434';
+const OLLAMA_URL       = process.env.OLLAMA_URL            || 'http://localhost:11434';
 const OLLAMA_MODEL     = process.env.OLLAMA_MODEL          || 'papu-pro:latest';
 
 const SYSTEM_PROMPT = `Eres el asistente holístico de Quantum Holistic, un servicio de nutrición km0, herbología y bienestar personalizado.

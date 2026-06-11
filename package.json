@@ -7,14 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen:manifest": "tsx scripts/gen-plants-manifest.ts",
-    "verify": "tsx scripts/check-plants.ts",
-    "prebuild": "tsx scripts/check-plants.ts",
     "prepare": "husky"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.87.0",
-    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.103.0",
     "@vercel/analytics": "^2.0.1",

@@ -4,7 +4,7 @@ async function tryOllama(prompt: string): Promise<string> {
   const res = await fetch('http://localhost:11434/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'phi4-mini', prompt, stream: false }),
+    body: JSON.stringify({ model: process.env.OLLAMA_MODEL || 'papu-pro:latest', prompt, stream: false }),
     signal: AbortSignal.timeout(30000),
   })
   const data = await res.json()

@@ -6,8 +6,6 @@ const FOOTER_COLS = [
   {
     heading: 'Plataforma',
     links: [
-      { label: 'Mi perfil holístico', href: '/recomendador' },
-      { label: 'Herbología',          href: '/plantas' },
       { label: 'Blog',                href: '/blog' },
       { label: 'Quantum Pro',         href: '/#pricing' },
     ],
