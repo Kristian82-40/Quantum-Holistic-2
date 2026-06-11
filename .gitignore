@@ -20,3 +20,6 @@ tsconfig.tsbuildinfo
 
 # Directorio redundante eliminado de git pero aún en disco
 app/app/
+
+# Imágenes pendientes de aprobación visual (plantas peligrosas — NO servir sin revisión)
+public/images/plants/_pending-approval/
