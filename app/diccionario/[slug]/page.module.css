@@ -1,0 +1,342 @@
+/* ─── Diccionario: plant detail page ─── */
+
+.main {
+  background: #F4EDE0;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+/* ── Hero ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 420px;
+  max-height: 560px;
+}
+
+@media (max-width: 720px) {
+  .hero { grid-template-columns: 1fr; max-height: none; }
+}
+
+.heroImageWrap {
+  position: relative;
+  overflow: hidden;
+  background: #ede5d8;
+}
+
+.heroImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.heroPlaceholder {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8dfd2 0%, #d0c5b5 100%);
+}
+
+.heroPlaceholder span {
+  font-family: var(--font-serif);
+  font-size: 8rem;
+  font-weight: 300;
+  color: #8A9A7B;
+  opacity: 0.45;
+  line-height: 1;
+  user-select: none;
+}
+
+.heroInfo {
+  background: #3D4A3A;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .heroInfo { padding: 2rem 1.5rem; }
+  .heroPlaceholder { min-height: 220px; }
+}
+
+.back {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #8A9A7B;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s;
+}
+
+.back:hover { color: #B8935A; }
+
+.catBadge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B8935A;
+  border: 1px solid rgba(184, 147, 90, 0.4);
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.plantName {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: #F4EDE0;
+  margin: 0.25rem 0 0;
+  line-height: 1.1;
+}
+
+.latin {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #8A9A7B;
+  font-style: italic;
+  margin: 0;
+}
+
+.familia,
+.parteUsada {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: rgba(244, 237, 224, 0.6);
+  margin: 0;
+}
+
+.familia em,
+.parteUsada em {
+  color: rgba(244, 237, 224, 0.85);
+  font-style: italic;
+}
+
+/* ── Content container ── */
+.content {
+  padding: 3rem var(--section-px) 5rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+@media (max-width: 560px) {
+  .content { padding: 2rem 1.25rem 4rem; }
+}
+
+/* ── Contraindicaciones (siempre destacadas) ── */
+.contraBox {
+  background: rgba(156, 90, 60, 0.08);
+  border: 1.5px solid rgba(156, 90, 60, 0.3);
+  border-radius: 10px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.contraTitle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9C5A3C;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contraIcon {
+  font-size: 1rem;
+}
+
+.contraList {
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.contraList li {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #7a3a20;
+  line-height: 1.5;
+}
+
+/* ── Sections ── */
+.sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 680px) {
+  .sections { grid-template-columns: 1fr; }
+}
+
+.section,
+.sectionMistica {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.75rem;
+  border: 1px solid rgba(138, 154, 123, 0.14);
+}
+
+.sectionMistica {
+  background: rgba(61, 74, 58, 0.04);
+  border-color: rgba(61, 74, 58, 0.1);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: #3D4A3A;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(138, 154, 123, 0.18);
+}
+
+/* ── Blocks inside sections ── */
+.block {
+  margin-bottom: 1.25rem;
+}
+
+.block:last-child { margin-bottom: 0; }
+
+.blockLabel {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8A9A7B;
+  margin: 0 0 0.5rem;
+  font-weight: 500;
+}
+
+.text {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #4a5845;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Pills (tags) ── */
+.pills {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pills li {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: #3D4A3A;
+  background: rgba(138, 154, 123, 0.12);
+  border: 1px solid rgba(138, 154, 123, 0.22);
+  border-radius: 20px;
+  padding: 3px 10px;
+  line-height: 1.4;
+}
+
+/* ── List ── */
+.list {
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.list li {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: #4a5845;
+  line-height: 1.55;
+}
+
+/* ── Mística grid ── */
+.misticaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.misticaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(184, 147, 90, 0.06);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgba(184, 147, 90, 0.12);
+}
+
+.misticaLabel {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B8935A;
+  font-weight: 500;
+}
+
+.misticaValue {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: #3D4A3A;
+  font-weight: 400;
+}
+
+/* ── Disclaimer ── */
+.disclaimer {
+  background: rgba(138, 154, 123, 0.08);
+  border-left: 3px solid #8A9A7B;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.disclaimer p {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: #5c6e57;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.disclaimer strong {
+  color: #3D4A3A;
+}
+
+/* ── Back link ── */
+.backLink {
+  text-align: center;
+}
+
+.backLink a {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: #8A9A7B;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.backLink a:hover { color: #B8935A; }

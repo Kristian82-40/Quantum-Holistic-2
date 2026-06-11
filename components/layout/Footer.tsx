@@ -7,6 +7,7 @@ const FOOTER_COLS = [
     heading: 'Plataforma',
     links: [
       { label: 'Blog',                href: '/blog' },
+      { label: 'Diccionario',         href: '/diccionario' },
       { label: 'Quantum Pro',         href: '/#pricing' },
     ],
   },

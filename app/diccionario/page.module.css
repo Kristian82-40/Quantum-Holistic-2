@@ -1,0 +1,164 @@
+/* ─── Diccionario: listing page ─── */
+
+.main {
+  background: #F4EDE0;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.inner {
+  padding: 4.5rem var(--section-px) 6rem;
+}
+
+@media (max-width: 560px) {
+  .inner { padding: 2.5rem 1.25rem 4rem; }
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8A9A7B;
+  margin: 0 0 0.75rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 300;
+  color: #3D4A3A;
+  margin: 0 0 1rem;
+  line-height: 1.08;
+}
+
+.title em {
+  font-style: italic;
+  color: #B8935A;
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: #5c6e57;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 920px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* ── Card ── */
+.card {
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(138, 154, 123, 0.14);
+  transition: transform 0.25s var(--ease-out, ease), box-shadow 0.25s var(--ease-out, ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(61, 74, 58, 0.12);
+}
+
+/* ── Card image ── */
+.imageWrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #ede5d8;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease-out, ease);
+  display: block;
+}
+
+.card:hover .image {
+  transform: scale(1.04);
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8dfd2 0%, #d4c9bb 100%);
+}
+
+.placeholder span {
+  font-family: var(--font-serif);
+  font-size: 4.5rem;
+  font-weight: 300;
+  color: #8A9A7B;
+  opacity: 0.55;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── Category badge ── */
+.cat {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.catMaestras { background: rgba(61, 74, 58, 0.82); color: #F4EDE0; }
+.catSagradas { background: rgba(184, 147, 90, 0.88); color: #fff; }
+.catMagicas  { background: rgba(138, 154, 123, 0.88); color: #fff; }
+
+/* ── Card body ── */
+.cardBody {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.plantName {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #3D4A3A;
+  margin: 0 0 0.2rem;
+  line-height: 1.2;
+}
+
+.latin {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: #8A9A7B;
+  font-style: italic;
+  margin: 0;
+}

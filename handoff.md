@@ -1,53 +1,60 @@
-# Handoff — 2026-06-03
+# Handoff — 2026-06-11
 
 ## Estado del proyecto
-- **Deploy Vercel:** main hasta `7fb0700` READY. PR #2 (equinácea) abierto, pendiente merge de Papu.
-- Módulo cerrado: imágenes botánicas + columna verificación + Kimiko.
-- **Kimiko AUTÓNOMA confirmada** (pipeline + LaunchAgent + idempotencia + git/PR validados end-to-end).
+- **Deploy Vercel:** main en `e0dea15` — build limpio, push OK, deploy en curso.
+- Build local: ✓ 31 rutas, 0 errores TypeScript, lint pass.
+- PR #2 (equinácea) sigue abierto pendiente merge.
 
-## Validación autonomía Kimiko (esta sesión)
-- LaunchAgent ya reapuntado al pipeline (commit `f6773da`, deploy READY).
-- Guard idempotencia `nothing staged` añadido (`7fb0700`) tras caso manzanilla (imagen ya en HEAD).
-- **manzanilla** id 51 → INSERT Supabase + imagen ya existente (caso "sin diff", guard OK).
-- **equinacea** id 52 → INSERT Supabase + ciclo COMPLETO: genera → UPDATE → rama `kimiko/images-2026-06-03-13-58` → push → PR #2.
-- PR #2: solo añade `equinacea-cientifica.jpg` (540KB). Limpio. https://github.com/Kristian82-40/Quantum-Holistic-2/pull/2
-- **Pendiente Papu:** mergear PR #2 (= deploy).
+## Módulo trabajado
+Limpieza profunda post-auditoría — reparación de build roto + eliminación de código muerto.
 
-## Completado en esta sesión (Claude Code)
-1. **21 imágenes generadas** vía Wikimedia Commons (Pollinations bloqueado HTTP 402 / x402 payment protocol).
-2. **50 renombres** plant-XX-*-cientifica.jpg → {slug}-cientifica.jpg (20 manifest + 30 legacy).
-3. **Gate prebuild** `scripts/check-plants.ts` — (a) rename OK, (b) residuales prohibidos; dangerous/pending = warning.
-4. **Schema Zod** `lib/schemas/plant.ts` — añade nombre_es, nombre_latino, image_cientifica_url (opcionales).
-5. **Playwright** `tests/e2e/site-health.spec.ts` — cards diccionario + prohibición src plant-XX.
-6. **LaunchAgent** `com.qh.weekend-agent` → `com.qh.kimiko` (unload/load activo).
-7. `data/pending-images.json` vaciado (0 pendientes).
+## Archivos modificados
+- `package.json` — eliminados scripts `prebuild`, `verify`, `gen:manifest`
+- `app/api/chat/route.ts` — fix fallback Ollama: `172.17.0.2` → `localhost`
+- `lib/claude.ts` — fix modelo: `phi4-mini` → `process.env.OLLAMA_MODEL || papu-pro:latest`
+- `lib/email.ts` — eliminada referencia a diccionario de plantas (ruta eliminada)
+- `tests/e2e/site-health.spec.ts` — eliminados tests de `/diccionario` (ruta muerta)
 
-## Kimiko ahora es autónoma end-to-end (pipeline)
-- **NUEVO** `scripts/kimiko-pipeline.mjs`: `generar → UPDATE Supabase → git rama/commit/push → abrir PR`.
-- Credenciales ya presentes en `.env.local`: `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`. `@supabase/supabase-js` instalado. Sin `gh` CLI → uso GitHub REST API.
-- **NUNCA** pushea a main → rama `kimiko/images-<ts>` + PR. El **merge** del PR dispara el deploy (= supervisión humana).
-- Falta SOLO: reapuntar LaunchAgent `com.qh.kimiko` para correr el pipeline en vez del generador suelto (prompt para Code abajo).
+## Eliminado
+| Archivo/Dir | Motivo |
+|---|---|
+| `app/admin/plantas/page.tsx` | Ruta eliminada, commit pendiente |
+| `app/api/admin/plantas/route.ts` | Ídem |
+| `app/recomendador/page.tsx` | Ruta eliminada, commit pendiente |
+| `app/public/` (51 imgs, 14MB) | Directorio no servido por Next.js App Router |
+| `lib/stripe.ts` | Stub null, 0 importaciones reales |
+| `app/lib/posts.ts` | Duplicado de `lib/posts.ts`, 0 importaciones |
+| `app/lib/email.ts` | Duplicado de `lib/email.ts`, 0 importaciones |
+| `components/illustrations/LaboratorioNatural.tsx` | 0 importaciones |
+| `components/illustrations/ManoSanadora.tsx` | 0 importaciones |
+| `scripts/gen-plants-manifest.ts` | Depende de data/*.json inexistentes |
+| `scripts/kimiko-pipeline.mjs` | Ídem |
+| `scripts/qh-generar-imagenes.mjs` | Ídem |
+| `lib/schemas/plant.ts` | Solo usada por scripts eliminados |
+| `@anthropic-ai/sdk` (dep) | 0 imports en código |
+| `@google/generative-ai` (dep) | 0 imports (Gemini usa fetch directo) |
 
-## Próximos pasos (Cowork, ordenados)
-1. ✅ **UPDATE Supabase Fase 1+2 hechas** — 41/50 en patrón `{slug}-cientifica.jpg`, 9 peligrosas legacy intencional.
-2. Reapuntar LaunchAgent al pipeline (Code).
-3. Test autonomía: meter 1 slug a `pending-images.json` y dejar que Kimiko dispare sola.
-4. Verificar `/diccionario` en Vercel tras el deploy
-4. Aprobación manual 9 dangerous (beleno-negro, hierba-mora, tejo, aconito, cornezuelo, cannabis, datura, datura-metel, amanita-muscaria)
-5. Playwright E2E contra prod cuando esté up
+## Conservado (verificado con grep)
+- `next-intl` — usado por `components/providers/LanguageProvider.tsx`
+- `CincoElementos.tsx` — usado por `Footer.tsx`
+- `PlantaMedicinal.tsx` — usado por `components/sections/Pillars.tsx`
+- `QuantumCircle.tsx` — usado por `components/sections/Hero.tsx`
+- `lib/email.ts` — usado por `app/api/webhooks/stripe/route.ts`
+- `app/lib/stripe.ts` — usado por checkout, success, stripe webhook
+- `lib/claude.ts` — usado por `app/api/profile/route.ts`
+- `scripts/kimiko-blog-*.mjs` — NO tocados (pipeline Kimiko activo)
 
-## Decisiones técnicas
-- **Pollinations HTTP 402:** tier gratuito activa x402 micropagos (Base L2). IP Cloudflare compartida. → **Provider default ahora Wikimedia Commons** (ilustraciones botánicas dominio público, calidad superior).
-- **50 renombres (no 20):** gate (b) es general — cualquier plant-XX no-dangerous → ERROR. Se limpiaron todos los legacy.
-- **Schema Zod opcional:** compatibilidad con `page.tsx` que valida solo `{id, slug, categoria}`.
+## Próximos pasos (ordenados por prioridad)
+1. **Verificar deploy Vercel** de `e0dea15` — confirmar 0 errores en producción
+2. **Mergear PR #2** (equinácea) → dispara deploy automático
+3. **Rebuild diccionario** — cuando llegue el momento, crear `scripts/check-plants.ts` nuevo
+4. **Limpiar ramas obsoletas** — `fix/images-and-video-2026-05-13`, `kimiko/images-*` post-merge
 
-## Otros pendientes vivos (sin cambios)
-1. RESEND_API_KEY sin configurar en Vercel.
-2. Dominio quantumholistic.com → Vercel.
-3. Stripe keys live → producción.
-4. n8n `Auto-Bitacora Inactividad` — credenciales nodo `UltimaActividad` caducadas.
+## Decisiones técnicas tomadas
+- `app/lib/email.ts` eliminado aunque era la versión más moderna: 0 importaciones. La webhook activa usa `lib/email.ts`.
+- `next-intl` conservado: `LanguageProvider.tsx` lo usa en el layout raíz.
+- Scripts Kimiko blog (`kimiko-blog-catalog.mjs`, `kimiko-blog-pipeline.mjs`, `kimiko-run-all.sh`) intactos.
+- Footer y sitemap ya no tenían referencias a `/plantas` ni `/recomendador` — nada que limpiar allí.
 
-## Referencias
-- Script Kimiko: `scripts/qh-generar-imagenes.mjs` (PROVIDER=wikimedia default)
-- LaunchAgent: `~/Library/LaunchAgents/com.qh.kimiko.plist` (Label: com.qh.kimiko, interval 14400s)
-- Notion Bitácora 2026-06-03: https://app.notion.com/p/37437a0e7b4581c8a57af064a2788a81
+## Notas para CLAUDE.md
+- Sección 11 menciona `app/admin/plantas` y `/recomendador` — ya no existen.
