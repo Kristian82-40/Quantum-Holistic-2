@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
 import { getPostBySlug } from '@/lib/posts';
 import styles from './page.module.css';
 
@@ -103,6 +104,7 @@ export default async function BlogPostPage(
         </article>
       </main>
       <Footer />
+      <CuentaScrollModal />
     </>
   );
 }

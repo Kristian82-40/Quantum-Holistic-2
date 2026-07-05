@@ -1,0 +1,92 @@
+.main {
+  min-height: 100vh;
+  padding: 64px 0 96px;
+}
+
+.inner {
+  max-width: 760px;
+}
+
+.back {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sage);
+  border: 1px solid var(--sage);
+  padding: 3px 10px;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: clamp(36px, 6vw, 52px);
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.especialidad {
+  font-size: 15px;
+  color: var(--sage);
+  margin: 0 0 32px;
+  letter-spacing: 0.02em;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionLabel {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin: 0 0 12px;
+}
+
+.body {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 12px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 16px 32px;
+  background: var(--sage);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+}

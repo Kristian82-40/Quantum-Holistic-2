@@ -10,7 +10,9 @@ export async function middleware(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) { return req.cookies.get(name)?.value; },
+        get(name: string) {
+          return req.cookies.get(name)?.value;
+        },
         set(name: string, value: string, options: CookieOptions) {
           res.cookies.set({ name, value, ...options });
         },
@@ -24,7 +26,7 @@ export async function middleware(req: NextRequest) {
   const { data: { session } } = await supabase.auth.getSession();
   const { pathname } = req.nextUrl;
 
-  const needsAuth = ['/mi-cuenta', '/terapeuta', '/admin'].some(
+  const needsAuth = ['/cuenta', '/terapeuta', '/admin'].some(
     (p) => pathname.startsWith(p)
   );
 
@@ -56,5 +58,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/mi-cuenta/:path*', '/terapeuta/:path*', '/admin/:path*'],
+  matcher: ['/cuenta/:path*', '/terapeuta/:path*', '/admin/:path*'],
 };

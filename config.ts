@@ -19,6 +19,7 @@ export const NAV_LINKS = [
   { label: 'Planes',       href: '/#pricing' },
   { label: 'Blog',         href: '/blog' },
   { label: 'Diccionario', href: '/diccionario' },
+  { label: 'Terapeutas',  href: '/terapeutas' },
 ] as const;
 
 // ─── Pricing ─────────────────────────────────────────────────

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -105,6 +106,7 @@ export default async function DiccionarioPage() {
         </div>
       </main>
       <Footer />
+      <CuentaScrollModal />
     </>
   );
 }
