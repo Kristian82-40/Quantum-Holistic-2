@@ -50,3 +50,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Migración `especialidades text[]` aplicada** (commit `4326566`), código actualizado en `/terapeuta` y `/terapeutas`.
 - **3 borradores de contenido social redactados**, NO publicados, en la bitácora Notion del día — su CTA depende de `/regalo/primera-noche`, que todavía no existe.
 - Pendiente próxima sesión: construir `/regalo/primera-noche` (lead magnet, falta para cerrar el funnel), decisión de Papu sobre purga de historial + cuenta Gumroad, y confirmar si el proceso `claude --remote-control` (PID 954) detectado al iniciar la sesión era legítimo.
+
+---
+
+## 2026-07-10 — Ciclo tarde (QA · checkout · contenido · blog SEO · leads)
+
+### Aprendizajes
+- **`scripts/kimiko-qa-nocturna.mjs` no carga `.env.local` automáticamente** (no usa `dotenv`) — al correrlo a mano sin `source .env.local` primero, los checks de Vercel API y Supabase fallan con 403 / "key not set", que parece un bug real pero es solo el entorno del shell sin las vars. Siempre `set -a && source .env.local && set +a` antes de correr el script manualmente.
+- **`RitualCheckout.tsx` ya es agnóstico de proveedor de pago** — usa `NEXT_PUBLIC_GUMROAD_URL` como un link de checkout genérico (funciona igual para Gumroad o Lemon Squeezy, no hay lock-in). No hace falta tocar código para soportar ambas plataformas, solo pasar la URL que Papu genere.
+- **El CTA `/regalo/primera-noche` sigue bloqueado** (la página no existe) pero el PDF del lead magnet (`assets/primera-noche-tranquila.pdf`) ya está en disco desde antes — solo falta construir la landing. Mientras tanto, los borradores sociales usan CTA a páginas live (`/producto/ritual-descanso`, `/diccionario`) en vez de enlazar una URL rota.
+- **`leads` y `purchases` siguen en 0 filas** — sin actividad de usuarios reales todavía (checkout de pago no está activo, solo waitlist).
+
+### Qué funciona
+- Insertar blog posts directo en `blog_posts` vía SQL (status `draft`, slug con timestamp, categoría `Herbología`, `tags` como array) es más rápido que pasar por Ollama/papu-pro para un solo artículo puntual — sigue el mismo schema que usa el agente nocturno.
+- Revisar un post `published` existente antes de escribir uno nuevo para calibrar tono (dual Sage+Magician, disclaimer médico al final) da consistencia sin tener que releer el Brand Bible completo cada vez.
+
+### Cierre 2026-07-10 (tarde)
+- QA: **12/13 checks OK** (único fallo esperado: `/regalo/primera-noche`, heredado, no es regresión).
+- Checkout ritual-descanso: sin cambios de código, ya estaba listo — solo falta la cuenta de pago (tarea de Papu).
+- 3 borradores sociales redactados (2 Instagram + 1 LinkedIn), CTA ajustado a páginas live, sin publicar.
+- 1 borrador de blog SEO creado (`nutricion-km0-herbologia-plantas-medicinales-de-proximidad-1783698312`), keywords nutrición km0/herbología/plantas medicinales, status `draft`.
+- Tabla `leads`: 0 filas nuevas, nada que reportar. `purchases`: 0 filas.
+- Bitácora Notion del ciclo: https://app.notion.com/p/39937a0e7b4581958476c2ae0d1925e1
+- Pendiente próxima sesión: decisión de Papu sobre construir `/regalo/primera-noche` (PDF ya listo, falta landing), purga de historial del PDF de pago, cuenta Gumroad/Lemon Squeezy, aprobación de los 3 borradores sociales y del borrador de blog.
