@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { POSTS } from '@/lib/posts';
 
-const BASE = 'https://quantumholistic.com';
+const BASE = 'https://quantum-holistic.com';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 

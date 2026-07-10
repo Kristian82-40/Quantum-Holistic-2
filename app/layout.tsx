@@ -4,7 +4,7 @@ import { LanguageProvider } from '@/components/providers/LanguageProvider';
 import { Analytics } from '@vercel/analytics/react';
 import ChatBot from '@/components/ui/ChatBot';
 
-const SITE_URL = 'https://quantumholistic.com';
+const SITE_URL = 'https://quantum-holistic.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

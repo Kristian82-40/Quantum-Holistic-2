@@ -3,6 +3,6 @@ import { MetadataRoute } from 'next';
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: '*', allow: '/' },
-    sitemap: 'https://quantumholistic.com/sitemap.xml',
+    sitemap: 'https://quantum-holistic.com/sitemap.xml',
   };
 }
