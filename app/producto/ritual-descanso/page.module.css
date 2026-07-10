@@ -1,0 +1,124 @@
+.main {
+  min-height: 90vh;
+  padding: 140px var(--section-px) 100px;
+  background: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  max-width: 620px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage);
+  border: 1px solid var(--sage);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.price span {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.desc {
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+
+.list {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.list li {
+  color: var(--text-primary);
+  font-weight: 300;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.list li::before {
+  content: '◈';
+  color: var(--sage);
+  flex-shrink: 0;
+}
+
+.form {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.input {
+  flex: 1;
+  min-width: 220px;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.cta {
+  display: inline-block;
+  padding: 0.85rem 1.8rem;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity var(--dur-fast);
+}
+
+.cta:hover {
+  opacity: 0.85;
+}
+
+.cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.success {
+  color: var(--sage);
+  font-weight: 400;
+}
