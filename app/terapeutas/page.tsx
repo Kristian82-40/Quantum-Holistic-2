@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 interface Terapeuta {
   id: string;
   full_name: string | null;
-  especialidad: string | null;
+  especialidades: string[] | null;
   bio: string | null;
 }
 
@@ -24,7 +24,7 @@ async function getTerapeutas(): Promise<Terapeuta[]> {
   if (!url || !key) return [];
   try {
     const res = await fetch(
-      `${url}/rest/v1/profiles?select=id,full_name,especialidad,bio&role=eq.terapeuta&verified=eq.true&order=full_name`,
+      `${url}/rest/v1/profiles?select=id,full_name,especialidades,bio&role=eq.terapeuta&verified=eq.true&order=full_name`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: 'no-store' }
     );
     if (!res.ok) return [];
@@ -65,7 +65,9 @@ export default async function TerapeutasPage() {
             {terapeutas.map((t) => (
               <div key={t.id} className={styles.card}>
                 <h2 className={styles.name}>{t.full_name}</h2>
-                {t.especialidad && <p className={styles.especialidad}>{t.especialidad}</p>}
+                {t.especialidades && t.especialidades.length > 0 && (
+                  <p className={styles.especialidad}>{t.especialidades.join(' · ')}</p>
+                )}
                 {t.bio && <p className={styles.bio}>{t.bio}</p>}
               </div>
             ))}

@@ -8,7 +8,7 @@ type Profile = {
   id: string;
   full_name: string;
   email: string;
-  especialidad: string | null;
+  especialidades: string[] | null;
   bio: string | null;
   verified: boolean;
   plan: string;
@@ -26,7 +26,7 @@ export default function TerapeutaDashboard() {
 
       const { data } = await supabase
         .from('profiles')
-        .select('id, full_name, email, especialidad, bio, verified, plan, role')
+        .select('id, full_name, email, especialidades, bio, verified, plan, role')
         .eq('id', user.id)
         .single();
 
@@ -80,10 +80,10 @@ export default function TerapeutaDashboard() {
           <h1 style={s.name}>{profile?.full_name}</h1>
           <p style={s.email}>{profile?.email}</p>
 
-          {profile?.especialidad && (
+          {profile?.especialidades && profile.especialidades.length > 0 && (
             <div style={s.field}>
-              <span style={s.fieldLabel}>Especialidad</span>
-              <p style={s.fieldValue}>{profile.especialidad}</p>
+              <span style={s.fieldLabel}>Especialidades</span>
+              <p style={s.fieldValue}>{profile.especialidades.join(' · ')}</p>
             </div>
           )}
 
