@@ -1,42 +1,41 @@
-# Handoff — 2026-07-05
+# Handoff — 2026-07-10
 
 ## Estado del proyecto
-- **Bloque Auth + Captación** (handoff Notion 2026-07-04) ejecutado completo, Pasos 1-5.
-- Build local: ✓ 35 rutas, 0 errores.
-- PR #2 (equinácea) sigue abierto pendiente merge (pendiente de sesiones anteriores).
+- Directiva Cowork 2026-07-10 ejecutada en orden estricto (6 prioridades). Producción al día (`quantum-holistic.com`).
+- Build local: ✓ 36 rutas, 0 errores. QA nocturna: 12/13 checks OK (el único que falla, `/regalo/primera-noche`, es esperado — la página no existe todavía).
+- Commits del día (main, todos pusheados y deployados): `3b7c152` (P0 SEO), `fc617a3` (mitigación PDF expuesto), `195d299` (landing ritual-descanso + QA script), `4326566` (migración `especialidades`).
 
 ## Módulos completados esta sesión
-1. **Migración `profiles`** — trigger `handle_new_user()` (auto-insert al registrarse, lee `role` de metadata) + policy pública de lectura para terapeutas verificados. La tabla `profiles` YA EXISTÍA (no se recreó); solo faltaban trigger y policies.
-2. **Auth migrado a magic-link** (decisión de Kristian) — `/login`, `/registro` (selector Cliente/Terapeuta) reescritos con `signInWithOtp`, componente compartido `components/auth/MagicLinkForm.tsx`. `/registro/terapeuta` ahora redirige a `/registro`.
-3. **`app/auth/callback/route.ts`** — nuevo, intercambia el code del magic-link por sesión.
-4. **`middleware.ts` reubicado a la raíz** — estaba en `app/middleware.ts` y Next.js NUNCA lo ejecutaba (bug heredado, protección de rutas inactiva en producción hasta hoy). Ahora protege `/cuenta`, `/terapeuta`, `/admin`. Verificado: build muestra `ƒ Middleware` (antes no aparecía) y `curl` confirma redirect 307 a `/login?redirect=...`.
-5. **`/cuenta`** (nueva) — perfil, selector de dosha (Vata/Pitta/Kapha, escribe a Supabase), listado de compras (`purchases` + `products`).
-6. **Modal scroll-trigger** `components/ui/CuentaScrollModal.tsx` — aparece al 50% de scroll en `/diccionario`, `/diccionario/[slug]`, `/blog`, `/blog/[slug]`. Una vez por sesión (`sessionStorage`), cerrable, no bloquea en móvil.
-7. **`/terapeutas`** (directorio público) + **`/terapeutas/papu`** (perfil destacado del fundador, botón "Reservar consulta · €65" vía mailto). Añadido al nav (`config.ts`).
-8. **`KIMIKO_MEMORIA.md`** creado (diario de aprendizaje, Paso 0 del handoff).
+1. **P0 SEO**: `canonical`/`og:url`/`sitemap.ts`/`robots.ts`/`config.ts` corregidos de `quantumholistic.com` → `https://quantum-holistic.com`. Verificado en producción con curl.
+2. **Autostart Kimiko**: `StartOnMount` no disparaba en remontajes repetidos (`runs=1` desde el 5-jul). Cambiado a `WatchPaths` sobre `/Volumes/Papu Ext` + logging real (antes se silenciaba stderr de `osascript`). Backup del plist/script original en `~/bin/qh/backup/`.
+3. **QA nocturna ampliada**: `scripts/kimiko-qa-nocturna.mjs` +check #10 (middleware.ts en raíz + `/admin` redirige) +check #11 (canonical/og:url en prod). Bug corregido: `PRODUCTION_URL` apuntaba al alias `*.vercel.app` con SSO activo → falsos positivos en los 3 checks de rutas desde que el script existe.
+4. **Checkout "El Ritual del Descanso"**: landing `/producto/ritual-descanso` (19€, copy, CTA con fallback a lead capture). Fila en `products`. Hallazgo crítico: el PDF de pago era descargable gratis vía `raw.githubusercontent.com` (repo público) — mitigado parcialmente (`git rm --cached` + `.gitignore`); purga completa del historial pendiente de aprobación de Papu.
+5. **Migración `profiles.especialidad` → `especialidades text[]`**: aplicada directo (0 filas con dato real), código actualizado en `/terapeuta` y `/terapeutas`.
+6. **3 borradores de contenido social** redactados en la bitácora Notion del día — sin publicar.
 
 ## Decisiones técnicas tomadas
-- **No se recreó `profiles`**: el handoff de Notion asumía que no existía; auditoría (`list_tables`) mostró que sí, con casi todas las columnas pedidas. Solo se añadió lo que realmente faltaba (trigger + policies). Ver `KIMIKO_MEMORIA.md` para el detalle.
-- **Migración completa a magic-link** (no híbrido) — confirmado explícitamente por Kristian en sesión.
-- Rol interno sigue siendo `user`/`terapeuta`/`admin` (constraint ya existente en DB) aunque la UI de `/registro` lo etiquete como "Cliente" — evita romper el check constraint y el código ya dependiente de `role==='user'`.
-- `app/middleware.ts` (ubicación rota) se borró; la lógica vive ahora solo en `middleware.ts` (raíz).
+- No se usó patrón de 2 fases para la migración `especialidades` — columna no UNIQUE, blast radius cero (solo 1 fila real).
+- PDF de pago desvinculado de git tracking pero mantenido en disco local — purga de historial (`filter-repo`/BFG + force-push) es acción irreversible sobre repo compartido, requiere OK explícito de Papu.
+- Checkout usa `NEXT_PUBLIC_GUMROAD_URL` como interruptor: si no está seteada, cae a captura de lead (`leads.source=ritual_descanso_waitlist`); en cuanto Papu cree la cuenta y pase la URL, el botón se activa sin tocar código.
 
 ## Pendiente / deuda técnica detectada (no tocada esta sesión)
-1. **`app/` contiene un scaffolding de proyecto duplicado** (`app/package.json`, `app/next.config.js`, `app/tsconfig.json`, `app/vercel.json`, `app/node_modules`, `app/.vercel`, `app/CLAUDE.md`). Next.js lo ignora (App Router solo lee `page.tsx`/`layout.tsx`/`route.ts`) pero es deuda técnica — requiere auditoría antes de limpiar.
-2. **Directorio `/terapeutas`** hoy solo muestra a Papu (fundador, hardcoded) — no hay terapeutas verificados reales en `profiles` todavía. Se llenará cuando se aprueben registros vía `/registro` (selector Terapeuta) + verificación manual (`verified=true`).
-3. **`especialidad` sigue siendo texto simple** (no array) — el handoff pedía `especialidades text[]`; se mantuvo el campo existente para no romper `app/terapeuta/page.tsx`. Si se necesita multi-especialidad, es una migración aparte.
-4. **Reservar consulta** apunta a `mailto:` — pendiente integrar Calendly u otro sistema de citas (explícitamente pospuesto por el handoff).
-5. Pendientes heredados de sesiones anteriores sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
+1. `app/` sigue conteniendo el scaffolding duplicado (`app/package.json`, `app/next.config.js`, etc.) — deuda técnica conocida, no tocar sin auditoría.
+2. `/regalo/primera-noche` (lead magnet) no existe — bloquea el CTA de los 3 borradores sociales de hoy y el funnel completo `regalo → lead → producto`.
+3. Purga de historial de git del PDF de pago — pendiente de aprobación explícita de Papu.
+4. Cuenta Gumroad/Lemon Squeezy — pendiente de que Papu la cree (paso manual, ver bitácora Notion).
+5. Proceso `claude --remote-control` (PID 954, tty s001, corriendo desde las 10:25 del 2026-07-10) detectado al iniciar sesión — origen sin confirmar, no se tocó.
+6. Heredado de sesiones anteriores sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
 
 ## Próximos pasos (ordenados por prioridad)
-1. **Commit + push + deploy Vercel** de este Bloque Auth (siguiente acción de esta sesión).
-2. **Añadir checks de QA nocturna** para rutas auth (`/login`, `/registro`, `/cuenta`, `/terapeutas` responden 200; tabla `profiles` con trigger activo).
-3. Revisar plantilla de bitácora del Plan Maestro (secciones "☀️ Tareas manuales de Papu hoy" y "📚 Aprendí hoy") — pendiente de escribir en Notion al cierre.
-4. Pendientes heredados (ver arriba, punto 5).
+1. Decisión de Papu: purga de historial del PDF + cuenta Gumroad/Lemon Squeezy (ver "Tareas manuales de Papu hoy" en la bitácora Notion del día).
+2. Construir `/regalo/primera-noche` — desbloquea el funnel y los borradores sociales.
+3. Dar de alta `quantum-holistic.com` en Google Search Console + enviar sitemap (ahora que el canonical es correcto).
+4. Confirmar en un remontaje real del disco que el fix de `WatchPaths` dispara el autostart correctamente (el test de hoy fue manual, no vía mount real).
 
 ## Scripts disponibles
 | Script | Función |
 |---|---|
+| `node scripts/kimiko-qa-nocturna.mjs` | QA 11+ checks: build, rutas, Supabase, assets, middleware, canonical/og:url. `env -u NOTION_API_KEY` para correr sin postear bitácora. |
 | `node scripts/qh-imagenes-v2.mjs` | Descarga imágenes Wikimedia para slugs faltantes |
 | `bash scripts/kimiko-run-all.sh` | Pipeline Kimiko: genera blog posts + imágenes |
 | `bash scripts/auto-flow-state.sh` | Estado del proyecto |
