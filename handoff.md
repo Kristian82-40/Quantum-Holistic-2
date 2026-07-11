@@ -1,42 +1,44 @@
-# Handoff — 2026-07-10 (ciclo tarde)
+# Handoff — 2026-07-11 (v3 headless)
 
 ## Estado del proyecto
-- Ciclo de continuación ejecutado en orden: QA → checkout → contenido social → blog SEO → leads. Producción estable (`quantum-holistic.com`), sin regresiones.
-- QA: 12/13 checks OK. Único fallo: `/regalo/primera-noche` → 404 (esperado, página no existe todavía — heredado, no es regresión).
-- Sin commits de código este ciclo (no hicieron falta cambios — checkout ya estaba listo del ciclo anterior).
+- Run v3 headless ejecutada en modo operadora total (mandato Papu 2026-07-11 16:30): ciclo completo salud → QA → monetización → contenido → bitácora, sin esperar aprobación adicional.
+- Producción estable (`quantum-holistic.com`), deploy READY (`dpl_GkKaziEAMzrpsJQ434bWxj2Um6Gg`, commit `dcb76bf`). QA **13/13 checks OK** (primera vez completo).
+- **Funnel de monetización completo y en producción**: `/regalo/primera-noche` (lead magnet gratis) → `leads` → `/producto/ritual-descanso` (€19, checkout listo salvo cuenta de pago).
 
 ## Módulos completados esta sesión
-1. **QA completo**: 12/13 checks. Confirmado estable tras el ciclo anterior (canonical/og:url, middleware, plantas 52/52, placeholders 9/9 intactos).
-2. **Checkout "El Ritual del Descanso"**: sin cambios necesarios — `RitualCheckout.tsx` ya usa `NEXT_PUBLIC_GUMROAD_URL` como interruptor genérico (sirve para Gumroad o Lemon Squeezy). Solo falta que Papu cree la cuenta y pase la URL.
-3. **3 borradores de contenido social** (2 Instagram + 1 LinkedIn), tono Sage+Magician, ligados a insomnio de verano / nutrición km0 / herbología de temporada. CTA apuntando a páginas live (`/producto/ritual-descanso`, `/diccionario`) en vez de `/regalo/primera-noche` (no existe). En bitácora Notion, sin publicar.
-4. **1 borrador de blog SEO**: "Nutrición Km0 y Herbología: el Poder de las Plantas Medicinales de Proximidad" — keywords nutrición km0/herbología/plantas medicinales. Guardado en `blog_posts` (status `draft`, categoría Herbología).
-5. **Revisión tabla `leads`**: 0 filas, sin novedad. `purchases`: 0 filas.
+1. **Salud v3**: instancia única confirmada (lock `mkdir` en orden, sin runaway), registrado en bitácora.
+2. **QA completa**: 13/13 checks OK, incluye por primera vez `/regalo/primera-noche`.
+3. **`/regalo/primera-noche` construida** (commit `dcb76bf`): landing con formulario de email → `POST /api/leads` (`source=primera_noche_regalo`, mismo endpoint que ya existía, sin cambios de backend) → entrega inmediata del PDF `primera-noche-tranquila.pdf` (copiado a `public/downloads/` para servir estático) → CTA final a `/producto/ritual-descanso`. Añadida al sitemap.
+4. **Funnel verificado extremo a extremo en producción**: página 200 (tras redirect 308 esperado por `trailingSlash:true`), lead insertado y confirmado por SQL directo en Supabase (luego borrado, era de prueba), PDF descargable, CTA al producto de pago.
+5. **3 borradores sociales** (2 Instagram + 1 LinkedIn) con CTA real a `/regalo/primera-noche` — ya no apuntan a páginas sustitutas. Sin publicar.
+6. **Blog SEO**: sin borrador nuevo — el de ayer ("Nutrición Km0 y Herbología") sigue en `draft` pendiente de aprobación en `/admin/blog`, cadencia semanal respetada.
 
 ## Decisiones técnicas tomadas
-- No se tocó código de checkout — ya está listo desde el ciclo anterior, agnóstico de proveedor de pago.
-- CTA de los borradores sociales redirigido a páginas live en vez de `/regalo/primera-noche` para no publicar un link roto (decisión documentada en bitácora, pendiente de que Papu decida si construir esa página).
+- `/regalo/primera-noche` se construyó sin pedir aprobación adicional: el mandato de Papu del 2026-07-11 (16:30, "modo operadora total") lista explícitamente el funnel completo como parte del ciclo estándar de cada run — reemplaza el pendiente de sesiones anteriores de "esperar decisión".
+- PDF del lead magnet gratuito servido desde `public/downloads/` sin gating adicional (distinto del PDF de pago, que sigue fuera de `public/` y de git por la mitigación de seguridad de ciclos anteriores).
 
 ## Pendiente / deuda técnica detectada (no tocada esta sesión)
-1. `/regalo/primera-noche` (lead magnet) sigue sin existir — el PDF (`assets/primera-noche-tranquila.pdf`) ya está en disco, solo falta la landing. Bloquea el CTA "real" de los borradores sociales y el funnel completo.
+1. Cuenta Gumroad/Lemon Squeezy — único bloqueador restante del primer € del funnel (tarea manual de Papu).
 2. Purga de historial de git del PDF de pago (`ritual-descanso.pdf`) — pendiente de aprobación explícita de Papu (acción irreversible, force-push).
-3. Cuenta Gumroad/Lemon Squeezy — pendiente de que Papu la cree (paso manual).
+3. `quantum-holistic.com` en Google Search Console + enviar sitemap actualizado (ya incluye `/regalo/primera-noche`) — pendiente de ciclos anteriores.
 4. `app/` sigue conteniendo scaffolding duplicado — deuda técnica conocida, no tocar sin auditoría.
-5. Heredado de sesiones anteriores sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura), proceso `claude --remote-control` (PID 954) sin confirmar origen.
+5. Heredado sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
 
 ## Próximos pasos (ordenados por prioridad)
-1. Decisión de Papu: ver "Tareas manuales de Papu hoy" en la bitácora Notion de este ciclo (cuenta de pago, aprobar borradores sociales y de blog, decidir sobre `/regalo/primera-noche`, purga de historial).
-2. Si Papu aprueba: construir `/regalo/primera-noche` — desbloquea el funnel y los CTA reales de los borradores sociales.
-3. Dar de alta `quantum-holistic.com` en Google Search Console + enviar sitemap (pendiente de ciclos anteriores).
-4. Confirmar en un remontaje real del disco que el fix de `WatchPaths` del autostart dispara correctamente.
+1. Papu: crear cuenta de pago y pasar `NEXT_PUBLIC_GUMROAD_URL` en Vercel — activa el botón de compra sin tocar código.
+2. Papu: aprobar los 3 borradores sociales y el borrador de blog pendiente.
+3. Dar de alta `quantum-holistic.com` en Google Search Console + enviar sitemap.
+4. Próxima run v3: seguir el ciclo estándar (salud → QA → monetización → contenido → bitácora) sin esperar directiva nueva, salvo que Papu indique lo contrario.
 
 ## Scripts disponibles
 | Script | Función |
 |---|---|
-| `node scripts/kimiko-qa-nocturna.mjs` | QA 13 checks: build, rutas, Supabase, assets, middleware, canonical/og:url. Requiere `source .env.local` antes si se corre a mano (no carga dotenv solo). `env -u NOTION_API_KEY` para correr sin postear bitácora. |
+| `node scripts/kimiko-qa-nocturna.mjs` | QA 13 checks: build, rutas, Supabase, assets, middleware, canonical/og:url. Requiere `source .env.local` antes si se corre a mano. `env -u NOTION_API_KEY` para correr sin postear bitácora. |
 | `node scripts/qh-imagenes-v2.mjs` | Descarga imágenes Wikimedia para slugs faltantes |
 | `bash scripts/kimiko-run-all.sh` | Pipeline Kimiko: genera blog posts + imágenes |
 | `bash scripts/auto-flow-state.sh` | Estado del proyecto |
 
 ## Referencias
-- Bitácora Notion de este ciclo: https://app.notion.com/p/39937a0e7b4581958476c2ae0d1925e1
-- Blog draft creado: `blog_posts.slug = nutricion-km0-herbologia-plantas-medicinales-de-proximidad-1783698312`
+- Bitácora Notion de este ciclo: https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
+- Bitácora "raíz" con mandatos de Papu (leer siempre, se prependea cronológicamente): https://app.notion.com/p/36c37a0e7b45812f8628f31630109924
+- Deploy producción: `dpl_GkKaziEAMzrpsJQ434bWxj2Um6Gg` (commit `dcb76bf`)

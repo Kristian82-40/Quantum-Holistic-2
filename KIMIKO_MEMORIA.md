@@ -73,3 +73,28 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Tabla `leads`: 0 filas nuevas, nada que reportar. `purchases`: 0 filas.
 - Bitácora Notion del ciclo: https://app.notion.com/p/39937a0e7b4581958476c2ae0d1925e1
 - Pendiente próxima sesión: decisión de Papu sobre construir `/regalo/primera-noche` (PDF ya listo, falta landing), purga de historial del PDF de pago, cuenta Gumroad/Lemon Squeezy, aprobación de los 3 borradores sociales y del borrador de blog.
+
+---
+
+## 2026-07-11 — Sesión v3 headless: /regalo/primera-noche construida, funnel completo
+
+### Aprendizajes
+- **Arquitectura de autostart migró a v3 headless tras 3 incidentes de "runaway"** (múltiples ventanas de Terminal/Kimiko sin trabajo real). Causa raíz: `StartOnMount` disparaba ráfagas de eventos en cada remontaje del volumen. v3 elimina `StartOnMount`, usa `StartInterval` 4h + lock atómico por `mkdir` (`~/bin/qh/kimiko.lockdir`, más fiable que `pgrep` de argv) + cooldown 3h + watchdog que mata la sesión a las 3h si cuelga. Logs por sesión en `~/bin/qh/kimiko-session-YYYYMMDD-HHMM.log`. Antes de tocar nada al iniciar una run: verificar `ps aux | grep remote-control` y el contenido de `kimiko.lockdir/pid` contra el propio PID — evita duplicar trabajo si ya hay una sesión legítima corriendo.
+- **Mandato "modo operadora total" (Papu, 2026-07-11 16:30): cada run ejecuta el ciclo completo (salud → QA → monetización → contenido → bitácora) sin esperar aprobación nueva.** La run anterior (16:07) rompió esto al terminar en 1 minuto solo con una pregunta ("¿apruebas construir /regalo/primera-noche?") en vez de ejecutar — quedó corregido explícitamente por la nueva directiva. Las decisiones que ya están declaradas como parte del ciclo estándar (ej. "funnel /regalo/primera-noche → leads → producto verificado extremo a extremo" listado en el paso 3 de monetización) no requieren preguntar de nuevo, se ejecutan directo.
+- **El directorio `/regalo/` no existía como ruta pero el plan maestro de monetización lo daba por "ya live" desde el 2026-07-04** — la bitácora de negocio (Notion) puede quedar desactualizada respecto al código real igual que el handoff técnico; verificar siempre contra `find`/`curl`, no contra lo que dice la documentación de producto.
+- **Un lead magnet gratuito no necesita el mismo tratamiento de seguridad que un producto de pago**: el PDF (`primera-noche-tranquila.pdf`) se copia a `public/downloads/` y se sirve estático sin gating adicional — el único "gate" es el formulario de email. Esto es intencionalmente distinto de `ritual-descanso.pdf` (pago), que sigue fuera de `public/` y de git.
+- **El patrón de captura de lead (`RitualCheckout.tsx` → `POST /api/leads`) es completamente reutilizable sin tocar backend**: el endpoint ya acepta cualquier `source` arbitrario. Construir un segundo punto de captura del funnel fue solo frontend (page.tsx + client component + reusar page.module.css con un estilo extra para el link secundario).
+- **`trailingSlash: true` en `next.config.js` hace que TODA ruta (páginas y API routes) devuelva 308 → redirect con slash final** — esto es comportamiento global esperado del sitio, no un bug de la ruta nueva. Verificar con `curl -sL` (sigue redirects) en vez de leer el primer status code a secas, si no, cualquier ruta nueva parece "rota" cuando no lo está.
+
+### Qué funciona
+- Verificar el lock (`~/bin/qh/kimiko.lockdir/pid`) contra el propio PID de proceso al iniciar una run headless es un chequeo de 10 segundos que evita todo el problema de runaway — hacerlo siempre antes de tocar código.
+- Revisar la página de bitácora "raíz" del proyecto en Notion (la que acumula directivas prependeadas cronológicamente) en vez de solo la última bitácora de cierre — ahí es donde Papu deja mandatos nuevos que pueden reemplazar o superar lo que dice `handoff.md`. En este ciclo, `handoff.md` decía "pendiente decisión de Papu sobre /regalo/primera-noche" pero la bitácora Notion de hoy ya traía la decisión tomada (construirlo, sin preguntar más).
+- `mcp__Supabase__execute_sql` para verificar de punta a punta que un lead insertado vía API realmente llegó a la tabla — mejor que asumir por el código 200 de la respuesta. Borrar el registro de prueba inmediatamente después evita ensuciar `leads` con datos ficticios.
+
+### Cierre 2026-07-11 (v3 headless)
+- **QA 13/13 checks OK** — primera vez que pasa completo, todos los checks incluido `/regalo/primera-noche`.
+- **`/regalo/primera-noche` construida y en producción** (commit `dcb76bf`): landing + captura de lead (`source=primera_noche_regalo`) + entrega inmediata de PDF + CTA a `/producto/ritual-descanso`. Funnel completo verificado extremo a extremo en producción (curl + SQL directo).
+- **3 borradores sociales** con CTA real a `/regalo/primera-noche` (ya no a páginas sustitutas), sin publicar.
+- **Blog SEO**: sin borrador nuevo — el de ayer sigue pendiente de aprobación, cadencia semanal respetada.
+- Bitácora Notion: https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
+- Pendiente próxima sesión: cuenta Gumroad/Lemon Squeezy (único bloqueador del primer €), aprobación de borradores sociales/blog, Google Search Console, purga de historial del PDF de pago (pendiente de OK explícito, irreversible).
