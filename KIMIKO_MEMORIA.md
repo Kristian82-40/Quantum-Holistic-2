@@ -124,3 +124,32 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Segundo ciclo del mismo día: QA **13/13**, deploy READY commit `58afed4`. `leads`/`purchases` sin cambio (0/0), backlog `blog_posts` sin cambio (88 drafts).
 - Housekeeping: `logs/kimiko-qa-nocturna.log` quedaba untracked en el repo desde antes — añadido `logs/` a `.gitignore`. Ningún log de script debería versionarse; si aparece uno nuevo untracked, es señal de que falta esa entrada, no un hallazgo de contenido.
 - Todos los pendientes siguen siendo bloqueantes manuales de Papu (TCC, backlog de drafts, Gumroad, Search Console, redes) — nada nuevo que Kimiko pueda resolver de forma autónoma en este ciclo.
+
+---
+
+## 2026-07-23 — Primer ciclo Kimiko Cloud (GitHub Actions, v4 Operadora Total)
+
+### Aprendizajes
+- **Migración a GitHub Actions (`kimiko-cloud.yml`) resuelve el bloqueador TCC/launchd** que impedía correr en background desde 2026-07-11 — el entorno cloud no depende del disco Papu Ext ni de permisos macOS. Sin lock local: la concurrencia la gestiona el `concurrency: group: kimiko` del workflow.
+- **La tabla de plantas en Supabase se llama `plants`, no `plantas`.** El prompt del ciclo (`kimiko/PROMPT.md`) dice "plantas" en el paso 1.5 — es solo terminología del prompt, la tabla real siempre fue `plants` (confirmado también en `app/diccionario/page.tsx`). No es un bug, es una imprecisión de redacción del prompt — no la corregí sin más contexto porque no es mío decidir tocar el prompt operativo sin que Papu lo revise.
+- **El entorno cloud NO tiene canal para ejecutar DDL en Supabase.** Solo llegan `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` como secrets (API REST/PostgREST, para datos, no schema). A diferencia de las sesiones interactivas anteriores que sí tenían `mcp__Supabase__execute_sql`, aquí no hay MCP de Supabase ni Management API token. Bloqueó la tarea "insertar cita diaria en tabla `citas`" del paso 5.3 porque la tabla no existe y no se puede crear vía REST. **Si Papu quiere que Kimiko Cloud pueda migrar, necesita añadir un secret con Management API token o connection string al workflow.**
+- **La feature "Tu Planta Aliada" (paso 2) no necesita migración nueva.** El campo `ficha_mistica.afinidad_ayurvedica` ya existe y está poblado en 50/52 plantas (`plants` es JSONB para `ficha_mistica`) — solo faltan `manzanilla` y `equinacea`. Antes de proponer cualquier migración para una feature nueva, revisar primero si el dato ya vive en un campo JSONB existente — ahorra una migración completa.
+- **El build de producción incluye `/api/webhooks/btcpay`**, código de una pasarela de pago (cripto) explícitamente descartada por directiva ("Pasarela de pago descartada: BTCPay/cripto"). Es deuda técnica heredada, no se tocó — documentado en bitácora para que Papu decida si se borra.
+- **Backlog de `blog_posts` en `draft` subió a 90** (era 88 el 2026-07-23 tarde/noche) — de esos, al menos 8 violan el checklist anti-pseudociencia de forma inequívoca solo por el título (chakras×4, reiki, cristales, biodescodificación, "nutrición cuántica"). Encontrar ejemplos concretos y citarlos en la bitácora es más útil para Papu que solo repetir "hay backlog sin revisar" — da algo accionable de inmediato (ese subconjunto se puede archivar/borrar sin debate).
+- **`curl -X POST` contra una ruta con `trailingSlash: true` en `next.config.js` pierde el body/método si se sigue el 308 con `-L`** sin más — mejor apuntar directo a la URL con slash final (`/api/leads/`) que confiar en que curl reenvíe correctamente un 308 con verbo POST.
+
+### Qué funciona
+- Test end-to-end real del funnel de leads (POST → verificar en Supabase → DELETE del registro de prueba) sigue siendo la forma más confiable de confirmar que un funnel vive en producción, no solo que las páginas devuelven 200.
+- Revisar `Vercel API /v9/projects/<id>/env` para confirmar si una env var existe es más rápido y menos ambiguo que inferirlo del comportamiento del frontend.
+- Verificar en el mismo ciclo que ninguna de las 9 plantas peligrosas tenga un archivo de imagen huérfano en disco (`public/images/plants/<slug>-cientifica.jpg`) además de comprobar que el campo en Supabase sea `null` — cubre tanto el vector "alguien puso el campo" como "alguien subió el archivo pero se le olvidó el campo".
+
+### Cierre 2026-07-23 (ciclo cloud 16:50 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. `next@14.2.5` con vulnerabilidad de seguridad conocida — no actualizado este ciclo (requiere validación completa, no es un bump trivial).
+- 52 plantas íntegras, 9 peligrosas con placeholder intacto (doble verificación: campo null + sin archivo huérfano). 43 plantas seguras con imagen válida en disco, 0 faltantes.
+- Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` reverificado extremo a extremo (POST real + verificación SQL + limpieza). `leads`/`purchases` en 0 filas — sin actividad real todavía.
+- Gumroad: `NEXT_PUBLIC_GUMROAD_URL` sigue sin existir en Vercel — único bloqueador del primer cobro.
+- Propuesta de esquema para "Tu Planta Aliada" en bitácora (usa campo ya existente, sin migración) — sin implementar, pendiente de OK de Papu.
+- Cita diaria: bloqueada por falta de canal DDL en el entorno cloud — nuevo hallazgo de infraestructura, no accionable sin que Papu añada un secret.
+- Sin contenido de blog nuevo — backlog de 90 drafts (8 con violación explícita del checklist) sigue sin revisión de Papu. 2 borradores sociales redactados en bitácora, sin publicar.
+- Sin commits de código este ciclo (nada que arreglar); la bitácora la commitea el workflow según `kimiko-cloud.yml`.
+- Pendiente próxima sesión: Gumroad, secret de Management API/connection string para DDL, decisión sobre backlog de blog (90 drafts, 8 con violación de checklist), decisión sobre `/api/webhooks/btcpay` heredado.
