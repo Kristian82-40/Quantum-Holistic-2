@@ -119,3 +119,8 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Sin contenido nuevo generado** — decisión deliberada por backlog de 88 drafts sin revisar.
 - Commit `e56967a` (solo handoff, ningún cambio de código).
 - Pendiente próxima sesión: TCC/Full Disk Access (Papu), decisión sobre backlog de 85 drafts viejos (Papu), Gumroad, Search Console, aprobación de borradores existentes.
+
+### Cierre 2026-07-23 (noche)
+- Segundo ciclo del mismo día: QA **13/13**, deploy READY commit `58afed4`. `leads`/`purchases` sin cambio (0/0), backlog `blog_posts` sin cambio (88 drafts).
+- Housekeeping: `logs/kimiko-qa-nocturna.log` quedaba untracked en el repo desde antes — añadido `logs/` a `.gitignore`. Ningún log de script debería versionarse; si aparece uno nuevo untracked, es señal de que falta esa entrada, no un hallazgo de contenido.
+- Todos los pendientes siguen siendo bloqueantes manuales de Papu (TCC, backlog de drafts, Gumroad, Search Console, redes) — nada nuevo que Kimiko pueda resolver de forma autónoma en este ciclo.

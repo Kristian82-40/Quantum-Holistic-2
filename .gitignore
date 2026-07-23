@@ -27,3 +27,6 @@ public/images/plants/_pending-approval/
 # PDF de pago — NUNCA en el repo (era descargable gratis vía raw.githubusercontent.com,
 # ver QH_MASTER_VERIFIED.md bloqueo #0). Vive solo en local hasta migrar a storage privado.
 assets/ritual-descanso.pdf
+
+# Logs locales de scripts (QA nocturna, agentes)
+logs/

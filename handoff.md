@@ -1,17 +1,13 @@
-# Handoff — 2026-07-23 (ciclo interactivo, tarde)
+# Handoff — 2026-07-23 (ciclo interactivo, noche)
 
 ## Ciclo ejecutado hoy (Directiva v3.1 — salud → QA → monetización → contenido)
-Corrido de forma **interactiva** (no headless/launchd) porque el bloqueador TCC descrito abajo sigue sin resolver. Esto confirma el diagnóstico: el problema es específico del contexto de `launchd`, no del acceso a Papu Ext en general — esta sesión leyó/escribió en el disco externo sin ningún problema.
+Segundo ciclo interactivo del día, mismo bloqueador TCC sin resolver.
 
-1. **Salud:** disco Papu Ext montado (1.6Ti libres), repo `main` limpio, sin cambios pendientes.
-2. **QA:** `kimiko-qa-nocturna.mjs` → **13/13 checks OK**. Deploy en producción confirmado READY, commit `a51c4db`.
-   - Nota técnica: `node` no estaba en el `$PATH` de este shell (`/usr/bin:/bin:/usr/sbin:/sbin` únicamente) — está en `/opt/homebrew/bin/node`. Hubo que exportar el PATH a mano para correr el script. Si esto se repite en otras sesiones interactivas, puede ser señal de un perfil de shell no cargado correctamente.
-3. **Monetización:** funnel `/regalo/primera-noche` → `/producto/ritual-descanso` sigue live (200 OK ambas rutas vía QA). `NEXT_PUBLIC_GUMROAD_URL` sigue sin valor en `.env.local` — `RitualCheckout.tsx` ya listo para activarse en cuanto exista la URL real, sin tocar código. `leads`: 0 filas. `purchases`: 0 filas — sigue sin actividad real de usuarios.
-4. **Contenido — HALLAZGO IMPORTANTE:** `blog_posts` tiene **88 borradores sin revisar** (`status='draft'`), no solo el 1 que registraba el handoff anterior:
-   - 85 de ellos son de abril–mayo 2026 (categorías "sabiduría" 33+4, "nutrición" 10, "Bienestar Holístico" 11, "herbología"/"bienestar"/"ayurveda"/"detox" 6-9 c/u) — generados por el agente nocturno viejo, nunca aprobados ni descartados.
-   - Los otros 3 son "Herbología" (capitalizado, convención del agente-plantas actual): `echinacea-guia` y `sidr-espino-de-cristo-guia` (28-may) + `nutricion-km0-herbologia...` (10-jul, el que ya estaba en el handoff).
-   - **Decisión tomada esta sesión: NO generar contenido nuevo este ciclo.** Con 88 borradores acumulados sin que nadie los revise, sumar más no aporta — el cuello de botella real es la revisión de Papu, no la generación. Los 3 borradores sociales ya redactados el 2026-07-11 (bitácora Notion) siguen vigentes porque el funnel no cambió.
-   - **Pendiente de decisión de Papu:** ¿revisar/publicar/borrar el backlog de 85 drafts viejos? Si no se van a usar nunca, hay que decidir si vale la pena seguir corriendo el agente nocturno de contenido genérico o pausarlo hasta aclarar el flujo de aprobación.
+1. **Salud:** disco Papu Ext montado (1.6Ti libres), repo `main` limpio salvo `logs/` (untracked, ver abajo).
+2. **QA:** `kimiko-qa-nocturna.mjs` → **13/13 checks OK**. Deploy READY commit `58afed4`.
+3. **Monetización:** sin cambios — `leads` 0 filas, `purchases` 0 filas, `NEXT_PUBLIC_GUMROAD_URL` sigue sin valor. Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` reverificado live.
+4. **Contenido:** backlog de `blog_posts` sigue en **88 drafts** (sin cambio desde el hallazgo de la tarde) — sigue pendiente de decisión de Papu, no se generó contenido nuevo por la misma razón.
+5. **Housekeeping:** `logs/kimiko-qa-nocturna.log` apareció untracked en el repo (log generado por el script de QA) — añadido `logs/` a `.gitignore`, no debe versionarse.
 
 ## Directiva v3.1 — "Modo Operadora Total" (Papu, 2026-07-23) — sigue vigente
 1. **Pasarela de pago: Gumroad** (decidido). Placeholder sin valor real — sin cambios de código pendientes.
@@ -39,8 +35,8 @@ Sin cambios desde el diagnóstico anterior — sigue pendiente de acción de Pap
 - Backlog de contenido sin revisar: 88 borradores en `blog_posts` (ver hallazgo arriba) + 3 borradores sociales (2 IG + 1 LinkedIn) en bitácora Notion del 2026-07-11.
 
 ## Archivos modificados esta sesión
-- `handoff.md` — reescrito con resultado del ciclo de hoy + hallazgo del backlog de 88 borradores.
-- Ningún archivo de código tocado (no hacía falta — QA limpio, funnel verificado, sin regresiones).
+- `handoff.md` — reescrito con resultado del segundo ciclo del día.
+- `.gitignore` — añadido `logs/` (log de QA local no debe versionarse).
 
 ## Próximos pasos (ordenados por prioridad)
 1. **Papu: resolver el permiso Full Disk Access/TCC** para que Kimiko vuelva a correr en background.
