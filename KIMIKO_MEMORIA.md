@@ -98,3 +98,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Blog SEO**: sin borrador nuevo — el de ayer sigue pendiente de aprobación, cadencia semanal respetada.
 - Bitácora Notion: https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
 - Pendiente próxima sesión: cuenta Gumroad/Lemon Squeezy (único bloqueador del primer €), aprobación de borradores sociales/blog, Google Search Console, purga de historial del PDF de pago (pendiente de OK explícito, irreversible).
+
+---
+
+## 2026-07-23 — Ciclo interactivo (salud → QA → monetización → contenido)
+
+### Aprendizajes
+- **En esta sesión interactiva el shell arrancó con `$PATH=/usr/bin:/bin:/usr/sbin:/sbin` únicamente** — ni `node` ni `npx` (usado por el hook `husky` pre-commit) estaban disponibles hasta exportar `/opt/homebrew/bin` a mano. Esto es distinto del bloqueador TCC/launchd ya documentado (ese impide leer el prompt; esto solo afecta qué binarios ve el shell). Si un comando simple como `node` o `git commit` falla con "not found", revisar el PATH antes de asumir un problema de permisos o de instalación.
+- **`blog_posts` tenía 88 filas en `status='draft'`, no 1 como registraba el handoff anterior.** El handoff solo trackeaba el último draft SEO relevante; nunca se había hecho un `count(*) group by category` sobre todo lo acumulado. 85 son restos del agente nocturno viejo (abril–mayo 2026, categorías genéricas "sabiduría"/"nutrición"/"bienestar"/etc.) que nadie revisó ni descartó nunca. **Antes de generar contenido nuevo en un ciclo, correr un conteo de drafts existentes** — si hay backlog grande sin tocar, generar más no ayuda, lo que hace falta es que Papu decida qué hacer con lo acumulado.
+- **Decisión tomada sin preguntar (autoridad ya concedida):** saltar la generación de contenido de este ciclo dado el backlog, y en vez de eso escalar el hallazgo con datos concretos (conteo por categoría, fechas) en el handoff. Coherente con la regla de Validación Cruzada del CLAUDE.md: cuando lo pedido por una directiva choca con el estado real, exponer el conflicto en vez de ejecutar a ciegas.
+
+### Qué funciona
+- Correr el ciclo completo de forma interactiva (no headless) cuando el bloqueador TCC de `launchd` sigue sin resolver — el acceso a Papu Ext funciona perfecto en sesión interactiva, solo falla dentro del proceso lanzado por `launchd`. Sirve como mitigación temporal mientras Papu resuelve el permiso de sistema.
+- `select category, count(*), min(created_at), max(created_at) group by category` sobre `blog_posts` da en una sola query todo lo necesario para diagnosticar un backlog de contenido — más rápido que revisar `/admin/blog` a mano.
+
+### Cierre 2026-07-23 (tarde)
+- QA: **13/13 checks OK**, deploy READY commit `a51c4db`.
+- Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` reverificado live, sin regresión.
+- `leads`/`purchases`: 0 filas, sin actividad todavía.
+- **Sin contenido nuevo generado** — decisión deliberada por backlog de 88 drafts sin revisar.
+- Commit `e56967a` (solo handoff, ningún cambio de código).
+- Pendiente próxima sesión: TCC/Full Disk Access (Papu), decisión sobre backlog de 85 drafts viejos (Papu), Gumroad, Search Console, aprobación de borradores existentes.
