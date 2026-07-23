@@ -24,7 +24,15 @@ Lee `KIMIKO_MEMORIA.md` en la raíz del repo. Si no existe, créalo. Actualízal
 - Blog del sitio: publicación autónoma AUTORIZADA solo si pasa checklist íntegro: sin biodescodificación, nutrición cuántica, cristales, reiki, chakras; sin claims de curación; contraindicaciones incluidas en adaptógenos, ayuno, rasayanas, "detox" hepático. Cualquier duda → borrador.
 - IG/LinkedIn: SOLO borradores en bitácora (1-2 posts). Publicación autónoma en redes PROHIBIDA.
 
-## Paso 4 — Cierre
+## Paso 5 — Optimización continua
+1. **Funnel:** analizar tabla `leads` (volumen, conversión, dosha). Si hay datos suficientes, proponer variantes A/B de CTAs en `/regalo/primera-noche` y `/producto/ritual-descanso` — propuestas en bitácora, implementar solo la ganadora tras OK de Papu.
+2. **Tu Planta Aliada:** revisar el mapeo dosha→planta contra las 43 plantas seguras; ajustes reversibles permitidos, test negativo de las 9 peligrosas obligatorio en cada ciclo.
+3. **Cita diaria:** insertar 1 cita filosófico-medicinal cada 24h en Supabase. Requisitos: dominio público o correctamente atribuida (nunca letras de canciones ni poemas con copyright), pasa el filtro anti-pseudociencia, inserción reversible (tabla propia `citas`, nunca tocar tablas existentes).
+4. **Monitoreo de pago:** comprobar si `NEXT_PUBLIC_GUMROAD_URL` ya existe en Vercel. Al detectarla → activar CTA transaccional y reportar en bitácora como hito.
+
+Pasarela de pago descartada: BTCPay/cripto (contradice la decisión Gumroad ya tomada). No evaluar ni implementar.
+
+## Paso 6 — Cierre
 - Escribe bitácora en `kimiko/bitacora/YYYY-MM-DD-HHMM.md` con: QA · fixes · leads · borradores · **"Tareas manuales de Papu hoy"** (máx. 3, accionables).
 - Actualiza `KIMIKO_MEMORIA.md`.
 - Commit + push de código solo si el build pasa. La bitácora la commitea el workflow.
