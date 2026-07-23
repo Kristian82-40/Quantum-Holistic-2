@@ -1,34 +1,53 @@
-# Handoff — 2026-07-11 (v3 headless)
+# Handoff — 2026-07-23
+
+## Directiva v3.1 — "Modo Operadora Total" (Papu, 2026-07-23)
+Kimiko ejecuta esto en su próximo ciclo de 4h, sin esperar aprobación adicional, dentro del ciclo estándar (salud → QA → monetización → contenido → bitácora):
+
+1. **Pasarela de pago: Gumroad** (decidido, merchant of record). Completar integración técnica con placeholder — `NEXT_PUBLIC_GUMROAD_URL` sin valor real todavía. El botón de checkout (`RitualCheckout.tsx`, ya agnóstico de proveedor) debe quedar listo para activarse en cuanto Papu pase la URL real, sin tocar código de nuevo.
+2. **Funnel regalo→email→ritual (€19)**: `/regalo/primera-noche` → captura de email → `/producto/ritual-descanso`. Ya construido y verificado extremo a extremo en producción desde 2026-07-11 (commit `dcb76bf`) — este ciclo: reverificar que sigue live, no reconstruir salvo regresión real.
+3. **QA cada ciclo**: correr `kimiko-qa-nocturna.mjs`, verificar salud del deploy, corregir inconsistencias reversibles encontradas sin pedir aprobación.
+4. **Contenido cada ciclo**: borradores IG/LinkedIn + blog SEO. Publicación autónoma sigue PROHIBIDA — todo queda en `draft`/sin publicar para revisión de Papu.
+
+### Bloqueantes manuales de Papu (Kimiko no puede resolverlos)
+1. Crear cuenta Gumroad → pasar URL del producto (activa `NEXT_PUBLIC_GUMROAD_URL` en Vercel).
+2. Registrar `quantum-holistic.com` en Google Search Console + enviar sitemap.
+3. Confirmar qué perfiles IG/LinkedIn se usarán para publicar los borradores acumulados.
+
+## ⚠️ Bloqueador crítico de infraestructura — Kimiko sin correr desde 2026-07-11
+Diagnosticado hoy revisando `~/bin/qh/kimiko-autostart.log` y las sesiones del 2026-07-22 (16:31 y 20:32):
+- El guard de disco montado + archivo legible pasa correctamente (`[ -r "$PROMPT" ]` OK).
+- Pero al ejecutar `cat "$PROMPT"` **dentro del proceso lanzado por `launchd`**, falla con `Operation not permitted` — el mismo archivo se lee sin problema desde una sesión interactiva de Terminal con el mismo usuario.
+- Consecuencia: `claude -p "$(cat "$PROMPT")"` recibe un prompt vacío → `Error: Input must be provided either through stdin or as a prompt argument when using --print` → la sesión termina en ~1 minuto sin ejecutar nada.
+- Causa más probable: restricción TCC de macOS (Privacy & Security) sobre procesos de `launchd` accediendo a un volumen externo — `/bin/bash` lanzado como agente en background no hereda el mismo permiso de "Full Disk Access" / acceso a volúmenes extraíbles que tiene Terminal.app en uso interactivo.
+- **Acción requerida de Papu (GUI, no ejecutable por CLI):** System Settings → Privacy & Security → Full Disk Access (o el apartado de acceso a volúmenes extraíbles según versión de macOS) → añadir `/bin/bash` y/o el binario `claude` con permiso explícito.
+- Hasta resolver esto, forzar el ciclo con `launchctl kickstart -k gui/$(id -u)/com.qh.kimiko-autostart` probablemente reproduce el mismo fallo — no ejecutado todavía a la espera de confirmación de Papu.
 
 ## Estado del proyecto
-- Run v3 headless ejecutada en modo operadora total (mandato Papu 2026-07-11 16:30): ciclo completo salud → QA → monetización → contenido → bitácora, sin esperar aprobación adicional.
-- Producción estable (`quantum-holistic.com`), deploy READY (`dpl_GkKaziEAMzrpsJQ434bWxj2Um6Gg`, commit `dcb76bf`). QA **13/13 checks OK** (primera vez completo).
-- **Funnel de monetización completo y en producción**: `/regalo/primera-noche` (lead magnet gratis) → `leads` → `/producto/ritual-descanso` (€19, checkout listo salvo cuenta de pago).
+- Producción estable (`quantum-holistic.com`), último deploy verificado READY (`dpl_GkKaziEAMzrpsJQ434bWxj2Um6Gg`, commit `dcb76bf`/`ec24aba`). QA: 13/13 checks OK la última vez que corrió (2026-07-11).
+- Funnel de monetización completo y en producción: `/regalo/primera-noche` (lead magnet gratis) → `leads` → `/producto/ritual-descanso` (€19, checkout listo salvo cuenta de pago).
+- `leads` y `purchases` siguen en 0 filas reales — sin actividad de usuarios todavía (checkout de pago no activo).
+- 3 borradores sociales (2 IG + 1 LinkedIn) y 1 borrador de blog SEO ("Nutrición Km0 y Herbología") pendientes de aprobación en `/admin/blog` y en la bitácora Notion del 2026-07-11 — nadie los ha revisado aún.
 
-## Módulos completados esta sesión
-1. **Salud v3**: instancia única confirmada (lock `mkdir` en orden, sin runaway), registrado en bitácora.
-2. **QA completa**: 13/13 checks OK, incluye por primera vez `/regalo/primera-noche`.
-3. **`/regalo/primera-noche` construida** (commit `dcb76bf`): landing con formulario de email → `POST /api/leads` (`source=primera_noche_regalo`, mismo endpoint que ya existía, sin cambios de backend) → entrega inmediata del PDF `primera-noche-tranquila.pdf` (copiado a `public/downloads/` para servir estático) → CTA final a `/producto/ritual-descanso`. Añadida al sitemap.
-4. **Funnel verificado extremo a extremo en producción**: página 200 (tras redirect 308 esperado por `trailingSlash:true`), lead insertado y confirmado por SQL directo en Supabase (luego borrado, era de prueba), PDF descargable, CTA al producto de pago.
-5. **3 borradores sociales** (2 Instagram + 1 LinkedIn) con CTA real a `/regalo/primera-noche` — ya no apuntan a páginas sustitutas. Sin publicar.
-6. **Blog SEO**: sin borrador nuevo — el de ayer ("Nutrición Km0 y Herbología") sigue en `draft` pendiente de aprobación en `/admin/blog`, cadencia semanal respetada.
-
-## Decisiones técnicas tomadas
-- `/regalo/primera-noche` se construyó sin pedir aprobación adicional: el mandato de Papu del 2026-07-11 (16:30, "modo operadora total") lista explícitamente el funnel completo como parte del ciclo estándar de cada run — reemplaza el pendiente de sesiones anteriores de "esperar decisión".
-- PDF del lead magnet gratuito servido desde `public/downloads/` sin gating adicional (distinto del PDF de pago, que sigue fuera de `public/` y de git por la mitigación de seguridad de ciclos anteriores).
-
-## Pendiente / deuda técnica detectada (no tocada esta sesión)
-1. Cuenta Gumroad/Lemon Squeezy — único bloqueador restante del primer € del funnel (tarea manual de Papu).
-2. Purga de historial de git del PDF de pago (`ritual-descanso.pdf`) — pendiente de aprobación explícita de Papu (acción irreversible, force-push).
-3. `quantum-holistic.com` en Google Search Console + enviar sitemap actualizado (ya incluye `/regalo/primera-noche`) — pendiente de ciclos anteriores.
-4. `app/` sigue conteniendo scaffolding duplicado — deuda técnica conocida, no tocar sin auditoría.
-5. Heredado sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
+## Archivos modificados esta sesión
+- `handoff.md` — reescrito con Directiva v3.1 + diagnóstico del bloqueador de infraestructura.
+- `~/.claude/settings.json` — eliminada regla inválida `Write(/Users/juliafenton/*)` (generaba warning en cada sesión de Kimiko; `Edit(/Users/juliafenton/*)` ya cubre el caso).
 
 ## Próximos pasos (ordenados por prioridad)
-1. Papu: crear cuenta de pago y pasar `NEXT_PUBLIC_GUMROAD_URL` en Vercel — activa el botón de compra sin tocar código.
-2. Papu: aprobar los 3 borradores sociales y el borrador de blog pendiente.
-3. Dar de alta `quantum-holistic.com` en Google Search Console + enviar sitemap.
-4. Próxima run v3: seguir el ciclo estándar (salud → QA → monetización → contenido → bitácora) sin esperar directiva nueva, salvo que Papu indique lo contrario.
+1. **Papu: resolver el permiso Full Disk Access/TCC** para que Kimiko vuelva a correr en background — bloquea todo lo demás.
+2. Papu: crear cuenta Gumroad → pasar URL del producto.
+3. Papu: Google Search Console + envío de sitemap.
+4. Papu: confirmar perfiles IG/LinkedIn para los borradores ya redactados.
+5. Papu: aprobar/rechazar los 3 borradores sociales y el borrador de blog pendientes desde 2026-07-11.
+6. Una vez resuelto el permiso, próxima run de Kimiko: ciclo estándar completo según Directiva v3.1 (sin esperar mandato nuevo).
+
+## Decisiones técnicas tomadas
+- Gumroad elegido como pasarela de pago (merchant of record) — sin cambios de código necesarios, `RitualCheckout.tsx` ya es agnóstico de proveedor vía `NEXT_PUBLIC_GUMROAD_URL`.
+- Se deja documentado el diagnóstico TCC en vez de intentar workarounds por CLI (p. ej. mover el prompt al disco interno) — el fix correcto es el permiso de sistema, no un rodeo que oculte el síntoma.
+
+## Pendiente / deuda técnica heredada (no tocada esta sesión)
+1. Purga de historial de git del PDF de pago (`ritual-descanso.pdf`) — pendiente de aprobación explícita de Papu (acción irreversible, force-push).
+2. `app/` sigue conteniendo scaffolding duplicado — deuda técnica conocida, no tocar sin auditoría.
+3. Heredado sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
 
 ## Scripts disponibles
 | Script | Función |
@@ -39,6 +58,6 @@
 | `bash scripts/auto-flow-state.sh` | Estado del proyecto |
 
 ## Referencias
-- Bitácora Notion de este ciclo: https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
 - Bitácora "raíz" con mandatos de Papu (leer siempre, se prependea cronológicamente): https://app.notion.com/p/36c37a0e7b45812f8628f31630109924
-- Deploy producción: `dpl_GkKaziEAMzrpsJQ434bWxj2Um6Gg` (commit `dcb76bf`)
+- Última bitácora de cierre (2026-07-11): https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
+- Log de autostart: `~/bin/qh/kimiko-autostart.log`
