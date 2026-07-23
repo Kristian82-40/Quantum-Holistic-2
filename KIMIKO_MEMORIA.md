@@ -171,3 +171,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Gumroad y canal DDL para `citas` siguen bloqueados — mismas 2 tareas de Papu que en el ciclo anterior.
 - Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismo desglose por categoría. Sin contenido nuevo generado (misma decisión deliberada del ciclo anterior).
 - Sin commits de código este ciclo; la bitácora la commitea el workflow.
+
+---
+
+## 2026-07-23 — Tercer ciclo Kimiko Cloud (21:09 UTC)
+
+### Aprendizajes
+- **`plants` tiene un duplicado real de contenido: `equinacea` y `echinacea` son la misma especie** (`nombre_latino = "Echinacea purpurea"` en ambas filas, dos slugs distintos). No es un problema de seguridad (ninguna es de las 9 peligrosas) sino de calidad de datos — quedó sin detectar en los 2 ciclos anteriores del día porque los checks de QA verifican conteo total (52) e integridad de las peligrosas, no duplicados dentro de las seguras. **Vale la pena, en ciclos futuros que toquen "Tu Planta Aliada" o el diccionario, cruzar `nombre_latino` contra `slug` para pescar duplicados** — no asumir que 52 filas = 52 especies únicas. No se resuelve sin decisión de Papu: cualquiera de los dos slugs puede estar ya indexado en Google, y fusionar/borrar sin verificar primero rompería un enlace real.
+- **`image_mistica_url` (columna en `plants`) está sin usar en todo el código** — confirmado con grep sobre `app/diccionario/page.tsx` y `app/diccionario/[slug]/page.tsx`: solo leen `image_cientifica_url`. Que las 43 plantas seguras tengan `image_mistica_url = null` no es un hallazgo de datos faltantes, es un campo reservado para una feature que nunca se construyó. Antes de reportar un campo NULL masivo como bug, grep first — puede ser simplemente no-usado-todavía.
+- **El commit único que aparece en `git log` de este entorno (`kimiko: bitácora ciclo 2026-07-23-1728`) contiene el repo completo, no un diff incremental** — es el commit de inicialización del sandbox/checkout de esta sesión, no evidencia de que un ciclo real haya corrido a las 17:28 y no haya dejado archivo de bitácora. Confirmado que no hay bitácora `2026-07-23-1728.md` en `kimiko/bitacora/` (solo `1650` y `1727`), consistente con que ese commit es artefacto de entorno, no un ciclo perdido. No investigar más a fondo la arqueología de git de un entorno sandbox — no es información accionable dentro del propio ciclo.
+
+### Qué funciona
+- `grep -rn "<nombre_de_columna>" app/ components/` antes de reportar un campo de Supabase como "faltante" en N filas — distingue en segundos si es un dato roto o un campo sin feature construida encima.
+- Listar explícitamente los `slug` de los drafts de blog que violan el checklist anti-pseudociencia (en vez de solo repetir el conteo "8") deja el hallazgo directamente accionable para Papu sin que tenga que volver a buscarlos cada vez que lee la bitácora.
+
+### Cierre 2026-07-23 (ciclo cloud 21:09 UTC)
+- QA: **8/8 checks OK**, tercer ciclo del día sin ningún commit de código entre medias — todos los indicadores (build, 52 plantas, 9 peligrosas con placeholder, leads/purchases 0/0, sitemap/robots) idénticos a los ciclos de 16:52 y 17:27 UTC.
+- **Hallazgo nuevo:** duplicado de contenido `equinacea`/`echinacea` (misma especie, dos filas) — documentado en bitácora, sin tocar hasta que Papu decida el slug canónico.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, los mismos 8 drafts con violación de checklist ahora listados por slug en la bitácora para acción directa.
+- Sin contenido nuevo generado (mismo backlog sin revisar), sin borradores sociales nuevos (los 2 vigentes del ciclo de 16:52 no se duplican).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
