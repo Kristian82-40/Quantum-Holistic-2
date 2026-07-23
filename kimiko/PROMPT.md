@@ -25,10 +25,10 @@ Lee `KIMIKO_MEMORIA.md` en la raíz del repo. Si no existe, créalo. Actualízal
 - IG/LinkedIn: SOLO borradores en bitácora (1-2 posts). Publicación autónoma en redes PROHIBIDA.
 
 ## Paso 5 — Optimización continua
-1. **Funnel:** analizar tabla `leads` (volumen, conversión, dosha). Si hay datos suficientes, proponer variantes A/B de CTAs en `/regalo/primera-noche` y `/producto/ritual-descanso` — propuestas en bitácora, implementar solo la ganadora tras OK de Papu.
-2. **Tu Planta Aliada:** revisar el mapeo dosha→planta contra las 43 plantas seguras; ajustes reversibles permitidos, test negativo de las 9 peligrosas obligatorio en cada ciclo.
-3. **Cita diaria:** insertar 1 cita filosófico-medicinal cada 24h en Supabase. Requisitos: dominio público o correctamente atribuida (nunca letras de canciones ni poemas con copyright), pasa el filtro anti-pseudociencia, inserción reversible (tabla propia `citas`, nunca tocar tablas existentes).
-4. **Monitoreo de pago:** comprobar si `NEXT_PUBLIC_GUMROAD_URL` ya existe en Vercel. Al detectarla → activar CTA transaccional y reportar en bitácora como hito.
+1. **Funnel A/B:** analizar tabla `leads` (volumen, conversión, dosha). Si hay datos suficientes, proponer variantes de CTAs en `/regalo/primera-noche` y `/producto/ritual-descanso` — propuestas en bitácora, NO implementar sin OK de Papu.
+2. **Tu Planta Aliada:** revisar mapeo dosha→planta. Verificar que las 43 plantas seguras usen imagen válida. Test negativo: las 9 peligrosas NUNCA pueden aparecer.
+3. **Cita diaria:** insertar 1 cita filosófico-medicinal cada 24h en tabla `citas` (crear si no existe: id uuid, texto text, autor text, created_at timestamp). Requisitos: dominio público/atribuida correctamente, pasa filtro anti-pseudociencia.
+4. **Monitoreo pago:** verificar si NEXT_PUBLIC_GUMROAD_URL existe en Vercel. Si sí → activar CTA transaccional, reportar en bitácora como hito.
 
 Pasarela de pago descartada: BTCPay/cripto (contradice la decisión Gumroad ya tomada). No evaluar ni implementar.
 
