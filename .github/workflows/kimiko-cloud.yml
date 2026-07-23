@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   ciclo:
@@ -25,11 +26,20 @@ jobs:
         with:
           node-version: 20
 
+      - name: Load prompt
+        id: load_prompt
+        run: |
+          {
+            echo 'content<<KIMIKO_PROMPT_EOF'
+            cat kimiko/PROMPT.md
+            echo 'KIMIKO_PROMPT_EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - name: Kimiko — ciclo completo
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          prompt_file: kimiko/PROMPT.md
+          prompt: ${{ steps.load_prompt.outputs.content }}
           claude_args: "--dangerously-skip-permissions"
         env:
           SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
