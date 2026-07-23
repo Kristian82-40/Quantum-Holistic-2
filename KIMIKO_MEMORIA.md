@@ -153,3 +153,21 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin contenido de blog nuevo — backlog de 90 drafts (8 con violación explícita del checklist) sigue sin revisión de Papu. 2 borradores sociales redactados en bitácora, sin publicar.
 - Sin commits de código este ciclo (nada que arreglar); la bitácora la commitea el workflow según `kimiko-cloud.yml`.
 - Pendiente próxima sesión: Gumroad, secret de Management API/connection string para DDL, decisión sobre backlog de blog (90 drafts, 8 con violación de checklist), decisión sobre `/api/webhooks/btcpay` heredado.
+
+---
+
+## 2026-07-23 — Segundo ciclo Kimiko Cloud (17:27 UTC)
+
+### Aprendizajes
+- **No repetir el test end-to-end de POST/DELETE contra `/api/leads/` en cada ciclo cuando no hubo cambios de código de por medio.** Se verificó extremo a extremo en el ciclo de las 16:52 UTC; repetirlo 35 minutos después sin ningún commit intermedio no aporta señal nueva, solo ensucia potencialmente la tabla `leads` con más filas de prueba. Repetir ese test solo tiene sentido si cambió el código del funnel o pasó tiempo suficiente para sospechar de una regresión de infraestructura (ej. rotación de keys, cambio de RLS).
+- **Cuando dos ciclos consecutivos del mismo día no tienen ningún commit de código entre medias, todos los indicadores (QA, leads, purchases, backlog de blog) deberían salir idénticos — y así fue.** Confirma que el pipeline de QA es determinista y que no hay actividad de usuarios reales todavía. Si en un futuro ciclo cercano en el tiempo aparece una diferencia sin que haya habido commit ni acción manual, es señal de alerta (dato mutado fuera de banda) más que un hallazgo normal.
+
+### Qué funciona
+- Cuando el ciclo anterior ya dejó una propuesta en bitácora sin implementar (ej. "Tu Planta Aliada", esquema `citas`), el ciclo siguiente solo necesita referenciarla y confirmar que sigue vigente — no hace falta re-redactar la propuesta completa cada vez, basta con apuntar a que no cambió.
+
+### Cierre 2026-07-23 (ciclo cloud 17:27 UTC)
+- QA: **8/8 checks OK**, sin diferencias frente al ciclo de las 16:52 UTC (mismo build limpio, mismas 52 plantas, mismos 0 leads/purchases).
+- Sin test end-to-end repetido del funnel de leads (ver aprendizaje arriba) — páginas verificadas con 200, sin regresión visible.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas 2 tareas de Papu que en el ciclo anterior.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismo desglose por categoría. Sin contenido nuevo generado (misma decisión deliberada del ciclo anterior).
+- Sin commits de código este ciclo; la bitácora la commitea el workflow.
