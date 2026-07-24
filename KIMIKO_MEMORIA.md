@@ -235,3 +235,23 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre disponibilidad honesta de ritual-descanso, 1 LinkedIn sobre transparencia editorial), sin publicar.
 - Sin test E2E de leads repetido (último real fue hace ~3.5h, por debajo del umbral de 24h).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Sexto ciclo Kimiko Cloud (10:22 UTC)
+
+### Aprendizajes
+- **El entorno cloud recibió `VERCEL_TOKEN` como secret nuevo este ciclo** (no estaba en ninguno de los 5 ciclos anteriores, solo `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`). Permite consultar en vivo `GET https://api.vercel.com/v9/projects/<project_id>/env` para confirmar el estado real de env vars de producción (ej. `NEXT_PUBLIC_GUMROAD_URL`) en vez de depender de lo que dice esta memoria — usado este ciclo, mismo resultado (12 vars, sin Gumroad) pero ahora con verificación en vivo. **Importante: `VERCEL_TOKEN` no da canal DDL para Supabase** — son plataformas distintas, seguir pidiendo un secret separado (Management API token o connection string de Postgres) para poder crear la tabla `citas`.
+- Antes de asumir que un secret nuevo resuelve un bloqueador pendiente, verificar contra qué plataforma opera — un ciclo futuro no debería dar por resuelto el bloqueador de `citas` solo porque llegó *algún* secret nuevo.
+
+### Qué funciona
+- Revisar el listado completo de variables de entorno del runner (`env | grep -viE "<ruido conocido>"`) al inicio del ciclo detecta secrets nuevos sin tener que esperar a que se documenten en otro sitio — así se encontró `VERCEL_TOKEN` este ciclo.
+
+### Cierre 2026-07-24 (ciclo cloud 10:22 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 06:30 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, leads/purchases 0/0, sitemap/robots OK).
+- **Novedad de infraestructura:** `VERCEL_TOKEN` disponible por primera vez — usado para confirmar en vivo que `NEXT_PUBLIC_GUMROAD_URL` sigue sin existir en Vercel (12 env vars, ninguna Gumroad).
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu (el DDL de Supabase sigue sin resolverse pese al secret nuevo, ver aprendizaje arriba).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — séptimo ciclo consecutivo con el mismo pendiente.
+- 2 borradores sociales nuevos (1 Instagram sobre "Tu Planta Aliada", 1 LinkedIn sobre por qué 9 plantas no muestran foto), ángulo distinto a los de ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real fue en el ciclo de 06:30 UTC, ~3h50min antes, por debajo del umbral de 24h).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
