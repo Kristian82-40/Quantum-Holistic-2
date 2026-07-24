@@ -294,3 +294,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre el diccionario como recurso educativo, 1 LinkedIn sobre construir despacio sin pasarela de pago activa aún), ángulo distinto a ciclos anteriores, sin publicar.
 - Sin test E2E de leads repetido (último real: 02:50 UTC, ~15h antes, por debajo del umbral de 24h).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Décimo ciclo Kimiko Cloud (21:05 UTC)
+
+### Aprendizajes
+- **Ningún secret nuevo llegó este ciclo tampoco** — mismo trío que los 3 ciclos anteriores (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`). El bloqueador de DDL para `citas` sigue exactamente igual desde el 2026-07-23 16:50 UTC — ya son 10 ciclos consecutivos sin canal de escritura DDL.
+- **El umbral de 24h para repetir el test E2E de leads sigue funcionando como criterio simple y suficiente** — con el último test real en 02:50 UTC y este ciclo a las 21:05 UTC (~18h15min), no hizo falta repetirlo. Confirma que el criterio afinado en el ciclo de 13:50 UTC (rastrear la cadena completa de memoria, no solo la bitácora inmediatamente anterior) sigue siendo el correcto — no hubo que corregir nada esta vez porque el ciclo de 17:41 UTC ya había rastreado bien la fecha.
+
+### Qué funciona
+- El patrón establecido de recruce rápido (script Python de una sola llamada REST) para "43 seguras con imagen" y "duplicados por nombre_latino" se repitió una vez más sin hallazgos nuevos — confirma que ambas verificaciones son baratas y vale la pena mantenerlas en cada ciclo aunque no cambien, porque son la única forma barata de detectar una regresión de datos sin necesitar canal DDL.
+- Verificar el fallback de `RitualCheckout.tsx` leyendo el código fuente (no solo el HTML renderizado) sigue siendo el método correcto para confirmar el comportamiento sin Gumroad — repetido este ciclo, mismo resultado.
+
+### Cierre 2026-07-24 (ciclo cloud 21:05 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 17:41 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, leads/purchases 0/0, sitemap/robots OK).
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu, sin secret nuevo este ciclo (décimo ciclo consecutivo).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — décimo ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre qué se hace con el email del regalo, 1 LinkedIn sobre la estructura de rigor de cada ficha del diccionario), ángulo distinto a ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:50 UTC, ~18h15min antes, por debajo del umbral de 24h).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
