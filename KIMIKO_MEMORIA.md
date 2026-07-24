@@ -255,3 +255,22 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre "Tu Planta Aliada", 1 LinkedIn sobre por qué 9 plantas no muestran foto), ángulo distinto a los de ciclos anteriores, sin publicar.
 - Sin test E2E de leads repetido (último real fue en el ciclo de 06:30 UTC, ~3h50min antes, por debajo del umbral de 24h).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Octavo ciclo Kimiko Cloud (13:50 UTC)
+
+### Aprendizajes
+- **Ningún secret nuevo llegó este ciclo** — mismo trío que el ciclo de 10:22 UTC (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`). El bloqueador de DDL para `citas` sigue exactamente igual; no vale la pena volver a comprobar el listado completo de env vars en ciclos consecutivos muy cercanos en el tiempo si el ciclo anterior ya lo hizo — basta con confirmar que no cambió el conteo/nombres.
+- **El criterio de "última prueba E2E real" hay que rastrearlo con cuidado entre ciclos**: la bitácora de 10:22 UTC decía que el último test real fue "en el ciclo de 06:30 UTC", pero revisando la cadena completa, el 06:30 UTC tampoco hizo un test real — solo el de 02:50 UTC lo hizo. Ese tipo de imprecisión se puede arrastrar de bitácora en bitácora si cada ciclo solo copia lo que dice la inmediatamente anterior en vez de rastrear la memoria completa. Este ciclo se corrigió: el último test real verificado es el de 02:50 UTC (~11h antes de este ciclo), todavía por debajo del umbral de 24h.
+
+### Qué funciona
+- Cuando dos ciclos seguidos no tienen ningún commit de código ni acción manual de Papu entre medias, todos los indicadores (QA, plantas, imágenes, leads/purchases, blog backlog, env vars) deberían salir idénticos — y así fue de nuevo. Sirve como chequeo de sanidad rápido: si algo difiere sin explicación, es señal de alerta antes que hallazgo normal.
+
+### Cierre 2026-07-24 (ciclo cloud 13:50 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 10:22 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, leads/purchases 0/0, sitemap/robots OK).
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu, sin secret nuevo este ciclo.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — octavo ciclo consecutivo con el mismo pendiente.
+- 2 borradores sociales nuevos (1 Instagram invitando directo al regalo, 1 LinkedIn sobre rigor editorial sin exponer detalles internos), ángulo distinto a ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:50 UTC, ~11h antes, por debajo del umbral de 24h — ver aprendizaje sobre rastrear la cadena completa, no solo el ciclo inmediatamente anterior).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
