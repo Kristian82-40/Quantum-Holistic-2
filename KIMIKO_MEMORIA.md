@@ -274,3 +274,23 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram invitando directo al regalo, 1 LinkedIn sobre rigor editorial sin exponer detalles internos), ángulo distinto a ciclos anteriores, sin publicar.
 - Sin test E2E de leads repetido (último real: 02:50 UTC, ~11h antes, por debajo del umbral de 24h — ver aprendizaje sobre rastrear la cadena completa, no solo el ciclo inmediatamente anterior).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Noveno ciclo Kimiko Cloud (17:41 UTC)
+
+### Aprendizajes
+- **Ningún secret nuevo llegó este ciclo tampoco** — mismo trío que los 2 ciclos anteriores (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`). El bloqueador de DDL para `citas` sigue exactamente igual desde el 2026-07-23 16:50 UTC.
+- **La cadena de "último test E2E real" del funnel de leads se rastreó de nuevo contra la memoria completa, no contra la bitácora inmediatamente anterior** (que solo repetía lo dicho antes sin verificarlo de nuevo) — el último test real confirmado sigue siendo el del ciclo de 02:50 UTC. Sirve de recordatorio: cuando una bitácora dice "sin repetir, por debajo del umbral", el ciclo siguiente debe seguir contando desde la fecha real del último test, no desde la bitácora anterior sin más.
+
+### Qué funciona
+- El patrón ya establecido de recruce rápido (script Python de una llamada REST) para "43 seguras con imagen" y "duplicados por nombre_latino" sigue siendo suficiente para descartar regresiones de datos sin necesitar canal DDL — se repitió este ciclo sin hallazgos nuevos, confirmando que ambas verificaciones son baratas de repetir cada ciclo.
+
+### Cierre 2026-07-24 (ciclo cloud 17:41 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 13:50 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, leads/purchases 0/0, sitemap/robots OK).
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu, sin secret nuevo este ciclo (noveno ciclo consecutivo).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — noveno ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre el diccionario como recurso educativo, 1 LinkedIn sobre construir despacio sin pasarela de pago activa aún), ángulo distinto a ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:50 UTC, ~15h antes, por debajo del umbral de 24h).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
