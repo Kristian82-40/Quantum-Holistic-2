@@ -214,3 +214,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist. Sin contenido de blog nuevo (misma decisión deliberada).
 - 2 borradores sociales nuevos redactados (1 Instagram sobre el regalo, 1 LinkedIn sobre el diccionario/posicionamiento), sin publicar.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Quinto ciclo Kimiko Cloud (06:30 UTC)
+
+### Aprendizajes
+- **Un `nombre_latino` repetido en `plants` no implica duplicado de contenido — hay que comparar `nombre_es` + `ficha_cientifica` antes de reportarlo.** Al hacer por primera vez un cruce sistemático de `nombre_latino` sobre las 52 filas (no solo el par ya conocido `equinacea`/`echinacea`), apareció un segundo par: `ashwagandha` / `ashwagandha-fruto` (ambos *Withania somnifera*). Investigado a fondo: son fichas distintas a propósito (raíz vs. fruto), con `nombre_es`, `ficha_cientifica.evidencia`, posología e imágenes en disco todas distintas. **Descartado como duplicado** — no requiere decisión de Papu, a diferencia de `equinacea`/`echinacea` que sí es contenido idéntico duplicado. Documentar esto evita que un ciclo futuro lo vuelva a marcar como hallazgo nuevo.
+- **El backlog de 90 drafts de blog lleva ya 6 ciclos consecutivos como la misma tarea pendiente sin resolución** (desde el 2026-07-23 tarde). Es un bloqueador crónico, no una decisión puntual — vale la pena decirlo así de explícito en la bitácora en vez de solo repetir el hallazgo cada vez, para que quede claro que el patrón en sí (no solo el conteo) es la señal a atender.
+
+### Qué funciona
+- Cruzar `nombre_latino` con `python3` + `urllib` directo contra la REST API de Supabase (sin necesidad de MCP) es suficiente para detectar duplicados de especie en `plants` — no hace falta canal DDL para esta clase de auditoría de datos, solo lectura.
+- Revisar el código fuente de un componente (`RitualCheckout.tsx`) en vez de solo confiar en el HTML renderizado por curl confirma con certeza el comportamiento de fallback cuando una env var falta — el HTML estático de una página cliente no siempre refleja el string exacto que se busca con grep.
+
+### Cierre 2026-07-24 (ciclo cloud 06:30 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 02:50 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, leads/purchases 0/0, sitemap/robots OK).
+- **Hallazgo nuevo (resuelto en el mismo ciclo, sin acción pendiente):** `ashwagandha`/`ashwagandha-fruto` comparten `nombre_latino` pero NO son duplicado — verificado y documentado para no repetir el chequeo.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — sexto ciclo consecutivo con el mismo pendiente, ahora marcado explícitamente como bloqueador crónico en la bitácora.
+- 2 borradores sociales nuevos (1 Instagram sobre disponibilidad honesta de ritual-descanso, 1 LinkedIn sobre transparencia editorial), sin publicar.
+- Sin test E2E de leads repetido (último real fue hace ~3.5h, por debajo del umbral de 24h).
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
