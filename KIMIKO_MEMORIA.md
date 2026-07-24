@@ -192,3 +192,25 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Backlog `blog_posts` sin cambio: 90 drafts / 19 published, los mismos 8 drafts con violación de checklist ahora listados por slug en la bitácora para acción directa.
 - Sin contenido nuevo generado (mismo backlog sin revisar), sin borradores sociales nuevos (los 2 vigentes del ciclo de 16:52 no se duplican).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-24 — Cuarto ciclo Kimiko Cloud (02:50 UTC)
+
+### Aprendizajes
+- **`data/dangerous-plants.json` existe y no estaba documentado en ninguna bitácora anterior** — es un archivo de gobierno con política explícita ("NO generar a ciegas. Requieren aprobación visual manual antes de renombrar/publicar.") que trackea candidatos de imagen para las 9 plantas peligrosas. Hay un archivo real (`public/images/plants/plant-00-beleno-negro-cientifica.jpg`, 784×1168) para `beleno-negro`, con nota "Archivo SuperGrok existe; aprobar visualmente y renombrar". **Verificado inactivo**: el prefijo `plant-00-` no coincide con el patrón exacto `{slug}-cientifica.jpg` que `diskImgExists()` comprueba en disco (`app/diccionario/page.tsx`, `[slug]/page.tsx`), así que hoy renderiza el placeholder de inicial. El límite inamovible "placeholder intacto siempre" para las 9 peligrosas aplica sin excepción — **aunque el JSON invite a "aprobar y renombrar", esa decisión nunca es de Kimiko**, solo de Papu. Antes de reportar un hallazgo de este tipo como bug, comprobar primero si ya existe un mecanismo de gating (aquí lo hay, y funciona) — el hallazgo es informativo, no una vulnerabilidad activa.
+- **El funnel de leads (`POST /api/leads/` → verificación en Supabase → DELETE) vale la pena repetirlo cuando ha pasado >24h desde el último test real**, incluso sin commits de código de por medio — la regla del ciclo anterior era "no repetir si no cambió código", pero un intervalo largo (aquí ~29h) sí justifica una repetición porque cubre riesgos de infraestructura (rotación de keys, cambios de RLS) que no dejan rastro en git. Repetido este ciclo, sin incidencias.
+- **Criterio afinado para cuándo repetir el test E2E del funnel**: no solo "¿cambió el código?" sino también "¿cuánto tiempo pasó desde la última verificación real?" — un ciclo que arranca el primer día distinto (aunque sea horas después del último del día anterior) es buen punto natural para repetirlo una vez, luego no hace falta en ciclos subsiguientes del mismo día si no hay cambios.
+
+### Qué funciona
+- Cruzar explícitamente la lista de slugs seguros de Supabase contra los archivos en `public/images/plants/` con un script Python de una línea (no solo confiar en el conteo agregado) confirma en segundos que las 43 plantas seguras tienen imagen sin missing — más riguroso que asumir por el conteo total.
+- Revisar `data/*.json` (no solo `app/`, `components/`, Supabase) al hacer QA de las plantas peligrosas — ahí puede vivir metadata de gobierno/política que no aparece en ningún otro sitio y que es relevante para el límite inamovible más estricto del mandato.
+
+### Cierre 2026-07-24 (ciclo cloud 02:50 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el último ciclo del 23-jul (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, sitemap/robots OK).
+- **Hallazgo nuevo documentado (sin acción, ya bien gestionado):** archivo candidato de imagen real para `beleno-negro` en disco, inactivo por diseño (nombre no coincide con el patrón que consume el frontend). Ver bitácora para detalle completo.
+- Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` reverificado extremo a extremo (POST real + SQL + limpieza) tras >24h del último test real — sano.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist. Sin contenido de blog nuevo (misma decisión deliberada).
+- 2 borradores sociales nuevos redactados (1 Instagram sobre el regalo, 1 LinkedIn sobre el diccionario/posicionamiento), sin publicar.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
