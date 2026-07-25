@@ -407,3 +407,25 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:50 UTC del mismo día, ~10h45min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Sin incidentes de higiene operativa este ciclo (sin volcado de `env`, solo checks puntuales `[ -n "$VAR" ]`) — token OAuth expuesto en ciclos anteriores sigue sin confirmación de rotación, escalado de nuevo en "Tareas manuales de Papu".
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-25 — Decimoquinto ciclo Kimiko Cloud (17:00 UTC)
+
+### Aprendizajes
+- **El draft "Nutrición Cuántica" no aparece al buscar por `ilike.*cuant*`** porque el título usa la tilde (`Nutrición Cuántica...`) y el patrón sin acentuar no matchea contra el texto acentuado en Postgres `ilike` (no hay normalización de acentos implícita). Para reconfirmar los 8 drafts crónicos con violación de checklist hace falta un segundo término sin acento relacionado (`nutrici`) además de `cuant` — documentado para no perder ese slug en un chequeo futuro más apurado.
+- Ningún secret nuevo llegó este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`). Comprobación hecha exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- El project ID directo de Vercel (`prj_DASuxCUuV72w8CLpZejVij8XcXvL`) sigue resolviendo sin depender del slug — confirmado de nuevo este ciclo, mismo resultado (12 env vars, sin Gumroad).
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, 43 imágenes seguras en disco, fallback de `RitualCheckout.tsx`, funnel `RegaloForm.tsx` → `/api/leads` → `/producto/ritual-descanso`, cobertura 41/43 de `afinidad_ayurvedica`) se repitieron sin hallazgos nuevos.
+
+### Cierre 2026-07-25 (ciclo cloud 17:00 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que los ciclos previos del día (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, sitemap/robots OK).
+- Gumroad y canal DDL para `citas` siguen bloqueados — decimoquinto ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN` para DDL).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist reconfirmados por título (incluyendo el de "Nutrición Cuántica", ver aprendizaje arriba sobre el matching por acento).
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre por qué se pregunta el dosha antes de recomendar planta, 1 LinkedIn sobre el filtro de verificación al registrarse como terapeuta), ángulo distinto a ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:50 UTC del mismo día, ~14h10min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Sin incidentes de higiene operativa este ciclo (sin volcado de `env`, solo checks puntuales `[ -n "$VAR" ]`) — token OAuth expuesto en ciclos anteriores sigue sin confirmación de rotación, escalado de nuevo en "Tareas manuales de Papu".
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
