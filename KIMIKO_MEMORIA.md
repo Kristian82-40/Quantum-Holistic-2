@@ -315,3 +315,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre qué se hace con el email del regalo, 1 LinkedIn sobre la estructura de rigor de cada ficha del diccionario), ángulo distinto a ciclos anteriores, sin publicar.
 - Sin test E2E de leads repetido (último real: 02:50 UTC, ~18h15min antes, por debajo del umbral de 24h).
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-25 — Undécimo ciclo Kimiko Cloud (02:50 UTC)
+
+### Aprendizajes
+- **Volcar `env` completo con un patrón de exclusión "por si acaso" es peligroso — se me escaparon tokens reales en la salida de un tool call** (`SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`, `GH_TOKEN`, `DEFAULT_WORKFLOW_TOKEN`, `CLAUDE_CODE_OAUTH_TOKEN`) porque el filtro `grep -viE` solo cubría nombres de variables "de ruido" conocidas, no secretos por contenido. No llegaron a bitácora/memoria/commit, pero quedaron visibles en la transcripción de la sesión. **Nunca volcar `env` sin filtrar explícitamente por posibles secretos** (grep -i "key\|token\|secret\|password") o, mejor, consultar variables puntuales por nombre (`echo $SUPABASE_URL`) en vez de listar todo el entorno. Este límite ("exponer secretos" está en los límites inamovibles) aplica también a la propia salida de herramientas, no solo a archivos versionados.
+- **El umbral de 24h para el test E2E de leads cayó casi exacto este ciclo** (23h58min desde el último test real del 2026-07-24 02:50 UTC) — al ser además el primer ciclo de un nuevo día calendario, se repitió el test según el criterio ya establecido. Sin incidencias: funnel sano.
+- `npm audit` ahora reporta explícitamente el desglose de severidad (1 critical / 10 high / 4 moderate / 1 low) para la vulnerabilidad conocida de `next@14.2.5` — antes solo se mencionaba "vulnerabilidad conocida" sin desglose. No cambia la decisión (sigue sin ser un bump trivial), pero vale la pena citar el desglose exacto en bitácora para que Papu dimensione el riesgo real.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, 43 imágenes seguras en disco, fallback de `RitualCheckout.tsx`, env vars de Vercel) se repitieron sin hallazgos nuevos — el patrón sigue siendo la forma más eficiente de detectar regresiones sin canal DDL.
+- Verificar `/admin` siguiendo toda la cadena de redirects (`308 → /admin/` → `307 → /login/?redirect=...` → `200`) en una sola llamada `curl -I -L` confirma la protección del middleware en un solo comando, sin ambigüedad.
+
+### Cierre 2026-07-25 (ciclo cloud 02:50 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 21:05 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, sitemap/robots OK).
+- Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` (vía `leads`) reverificado extremo a extremo (POST real + SQL + limpieza) — primer test real en ~24h, sano.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu, sin secret nuevo este ciclo (undécimo ciclo consecutivo).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published — undécimo ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre el ritual de la primera noche, 1 LinkedIn sobre rigor editorial vs. placeholder honesto), ángulo distinto a ciclos anteriores, sin publicar.
+- **Hallazgo de higiene operativa (sin impacto real, mitigado):** exposición accidental de secretos en la salida de un tool call al volcar `env` con filtro insuficiente — no llegó a ningún archivo versionado, pero queda documentado como corrección de proceso para ciclos futuros.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
