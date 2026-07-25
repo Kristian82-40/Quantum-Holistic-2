@@ -338,3 +338,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre el ritual de la primera noche, 1 LinkedIn sobre rigor editorial vs. placeholder honesto), ángulo distinto a ciclos anteriores, sin publicar.
 - **Hallazgo de higiene operativa (sin impacto real, mitigado):** exposición accidental de secretos en la salida de un tool call al volcar `env` con filtro insuficiente — no llegó a ningún archivo versionado, pero queda documentado como corrección de proceso para ciclos futuros.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-25 — Duodécimo ciclo Kimiko Cloud (06:22 UTC)
+
+### Aprendizajes
+- **La mitigación del ciclo anterior contra volcados de `env` (filtrar por `grep -iE "key|token|secret|password"` sobre nombres de variable) no fue suficiente — repetí el incidente con una causa distinta.** `GITHUB_ACTION_INPUTS` es un blob JSON multilínea; mi `sed -E 's/=.*/=<redacted>/'` solo redacta líneas con formato `clave=valor`, pero las líneas internas del JSON usan `"clave": "valor"` — no coinciden con el patrón y no se redactan. Resultado: `claude_code_oauth_token` (un token OAuth real, `sk-ant-oat01-...`) quedó en texto plano en la salida de un tool call de esta sesión. **Regla corregida y más estricta: no volcar `env` en bloque bajo ninguna circunstancia, ni con filtro.** Consultar variables puntuales por nombre con `[ -n "$VAR" ] && echo yes || echo no` (sin imprimir el valor) es suficiente para todo lo que un ciclo necesita verificar (existencia de secrets nuevos). Si alguna vez hace falta enumerar nombres de variables nuevas, usar `env | cut -d= -f1` (solo nombres, nunca valores) en vez de intentar redactar contenido.
+- Recomendado a Papu rotar el token expuesto — no es una acción que Kimiko pueda tomar por sí misma (fuera de su alcance: gestión de credenciales de la propia plataforma).
+- Ningún secret nuevo llegó este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`). `npm audit` mantiene el mismo desglose (1 critical/10 high/4 moderate/1 low); el aviso de deprecación de npm ahora enlaza al post oficial de seguridad de Next.js del 2025-12-11 — información nueva pero no cambia la decisión de no hacer bump este ciclo.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, 43 imágenes seguras en disco, fallback de `RitualCheckout.tsx`, env vars de Vercel, campo `afinidad_ayurvedica`) se repitieron sin hallazgos nuevos — sigue siendo el patrón correcto para detectar regresiones sin canal DDL.
+- Verificar el conteo de `leads` por lectura (`Content-Range`) sin hacer POST/DELETE cuando el último test E2E real fue hace <24h es suficiente para confirmar "sin actividad fuera de banda" sin gastar una escritura de prueba innecesaria.
+
+### Cierre 2026-07-25 (ciclo cloud 06:22 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 02:50 UTC (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, sitemap/robots OK).
+- **Hallazgo crítico (higiene operativa, mitigado en el propio ciclo, acción pendiente de Papu):** token OAuth real expuesto en la transcripción de la sesión por un volcado de `env` con filtro insuficiente — no llegó a ningún archivo versionado. Recomendación de rotación en "Tareas manuales de Papu".
+- Gumroad y canal DDL para `citas` siguen bloqueados — duodécimo ciclo consecutivo, sin secret nuevo.
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published — duodécimo ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre por qué algunas plantas no tienen foto, 1 LinkedIn sobre el criterio editorial detrás de esa decisión), sin publicar.
+- Sin test E2E de leads repetido (último real: 02:50 UTC, ~3h30min antes, por debajo del umbral de 24h) — verificado solo por lectura que la tabla sigue en 0 filas.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
