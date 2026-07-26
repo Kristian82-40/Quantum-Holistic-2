@@ -519,3 +519,27 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~7h10min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Vigésimo ciclo Kimiko Cloud (13:29 UTC)
+
+### Aprendizajes
+- **El chequeo recurrente de "43 imágenes seguras en disco" venía verificando solo que las 43 plantas seguras de la DB tuvieran su imagen (subconjunto), sin nunca listar el directorio completo y contrastarlo a la inversa.** Al hacerlo este ciclo (`ls public/images/plants/` completo → 73 archivos, cruzado contra los 43 slugs seguros + 9 peligrosos), aparecieron **30 archivos `*-cientifica.jpg` que no corresponden a ningún slug de las 52 plantas actuales** — 1 ya conocido (`plant-00-beleno-negro-cientifica.jpg`, candidato peligroso sin resolver desde el 18º ciclo) y **29 nuevos, nunca documentados con este detalle antes** (verbena, yerba-mate, eucalipto, tila, romero, menta, calendula, melisa, etc. — nombres de plantas medicinales comunes no presentes en el catálogo). Ninguno corresponde a las 9 peligrosas, así que no hay violación del límite inamovible, pero **presunción negativa exige documentarlos como sospechosos hasta que Papu confirme su origen** (¿assets preparados para expansión futura? ¿basura de una carga anterior?). **Nuevo check recurrente a partir de este ciclo: no basta con confirmar que las 43 plantas seguras tienen imagen — hay que listar el directorio completo y reportar cualquier archivo sin slug correspondiente en la DB, cada vez.**
+- El patrón `title=ilike.*cu%C3%A1nt*` (con la tilde URL-encoded, `%C3%A1` = `á`) es necesario para que el draft de "Nutrición Cuántica" aparezca en el filtro de checklist — el patrón sin acentuar (`cuant`) NO matchea `Cuántica` porque `a` ≠ `á` carácter a carácter en Postgres `ilike`. Ya se había documentado el problema en el 15º/16º ciclo (17:00 y 20:55 UTC), pero ahora queda fijada la solución concreta: usar la tilde URL-encoded en vez de ampliar con substrings cortos tipo `nutrici` (que generan falsos positivos, ver 16º ciclo).
+- Ningún secret nuevo llegó este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status) se repitieron sin hallazgos nuevos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 02:54 UTC del mismo día (~10h35min antes), bastó con una lectura de `Content-Range` para confirmar 0 filas.
+
+### Cierre 2026-07-26 (ciclo cloud 13:29 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- **Hallazgo nuevo:** 30 imágenes huérfanas en `public/images/plants/` sin slug correspondiente en la DB (29 nuevas + 1 ya conocida) — ver aprendizaje arriba. No se tocó ningún archivo. Nuevo check recurrente añadido a partir de este ciclo.
+- Gumroad y canal DDL para `citas` siguen bloqueados — vigésimo ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published — 8 drafts con violación de checklist reconfirmados (incluyendo "Nutrición Cuántica" vía el patrón con tilde URL-encoded).
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre las 30 fotos huérfanas y por qué el catálogo crece lento pero verificado, 1 LinkedIn sobre el diseño del checklist anti-pseudociencia), ángulo distinto a los 19 ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~10h35min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads` sigue en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 6 ciclos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
