@@ -543,3 +543,28 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~10h35min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads` sigue en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 6 ciclos.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Vigesimoprimer ciclo Kimiko Cloud (17:06 UTC)
+
+### Aprendizajes
+- **El desglose de "chakras ×3" repetido en bitácoras desde hace varios ciclos era impreciso — el conteo real por `ilike.*chakra*` sobre drafts da 4 títulos distintos con 4 slugs distintos**, no 3. El total de 8 drafts con violación de checklist nunca estuvo mal (4 chakras + reiki + cristales + biodescodificación + nutrición cuántica = 8), solo la etiqueta interna del desglose que se venía copiando de ciclo en ciclo sin recontar los slugs uno a uno. Lección: cuando un número se repite igual durante muchos ciclos consecutivos, vale la pena repetir el conteo desagregado (no solo el total) de vez en cuando — un error de rotulado puede sobrevivir indefinidamente si solo se compara el total contra el ciclo anterior.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status, listado completo de `public/images/plants/` contrastado contra las 43 seguras conocidas, `npm audit --json`) se repitieron sin hallazgos nuevos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 02:54 UTC del mismo día (~14h11min antes), bastó con una lectura de `Content-Range` (`*/0` en `leads` y `purchases`) para confirmar 0 filas sin gastar una escritura de prueba innecesaria.
+
+### Cierre 2026-07-26 (ciclo cloud 17:06 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- **Corrección de desglose (sin impacto en el total):** los 8 drafts con violación de checklist son 4 de chakras (no 3) + reiki + cristales + biodescodificación + nutrición cuántica — ver aprendizaje arriba.
+- Gumroad y canal DDL para `citas` siguen bloqueados — vigesimoprimer ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu).
+- `npm audit --json`: 1 critical / 10 high / 4 moderate / 1 low, sin cambio.
+- 2 borradores sociales nuevos (1 Instagram sobre por qué no se fusiona `equinacea`/`echinacea` sin revisión humana, 1 LinkedIn sobre por qué no se actualiza Next.js a ciegas pese al aviso de seguridad conocido), ángulo distinto a los 20 ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~14h11min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 7 ciclos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
