@@ -472,3 +472,27 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre transparencia taxonómica del nombre científico, 1 LinkedIn sobre por qué el checklist excluye temas explícitamente), ángulo distinto a los 16 ciclos anteriores, sin publicar.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Decimoctavo ciclo Kimiko Cloud (06:41 UTC)
+
+### Aprendizajes
+- **Nuevo archivo `data/dangerous-plants.json` en el repo** (manifiesto de las 9 plantas peligrosas, con política explícita "NO generar a ciegas, requiere aprobación visual manual antes de renombrar/publicar") **y un candidato de imagen real para una de ellas** (`public/images/plants/plant-00-beleno-negro-cientifica.jpg`, etiquetado "SuperGrok" en el manifiesto). El archivo no está wireado a la DB (`image_cientifica_url` sigue `null` para `beleno-negro`) ni sigue el patrón de nombre `{slug}-cientifica.jpg` que usa el código, así que la ficha pública sigue mostrando el placeholder — **pero al vivir bajo `public/`, Next.js lo sirve igual por URL directa** (confirmado `200` en producción). Esto no es "activar" la imagen en el sentido de la UI, pero sí es una exposición real que el checklist de QA no contemplaba hasta ahora. **Nuevo check recurrente a partir de este ciclo: listar `public/images/plants/` completo y contrastar contra las 43 seguras conocidas — cualquier archivo extra es sospechoso por definición** (presunción negativa), no solo confiar en el conteo de la tabla `plants`.
+- **Revisar visualmente una imagen generada para una planta peligrosa es posible y barato con el tool `Read`** (lee imágenes directamente, sin necesitar credenciales ni DDL) — usado por primera vez este ciclo para juzgar si el candidato de `beleno-negro` corresponde botánicamente a *Hyoscyamus niger*. Conclusión: no parece corresponder (la ilustración muestra espigas florales moradas/blancas tipo Lamiaceae/Salvia, no las flores acampanadas amarillo-crema con venas púrpura características del beleño negro real). Vale la pena repetir esta verificación visual en cualquier ciclo futuro donde aparezca un nuevo candidato de imagen para una planta peligrosa, antes de que alguien lo apruebe solo por el nombre de archivo.
+- `npm audit` (el endpoint legacy `/-/npm/v1/security/audits/quick`) empezó a devolver `400 Bad Request` este ciclo — npm está retirando ese endpoint a favor de uno "bulk advisory" nuevo. No se pudo reconfirmar el desglose exacto de severidad este ciclo por este cambio de infraestructura externa, no por cambio real del proyecto. Si esto persiste, un ciclo futuro debería investigar el endpoint de reemplazo o usar `npm audit --json` / una herramienta alternativa.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status) se repitieron sin hallazgos nuevos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 02:54 UTC del mismo día (~3h47min antes), bastó con una lectura de `Content-Range` para confirmar 0 filas sin gastar una escritura de prueba innecesaria.
+
+### Cierre 2026-07-26 (ciclo cloud 06:41 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder en la ficha pública (ver hallazgo sobre el archivo huérfano arriba), sitemap/robots OK.
+- **Hallazgo nuevo (contenido, sin impacto en la ficha pública, acción recomendada a Papu):** candidato de imagen `plant-00-beleno-negro-cientifica.jpg` accesible por URL directa aunque no wireado a la DB — recomendación de no aprobarlo por posible error de identificación botánica (ver aprendizaje arriba). No se tocó el archivo este ciclo.
+- Gumroad y canal DDL para `citas` siguen bloqueados — decimoctavo ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published — decimoctavo ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre fichas que se actualizan ante nueva evidencia, 1 LinkedIn sobre qué se automatiza vs. qué espera revisión humana), ángulo distinto a los 17 ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~3h47min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
