@@ -496,3 +496,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~3h47min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Decimonoveno ciclo Kimiko Cloud (10:04 UTC)
+
+### Aprendizajes
+- **El `400 Bad Request` del endpoint legacy de `npm audit` visto en el ciclo de las 06:41 UTC fue transitorio, no un retiro real de infraestructura.** Este ciclo `npm audit --json` funcionó normal y devolvió el mismo desglose de siempre (1 critical/10 high/4 moderate/1 low). Usar `npm audit --json` directamente (en vez de depender del comportamiento del endpoint legacy vía `npm audit` a secas) es más robusto para ciclos futuros si el fallo se repite.
+- Ningún secret nuevo llegó este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status, listado completo de `public/images/plants/` contrastado contra las 43 seguras conocidas) se repitieron sin hallazgos nuevos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 02:54 UTC del mismo día (~7h10min antes), bastó con una lectura de `Content-Range` para confirmar 0 filas.
+
+### Cierre 2026-07-26 (ciclo cloud 10:04 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder en la ficha pública, sitemap/robots OK.
+- Candidato de imagen `plant-00-beleno-negro-cientifica.jpg` sigue sin resolución de Papu — sin cambios desde el ciclo de las 06:41 UTC (recomendación de no aprobar sigue vigente, archivo no tocado).
+- Gumroad y canal DDL para `citas` siguen bloqueados — decimonoveno ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published — decimonoveno ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre por qué el catálogo no crece más rápido, 1 LinkedIn sobre "Tu Planta Aliada" técnicamente lista pero sin lanzar por falta de aprobación editorial), ángulo distinto a los 18 ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~7h10min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
