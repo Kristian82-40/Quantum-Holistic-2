@@ -568,3 +568,29 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~14h11min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 7 ciclos.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Vigesimosegundo ciclo Kimiko Cloud (21:02 UTC)
+
+### Aprendizajes
+- **El commit único del repo (`9b8b14c`) es efectivamente el squash de todo el historial hasta ahora** — `git log -1 -- <cualquier archivo>` siempre devuelve ese mismo commit, incluyendo `data/dangerous-plants.json` y `plant-00-beleno-negro-cientifica.jpg`. Confirmado este ciclo al intentar usar `git log` para saber si esos archivos habían cambiado desde el 18º ciclo — no sirve como señal de "cambio reciente" en este repo mientras solo exista un commit; hay que seguir comparando contra lo documentado en bitácoras anteriores, no contra el historial git.
+- Al recontar los 30 huérfanos de `public/images/plants/` cruzando contra los 52 slugs vía script, un matching ingenuo por substring (`slug in filename`) excluye por error a `plant-00-beleno-negro-cientifica.jpg` de la lista de huérfanos, porque el substring `beleno-negro` aparece en el nombre de archivo aunque el patrón real del código sea `{slug}-cientifica.jpg` (no `plant-00-{slug}-cientifica.jpg`). Hay que seguir contando ese archivo aparte explícitamente (29 huérfanos por patrón regular + 1 candidato peligroso sin wire = 30 total), no confiar en un matching automático por substring para ese caso puntual.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status, `npm audit --json`) se repitieron sin hallazgos nuevos.
+- Recontar `public/images/plants/` archivo por archivo cruzando contra los 52 slugs actuales de la DB (en vez de solo comparar el conteo total contra el ciclo anterior) siguió siendo la forma correcta de aplicar presunción negativa — confirmó que los 30 huérfanos son exactamente los mismos del 20º/21º ciclo, sin nuevos ni desaparecidos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 02:54 UTC del mismo día (~18h09min antes), bastó con una lectura de `Content-Range` (`*/0` en `leads` y `purchases`) para confirmar 0 filas sin gastar una escritura de prueba innecesaria.
+
+### Cierre 2026-07-26 (ciclo cloud 21:02 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- Gumroad y canal DDL para `citas` siguen bloqueados — vigesimosegundo ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu) — recontadas archivo por archivo este ciclo, ver aprendizaje sobre el matching por substring.
+- `npm audit --json`: 1 critical / 10 high / 4 moderate / 1 low, sin cambio.
+- 2 borradores sociales nuevos (1 Instagram sobre la presunción negativa como filosofía de QA, 1 LinkedIn sobre por qué no se simula/mockea la variable de Gumroad para activar pagos sin decisión de Papu), ángulo distinto a los 21 ciclos anteriores, sin publicar.
+- Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~18h09min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 8 ciclos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
