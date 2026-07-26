@@ -450,3 +450,25 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 02:50 UTC del mismo día, ~18h05min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Sin incidentes de higiene operativa este ciclo — token OAuth expuesto en ciclos anteriores sigue sin confirmación de rotación, escalado de nuevo en "Tareas manuales de Papu".
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-26 — Decimoséptimo ciclo Kimiko Cloud (02:54 UTC)
+
+### Aprendizajes
+- **Un `curl -X POST` sin `-L` contra una ruta con trailing-slash-redirect (`308`) no llega al handler — el body nunca se procesa.** Al repetir el test E2E real de `/api/leads` este ciclo (justificado por el umbral de 24h: último real en 02:50 UTC del día anterior, ~24h04min antes), el primer intento sin `-L` devolvió `308` sin crear ningún lead; con `-L` sí llegó (`{"ok":true}`, `200`) y el lead apareció en Supabase. **No es una regresión real** — el `fetch('/api/leads')` del cliente en `RegaloForm.tsx`/`RitualCheckout.tsx` es same-origin y sigue redirects por defecto, así que el flujo real de usuario no se ve afectado. Pero sirve de recordatorio: al probar rutas POST/API de este proyecto con `curl` en ciclos futuros, usar siempre `-L` para no confundir un `308` esperado con un funnel roto.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, 43 imágenes seguras en disco vía `public/images/plants/`, fallback de `RitualCheckout.tsx`, cobertura 41/43 de `afinidad_ayurvedica`, env vars de Vercel vía project ID directo, backlog de blog por `ilike`) se repitieron sin hallazgos nuevos — mismo patrón eficiente de siempre.
+- Repetir el test E2E de leads al cruzar el umbral de 24h (aquí ~24h04min) siguió siendo la señal correcta para justificar una escritura de prueba real en vez de solo lectura — confirma que el criterio sigue siendo válido tras 17 ciclos.
+
+### Cierre 2026-07-26 (ciclo cloud 02:54 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Mismos indicadores estructurales que el ciclo de 20:55 UTC del día anterior (52 plantas, 9 peligrosas con placeholder, 43 seguras con imagen, sitemap/robots OK).
+- Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` (vía `leads`) reverificado extremo a extremo (POST real con `-L` + SQL + limpieza) — primer test real en ~24h, sano. Ver aprendizaje sobre el matiz de `-L` en `curl`.
+- Gumroad y canal DDL para `citas` siguen bloqueados — mismas tareas pendientes de Papu, sin secret nuevo este ciclo (decimoséptimo ciclo consecutivo).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist — decimoséptimo ciclo consecutivo con el mismo pendiente crónico.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 2 borradores sociales nuevos (1 Instagram sobre transparencia taxonómica del nombre científico, 1 LinkedIn sobre por qué el checklist excluye temas explícitamente), ángulo distinto a los 16 ciclos anteriores, sin publicar.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu".
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
