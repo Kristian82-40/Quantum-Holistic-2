@@ -713,3 +713,30 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin test E2E de leads repetido (último real: 03:23 UTC del mismo día, ~14h24min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 13 ciclos.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+
+---
+
+## 2026-07-27 — Vigesimoctavo ciclo Kimiko Cloud (21:15 UTC)
+
+### Aprendizajes
+- **El chequeo de checklist de `blog_posts` llevaba varios ciclos escaneando solo el título, no el `content` completo, y subestimaba el conteo real.** Al ampliar el escaneo al cuerpo del texto este ciclo aparecieron 2 drafts adicionales (10 en total, no 8) con una sección "elemento, chakra y dosha" enterrada dentro de fichas de planta con títulos legítimos ("Echinacea: El Poder Curativo...", "El Poder Curativo del Sidr..."). Ninguno está publicado, así que no hay violación en vivo, pero confirma que el patrón "elemento, chakra y dosha" puede estar en más fichas de planta como sección de plantilla estándar, invisible a un chequeo que solo mira el título. A partir de ahora, el chequeo de checklist de contenido debe escanear `title + content`, no solo `title` — dejarlo así documentado explícitamente para que no se repita la subestimación.
+- Columnas reales de `blog_posts` confirmadas por error 42703 al usar nombres en español: son `title`/`content` (inglés), no `titulo`/`contenido`. Anotado para no repetir el intento fallido en ciclos futuros.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 03:23 UTC del mismo día (~17h50min antes), bastó con una lectura de `Content-Range` (`*/0` en `leads` y `purchases`) para confirmar 0 filas sin gastar una escritura de prueba innecesaria.
+- Ampliar el escaneo del checklist de contenido de solo-título a título+cuerpo, en vez de seguir confiando en el conteo heredado sin cuestionarlo, es exactamente el tipo de aplicación de presunción negativa que hay que seguir haciendo periódicamente sobre los propios chequeos recurrentes, no solo sobre el estado del sitio.
+
+### Cierre 2026-07-27 (ciclo cloud 21:15 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- Gumroad y canal DDL para `citas` siguen bloqueados — 28º/29º ciclo consecutivo respectivamente, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio en el total: 90 drafts / 19 published. **Corrección: 10 drafts con violación de checklist, no 8** — 6 chakra (4 explícitos en título + 2 enterrados en el cuerpo del texto de fichas de planta) + 1 reiki + 1 cristales + 1 biodescodificación + 1 nutrición cuántica. Ver aprendizaje arriba.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu).
+- `npm audit --json`: 1 critical (`next@14.2.5`, fix disponible `14.2.35` sin salto mayor) / 10 high / 4 moderate / 1 low, sin cambio.
+- `/api/webhooks/btcpay` heredado (pasarela cripto descartada por directiva) reconfirmado en el build, sin tocar.
+- Sin test E2E de leads repetido (último real: 03:23 UTC del mismo día, ~17h50min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 14 ciclos.
+- Nueva tarea manual añadida: revisar los 2 drafts de plantas con sección "chakra" enterrada antes de considerar publicarlos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
