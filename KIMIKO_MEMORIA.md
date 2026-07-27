@@ -627,4 +627,44 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre probar en producción sin dejar rastro, 1 LinkedIn sobre por qué se sigue escalando el mismo aviso del token OAuth en vez de asumir que ya se resolvió), ángulo distinto a los 22 ciclos anteriores, sin publicar.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 9 ciclos.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-27 — Vigesimocuarto ciclo Kimiko Cloud (07:39 UTC)
+
+### Aprendizajes
+- **Identificada por fin la causa concreta del critical de `npm audit`, reportado sin desglose desde hace varios ciclos:** es la propia dependencia `next@14.2.5`, afectada por "Next.js Cache Poisoning" (`GHSA-gp8f-8m3g-qvj9`, CVSS 7.5). `npm audit` confirma `fixAvailable` a `14.2.35` **sin salto de versión mayor** (`isSemVerMajor: false`). No se actualizó de forma autónoma este ciclo — es una dependencia de framework que toca todo el build/middleware, y ya hay precedente documentado de incidente real por middleware mal ubicado, así que un cambio de este tipo se escala a Papu en vez de aplicarse directo a `main` sin PR. A partir de ahora, este hallazgo entra en el top-3 de "Tareas manuales de Papu" hasta que se resuelva.
+
+### Cierre 2026-07-27 (ciclo cloud 07:39 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- Gumroad y canal DDL para `citas` siguen bloqueados — 24º/25º ciclo consecutivo respectivamente, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist (4 chakras + reiki + cristales + biodescodificación + nutrición cuántica).
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu) — retiradas del top-3 de tareas manuales este ciclo para dar espacio al hallazgo de `next`, sin cambio de estado.
+- `npm audit --json`: 1 critical / 10 high / 4 moderate / 1 low — critical identificado como `next@14.2.5`, ver aprendizaje arriba.
+- Sin test E2E de leads repetido (último real: 03:23 UTC del mismo día, ~4h13min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 10 ciclos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-27 — Vigesimoquinto ciclo Kimiko Cloud (11:27 UTC)
+
+### Aprendizajes
+- Ciclo sin hallazgos nuevos — todos los chequeos recurrentes (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status y desglose desagregado por término, listado completo de `public/images/plants/`, `npm audit --json`, `/api/webhooks/btcpay` heredado) reconfirmaron el mismo estado del ciclo anterior sin cambios.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien — con el último test real a las 03:23 UTC del mismo día (~8h04min antes), bastó con una lectura de `Content-Range` (`*/0` en `leads` y `purchases`) para confirmar 0 filas sin gastar una escritura de prueba innecesaria.
+
+### Cierre 2026-07-27 (ciclo cloud 11:27 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- Gumroad y canal DDL para `citas` siguen bloqueados — 25º/26º ciclo consecutivo respectivamente, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist (4 chakras + reiki + cristales + biodescodificación + nutrición cuántica, reconfirmado por conteo desagregado).
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu).
+- `npm audit --json`: 1 critical (`next@14.2.5`, fix disponible `14.2.35` sin salto mayor) / 10 high / 4 moderate / 1 low, sin cambio.
+- `/api/webhooks/btcpay` heredado (pasarela cripto descartada por directiva) reconfirmado en el build, sin tocar.
+- Sin test E2E de leads repetido (último real: 03:23 UTC del mismo día, ~8h04min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 11 ciclos.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
