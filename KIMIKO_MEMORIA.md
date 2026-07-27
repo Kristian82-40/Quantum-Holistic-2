@@ -593,4 +593,30 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - 2 borradores sociales nuevos (1 Instagram sobre la presunción negativa como filosofía de QA, 1 LinkedIn sobre por qué no se simula/mockea la variable de Gumroad para activar pagos sin decisión de Papu), ángulo distinto a los 21 ciclos anteriores, sin publicar.
 - Sin test E2E de leads repetido (último real: 02:54 UTC del mismo día, ~18h09min antes, por debajo del umbral de 24h) — verificado solo por lectura que `leads`/`purchases` siguen en 0 filas.
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 8 ciclos.
+
+---
+
+## 2026-07-27 — Vigesimotercer ciclo Kimiko Cloud (03:23 UTC)
+
+### Aprendizajes
+- **`ficha_mistica.afinidad_ayurvedica` no es una tabla, es un campo JSONB dentro de `plants`.** Un intento de consultar `/rest/v1/ficha_mistica` directamente este ciclo devolvió `PGRST205` (tabla no encontrada) — la sintaxis correcta de bitácoras anteriores ("cruce `profiles.dosha` × `ficha_mistica.afinidad_ayurvedica`") se refería siempre al campo anidado `plants.ficha_mistica->>afinidad_ayurvedica`, nunca a una tabla separada. Aclarado explícitamente en esta bitácora para que no se repita la confusión en ciclos futuros — la consulta correcta filtra sobre `plants` con el operador `->>` de PostgREST.
+- El umbral de 24h para el test E2E de leads con escritura se cruzó este ciclo (~24h25min desde el último real, 02:54 UTC del 26/07) — se repitió el test completo: POST real con `-L`, verificación de la fila en Supabase, y **limpieza explícita con `DELETE` por `id`** antes de cerrar, reverificando `content-range: */0`. La limpieza post-test no se había descrito con este nivel de detalle en bitácoras anteriores (solo se mencionaba genéricamente "limpieza") — a partir de ahora documentar el `DELETE` y su reverificación como parte explícita del procedimiento, para dejar constancia de que ninguna fila de prueba queda en tablas de producción.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Los chequeos recurrentes baratos (duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog por conteo status, listado completo de `public/images/plants/` contrastado contra los 52 slugs actuales, `npm audit --json`) se repitieron sin hallazgos nuevos.
+- El criterio de umbral de 24h para el test E2E de leads con escritura siguió funcionando bien tras cruzar el umbral por primera vez en varios ciclos — confirmó que el funnel de escritura (`/api/leads`, compartido por `/regalo/primera-noche` y el fallback de `/producto/ritual-descanso`) sigue sano, sin dejar residuo en la tabla real.
+
+### Cierre 2026-07-27 (ciclo cloud 03:23 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- Test E2E real de `leads` repetido (umbral de 24h cruzado, ~24h25min desde el último) — POST con `-L`, verificación, `DELETE` de limpieza y reverificación de `*/0`. Ver aprendizaje sobre el procedimiento de limpieza explícito.
+- Gumroad y canal DDL para `citas` siguen bloqueados — vigesimotercer ciclo consecutivo, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 8 drafts con violación de checklist.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu).
+- `npm audit --json`: 1 critical / 10 high / 4 moderate / 1 low, sin cambio.
+- Funnel A/B de `/regalo/primera-noche` y `/producto/ritual-descanso`: sin datos suficientes en `leads` (0 filas reales) para proponer variantes — pendiente de volumen real.
+- 2 borradores sociales nuevos (1 Instagram sobre probar en producción sin dejar rastro, 1 LinkedIn sobre por qué se sigue escalando el mismo aviso del token OAuth en vez de asumir que ya se resolvió), ángulo distinto a los 22 ciclos anteriores, sin publicar.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 9 ciclos.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
