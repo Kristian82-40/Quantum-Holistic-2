@@ -1,70 +1,56 @@
-# Handoff — 2026-07-23 (ciclo interactivo, noche)
-
-## Ciclo ejecutado hoy (Directiva v3.1 — salud → QA → monetización → contenido)
-Segundo ciclo interactivo del día, mismo bloqueador TCC sin resolver.
-
-1. **Salud:** disco Papu Ext montado (1.6Ti libres), repo `main` limpio salvo `logs/` (untracked, ver abajo).
-2. **QA:** `kimiko-qa-nocturna.mjs` → **13/13 checks OK**. Deploy READY commit `58afed4`.
-3. **Monetización:** sin cambios — `leads` 0 filas, `purchases` 0 filas, `NEXT_PUBLIC_GUMROAD_URL` sigue sin valor. Funnel `/regalo/primera-noche` → `/producto/ritual-descanso` reverificado live.
-4. **Contenido:** backlog de `blog_posts` sigue en **88 drafts** (sin cambio desde el hallazgo de la tarde) — sigue pendiente de decisión de Papu, no se generó contenido nuevo por la misma razón.
-5. **Housekeeping:** `logs/kimiko-qa-nocturna.log` apareció untracked en el repo (log generado por el script de QA) — añadido `logs/` a `.gitignore`, no debe versionarse.
-
-## Directiva v3.1 — "Modo Operadora Total" (Papu, 2026-07-23) — sigue vigente
-1. **Pasarela de pago: Gumroad** (decidido). Placeholder sin valor real — sin cambios de código pendientes.
-2. **Funnel regalo→email→ritual (€19)**: reverificado hoy, sigue live extremo a extremo.
-3. **QA cada ciclo**: hecho hoy, 13/13.
-4. **Contenido cada ciclo**: este ciclo se saltó deliberadamente por el backlog sin revisar (ver hallazgo arriba) — no es incumplimiento, es la decisión más útil dado el estado real.
-
-### Bloqueantes manuales de Papu (Kimiko no puede resolverlos)
-1. Crear cuenta Gumroad → pasar URL del producto.
-2. Registrar `quantum-holistic.com` en Google Search Console + enviar sitemap.
-3. Confirmar perfiles IG/LinkedIn para publicar los borradores acumulados.
-4. **Nuevo:** decidir qué hacer con los 85 borradores de blog viejos sin revisar (revisar / archivar / borrar / pausar el agente nocturno que los generó).
-
-## ⚠️ Bloqueador crítico de infraestructura — Kimiko sin correr en background desde 2026-07-11
-Sin cambios desde el diagnóstico anterior — sigue pendiente de acción de Papu:
-- Guard de disco montado pasa OK, pero `cat "$PROMPT"` dentro de un proceso lanzado por `launchd` falla con `Operation not permitted` (funciona igual en sesión interactiva de Terminal).
-- Causa más probable: restricción TCC de macOS sobre procesos de `launchd` accediendo a un volumen externo.
-- **Acción requerida de Papu (GUI):** System Settings → Privacy & Security → Full Disk Access → añadir `/bin/bash` y/o el binario `claude`.
-- No ejecutado `launchctl kickstart` todavía — probablemente reproduce el mismo fallo.
+# Handoff — 2026-07-28 (3ª sesión: funnel de pago ACTIVADO)
 
 ## Estado del proyecto
-- Producción estable (`quantum-holistic.com`), deploy READY commit `a51c4db`. QA 13/13 (2026-07-23).
-- Funnel de monetización completo y live: `/regalo/primera-noche` → `leads` → `/producto/ritual-descanso` (€19, checkout listo salvo cuenta de pago).
-- `leads` y `purchases` en 0 filas — sin actividad real todavía.
-- Backlog de contenido sin revisar: 88 borradores en `blog_posts` (ver hallazgo arriba) + 3 borradores sociales (2 IG + 1 LinkedIn) en bitácora Notion del 2026-07-11.
+- Producción estable (`quantum-holistic.com`). Funnel de monetización **100% operativo por primera vez**:
+  `/regalo/primera-noche` → `leads` → `/producto/ritual-descanso` → **Gumroad €19**.
+- **Producto Gumroad publicado por Papu** (2026-07-28 10:09): https://kristiantronco.gumroad.com/l/ugsqtg — €19, digital, `is_published:true` (verificado vía `/l/ugsqtg.json`).
+- **`NEXT_PUBLIC_GUMROAD_URL` creada en Vercel** (production/preview/development) y en `.env.local` — hecha por Kimiko esta sesión. Redeploy disparado con este commit (la var es build-time).
+- `leads` y `purchases` en 0 filas. Backlog: **90 drafts** de blog (eran 88 el 7-23; el más nuevo es del 7-10 → los +2 son cambios de status, no contenido nuevo) + 3 borradores sociales sin revisar.
+
+## Módulo trabajado
+**Activación del checkout Gumroad** (paso 2 del handoff anterior):
+- Verificado producto live vía JSON público: €19 EUR, publicado, descripción OK. Sin covers/thumbnail (cosmético, lo puede añadir Papu).
+- No se puede verificar desde fuera que el PDF esté adjunto al producto — **Papu debe confirmar que subió `assets/ritual-descanso.pdf` v2 al producto** (o hacer una compra de prueba con descuento 100%).
+- Env var creada vía API Vercel (`upsert`), añadida a `.env.local`, redeploy con este push.
+- QA 13 checks tras el deploy (resultado en cierre de KIMIKO_MEMORIA.md).
 
 ## Archivos modificados esta sesión
-- `handoff.md` — reescrito con resultado del segundo ciclo del día.
-- `.gitignore` — añadido `logs/` (log de QA local no debe versionarse).
+- `.env.local` — `NEXT_PUBLIC_GUMROAD_URL` (no versionado).
+- `handoff.md` — reescrito (incluye también el estado de la 2ª sesión: PDF v2).
+
+## Contexto 2ª sesión de hoy (PDF v2, sin commit previo)
+- `assets/ritual-descanso.pdf` **v2 definitivo**: 32 págs A5, 5,8 MB, 7 ilustraciones acuarela, verificado página a página. Ignorado por git (correcto).
+- Generador persistido en `/Volumes/Papu Ext/scripts/pdf-ritual-descanso/` (`python3 gen_ritual_v2.py` regenera).
+- Del descargo legal se omitió "Revisión: Herborista certificado…" (no consta revisión real — riesgo legal).
+- Correcciones de seguridad sobre la spec: alergia Asteraceae en manzanilla, lúpulo + anticonceptivos/hormonales, melisa + hipotiroidismo, tónico alcohólico "solo adultos".
 
 ## Próximos pasos (ordenados por prioridad)
-1. **Papu: resolver el permiso Full Disk Access/TCC** para que Kimiko vuelva a correr en background.
-2. **Papu: decidir qué hacer con los 85 borradores de blog viejos** (nuevo hallazgo de hoy).
-3. Papu: crear cuenta Gumroad → pasar URL del producto.
-4. Papu: Google Search Console + envío de sitemap.
-5. Papu: confirmar perfiles IG/LinkedIn para los borradores ya redactados.
-6. Papu: aprobar/rechazar los 3 borradores sociales y el borrador de blog SEO de nutrición km0 (10-jul).
-7. Una vez resuelto el permiso TCC, próxima run headless: ciclo estándar completo según Directiva v3.1.
+1. **Papu: confirmar que el PDF v2 está subido como archivo del producto Gumroad** (compra de prueba recomendada). Opcional: añadir cover al producto.
+2. Papu: resolver permiso Full Disk Access/TCC (bloqueador Kimiko background desde 2026-07-11).
+3. Papu: decidir qué hacer con los 90 drafts de blog sin revisar.
+4. Papu: Google Search Console + sitemap; confirmar perfiles IG/LinkedIn; aprobar 3 borradores sociales.
+5. Vigilar primeras filas en `purchases`/ventas Gumroad ahora que el checkout está live.
 
 ## Decisiones técnicas tomadas
-- No se generó contenido nuevo este ciclo por el backlog de 88 drafts sin revisar — se prioriza flagear el hallazgo sobre seguir acumulando borradores.
-- Gumroad sigue siendo la pasarela elegida — sin cambios de código, `RitualCheckout.tsx` ya agnóstico de proveedor.
+- `NEXT_PUBLIC_GUMROAD_URL` configurada sin esperar confirmación (autoridad total + paso listado en handoff): producto verificado como publicado y con precio correcto antes de activar.
+- PDF de pago NO se versiona (`.gitignore`); purga del historial antiguo sigue pendiente de aprobación (irreversible).
+- Bloqueador TCC de Kimiko: System Settings → Privacy & Security → Full Disk Access → añadir `/bin/bash` y/o binario `claude`.
 
-## Pendiente / deuda técnica heredada (no tocada esta sesión)
-1. Purga de historial de git del PDF de pago (`ritual-descanso.pdf`) — pendiente de aprobación explícita de Papu (irreversible, force-push).
-2. `app/` sigue conteniendo scaffolding duplicado — deuda técnica conocida, no tocar sin auditoría.
-3. Heredado sin tocar: PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/` (cannabis, cornezuelo, datura).
+## Pendiente / deuda técnica heredada (no tocada)
+1. Purga de historial git del PDF antiguo — pendiente de aprobación de Papu.
+2. `app/` con scaffolding duplicado — no tocar sin auditoría.
+3. PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/`.
 
 ## Scripts disponibles
 | Script | Función |
 |---|---|
-| `node scripts/kimiko-qa-nocturna.mjs` | QA 13 checks: build, rutas, Supabase, assets, middleware, canonical/og:url. Requiere `source .env.local` antes si se corre a mano, y PATH con `/opt/homebrew/bin` si `node` no está en el PATH del shell. `env -u NOTION_API_KEY` para correr sin postear bitácora. |
+| `node scripts/kimiko-qa-nocturna.mjs` | QA 13 checks (requiere `source .env.local`; `env -u NOTION_API_KEY` para no postear bitácora) |
 | `node scripts/qh-imagenes-v2.mjs` | Descarga imágenes Wikimedia para slugs faltantes |
-| `bash scripts/kimiko-run-all.sh` | Pipeline Kimiko: genera blog posts + imágenes |
+| `bash scripts/kimiko-run-all.sh` | Pipeline Kimiko: blog posts + imágenes |
 | `bash scripts/auto-flow-state.sh` | Estado del proyecto |
 
 ## Referencias
-- Bitácora "raíz" con mandatos de Papu (leer siempre, se prependea cronológicamente): https://app.notion.com/p/36c37a0e7b45812f8628f31630109924
+- Producto Gumroad: https://kristiantronco.gumroad.com/l/ugsqtg
+- Bitácora "raíz" con mandatos de Papu: https://app.notion.com/p/36c37a0e7b45812f8628f31630109924
 - Última bitácora de cierre (2026-07-11): https://app.notion.com/p/39a37a0e7b4581eb8e3fd99033817de2
 - Log de autostart: `~/bin/qh/kimiko-autostart.log`
