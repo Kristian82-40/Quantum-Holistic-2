@@ -23,6 +23,9 @@ app/app/
 
 # Imágenes pendientes de aprobación visual (plantas peligrosas — NO servir sin revisión)
 public/images/plants/_pending-approval/
+kimiko/imagenes/pendiente-aprobacion/*.jpg
+kimiko/imagenes/pendiente-aprobacion/*.png
+kimiko/imagenes/pendiente-aprobacion/*.webp
 
 # PDF de pago — NUNCA en el repo (era descargable gratis vía raw.githubusercontent.com,
 # ver QH_MASTER_VERIFIED.md bloqueo #0). Vive solo en local hasta migrar a storage privado.
