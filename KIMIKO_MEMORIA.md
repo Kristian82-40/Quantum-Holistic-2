@@ -907,3 +907,86 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin borrar datos: backup íntegro en `/Volumes/Papu Ext/QuantumHolistic/backups/plants-full-dump-2026-07-28.json`.
 - Ficha mística mantenida (simbolismo, sin dosificación) — el diccionario sigue navegable.
 - Pendiente: re-verificar fichas planta a planta y levantar el gate una a una; **identificar y desactivar el script que pobló la tabla**, que sigue sin localizar y reintroduciría el fallo si se ejecuta.
+
+---
+
+## 2026-07-28 — Trigésimo tercer ciclo Kimiko Cloud (21:15 UTC)
+
+### Aprendizajes
+- **Un cambio de configuración en Vercel (sin commit de código) puede romper monetización entre
+  dos ciclos cloud, y `git log` no lo detecta.** Entre el ciclo anterior (17:40 UTC, checkout
+  Gumroad confirmado en vivo) y este, `NEXT_PUBLIC_GUMROAD_URL` se actualizó directamente en
+  Vercel (18:25 UTC) a un dominio y slug de Gumroad distintos (`kristian320.gumroad.com/l/ritual-descanso`
+  en vez de `kristiantronco.gumroad.com/l/ugsqtg`), con redeploy automático a las 18:26 UTC. La
+  URL nueva da **404** en Gumroad (confirmado con user-agent de navegador real, no solo `curl`
+  por defecto — Gumroad no bloquea bots aquí, el 404 es real). La URL antigua sigue viva (200).
+  **Lección operativa: revisar `git log` no basta para detectar cambios entre ciclos — hay que
+  comprobar también los timestamps de env vars y deployments en Vercel vía API cuando algo
+  relevante a monetización cambió de comportamiento.** El paso 0 de "revisar qué pasó desde el
+  ciclo anterior" debe extenderse a Vercel, no solo a git.
+- **El fallback de `RitualCheckout.tsx` solo cubre "la env var no existe", no "la env var existe
+  pero apunta a un destino roto".** Este es un caso nuevo no contemplado en el mandato: un CTA
+  puede estar "activo" (sin fallback) y aun así no funcionar. Vale la pena que una futura sesión
+  de código añada una verificación de salud del enlace (o al menos un chequeo periódico como este)
+  ya que el gate actual no distingue "configurado" de "funcional".
+- Dado el hallazgo, se evitó deliberadamente cualquier borrador social que sugiriera "ya puedes
+  comprar" — publicar esa afirmación mientras el checkout real está caído habría sido peor que
+  no publicar nada.
+- No se tocó `NEXT_PUBLIC_GUMROAD_URL` para revertirla: no hay forma de saber desde fuera si
+  Papu está migrando de cuenta de Gumroad a mitad de camino (y el producto nuevo simplemente no
+  se ha terminado de publicar) o si fue un error. Revertir sin saberlo sería una acción dudosa
+  sobre configuración de producción ajena — se documenta y se escala como tarea manual #1.
+- Resto de chequeos recurrentes (build, rutas 200, `/admin` redirect, 52 plantas íntegras, 9
+  peligrosas con `ficha_cientifica={}` + `ficha_verificada:false`, `leads`/`purchases` en 0,
+  sitemap/robots, backlog de blog sin cambio, duplicados `equinacea`/`echinacea` y
+  `ashwagandha`/`ashwagandha-fruto`, 71 archivos/29 huérfanos en `public/images/plants/`,
+  `npm audit` 0 critical/11 high/4 moderate/1 low, `/api/webhooks/btcpay` heredado, canal DDL
+  para `citas` bloqueado) reconfirmaron el mismo estado de la sesión interactiva de hoy, sin
+  cambios nuevos aparte del hallazgo de Gumroad.
+- El gate `ficha_verificada` (añadido en la sesión interactiva de hoy, commit `b99e6d8`) se
+  verificó en producción con un barrido de 14 slugs de control (9 tóxicas + `muerdago`/
+  `cinamomo`/`abedul`/`valeriana`/`lavanda`): **0 coincidencias reales** de patrones de dosis.
+  El primer intento de barrido dio 14/14 falsos positivos porque el propio aviso de "revisión en
+  curso" contiene la palabra "posología" — hubo que excluir esa frase del grep para no confundir
+  el aviso honesto con el contenido peligroso que describe. **Lección: al verificar la ausencia
+  de un patrón de texto, comprobar primero si el propio mecanismo de contención usa ese mismo
+  vocabulario en su aviso — si no se excluye, el chequeo se auto-sabotea con falsos positivos.**
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+  `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable.
+
+### Qué funciona
+- Consultar la API de deployments de Vercel (`/v6/deployments?projectId=...`) para cotejar el
+  timestamp de un redeploy contra el timestamp de un cambio de env var confirmó con precisión
+  de segundos que el cambio de Gumroad fue la causa directa del redeploy de las 18:26 UTC, no
+  una coincidencia. Vale la pena usar esta correlación siempre que se sospeche de un cambio de
+  configuración fuera de git.
+- Probar un enlace externo sospechoso con un user-agent de navegador real (no solo `curl` por
+  defecto) antes de reportarlo como roto evita falsos positivos por bloqueo de bots — en este
+  caso no hizo falta (Gumroad no bloquea), pero confirmar con ambos métodos da más seguridad al
+  hallazgo antes de escalarlo como urgente.
+
+### Cierre 2026-07-28 (ciclo cloud 21:15 UTC)
+- QA: **8/8 checks OK** aparte del hallazgo crítico de Gumroad. Build pasa sin fixes. 52 plantas,
+  9 peligrosas con placeholder + `ficha_verificada:false`, sitemap/robots OK.
+- **🔴 Hallazgo crítico nuevo: checkout Gumroad roto en producción desde las 18:25-18:26 UTC**
+  (env var cambiada a una URL que da 404; la URL anterior sigue funcionando). Pasa a tarea manual
+  #1 de Papu, con impacto directo en ventas mientras no se resuelva.
+- `leads`/`purchases` en 0 filas (lectura; último test de escritura real 06:31 UTC, bajo el
+  umbral de 24h).
+- Gate `ficha_verificada` de la sesión interactiva de hoy verificado en producción: 0 coincidencias
+  reales de posología en 14 slugs de control; 0 filas con `ficha_verificada:true` (re-verificación
+  planta a planta aún sin empezar).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published. Duplicados `equinacea`/`echinacea`
+  y `ashwagandha`/`ashwagandha-fruto` reconfirmados sin cambios.
+- `public/images/plants/`: 71 archivos, 29 huérfanos, sin cambio.
+- `npm audit --json`: 0 critical / 11 high / 4 moderate / 1 low, sin cambio.
+- `/api/webhooks/btcpay` heredado reconfirmado en el build, sin tocar. Canal DDL para `citas`
+  sigue bloqueado.
+- Token OAuth expuesto (2026-07-25) sigue sin confirmación de rotación — bajó a tarea manual #3
+  este ciclo, no por perder relevancia sino porque el checkout roto es una pérdida de ingresos
+  activa y el diccionario sigue con 0 fichas re-verificadas.
+- 2 borradores sociales nuevos con ángulo de auditoría/transparencia del diccionario (lote 2),
+  sin mención a "ya puedes comprar" dado el checkout roto — ver bitácora
+  `kimiko/bitacora/2026-07-28-2115.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
+  commitea el paso dedicado del workflow.
