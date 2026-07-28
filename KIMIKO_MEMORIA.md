@@ -990,3 +990,30 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-28-2115.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-29 — Sesión interactiva: causa raíz del barajado de fichas + recuperación de 18
+
+### Aprendizajes
+- **El barajado no fue un script malo, fue un upsert por `id` seguido de un cambio de identidad por `id`.** Los seeds (`/Volumes/Papu Ext/QH-Content/seed-plants*.mjs`, 2026-04-29) escribieron 50 fichas *correctas* de un diccionario herbolario. El 2026-05-05 (commit `8b84912`) se reescribieron `slug`/`nombre_es`/`nombre_latino` **por `id`** con un catálogo distinto (esotérico-mundial), sin tocar `ficha_cientifica`. La ficha se quedó pegada al `id` y la identidad de la fila cambió debajo. **Regla derivada: cuando una tabla se puebla por upsert sobre `id` y luego se "corrigen nombres", hay que migrar TODAS las columnas de esa entidad o ninguna** — dejar los datos derivados atrás es exactamente lo que produce contenido de otra especie.
+- **Antes de dar por perdido un dataset corrupto, buscar el origen en disco.** `app/fichas-50-valid.json` (y sus gemelos en `QH-Content/`) contienen las 50 fichas originales y son internamente coherentes: `familia_botanica` cuadra con `nombre_latino` en las 50. Sirvieron para recuperar 18 de las 52 plantas actuales emparejando **por `nombre_latino`, nunca por `id`**. El cotejo `familia_botanica` actual vs. la del JSON por `id` dio coincidencia 1:1 en las 43 filas con ficha — eso convirtió la hipótesis del mecanismo en prueba.
+- **Emparejar especies exige contemplar sinónimos botánicos.** Un `join` literal por `nombre_latino` daba 17; *Aloe vera ≡ Aloe barbadensis* y *Ocimum tenuiflorum ≡ O. sanctum* añaden 2 más, y `ashwagandha-fruto` hay que **excluirla a mano** pese a compartir binomio con `ashwagandha` (son fichas distintas a propósito: fruto vs. raíz, ya documentado el 2026-07-24).
+- **Un fallo de datos se propaga por los agentes que los consumen — hay que rastrear aguas abajo, no solo tapar la fuente.** `agente-plantas.sh` (alias `qb`) lee `plants.ficha_cientifica` y genera blog posts con sus `propiedades`/`indicaciones`. Generó 2 drafts atribuyendo la farmacología de otra planta (`echinacea-guia` usó la ficha del jengibre, `sidr-guia` la de cola de caballo — verificado buscando los términos delatores en el `content`). Ninguno publicado. **Blindado con `ficha_verificada=eq.true` + abort explícito**, así el agente se reactiva solo a medida que se levanten gates, sin necesidad de acordarse de reactivarlo.
+- **Restaurar el dato correcto y levantar el gate son dos decisiones distintas.** Sustituir una ficha equivocada por la de su propia especie es una mejora estricta y reversible que no publica nada mientras `ficha_verificada` siga en `false`. Levantar el gate es una decisión de salud que exige revisión humana contra fuente farmacognóstica. Se hizo lo primero (18 filas) y **no** lo segundo — las 52 siguen en 0 publicables, verificado en producción con patrones de dosificación reales (`mg/día`, `Infusión:`, `Tintura:`), no solo con los títulos de sección.
+- **Al verificar contención en producción, buscar el patrón del dato, no el rótulo.** Un `grep` de `Posolog|Principios Activos|Evidencia Cient` daba 1 coincidencia en las 52 páginas… que era el propio aviso honesto de revisión ("…y posología de este diccionario"). El chequeo válido es buscar formatos de dosis reales. Un falso positivo así podría haberse leído como regresión del gate.
+- **Service role key hardcodeada en claro** en `seed-plants*.mjs` (retirada) y todavía en `/Volumes/Papu Ext/scripts/agente-plantas.sh` y `runner.sh`. Escalado a Papu para rotación junto al token OAuth ya pendiente.
+
+### Qué funciona
+- Cotejar un dataset corrupto contra su JSON de origen **por la clave que se usó al escribir** (`id`) confirma el mecanismo del fallo; recuperarlo **por la clave semántica** (`nombre_latino`) es lo que arregla. Distinguir las dos claves fue todo el trabajo de esta sesión.
+- `git log --all -S "<término>"` sobre un slug del catálogo nuevo (`beleno`) localizó en segundos la ventana temporal del cambio de identidad, y de ahí el commit culpable por mensaje.
+- Desactivar un script con rename a `.DISABLED` + cabecera explicativa + `throw` al inicio, en vez de borrarlo, conserva los JSON de origen que consume — que resultaron ser el único material de recuperación existente.
+- `bash -n` sobre un script modificado antes de darlo por bueno, cuando no se puede ejecutar de verdad (requiere Docker + Ollama), más una comprobación directa de que la query REST del guard devuelve 0.
+
+### Cierre 2026-07-29 (sesión interactiva)
+- **Causa raíz del barajado identificada y demostrada** (upsert por `id` + cambio de identidad por `id`, commit `8b84912` del 2026-05-05). Cierra el pendiente #1 del handoff anterior.
+- **Seeds neutralizados** (`.mjs.DISABLED`, key retirada del código) y **`qb` blindado** con el gate `ficha_verificada`.
+- **18 fichas recuperadas** (`ficha_cientifica` + `ficha_mistica`) emparejando por especie. Gate **no** levantado: 0/52 publicables, verificado en producción.
+- **Contaminación aguas abajo acotada:** 2 drafts de blog construidos sobre farmacología ajena, ninguno publicado; ningún post `published` deriva de fichas de planta.
+- Backup previo en `backups/plants-full-dump-2026-07-29-pre-restore.json`.
+- Pendiente: revisar y levantar el gate de las 18 una a una; decidir qué hacer con las 25 fichas sin origen correcto en disco; descartar los 2 drafts contaminados; **rotar la service role key**.

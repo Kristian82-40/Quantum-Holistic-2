@@ -1,0 +1,128 @@
+[
+  {
+    "slug": "albahaca",
+    "ficha_origen_id": 1,
+    "ficha_origen_nombre": "Albahaca",
+    "nombre_latino": "Ocimum basilicum",
+    "familia_botanica": "Lamiaceae"
+  },
+  {
+    "slug": "arnica",
+    "ficha_origen_id": 3,
+    "ficha_origen_nombre": "Árnica",
+    "nombre_latino": "Arnica montana",
+    "familia_botanica": "Asteraceae"
+  },
+  {
+    "slug": "ashwagandha",
+    "ficha_origen_id": 4,
+    "ficha_origen_nombre": "Ashwagandha",
+    "nombre_latino": "Withania somnifera",
+    "familia_botanica": "Solanaceae"
+  },
+  {
+    "slug": "salvia",
+    "ficha_origen_id": 35,
+    "ficha_origen_nombre": "Salvia",
+    "nombre_latino": "Salvia officinalis",
+    "familia_botanica": "Lamiaceae"
+  },
+  {
+    "slug": "lavanda",
+    "ficha_origen_id": 23,
+    "ficha_origen_nombre": "Lavanda",
+    "nombre_latino": "Lavandula angustifolia",
+    "familia_botanica": "Lamiaceae"
+  },
+  {
+    "slug": "tomillo",
+    "ficha_origen_id": 40,
+    "ficha_origen_nombre": "Tomillo",
+    "nombre_latino": "Thymus vulgaris",
+    "familia_botanica": "Lamiaceae"
+  },
+  {
+    "slug": "hinojo",
+    "ficha_origen_id": 20,
+    "ficha_origen_nombre": "Hinojo",
+    "nombre_latino": "Foeniculum vulgare",
+    "familia_botanica": "Apiaceae"
+  },
+  {
+    "slug": "valeriana",
+    "ficha_origen_id": 44,
+    "ficha_origen_nombre": "Valeriana",
+    "nombre_latino": "Valeriana officinalis",
+    "familia_botanica": "Caprifoliaceae"
+  },
+  {
+    "slug": "sauco",
+    "ficha_origen_id": 36,
+    "ficha_origen_nombre": "Saúco",
+    "nombre_latino": "Sambucus nigra",
+    "familia_botanica": "Adoxaceae"
+  },
+  {
+    "slug": "echinacea",
+    "ficha_origen_id": 11,
+    "ficha_origen_nombre": "Echinacea",
+    "nombre_latino": "Echinacea purpurea",
+    "familia_botanica": "Asteraceae"
+  },
+  {
+    "slug": "jengibre",
+    "ficha_origen_id": 21,
+    "ficha_origen_nombre": "Jengibre",
+    "nombre_latino": "Zingiber officinale",
+    "familia_botanica": "Zingiberaceae"
+  },
+  {
+    "slug": "brahmi",
+    "ficha_origen_id": 50,
+    "ficha_origen_nombre": "Brahmi",
+    "nombre_latino": "Bacopa monnieri",
+    "familia_botanica": "Plantaginaceae"
+  },
+  {
+    "slug": "ginseng",
+    "ficha_origen_id": 17,
+    "ficha_origen_nombre": "Ginseng",
+    "nombre_latino": "Panax ginseng",
+    "familia_botanica": "Araliaceae"
+  },
+  {
+    "slug": "tribulus",
+    "ficha_origen_id": 41,
+    "ficha_origen_nombre": "Tribulus",
+    "nombre_latino": "Tribulus terrestris",
+    "familia_botanica": "Zygophyllaceae"
+  },
+  {
+    "slug": "manzanilla",
+    "ficha_origen_id": 25,
+    "ficha_origen_nombre": "Manzanilla",
+    "nombre_latino": "Matricaria chamomilla",
+    "familia_botanica": "Asteraceae"
+  },
+  {
+    "slug": "equinacea",
+    "ficha_origen_id": 11,
+    "ficha_origen_nombre": "Echinacea",
+    "nombre_latino": "Echinacea purpurea",
+    "familia_botanica": "Asteraceae"
+  },
+  {
+    "slug": "aloe-vera",
+    "ficha_origen_id": 2,
+    "ficha_origen_nombre": "Aloe vera",
+    "nombre_latino": "Aloe barbadensis",
+    "familia_botanica": "Asphodelaceae"
+  },
+  {
+    "slug": "tulsi",
+    "ficha_origen_id": 42,
+    "ficha_origen_nombre": "Tulsi",
+    "nombre_latino": "Ocimum sanctum",
+    "familia_botanica": "Lamiaceae"
+  }
+]
