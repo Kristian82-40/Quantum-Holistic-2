@@ -816,3 +816,68 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 17 ciclos.
 - 2 borradores sociales nuevos con ángulo de experiencia de producto/rigor editorial de datos, ver bitácora `kimiko/bitacora/2026-07-28-1040.md`.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-28 — Trigésimo segundo ciclo Kimiko Cloud (17:40 UTC)
+
+### Aprendizajes
+- **Entre este ciclo y el anterior (10:40 UTC) hubo una sesión local de Papu** (commit `c78df8a`,
+  17:51 CEST) que cambió el estado del proyecto de forma sustancial sin pasar por el ciclo cloud:
+  activó `NEXT_PUBLIC_GUMROAD_URL` en Vercel, actualizó `next` 14.2.5→14.2.35 (resolviendo el
+  critical de `npm audit` escalado desde el ciclo 24), y **detectó y mitigó un hallazgo crítico
+  de seguridad**: las 9 fichas de plantas tóxicas del diccionario publicaban íntegra la ficha de
+  otra planta inocua, incluyendo posología oral con dosis que en la realidad son letales para la
+  planta tóxica (`aconito` servía la ficha del hinojo con "2-3 g de semillas" cuando la dosis
+  letal real de aconitina es ~2-6 **mg**). Mitigado vaciando `ficha_cientifica` de las 9 filas.
+  **Lección operativa: el ciclo cloud debe empezar siempre revisando `git log` y `handoff.md`
+  por si hubo trabajo local entre ciclos, no asumir que el estado del ciclo anterior sigue
+  siendo el más reciente.** Este ciclo lo hizo y evitó reportar como "sin cambios" un salto real.
+- El hallazgo crítico **no está resuelto, solo contenido**: las 43 fichas restantes vienen del
+  mismo poblado defectuoso y no se han re-verificado. Confirmado con muestra propia este ciclo
+  (`valeriana` y `lavanda` siguen con contenido de otra planta, no tóxicas así que sin riesgo de
+  dosis letal, pero sí contenido de salud falso y publicado). Pasa a ser el hallazgo #1 en
+  "Tareas manuales de Papu", por delante del token OAuth — implica contenido de salud engañoso
+  ya en producción, no solo higiene de secretos.
+- Dado el hallazgo crítico sin cerrar, se pausó deliberadamente cualquier avance en "Tu Planta
+  Aliada" (mapeo dosha→planta) y en generación/publicación de contenido de blog este ciclo:
+  construir sobre datos de integridad no verificada agravaría el mismo problema en vez de
+  esperar a que Papu decida el plan de re-verificación.
+
+### Qué funciona
+- Verificar en producción (no solo en Supabase) que las 9 páginas tóxicas siguen sin contenido
+  de posología (`curl` + `grep -c` de patrones de dosis) fue la forma correcta de confirmar que
+  la mitigación de la sesión local sigue viva tras el commit, no solo que la escritura en la
+  base de datos ocurrió.
+- Revisar `git log`/`handoff.md` al inicio del ciclo, antes de asumir el estado del ciclo cloud
+  anterior como el más reciente, es ahora parte fija del paso 0 — se queda documentado aquí para
+  no perderlo en ciclos futuros.
+
+### Cierre 2026-07-28 (ciclo cloud 17:40 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. Next **14.2.35**. 52 plantas, 9 peligrosas con
+  `ficha_cientifica` vacío + placeholder de imagen, sitemap/robots OK.
+- **🟢 Hito: checkout Gumroad transaccional confirmado en vivo.** `/producto/ritual-descanso`
+  sirve el link a `gumroad.com/l/ugsqtg` (€19) en vez del formulario de captura de email.
+  Producto verificado `is_published:true`, `updated_at` más reciente que la última verificación
+  (indicio de que Papu subió el archivo). 13 env vars en Vercel (antes 12).
+- **🔴 Hallazgo crítico del diccionario reconfirmado mitigado en producción, NO resuelto** — ver
+  aprendizajes arriba. Pasa a tarea manual #1 de Papu.
+- `leads`/`purchases` en 0 filas (lectura, último test de escritura real 06:31 UTC, ~11h antes,
+  bajo el umbral de 24h).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 10 drafts con violación de
+  checklist, ninguno publicado. Duplicado `equinacea`/`echinacea` reconfirmado, ahora subordinado
+  a la re-verificación general del diccionario.
+- `public/images/plants/`: **71 archivos** (antes 73) — confirmada la retirada de
+  `lavanda-cientifica.jpg` (era cornezuelo) y `plant-00-beleno-negro-cientifica.jpg` (duplicado
+  de albahaca) hecha en la sesión local. **29 huérfanos** (antes 30).
+- `npm audit --json`: **0 critical** (antes 1) / 11 high / 4 moderate / 1 low — critical de
+  `next@14.2.5` resuelto por la sesión local.
+- `/api/webhooks/btcpay` heredado reconfirmado en el build, sin tocar.
+- Canal DDL para `citas` sigue bloqueado — 33er ciclo consecutivo.
+- Token OAuth expuesto (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación —
+  18 ciclos escalándolo, ahora tarea manual #2 (bajó de prioridad frente al diccionario, no por
+  perder relevancia sino porque el diccionario es un riesgo activo de contenido publicado).
+- 2 borradores sociales nuevos con ángulo de lanzamiento de checkout + integridad de contenido
+  de salud, ver bitácora `kimiko/bitacora/2026-07-28-1740.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
+  commitea el paso dedicado del workflow.
