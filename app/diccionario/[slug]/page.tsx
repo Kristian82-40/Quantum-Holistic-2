@@ -41,6 +41,7 @@ interface Plant {
   image_cientifica_url: string | null;
   ficha_cientifica: FichaCientifica | null;
   ficha_mistica: FichaMistica | null;
+  ficha_verificada: boolean;
 }
 
 async function getPlant(slug: string): Promise<Plant | null> {
@@ -66,9 +67,12 @@ export async function generateMetadata(
   const { slug } = await params;
   const plant = await getPlant(slug);
   if (!plant) return { title: 'Planta no encontrada' };
+  const latino = plant.nombre_latino ? ` (${plant.nombre_latino})` : '';
   return {
     title: `${plant.nombre_es} — Diccionario Botánico`,
-    description: `Ficha completa de ${plant.nombre_es}${plant.nombre_latino ? ` (${plant.nombre_latino})` : ''}: propiedades, indicaciones, contraindicaciones y tradición ancestral.`,
+    description: plant.ficha_verificada
+      ? `Ficha completa de ${plant.nombre_es}${latino}: propiedades, indicaciones, contraindicaciones y tradición ancestral.`
+      : `${plant.nombre_es}${latino}: tradición y simbolismo. La ficha científica está en revisión y no se publica hasta verificarla.`,
   };
 }
 
@@ -83,7 +87,8 @@ export default async function PlantPage(
     path.join(process.cwd(), 'public', 'images', 'plants', `${plant.slug}-cientifica.jpg`)
   );
 
-  const fc = plant.ficha_cientifica;
+  // La ficha clínica solo se sirve tras verificación humana contra nombre_latino.
+  const fc = plant.ficha_verificada ? plant.ficha_cientifica : null;
   const fm = plant.ficha_mistica;
   const hasMistica = fm && Object.values(fm).some(Boolean);
 
@@ -131,6 +136,26 @@ export default async function PlantPage(
         </div>
 
         <div className={`container ${styles.content}`}>
+
+          {/* ── Ficha clínica retenida hasta verificación ── */}
+          {!plant.ficha_verificada && (
+            <div className={styles.contraBox}>
+              <h2 className={styles.contraTitle}>
+                <span className={styles.contraIcon}>⚠</span>
+                Ficha científica en revisión
+              </h2>
+              <p className={styles.text}>
+                Estamos re-verificando planta a planta las propiedades, indicaciones,
+                contraindicaciones y posología de este diccionario. Hasta completar esa
+                revisión no publicamos la ficha clínica de {plant.nombre_es}: preferimos
+                no mostrar nada antes que mostrar información que no podamos garantizar.
+              </p>
+              <p className={styles.text}>
+                <strong>No sigas pautas de dosificación de esta planta obtenidas aquí
+                anteriormente.</strong> Consulta con un profesional de la salud.
+              </p>
+            </div>
+          )}
 
           {/* ── Contraindicaciones — SIEMPRE destacadas ── */}
           {fc?.contraindicaciones && fc.contraindicaciones.length > 0 && (

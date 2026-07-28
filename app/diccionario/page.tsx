@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Diccionario Botánico — 50+ Plantas Medicinales',
-  description: 'Directorio completo de plantas medicinales con fichas científicas, propiedades, indicaciones y tradición ancestral.',
+  description: 'Directorio de plantas medicinales con su tradición y simbolismo. Las fichas científicas se publican solo tras verificación planta a planta.',
 };
 
 interface Plant {
@@ -22,6 +22,7 @@ interface Plant {
   nombre_latino: string | null;
   categoria: 'Maestras' | 'Sagradas' | 'Magicas';
   image_cientifica_url: string | null;
+  ficha_verificada: boolean;
 }
 
 async function getPlants(): Promise<Plant[]> {
@@ -30,7 +31,7 @@ async function getPlants(): Promise<Plant[]> {
   if (!url || !key) return [];
   try {
     const res = await fetch(
-      `${url}/rest/v1/plants?select=id,slug,nombre_es,nombre_latino,categoria,image_cientifica_url&order=nombre_es`,
+      `${url}/rest/v1/plants?select=id,slug,nombre_es,nombre_latino,categoria,image_cientifica_url,ficha_verificada&order=nombre_es`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: 'no-store' }
     );
     if (!res.ok) return [];
@@ -54,6 +55,7 @@ const CAT_LABEL: Record<string, string> = {
 
 export default async function DiccionarioPage() {
   const plants = await getPlants();
+  const verificadas = plants.filter((p) => p.ficha_verificada).length;
 
   return (
     <>
@@ -66,7 +68,10 @@ export default async function DiccionarioPage() {
               Diccionario <em>Botánico</em>
             </h1>
             <p className={styles.subtitle}>
-              {plants.length} plantas con fichas científicas, propiedades y tradición ancestral.
+              {plants.length} plantas con su tradición y simbolismo.{' '}
+              {verificadas === 0
+                ? 'Las fichas científicas están en revisión y no se publican hasta verificarlas una a una.'
+                : `${verificadas} de ${plants.length} tienen ya la ficha científica verificada; el resto está en revisión.`}
             </p>
           </div>
 
