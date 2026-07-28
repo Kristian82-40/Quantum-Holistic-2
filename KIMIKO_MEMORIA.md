@@ -881,3 +881,29 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   de salud, ver bitácora `kimiko/bitacora/2026-07-28-1740.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-28 — Sesión interactiva: auditoría lote 2 del diccionario + gate `ficha_verificada`
+
+### Aprendizajes
+- **Una lista de exclusión curada a mano no protege contra un barajado aleatorio de contenido.** Las 9 plantas "peligrosas" estaban bien identificadas, pero el mecanismo del fallo (cada fila heredó la ficha de otra especie al azar) reparte también posología peligrosa sobre slugs que nadie marcó. Auditando las 41 fichas restantes aparecieron **3 especies tóxicas más** sirviendo pautas orales ajenas: `muerdago` (*Viscum album*) con la de ginseng, `cinamomo` (*Melia azedarach*, frutos venenosos) con la sedante de valeriana, y `abedul` con la de **kava** (hepatotóxica). Lección general: cuando la causa raíz es "los datos están barajados", el alcance del daño **no** se puede acotar por una lista de entidades conocidas — hay que asumir que afecta a todas las filas hasta demostrar lo contrario.
+- **Cotejar `familia_botanica` contra `nombre_latino` es el test más barato y concluyente para detectar fichas descolocadas.** Una sola query da el veredicto de las 41 sin leer el contenido completo: `abedul`→Piperaceae (kava), `sauco`→Ginkgoaceae (ginkgo), `sidr`→Equisetaceae (cola de caballo)… 38 de 41 incorrectas (93%). Cuando existe un campo taxonómico redundante con la identidad de la fila, usarlo como checksum antes de auditar prosa.
+- **Ante contenido masivamente corrupto, un gate booleano vence al borrado.** La sesión anterior vació 9 fichas (`ficha_cientifica = '{}'`), lo cual era correcto por urgencia pero destruye el material de partida. Para las 41 restantes se añadió `plants.ficha_verificada boolean not null default false` y se condicionó el render: mismo efecto en la web (nada publicado), cero pérdida de datos, y se levanta planta a planta a medida que se verifica. **Regla derivada:** una columna de gate con default seguro es preferible a `delete`/`update` masivo siempre que el consumidor del dato sea código propio que se puede modificar.
+- **Al retener contenido hay que corregir también las promesas del contenedor.** El subtítulo de `/diccionario` decía "52 plantas con fichas científicas" y los `<meta description>` prometían "propiedades, indicaciones, contraindicaciones". Retener el dato y dejar el texto habría convertido un problema de seguridad en uno de publicidad engañosa. Revisar siempre copy y metadatos cuando se despublica un bloque de contenido.
+- **Word splitting: el shell de estas sesiones es zsh, no bash.** `for s in $var` con una variable de slugs separados por espacios **no** hace splitting en zsh — el bucle se ejecuta una vez con la cadena entera y da un falso "0 errores". Detectado porque el barrido de 52 URLs devolvió `HTTP 000` una sola vez con todos los slugs concatenados. Usar `while read -r` sobre un archivo o `${=var}`; nunca confiar en splitting implícito.
+- **`git push` puede rebotar por los ciclos cloud.** El workflow `kimiko-cloud.yml` commitea bitácoras a `main` de forma autónoma; un push desde la sesión interactiva necesita `git pull --rebase` primero. No es un conflicto real, solo cadencia.
+
+### Qué funciona
+- Barrer las 52 rutas de producción con `curl` buscando los literales que **no** deben aparecer (`Posología`, `Principios Activos`, `Evidencia Científica`) es una verificación de contención mucho más fuerte que comprobar que devuelven 200 — confirma la ausencia del vector, no solo que la página vive.
+- Volcar la tabla entera a JSON vía REST (`curl` + service role key) antes de cualquier cambio de schema deja un backup íntegro en segundos y sin depender del MCP, que trunca outputs grandes.
+- `apply_migration` del MCP de Supabase sí funciona en sesión interactiva (a diferencia del entorno cloud, que lleva 30+ ciclos sin canal DDL) — las tareas que requieran schema conviene agruparlas para las sesiones interactivas.
+
+### Cierre 2026-07-28 (sesión interactiva, lote 2)
+- **Auditadas las 41 fichas con contenido: 38 pertenecen a otra especie (93% de error).** Solo `albahaca`, `arnica` y `ashwagandha` coinciden con su planta, por azar del barajado.
+- **3 especies tóxicas fuera de la lista de exclusión servían posología ajena** (`muerdago`, `cinamomo`, `abedul`) — ver aprendizaje arriba.
+- **Contención aplicada (commit `b99e6d8`):** migración `add_ficha_verificada_gate_plants` + gate en `app/diccionario/page.tsx` y `[slug]/page.tsx`. Aviso honesto de revisión en curso que pide no seguir pautas obtenidas antes en esa página.
+- **Verificado en producción: 52/52 fichas responden 200 y ninguna sirve posología, principios activos ni evidencia.** QA nocturna 13/13. Build limpio con `ƒ Middleware`.
+- Sin borrar datos: backup íntegro en `/Volumes/Papu Ext/QuantumHolistic/backups/plants-full-dump-2026-07-28.json`.
+- Ficha mística mantenida (simbolismo, sin dosificación) — el diccionario sigue navegable.
+- Pendiente: re-verificar fichas planta a planta y levantar el gate una a una; **identificar y desactivar el script que pobló la tabla**, que sigue sin localizar y reintroduciría el fallo si se ejecuta.

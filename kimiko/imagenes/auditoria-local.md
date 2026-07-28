@@ -153,6 +153,96 @@ publicando el diccionario.**
 
 ---
 
+## 3bis. Auditoría de las 41 fichas restantes (2026-07-28, lote 2) — CONFIRMADO TRANSVERSAL
+
+Se auditaron **las 41 fichas que quedaban con contenido** (52 − 9 tóxicas vaciadas − `equinacea`
+y `manzanilla`, que ya estaban en `{}`). Método: cotejar `ficha_cientifica->>familia_botanica` y
+`principios_activos` contra el `nombre_latino` real de la fila.
+
+**Resultado: 38 de 41 fichas pertenecen a otra especie (93% de error).** Solo 3 coinciden con su
+planta: `albahaca` (Lamiaceae, eugenol/linalool), `arnica` (Asteraceae, helenalina, tópico) y
+`ashwagandha` (Solanaceae, withanólidos) — coincidencias del barajado, no fichas validadas.
+
+Muestra representativa del descoloque (planta real de la que procede la ficha):
+
+| slug | familia declarada | ficha que realmente publicaba |
+|---|---|---|
+| `abedul` (*Betula pendula*) | Piperaceae | **kava** — kavalactonas, 100-200 mg/día |
+| `ajo` (*Allium sativum*) | Fabaceae | **regaliz** — glicirricina, DGL |
+| `aloe-vera` | Passifloraceae | **pasiflora** |
+| `amla` | Ranunculaceae | **hidrastis** — berberina |
+| `arbol-bodhi` | Rubiaceae | **uña de gato** |
+| `azafran` | Lamiaceae | **menta** — mentol |
+| `castano-de-indias` | Zingiberaceae | **cúrcuma** — curcumina + piperina |
+| `cinamomo` (*Melia azedarach*) | Caprifoliaceae | **valeriana** — 300-600 mg antes de dormir |
+| `echinacea` | Zingiberaceae | **jengibre** — gingeroles |
+| `hinojo` | Asteraceae | **equinácea** — echinacósido |
+| `incienso` | Caricaceae | **papaya** — papaína |
+| `jengibre` | Schisandraceae | **schisandra** |
+| `llantan` | Brassicaceae | **maca** — macamidas |
+| `milenrama` | Myrtaceae | **eucalipto** |
+| `muerdago` (*Viscum album*) | Araliaceae | **ginseng** — 200-400 mg/día |
+| `neem` | Malvaceae | **malva** |
+| `nigela` | Asteraceae | **manzanilla** — camazuleno |
+| `olivo` | Asteraceae | **cardo mariano** — silimarina |
+| `roble` | Hamamelidaceae | **hamamelis** |
+| `rosa-de-jerico` | Crassulaceae | **rhodiola** — rosavina |
+| `salvia` | Asteraceae | **diente de león** — taraxacina |
+| `sauco` | Ginkgoaceae | **ginkgo** — ginkgólidos |
+| `sidr` | Equisetaceae | **cola de caballo** — sílice |
+| `tomillo` | Araliaceae | **eleuterococo** |
+| `tribulus` | Plantaginaceae | **brahmi** — bacósidos |
+| `tulsi` | Zygophyllaceae | **tríbulus** |
+| `valeriana` | Rosaceae | **espino blanco** — proantocianidinas |
+
+### 🔴 La lista de exclusión de 9 era incompleta
+
+Tres especies **tóxicas fuera de esa lista** publicaban posología oral ajena:
+
+- **`muerdago`** (*Viscum album*) — planta tóxica, servía "extracto estandarizado 200-400 mg/día".
+- **`cinamomo`** (*Melia azedarach*) — frutos venenosos, potencialmente letales en niños; servía
+  la pauta sedante de valeriana "300-600 mg/día antes de dormir".
+- **`abedul`** (*Betula pendula*) — servía la pauta de **kava**, hepatotóxica y restringida en
+  varios países, con "Enfermedad hepática" listada como contraindicación de otra planta.
+
+O sea: proteger solo las 9 conocidas no bastaba, porque el barajado reparte fichas peligrosas
+sobre slugs que nadie había marcado como peligrosos.
+
+### ✅ CONTENCIÓN APLICADA — gate `ficha_verificada` (commit `b99e6d8`)
+
+En vez de vaciar 41 fichas más (destructivo e irreversible), se añadió un gate:
+
+```sql
+alter table plants
+  add column if not exists ficha_verificada boolean not null default false;
+```
+
+El frontend (`app/diccionario/page.tsx` y `[slug]/page.tsx`) solo renderiza la ficha clínica
+—propiedades, indicaciones, principios activos, posología, evidencia, contraindicaciones,
+familia botánica y parte usada— cuando `ficha_verificada = true`. Con el default en `false`,
+**ninguna de las 52 se publica**. En su lugar sale un aviso de revisión en curso que pide
+explícitamente no seguir pautas obtenidas antes en esa página.
+
+- **Ningún dato borrado.** Backup íntegro de las 52 filas (fichas científica y mística):
+  `/Volumes/Papu Ext/QuantumHolistic/backups/plants-full-dump-2026-07-28.json`
+- La **ficha mística se mantiene** (simbolismo, elemento, dosha): no contiene dosificación,
+  no es un vector de daño. Presumiblemente también está barajada — irrelevante para seguridad.
+- Los textos de `/diccionario` y los `<meta description>` se corrigieron: ya no prometen
+  "fichas científicas", que sería una promesa falsa mientras dure la revisión.
+
+**Verificado en producción tras el deploy:** las **52/52** fichas responden 200 y **ninguna**
+sirve "Posología", "Principios Activos" ni "Evidencia Científica". QA nocturna: 13/13.
+
+### Cómo se levanta el gate (planta a planta, nunca en masa)
+
+```sql
+update plants set ficha_verificada = true where slug = '<slug>';
+```
+Solo tras cotejar a mano la ficha contra una fuente farmacognóstica fiable. **Nunca
+`update plants set ficha_verificada = true` sin `where`** — eso republicaría el barajado entero.
+
+---
+
 ## 4. Estado de los pasos del mandato v5
 
 | Paso | Estado |
