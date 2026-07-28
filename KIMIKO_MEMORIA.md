@@ -765,3 +765,29 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 15 ciclos.
 - 2 borradores sociales nuevos con ángulo de marca/producto (ritual de regalo + estándar editorial), ver bitácora `kimiko/bitacora/2026-07-28-0241.md`.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-28 — Trigésimo ciclo Kimiko Cloud (06:31 UTC)
+
+### Aprendizajes
+- **El margen del umbral de 24h para el test E2E de leads se agotó este ciclo, tal como se anticipó en el cierre anterior** (el ciclo de 02:41 UTC ya avisaba que el margen se estrechaba). Con el último test real a las 03:23 UTC del 2026-07-27 (~27h08min antes), tocaba repetir el test de escritura real en vez de solo leer `Content-Range`. Ejecutado sin incidentes: `POST /api/leads/` → verificación directa en Supabase por `id` → `DELETE` de limpieza → tabla de vuelta a 0 filas. Confirma que el criterio de umbral sigue funcionando bien, solo hay que estar atento a cuándo toca repetir la escritura real en vez de conformarse con la lectura.
+- Resto de chequeos recurrentes (build, rutas 200, `/admin` redirect, 52 plantas íntegras, 9 peligrosas con placeholder, sitemap/robots, checklist de contenido `title+content`, duplicados por `nombre_latino`, cobertura 41/43 de `afinidad_ayurvedica`, fallback de `RitualCheckout.tsx`, env vars de Vercel vía project ID directo, backlog de blog, listado completo de `public/images/plants/`, `npm audit --json`, `/api/webhooks/btcpay` heredado) reconfirmaron el mismo estado del ciclo anterior sin cambios.
+- Ningún secret nuevo este ciclo — mismo trío (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VERCEL_TOKEN`), comprobado exclusivamente con `[ -n "$VAR" ]` variable por variable, sin iterar `env` en bloque — regla de higiene operativa respetada sin excepciones.
+
+### Qué funciona
+- Anticipar en el cierre de un ciclo cuándo el margen de un umbral temporal (como el de 24h del test E2E) se va a agotar en el ciclo siguiente evitó cualquier sorpresa esta vez — el aprendizaje del ciclo 29 se aplicó directo sin tener que redescubrirlo.
+- Rotar el ángulo de los borradores sociales ciclo a ciclo (meta-proceso → marca/producto → transparencia/seguridad del diccionario) sigue evitando agotar el mismo recurso narrativo — vale la pena mantener esta rotación consciente en los próximos ciclos también.
+
+### Cierre 2026-07-28 (ciclo cloud 06:31 UTC)
+- QA: **8/8 checks OK**, build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder, sitemap/robots OK.
+- **Test E2E real de leads repetido** (umbral de 24h superado): POST → verificado en Supabase → DELETE de limpieza, `leads`/`purchases` de vuelta a 0 filas.
+- Gumroad y canal DDL para `citas` siguen bloqueados — 30º/31º ciclo consecutivo respectivamente, sin secret nuevo (12 env vars en Vercel, sin Gumroad; sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`).
+- Backlog `blog_posts` sin cambio: 90 drafts / 19 published, mismos 10 drafts con violación de checklist (6 chakra + 1 reiki + 1 cristales + 1 biodescodificación + 1 nutrición cuántica), ninguno publicado.
+- Duplicados `equinacea`/`echinacea` (real, pendiente Papu) y `ashwagandha`/`ashwagandha-fruto` (descartado) reconfirmados sin cambios.
+- 30 imágenes huérfanas en `public/images/plants/` reconfirmadas sin cambios (incluyendo el candidato peligroso `plant-00-beleno-negro-cientifica.jpg`, sin resolución de Papu).
+- `npm audit --json`: 1 critical (`next@14.2.5`, fix disponible `14.2.35` sin salto mayor) / 10 high / 4 moderate / 1 low, sin cambio.
+- `/api/webhooks/btcpay` heredado (pasarela cripto descartada por directiva) reconfirmado en el build, sin tocar.
+- Token OAuth expuesto en ciclos anteriores (2026-07-25, 06:22 y 09:52 UTC) sigue sin confirmación de rotación — escalado de nuevo como prioridad #1 en "Tareas manuales de Papu", ya 16 ciclos.
+- 2 borradores sociales nuevos con ángulo de transparencia/seguridad del diccionario, ver bitácora `kimiko/bitacora/2026-07-28-0631.md`.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del workflow.
