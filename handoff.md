@@ -1,4 +1,15 @@
-# Handoff — 2026-07-28 (4ª sesión: purga de historial git COMPLETADA)
+# Handoff — 2026-07-28 (5ª sesión: auditoría F2 mandato v5 — HALLAZGO CRÍTICO)
+
+## 🔴 LO PRIMERO QUE HAY QUE LEER
+El diccionario publicaba **posología oral para plantas letales**. `/diccionario/aconito/`
+servía la ficha completa del **hinojo** ("Apiaceae", "carminativa", "cólicos", "lactancia",
+"Infusión 2-3 g de semillas") atribuida a *Aconitum napellus* (dosis letal: 2-6 **mg**).
+Lo mismo en las otras 8 de la lista de exclusión: cada una llevaba íntegra la ficha de otra
+planta inocua. Verificado en producción con curl, **ya mitigado** (fichas vaciadas, backup en
+`/Volumes/Papu Ext/QuantumHolistic/backups/`). Detalle completo en `kimiko/imagenes/auditoria-local.md`.
+
+**Las 43 fichas restantes vienen del mismo poblado defectuoso y NO se han revisado.**
+Decidir si se despublica el diccionario entero mientras se re-verifica.
 
 ## Estado del proyecto
 - Producción estable (`quantum-holistic.com`). Funnel de monetización **100% operativo por primera vez**:
@@ -26,6 +37,12 @@
 - Correcciones de seguridad sobre la spec: alergia Asteraceae en manzanilla, lúpulo + anticonceptivos/hormonales, melisa + hipotiroidismo, tónico alcohólico "solo adultos".
 
 ## Próximos pasos (ordenados por prioridad)
+0. **🔴 Decidir sobre el diccionario botánico** (ver bloque superior): (a) despublicar las 9
+   tóxicas con la columna `publicada` — SQL listo en `kimiko/imagenes/auditoria-local.md` §3;
+   (b) re-verificar las 43 fichas restantes, que salen del mismo poblado defectuoso;
+   (c) decidir si se despublica `/diccionario` entero mientras tanto.
+0b. **Imágenes: 5 de 7 verificadas estaban mal (71%).** Las 36 restantes sin verificar. Regenerar
+   manzanilla, valeriana, lavanda; decidir fusión `echinacea`/`equinacea` (misma especie).
 1. **Papu: confirmar que el PDF v2 está subido como archivo del producto Gumroad** (compra de prueba recomendada). Opcional: añadir cover al producto.
 1b. **Papu: rotar el token OAuth expuesto** (bitácoras cloud 2026-07-25 06:22 y 09:52 UTC) — la bitácora cloud lleva 17 ciclos escalándolo sin confirmación de rotación.
 2. Papu: resolver permiso Full Disk Access/TCC (bloqueador Kimiko background desde 2026-07-11).
