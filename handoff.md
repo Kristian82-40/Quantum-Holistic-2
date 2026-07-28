@@ -1,4 +1,4 @@
-# Handoff — 2026-07-28 (3ª sesión: funnel de pago ACTIVADO)
+# Handoff — 2026-07-28 (4ª sesión: purga de historial git COMPLETADA)
 
 ## Estado del proyecto
 - Producción estable (`quantum-holistic.com`). Funnel de monetización **100% operativo por primera vez**:
@@ -35,11 +35,12 @@
 
 ## Decisiones técnicas tomadas
 - `NEXT_PUBLIC_GUMROAD_URL` configurada sin esperar confirmación (autoridad total + paso listado en handoff): producto verificado como publicado y con precio correcto antes de activar.
-- PDF de pago NO se versiona (`.gitignore`); purga del historial antiguo sigue pendiente de aprobación (irreversible).
+- PDF de pago NO se versiona (`.gitignore`).
+- **Purga de historial EJECUTADA (2026-07-28, aprobada por Papu):** `git-filter-repo --invert-paths --path assets/ritual-descanso.pdf` + `git push --force --all` (4 ramas: main + fix/images + 2 kimiko/). Verificado: el blob del PDF ya no existe en ningún commit. Backup pre-purga: `/Volumes/Papu Ext/QuantumHolistic/backup-pre-purga-2026-07-28.bundle` + `ritual-descanso-BACKUP.pdf`. Todos los SHAs del repo cambiaron — cualquier clon existente debe re-clonarse.
 - Bloqueador TCC de Kimiko: System Settings → Privacy & Security → Full Disk Access → añadir `/bin/bash` y/o binario `claude`.
 
 ## Pendiente / deuda técnica heredada (no tocada)
-1. Purga de historial git del PDF antiguo — pendiente de aprobación de Papu.
+1. ~~Purga de historial git del PDF antiguo~~ — ✅ COMPLETADA esta sesión (ver Decisiones). Opcional: pedir a GitHub Support que purgue vistas cacheadas de los commits antiguos si el PDF fue accedido por URL directa de commit.
 2. `app/` con scaffolding duplicado — no tocar sin auditoría.
 3. PR #2 (equinácea), agente nocturno n8n (`PPchw62Xzdnvf9pT`), imágenes `_pending-approval/`.
 
