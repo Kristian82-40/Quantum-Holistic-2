@@ -92,8 +92,47 @@ Además `seguridad` es `null` en las 9 y las contraindicaciones no corresponden
 
 **La lista de exclusión protege la foto pero no el texto, que es lo peligroso.**
 
-**NO SE HA MODIFICADO NADA EN SUPABASE.** Requiere decisión explícita de Papu. Opción mínima
-recomendada — despublicar las 9 del diccionario:
+### Mecanismo real del fallo (peor que un descoloque de campos)
+
+No es que se mezclaran frases sueltas: **cada una de las 9 fichas tóxicas contenía ÍNTEGRA la
+ficha de otra planta inocua**, familia botánica y principios activos incluidos:
+
+| slug tóxico | ficha ajena que ocupaba su sitio | lo que publicaba |
+|---|---|---|
+| `aconito` | **hinojo** | "familia Apiaceae", "carminativa", "cólicos", "lactancia" |
+| `amanita-muscaria` | **yerba mate** | "Aquifoliaceae", cafeína, teobromina |
+| `beleno-negro` | **aloe vera** | "Asphodelaceae", aloína, gel de hojas |
+| `cannabis` | **salvia** | "Lamiaceae", tujona, cineol |
+| `cornezuelo-centeno` | **lavanda** | "Lamiaceae", linalool, Silexan |
+| `datura` | **vid roja** | "Vitaceae", resveratrol |
+| `datura-metel` | **yacón** | "Asteraceae", inulina, tubérculo |
+| `hierba-mora` | **bardana / diente de león** | "Asteraceae", inulina, raíz |
+| `tejo` | **hipérico** | "Hypericaceae", hipericina |
+
+Las plantas de origen son en su mayoría los slugs huérfanos de §2 → el script que pobló la tabla
+descolocó las fichas y las nueve peligrosas heredaron las de plantas seguras. Y en el caso
+lavanda ↔ cornezuelo **se intercambiaron imagen y texto a la vez**, en direcciones opuestas.
+
+### ✅ MITIGACIÓN APLICADA (2026-07-28)
+
+Verificado en producción con `curl` que `/diccionario/aconito/` servía la posología letal.
+Ejecutado sobre Supabase:
+
+```sql
+update plants set ficha_cientifica = '{}'::jsonb, updated_at = now()
+where slug in ('aconito','amanita-muscaria','beleno-negro','cannabis',
+               'cornezuelo-centeno','datura','datura-metel','hierba-mora','tejo');
+```
+
+- **Backup íntegro previo:** `/Volumes/Papu Ext/QuantumHolistic/backups/plants-ficha-cientifica-9-toxicas-2026-07-28.sql`
+- La plantilla ya tolera `ficha_cientifica = '{}'` (`equinacea` y `manzanilla` ya estaban así).
+- Las queries usan `cache: 'no-store'` → efecto inmediato, sin redeploy.
+- **Verificado tras aplicar:** las 9 responden 200 con 0 bloques de "Posología".
+- Se vació la ficha entera y no sólo `posologia` porque el resto también era falso: dejar
+  "Acónito · familia Apiaceae · carminativa · para cólicos" seguiría siendo peligroso.
+
+**Esto es una contención, no la solución.** Las 9 páginas siguen publicadas (ahora vacías).
+Pendiente de decisión de Papu — despublicarlas del todo:
 
 ```sql
 -- Fase 1: añadir la columna de publicación
@@ -105,7 +144,12 @@ where slug in ('aconito','amanita-muscaria','beleno-negro','cannabis',
                'cornezuelo-centeno','datura','datura-metel','hierba-mora','tejo');
 ```
 Y filtrar `&publicada=eq.true` en las dos queries de `app/diccionario/`.
-Aparte, revisar la posología de las 43 restantes: el descoloque es transversal, no sólo de las 9.
+
+⚠️ **Y lo más importante: el descoloque es transversal, no sólo de las 9.** Las 43 fichas
+restantes proceden del mismo poblado defectuoso y no se han tocado. Ya se ven indicios claros
+(`valeriana` → "insuficiencia cardíaca", que es espino blanco; `lavanda` → "resfriados", que es
+equinácea). **Toda la tabla `plants` necesita re-verificación ficha a ficha antes de seguir
+publicando el diccionario.**
 
 ---
 
@@ -119,6 +163,15 @@ Aparte, revisar la posología de las 43 restantes: el descoloque es transversal,
 | 4. Verificación visual previa a commit | ✅ 7 verificadas una a una; 36 pendientes |
 | 5. Auditoría | ✅ Este documento |
 | 6. Commit + push | ✅ · Actualización de `image_cientifica_url`: ❌ **no ejecutada** (ver abajo) |
+
+Verificación HTTP tras el deploy (2026-07-28):
+
+| URL | Antes | Después | Correcto |
+|---|---|---|---|
+| `/images/plants/lavanda-cientifica.jpg` | 200 | **404** | ✅ retirada (era cornezuelo) |
+| `/images/plants/plant-00-beleno-negro-cientifica.jpg` | 200 | **404** | ✅ retirada (dup. de albahaca) |
+| `/images/plants/equinacea-cientifica.jpg` | 200 | 200 | ✅ intacta |
+| `/images/plants/granada-cientifica.jpg` | 200 | 200 | ✅ intacta |
 
 **Por qué no se tocó `image_cientifica_url`:** no hay URLs nuevas que verificar (no se generó
 ninguna imagen), y el mapeo existente no es fiable (71% de error muestral). Escribir esas rutas
