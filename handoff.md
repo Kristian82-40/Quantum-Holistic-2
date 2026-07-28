@@ -16,6 +16,7 @@
 
 ## Archivos modificados esta sesión
 - `.env.local` — `NEXT_PUBLIC_GUMROAD_URL` (no versionado).
+- `package.json` / `package-lock.json` — **`next` 14.2.5 → 14.2.35** (parche de la vulnerabilidad critical que la bitácora cloud escalaba; build local limpio, `ƒ Middleware` presente). Quedan 11 high heredadas (`next-intl` etc.) que requieren saltos mayores — decisión de Papu.
 - `handoff.md` — reescrito (incluye también el estado de la 2ª sesión: PDF v2).
 
 ## Contexto 2ª sesión de hoy (PDF v2, sin commit previo)
@@ -26,6 +27,7 @@
 
 ## Próximos pasos (ordenados por prioridad)
 1. **Papu: confirmar que el PDF v2 está subido como archivo del producto Gumroad** (compra de prueba recomendada). Opcional: añadir cover al producto.
+1b. **Papu: rotar el token OAuth expuesto** (bitácoras cloud 2026-07-25 06:22 y 09:52 UTC) — la bitácora cloud lleva 17 ciclos escalándolo sin confirmación de rotación.
 2. Papu: resolver permiso Full Disk Access/TCC (bloqueador Kimiko background desde 2026-07-11).
 3. Papu: decidir qué hacer con los 90 drafts de blog sin revisar.
 4. Papu: Google Search Console + sitemap; confirmar perfiles IG/LinkedIn; aprobar 3 borradores sociales.
