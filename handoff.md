@@ -66,9 +66,24 @@ Las **25 restantes con ficha** (beleño, sidr, boldo, olivo, muérdago, cinamomo
 ficha correcta en disco — su especie nunca estuvo en el seed original. Hay que escribirlas desde
 cero o dejarlas retenidas. Las 9 tóxicas siguen con `ficha_cientifica` vacía.
 
+## 🔴 URGENTE (heredado del ciclo cloud de las 21:15 UTC, reverificado ahora)
+
+**El checkout está caído: `/producto/ritual-descanso` enlaza a un producto Gumroad que da 404.**
+
+| URL | estado |
+|---|---|
+| `kristian320.gumroad.com/l/ritual-descanso` ← la que sirve producción | **404** |
+| `kristiantronco.gumroad.com/l/ugsqtg` ← la anterior | 200 |
+
+`NEXT_PUBLIC_GUMROAD_URL` se cambió a mano en Vercel el 28-jul 18:25 UTC. **No lo he revertido**:
+el cambio es una acción humana deliberada y puede ser una migración de cuenta a medias — revertir
+mandaría a los compradores al producto de la cuenta antigua. Papu decide: o publicar el producto
+en `kristian320`, o devolver la env var a la URL que funciona. Mientras tanto no hay forma de
+cobrar, y el fallback de `RitualCheckout.tsx` no cubre este caso (solo cubre "la env var no existe").
+
 ## Estado del proyecto
 - Producción estable (`quantum-holistic.com`). Gate del diccionario intacto y verificado.
-- Funnel: `/regalo/primera-noche` → `leads` → `/producto/ritual-descanso` → Gumroad €19.
+- Funnel: `/regalo/primera-noche` → `leads` → `/producto/ritual-descanso` → **Gumroad 404 (ver arriba)**.
 - `leads` y `purchases` en 0 filas.
 - `plants`: 52 filas · 43 con ficha (18 ya correctas por especie) · 0 publicables.
 - `blog_posts`: 90 drafts / 19 published, sin cambios.
@@ -82,6 +97,7 @@ cero o dejarlas retenidas. Las 9 tóxicas siguen con `ficha_cientifica` vacía.
 - Supabase: 18 filas de `plants` (`ficha_cientifica` + `ficha_mistica`), sin tocar el gate
 
 ## Próximos pasos (ordenados por prioridad)
+00. **Papu: arreglar el checkout Gumroad 404** (ver bloque URGENTE arriba). Bloquea todo ingreso.
 0. **Revisar y levantar el gate de las 18 recuperadas, una a una.** Ahora es un trabajo de
    *revisión*, no de redacción: la ficha ya corresponde a la especie, falta contrastar posología
    contra fuente farmacognóstica fiable. Empezar por las estrella (lavanda, manzanilla, valeriana,
