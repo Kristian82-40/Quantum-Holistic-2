@@ -1056,3 +1056,35 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   sin autorización) con framing distinto ("doce horas, un revert de 30 segundos, y aun así
   esperamos"). Ver `kimiko/bitacora/2026-07-29-0635.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios).
+
+---
+
+## 2026-07-29 10:41 UTC — Ciclo cloud: checkout Gumroad ~16h16min caído + nueva ficha con identidad ajena
+
+- QA 8/8 OK. Sin fixes de código este ciclo.
+- **Checkout Gumroad sigue roto**, ~16h16min (desde 28-jul 18:25 UTC), tercer ciclo consecutivo
+  confirmando el mismo estado (`updatedAt` de la env var sin cambio, `updatedBy: null`;
+  `kristian320.gumroad.com/l/ritual-descanso` en 404, `kristiantronco.gumroad.com/l/ugsqtg` en
+  200). Matiz nuevo: el fallback de captura de email en `RitualCheckout.tsx` solo se activa cuando
+  la env var **no existe**, no cuando existe pero apunta a un enlace roto — quien hace clic ahora
+  mismo ve el 404 directo, no un formulario de respaldo. Sin tocar la env var sin OK de Papu.
+- **Nueva instancia confirmada del bug de identidad por `id`** (mismo mecanismo que las 18
+  recuperadas el 29-jul, commit `8b84912`): `slug: olivo` (`id: 7`, `Olea europaea`) tiene la
+  ficha de **cardo mariano** (*Silybum marianum*, familia Asteraceae, posología de silimarina).
+  Confirmado contra `app/fichas-50-valid.json`: `id: 7` ahí es literalmente "Cardo mariano". Cae
+  en las 25 sin recuperación posible por JSON (no hay entrada `Olea europaea` en el archivo de
+  origen, ni slug `cardo-mariano` vivo en la tabla para revertir el cruce). No se toca — el gate
+  `ficha_verificada` ya bloquea que llegue a producción, y arreglarlo requeriría contenido nuevo
+  con el mismo proceso de verificación humana pendiente para las otras 24. **Regla derivada: el
+  QA de "plantas peligrosas con placeholder" ya revisa `ficha_cientifica` fila por fila — vale la
+  pena, de paso, cotejar familia_botanica vs. nombre_latino en las 43 seguras una vez por semana,
+  no solo cuando hay una sesión de recuperación dedicada, porque así se pescó esta sin buscarla
+  explícitamente.**
+- Gate `ficha_verificada` sin cambios: 43/52 con ficha, 0 verificadas. Tabla `citas` sigue
+  bloqueada (sin canal DDL, >30 ciclos).
+- `leads`/`purchases` en 0 filas — sin datos aún para funnel A/B. `blog_posts`: 90 draft / 19
+  published, sin cambio.
+- 2 borradores sociales nuevos, ángulos distintos a los de ciclos anteriores (el fallback que no
+  se activa cuando el enlace existe pero está roto; el hallazgo de la ficha de olivo con datos de
+  cardo mariano). Ver `kimiko/bitacora/2026-07-29-1041.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios).
