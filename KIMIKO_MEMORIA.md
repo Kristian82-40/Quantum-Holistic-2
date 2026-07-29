@@ -1039,3 +1039,20 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Tareas manuales de Papu: (1) resolver el checkout Gumroad — ya escalada 2 ciclos seguidos;
   (2) decidir plan de re-verificación del diccionario; (3) rotar service role key + token OAuth
   expuestos.
+
+---
+
+## 2026-07-29 06:35 UTC — Ciclo cloud: checkout Gumroad sigue caído, ~12h10min
+
+- QA 8/8 OK. Sin fixes de código este ciclo.
+- **Checkout Gumroad sigue roto**, ahora ~12h10min (desde 28-jul 18:25 UTC). Confirmado de nuevo
+  vía API de Vercel (`updatedAt` de `NEXT_PUBLIC_GUMROAD_URL` sin cambio, `updatedBy: null`) y
+  comprobación directa: `kristian320.gumroad.com/l/ritual-descanso` sigue en 404,
+  `kristiantronco.gumroad.com/l/ugsqtg` sigue en 200. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 43/52 con ficha, 0 verificadas. Tabla `citas` sigue
+  bloqueada (sin canal DDL en el entorno cloud, >30 ciclos).
+- `leads`/`purchases` en 0 filas — sin datos aún para funnel A/B.
+- 2 borradores sociales nuevos, mismo ángulo de fondo (transparencia sobre no revertir la env var
+  sin autorización) con framing distinto ("doce horas, un revert de 30 segundos, y aun así
+  esperamos"). Ver `kimiko/bitacora/2026-07-29-0635.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios).
