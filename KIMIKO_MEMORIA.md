@@ -1137,3 +1137,51 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Nota de proceso:** cuando la tabla real difiere del nombre asumido (`plantas` vs. `plants`),
   el mensaje de error `PGRST205` de PostgREST sugiere el nombre correcto en `hint` — vale la pena
   leerlo antes de asumir que la tabla no existe.
+
+---
+
+## 2026-07-29 21:03 UTC — Ciclo cloud: checkout Gumroad ~1 día 2h37min caído (6º ciclo) + imagen rota de `lavanda`
+
+### Aprendizajes
+- **Retirar un archivo de imagen sin actualizar la fila que lo referencia deja un enlace
+  colgante que un conteo de archivos no detecta.** El 2026-07-28 17:40 UTC se retiró
+  `lavanda-cientifica.jpg` en una sesión local (contenido real era de cornezuelo). La fila
+  `plants` de `lavanda` siguió apuntando a esa ruta, y ningún ciclo posterior lo pescó porque el
+  QA verificaba `public/images/plants/` como conteo total (71, sin cambio) y no si cada
+  `image_cientifica_url` de las 43 plantas seguras resuelve a un archivo real. **Regla derivada:
+  cuando un QA recurrente cuenta archivos o filas, revisar también si vale la pena, de vez en
+  cuando, cruzar la referencia contra el archivo real (no solo el conteo) — un número estable
+  puede esconder una referencia rota si nadie invierte la dirección del chequeo.** Confirmado
+  único caso: 42/43 imágenes científicas de plantas seguras resuelven a archivo real, solo
+  `lavanda` rota (404 directo en producción).
+- `ficha_mistica.afinidad_ayurvedica` (campo clave para "Tu Planta Aliada") pasó de 41/43 a
+  **43/43** plantas seguras entre el ciclo del 17:19 UTC y este — probablemente completado en la
+  sesión interactiva de recuperación de 18 fichas del mismo día. La propuesta de "Tu Planta
+  Aliada" queda con cobertura de datos íntegra, sin migración pendiente, solo falta OK de Papu
+  para implementar.
+
+### Qué funciona
+- Volcar `plants` completa a JSON una vez y cruzar cada `image_cientifica_url`/`image_mistica_url`
+  contra `os.path.exists('public'+url)` en Python es mucho más barato que 43 `curl` individuales,
+  y detectó el caso de `lavanda` en una sola pasada.
+
+### Cierre 2026-07-29 (ciclo cloud 21:03 UTC)
+- QA 8/8 OK aparte de los dos hallazgos ya conocidos (Gumroad, olivo/cardo mariano) y el nuevo de
+  `lavanda`. Build pasa sin fixes (mismo `next-env.d.ts` auto-modificado por el build, revertido
+  sin commitear).
+- **Checkout Gumroad sigue roto**, ~1 día 2h37min, sexto ciclo consecutivo. Sin tocar la env var
+  sin OK de Papu.
+- **Hallazgo nuevo: `lavanda` (planta segura) tiene `image_cientifica_url` apuntando a un archivo
+  que ya no existe** (retirado en la limpieza del 28-jul, la fila nunca se actualizó). Sin tocar
+  el dato este ciclo (escritura en `plants`, documentado y a la espera). Pasa a tarea manual #2.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `olivo`/cardo mariano
+  reconfirmado. **Mejora:** `afinidad_ayurvedica` ahora 43/43 (antes 41/43).
+- Funnel `/regalo/primera-noche` → lead → producto verificado end-to-end (PDF 200, enlace a
+  `/producto/ritual-descanso` presente). Tabla `citas` sigue bloqueada (>30 ciclos). `leads`/
+  `purchases` en 0 filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1,
+  sin cambio. Imágenes: 71 archivos/29 huérfanos, sin cambio (aparte de `lavanda`).
+- 2 borradores sociales nuevos (ángulo del hallazgo de `lavanda` para Instagram; ángulo de
+  "reversible ≠ autorizado" como principio general de diseño de agentes para LinkedIn), sin
+  publicar. Ver `kimiko/bitacora/2026-07-29-2103.md`.
+- Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del
+  workflow.
