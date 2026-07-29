@@ -1111,3 +1111,29 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   completo, aunque el fix sea trivial). Ver `kimiko/bitacora/2026-07-29-1417.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-29 17:19 UTC — Ciclo cloud: checkout Gumroad ~22h53min caído (5º ciclo), verificación vía endpoint de proyecto Vercel
+
+- QA 8/8 OK. Sin fixes de código este ciclo (un `next-env.d.ts` auto-modificado por el build con
+  un comentario no funcional, revertido sin commitear).
+- **Checkout Gumroad sigue roto**, ~22h53min (desde 28-jul 18:25:20 UTC), quinto ciclo consecutivo.
+  Esta vez se confirmó con el endpoint de proyecto de Vercel (`prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  en vez de la lista general de proyectos: existen dos entradas `NEXT_PUBLIC_GUMROAD_URL`, una de
+  `development` y la de `production` (`type: sensitive`, `updatedAt` sin cambio, `updatedBy:
+  null`). El tipo `sensitive` explica por qué la API nunca devuelve el valor en claro — no es un
+  hallazgo nuevo, solo una confirmación más directa del mismo estado. `kristian320.gumroad.com/l/
+  ritual-descanso` sigue en 404, `kristiantronco.gumroad.com/l/ugsqtg` sigue en 200. Sin tocar la
+  env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `olivo`/cardo mariano reconfirmado sin
+  cambio. Tabla `citas` sigue bloqueada (sin canal DDL, >30 ciclos). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published. `npm audit`: 0/11/4/1, sin cambio. Imágenes: 71
+  archivos, sin cambio.
+- 2 borradores sociales nuevos: ángulo de "cinco chequeos idénticos, nada que añadir salvo el
+  reloj" (Instagram) y ángulo de "dos tipos de espera distintos, y solo uno está justificado" —
+  distinguiendo la espera legítima sobre el revert de Gumroad de la rotación de la key expuesta,
+  que no tiene ambigüedad que esperar (LinkedIn). Ver `kimiko/bitacora/2026-07-29-1719.md`.
+- **Nota de proceso:** cuando la tabla real difiere del nombre asumido (`plantas` vs. `plants`),
+  el mensaje de error `PGRST205` de PostgREST sugiere el nombre correcto en `hint` — vale la pena
+  leerlo antes de asumir que la tabla no existe.
