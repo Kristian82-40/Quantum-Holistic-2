@@ -1017,3 +1017,25 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Contaminación aguas abajo acotada:** 2 drafts de blog construidos sobre farmacología ajena, ninguno publicado; ningún post `published` deriva de fichas de planta.
 - Backup previo en `backups/plants-full-dump-2026-07-29-pre-restore.json`.
 - Pendiente: revisar y levantar el gate de las 18 una a una; decidir qué hacer con las 25 fichas sin origen correcto en disco; descartar los 2 drafts contaminados; **rotar la service role key**.
+
+---
+
+## 2026-07-29 02:48 UTC — Ciclo cloud: checkout Gumroad sigue caído, ~8h22min
+
+- QA 8/8 OK. Sin fixes de código este ciclo.
+- **Checkout Gumroad sigue roto.** Confirmado vía API de Vercel que `NEXT_PUBLIC_GUMROAD_URL` no
+  ha cambiado desde el 28-jul 18:25:20 UTC (mismo `updatedAt`, `updatedBy: null`) — Papu todavía
+  no ha actuado. `kristian320.gumroad.com/l/ritual-descanso` sigue en 404; la URL anterior
+  (`kristiantronco.gumroad.com/l/ugsqtg`) sigue en 200. Ventana de checkout roto: ~8h22min.
+  **Regla aplicada:** no se toca la env var sin OK de Papu — puede ser una migración de cuenta a
+  medias, y revertir sin saber sería una acción irreversible y dudosa por cuenta propia.
+- Gate `ficha_verificada` sin cambios: 43/52 con ficha, 0 verificadas. Tabla `citas` sigue sin
+  poder crearse (canal DDL bloqueado, sin `DATABASE_URL`/`SUPABASE_DB_URL`/`SUPABASE_ACCESS_TOKEN`
+  en el entorno cloud — más de 30 ciclos consecutivos).
+- `leads`/`purchases` en 0 filas — sin datos aún para el análisis de funnel A/B del Paso 5.1.
+- 2 borradores sociales nuevos sobre la transparencia de esperar la decisión de Papu en vez de
+  revertir por cuenta propia, sin mención a CTA de compra. Ver
+  `kimiko/bitacora/2026-07-29-0248.md`.
+- Tareas manuales de Papu: (1) resolver el checkout Gumroad — ya escalada 2 ciclos seguidos;
+  (2) decidir plan de re-verificación del diccionario; (3) rotar service role key + token OAuth
+  expuestos.
