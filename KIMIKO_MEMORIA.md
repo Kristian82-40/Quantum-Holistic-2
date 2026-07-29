@@ -1088,3 +1088,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   se activa cuando el enlace existe pero está roto; el hallazgo de la ficha de olivo con datos de
   cardo mariano). Ver `kimiko/bitacora/2026-07-29-1041.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios).
+
+---
+
+## 2026-07-29 14:17 UTC — Ciclo cloud: checkout Gumroad ~19h50min caído, sin hallazgos nuevos
+
+- QA 8/8 OK. Sin fixes de código este ciclo.
+- **Checkout Gumroad sigue roto**, ~19h50min (desde 28-jul 18:25:20 UTC), cuarto ciclo consecutivo
+  confirmando el mismo estado (env var sin cambio, `updatedBy: null`;
+  `kristian320.gumroad.com/l/ritual-descanso` en 404 con user-agent real,
+  `kristiantronco.gumroad.com/l/ugsqtg` en 200). Verificado también en el HTML servido de
+  `/producto/ritual-descanso`, no solo en la env var de Vercel. Sin tocar la env var sin OK de
+  Papu.
+- Gate `ficha_verificada` sin cambios: 43/52 con ficha, 0 verificadas. Hallazgo `olivo`/cardo
+  mariano reconfirmado sin cambio de estado. Tabla `citas` sigue bloqueada (sin canal DDL, >30
+  ciclos).
+- `leads`/`purchases` en 0 filas. `blog_posts`: 90 draft / 19 published, sin cambio. `npm audit`:
+  0 critical/11 high/4 moderate/1 low, sin cambio. `public/images/plants/`: 71 archivos, sin
+  cambio.
+- 2 borradores sociales nuevos, ángulos nuevos (lo que un 200 OK no cuenta sobre el propósito real
+  del sistema; por qué un agente autónomo no revierte configuración de producción sin contexto
+  completo, aunque el fix sea trivial). Ver `kimiko/bitacora/2026-07-29-1417.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
+  commitea el paso dedicado del workflow.
