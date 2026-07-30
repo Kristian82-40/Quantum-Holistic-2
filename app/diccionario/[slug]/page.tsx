@@ -11,6 +11,22 @@ import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
 
+// Plantas peligrosas: nunca se sirve su ficha mística, ni siquiera si la
+// planta tiene datos cargados en la base — el contenido de ficha_mistica no
+// pasa por ningún proceso de verificación y para estas 9 puede describir
+// "uso ceremonial" fabricado que no corresponde a la especie real.
+const PLANTAS_PELIGROSAS = new Set([
+  'aconito',
+  'datura',
+  'datura-metel',
+  'amanita-muscaria',
+  'cannabis',
+  'cornezuelo-centeno',
+  'beleno-negro',
+  'tejo',
+  'hierba-mora',
+]);
+
 interface FichaCientifica {
   familia_botanica?: string;
   parte_usada?: string;
@@ -89,7 +105,7 @@ export default async function PlantPage(
 
   // La ficha clínica solo se sirve tras verificación humana contra nombre_latino.
   const fc = plant.ficha_verificada ? plant.ficha_cientifica : null;
-  const fm = plant.ficha_mistica;
+  const fm = PLANTAS_PELIGROSAS.has(plant.slug) ? null : plant.ficha_mistica;
   const hasMistica = fm && Object.values(fm).some(Boolean);
 
   return (
