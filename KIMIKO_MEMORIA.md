@@ -1295,3 +1295,62 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   publicar. Ver `kimiko/bitacora/2026-07-30-0634.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+## 2026-07-30 10:26 UTC — Ciclo cloud: el gap de `ficha_mistica` alcanzaba también a las 9 peligrosas — fix aplicado
+
+### Aprendizajes
+- **El mismo cruce que generalizó el hallazgo a 25 fichas seguras (ciclo 06:34 UTC) no se había
+  aplicado todavía a las 9 plantas peligrosas** — los ciclos previos solo verificaban su lado
+  científico (gate `ficha_verificada`) y sus imágenes (`null`/placeholder), nunca su
+  `ficha_mistica`. Al correr el mismo cruce por `id` contra `app/fichas-50-valid.json` sobre las 9,
+  las 9 (100%) resultaron con `ficha_mistica` copiada byte a byte de una especie no tóxica
+  distinta: `cannabis`→Salvia officinalis, `datura`→Vitis vinifera, `datura-metel`→Smallanthus
+  sonchifolius, `amanita-muscaria`→Ilex paraguariensis, `hierba-mora`→Arctium lappa,
+  `beleno-negro`→Aloe barbadensis, `tejo`→Hypericum perforatum, `aconito`→Foeniculum vulgare,
+  `cornezuelo-centeno`→Lavandula angustifolia. Confirmado en producción en `/diccionario/cannabis/`
+  antes del fix: mostraba "Uso Ceremonial: Rituales de sabiduría, protección y purificación de la
+  palabra" — contenido íntegro de Salvia officinalis, sin relación alguna con Cannabis sativa.
+  **Regla derivada: cuando un cruce de datos se generaliza a un subconjunto (ej. "43 plantas
+  seguras"), hay que preguntarse explícitamente qué otro subconjunto relacionado quedó fuera del
+  barrido (aquí, las 9 peligrosas) — el criterio de selección de la muestra original (plantas
+  "seguras") puede excluir por accidente justo el subconjunto donde el mismo bug importa más.**
+- **Diferencia de fondo con el caso de las 25 fichas seguras: aquí el bug cae dentro de una zona
+  de protección explícita e inamovible del protocolo ("9 plantas peligrosas: placeholder intacto
+  siempre").** Aunque la regla original hablaba de imágenes, servir un texto de "uso ceremonial"
+  inventado para plantas realmente tóxicas (aconito, cornezuelo del centeno, datura, amanita
+  muscaria) cae dentro del espíritu de esa protección, no solo de su letra literal.
+- **Se aplicó un fix de código este ciclo — primera vez que un ciclo modifica código de gating de
+  `ficha_mistica`, tras 3 ciclos consecutivos documentando el problema sin tocarlo.** La
+  justificación: (a) `app/CLAUDE.md` autoriza actuar directamente en cambios de código sin pedir
+  confirmación salvo riesgo de pérdida de datos; (b) el fix es mínimo, reversible, no toca datos ni
+  el gate ya pendiente para las 25 fichas seguras; (c) cae directamente en la zona de protección
+  inamovible de las 9 peligrosas, no en la zona de "decisión de producto" que sí sigue bloqueando
+  la corrección de las 25 fichas seguras. **Regla derivada: la barrera de "no tocar sin OK de
+  Papu" aplica a decisiones de producto (qué hacer con datos ambiguos/contaminados); no aplica a
+  aplicar directamente una regla de protección ya inamovible y explícita cuando se descubre que el
+  código no la cumplía — ahí el fix mínimo y reversible es la acción correcta, no la espera.**
+- Confirmado también que `afinidad_ayurvedica` está poblada en las 52 filas, incluidas las 9
+  peligrosas — dato que refuerza por qué el filtro hardcoded de exclusión para "Tu Planta Aliada"
+  (ya exigido por el protocolo) es obligatorio y no una precaución de sobra: el dato crudo no
+  distingue peligro por sí mismo en ningún campo.
+
+### Cierre 2026-07-30 (ciclo cloud 10:26 UTC)
+- QA 8/8 OK, con 1 hallazgo crítico corregido este ciclo (ver aprendizajes). Build pasa en verde
+  tras el fix. 52 plantas, 9 peligrosas con placeholder de imagen intacto y ahora también con
+  `ficha_mistica` bloqueada por filtro hardcoded.
+- **Fix aplicado y commiteado (`46f1022`, pusheado a `main`):** `app/diccionario/[slug]/page.tsx`
+  ahora oculta la sección "Tradición & Sabiduría Ancestral" completa para las 9 plantas peligrosas,
+  igual que ya oculta su imagen. No toca las 25 fichas seguras contaminadas ni decide la extensión
+  del gate a las 52 — esa decisión de producto sigue pendiente de Papu (tarea manual #2).
+- **Checkout Gumroad sigue roto**, ~1 día 16h, noveno ciclo consecutivo. Sin tocar la env var sin
+  OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `lavanda` (imagen rota)
+  reconfirmada sin cambio. Tabla `citas` sigue bloqueada (33 ciclos). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, 0 violaciones de checklist en los published. `npm
+  audit`: 0/11/4/1, sin cambio. Imágenes: 71 archivos/29 huérfanos, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → producto verificado end-to-end, sin cambios.
+- 2 borradores sociales nuevos (ángulo de transparencia sobre control de calidad, sin nombrar
+  plantas concretas dado lo sensible del hallazgo), sin publicar. Ver
+  `kimiko/bitacora/2026-07-30-1026.md`.
+- 1 commit de código este ciclo (`46f1022`, build verificado en verde); bitácora y memoria las
+  commitea el paso dedicado del workflow.
