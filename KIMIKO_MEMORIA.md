@@ -1431,3 +1431,40 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-30-1733.md`.
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-30 21:15 UTC — Ciclo cloud: QA limpio, sin novedades — línea base estable
+
+### Aprendizajes
+- **Cuando un incidente ya documentado lleva varios ciclos sin cambio, el valor del ciclo está en
+  la reverificación concreta, no en la repetición de la afirmación.** Este ciclo no se limitó a
+  copiar "Gumroad sigue roto" de la bitácora anterior: volvió a pedir las dos URLs por HTTP
+  (rota → 404, funcional de respaldo → 200) y volvió a extraer el `ficha_mistica` renderizado de
+  `ashwagandha-fruto` comparándolo campo a campo contra `app/fichas-50-valid.json` id 36 (Saúco).
+  Ambas pruebas siguen siendo baratas de repetir y evitan que un estado "confirmado hace 10
+  ciclos" se dé por sentado sin comprobación real.
+- Sin hallazgos nuevos: los tres incidentes abiertos (Gumroad, `lavanda` con imagen rota, 25
+  fichas místicas contaminadas) siguen exactamente en el mismo estado que el ciclo de las 17:33
+  UTC. `leads`/`purchases` siguen en 0 filas — el sitio aún no ha recibido ningún envío de
+  formulario ni compra real desde que existe telemetría.
+
+### Cierre 2026-07-30 (ciclo cloud 21:15 UTC)
+- QA 8/8 OK, sin hallazgos nuevos. Build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder
+  de imagen y `ficha_mistica` bloqueada por el filtro hardcoded, reverificado en producción.
+- **Checkout Gumroad sigue roto**, ~2 días 3h, duodécimo ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas. Sin tocar la env
+  var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `lavanda` (imagen rota)
+  reconfirmada sin cambio. Tabla `citas` sigue bloqueada (36 ciclos). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin cambio.
+  Imágenes: 71 archivos, sin cambio.
+- Las 25 fichas seguras contaminadas de `ficha_mistica` siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu, sin cambio este ciclo (tarea manual #2). Caso `ashwagandha-fruto`
+  reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- Funnel `/regalo/primera-noche` → lead → producto verificado end-to-end (PDF 200, rutas 200),
+  sin cambios.
+- 2 borradores sociales nuevos (ángulo de la guía de regalo como puerta de entrada para
+  Instagram; ángulo "dato vs. vista" en control de calidad para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-30-2115.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
+  memoria las commitea el paso dedicado del workflow.
