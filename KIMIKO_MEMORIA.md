@@ -1251,3 +1251,47 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-30-0236.md`.
 - Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+---
+
+## 2026-07-30 06:34 UTC — Ciclo cloud: el gap de `ficha_mistica` son 25 fichas contaminadas, no 1
+
+### Aprendizajes
+- **Un hallazgo puntual pide generalizarse antes de cerrarse, no solo corregirse.** El ciclo
+  anterior confirmó que `ficha_mistica` no tiene gate y que `ashwagandha-fruto` servía en vivo el
+  perfil de Saúco. En vez de tratarlo como un caso aislado, este ciclo aplicó el mismo cruce
+  (`ficha_cientifica`/`ficha_mistica` actual vs. `app/fichas-50-valid.json` por `id`, filtrando
+  filas con contenido *idéntico byte a byte* al origen pero identidad `nombre_latino` distinta) a
+  las 43 plantas seguras completas, no solo a la fila ya conocida. **Resultado: 25 de 43 (58%)
+  están contaminadas de la misma forma**, no 1. Lista completa documentada en
+  `kimiko/bitacora/2026-07-30-0634.md`. **Regla derivada: cuando un cruce de datos destapa un
+  caso, correrlo sobre el conjunto completo el mismo ciclo (no en una sesión dedicada futura) —
+  la diferencia entre "1 caso" y "58% del dataset" cambia por completo qué decisión hace falta
+  tomar, y dejarlo para después deja a quien decide trabajando con la cifra equivocada.**
+- **Confirmado en producción, no solo por cruce de datos:** se comprobó el HTML servido de dos
+  slugs adicionales de la lista (`loto` → chakra/planeta de `tulsi`; `ajo` → chakra/planeta de
+  `granada`), coincidiendo exactamente con lo que predice el cruce por `id`. El método de
+  verificación (comparar contenido exacto contra el origen, no solo inferir del listado) sigue
+  siendo el que generaliza sin falsos positivos.
+- **Consecuencia directa para "Tu Planta Aliada":** la cobertura "43/43 con
+  `afinidad_ayurvedica"` reportada como lista para implementar en ciclos anteriores queda
+  reclasificada: 25 de esas 43 filas recomendarían la afinidad dosha de una especie equivocada.
+  El mapeo no puede activarse de forma responsable sin que Papu decida entre corregir las 25 o
+  extender el gate a `ficha_mistica`.
+
+### Cierre 2026-07-30 (ciclo cloud 06:34 UTC)
+- QA 8/8 OK. Build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder intacto.
+- **Checkout Gumroad sigue roto**, ~1 día 12h, octavo ciclo consecutivo. Sin tocar la env var sin
+  OK de Papu.
+- **Hallazgo del ciclo: el gap de gating en `ficha_mistica` afecta a 25 fichas, no a 1** (ver
+  aprendizajes). Sin tocar datos ni gating — decisión de producto pendiente, pasa a tarea manual
+  #2.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `lavanda` (imagen rota)
+  reconfirmada sin cambio. Tabla `citas` sigue bloqueada (32 ciclos). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, 10 con violación de checklist, sin cambio. `npm
+  audit`: 0/11/4/1, sin cambio. Imágenes: 71 archivos/29 huérfanos, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → producto verificado end-to-end, sin cambios.
+- 2 borradores sociales nuevos (ángulo de "un hallazgo de ayer, multiplicado por 25 hoy"), sin
+  publicar. Ver `kimiko/bitacora/2026-07-30-0634.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
+  commitea el paso dedicado del workflow.
