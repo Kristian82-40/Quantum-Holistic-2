@@ -1185,3 +1185,69 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   publicar. Ver `kimiko/bitacora/2026-07-29-2103.md`.
 - Sin commits de código este ciclo; bitácora y memoria las commitea el paso dedicado del
   workflow.
+
+---
+
+## 2026-07-30 02:36 UTC — Ciclo cloud: `ficha_mistica` sin gate + segunda identidad ajena en vivo (`ashwagandha-fruto` = Saúco)
+
+### Aprendizajes
+- **El gate `ficha_verificada` protege solo la mitad del contenido de cada ficha.** Leyendo
+  `app/diccionario/[slug]/page.tsx` línea 91-92: `ficha_cientifica` se condiciona a
+  `plant.ficha_verificada`, pero `ficha_mistica` se asigna sin condición alguna. El campo
+  `publicada` no se usa en ningún punto del código de listado ni de detalle — es vestigial. Todos
+  los ciclos anteriores verificaban correctamente "0/52 fichas científicas verificadas ⇒ nada
+  llega a producción", pero esa afirmación nunca fue cierta para el contenido místico (elemento,
+  chakra, planeta, energía, dosha, simbolismo), que se sirve para las 52 plantas sin filtro desde
+  que existe la tabla. **Regla derivada: cuando un chequeo confirma que "un gate bloquea la
+  publicación", hay que verificar que el gate cubre *todos* los campos que se muestran en la
+  página, no solo el campo que motivó crear el gate — un control bien diseñado para un tipo de
+  contenido puede dejar ciego a otro tipo en la misma fila sin que nadie lo pidiera
+  explícitamente.**
+- **Segunda instancia confirmada del bug de identidad por `id`** (mismo mecanismo que `olivo`,
+  commit `8b84912` del 2026-05-05): `ashwagandha-fruto` (`id:36`, `nombre_latino: Withania
+  somnifera`) tiene `ficha_cientifica` **y** `ficha_mistica` idénticas palabra por palabra a la
+  entrada `id:36` de `app/fichas-50-valid.json`, que es **Saúco** (*Sambucus nigra*, Adoxaceae).
+  El dataset de origen solo tiene un Withania somnifera (`id:4`, ya recuperado como `ashwagandha`
+  actual) — no existe ninguna base para una segunda ficha "fruto vs. raíz". **Corrección a la
+  nota de memoria del 2026-07-24: `ashwagandha-fruto` no es una ficha deliberadamente distinta,
+  es el mismo bug de identidad que `olivo`, documentado entonces con una explicación equivocada.**
+- **Diferencia crítica con `olivo`: este caso no está contenido.** `olivo` cae en las 25 fichas
+  sin `ficha_verificada`, así que el gate científico lo bloquea (aunque ahora sabemos que su
+  `ficha_mistica`, si la tuviera con datos de otra especie, también se serviría sin filtro).
+  `ashwagandha-fruto` sirve su `ficha_mistica` contaminada en producción ahora mismo — verificado
+  extrayendo el texto renderizado de `https://quantum-holistic.com/diccionario/ashwagandha-fruto`.
+  Visible a cualquier visitante desde `created_at: 2026-04-29`, sin que ningún ciclo previo lo
+  hubiera detectado porque el QA de "gate ficha_verificada" solo se probaba contra
+  `ficha_cientifica`.
+- La cobertura "43/43 con `afinidad_ayurvedica`" reportada como mejora el 2026-07-29 sigue siendo
+  cierta en cantidad, pero al menos una de esas 43 filas es contenido de otra especie — la
+  propuesta de "Tu Planta Aliada" no puede darse por lista solo con el conteo, hace falta
+  verificación de calidad fila por fila antes de cruzarla con `profiles.dosha`.
+
+### Qué funciona
+- El mismo método que destapó `olivo` (cruzar `nombre_latino`/`ficha_cientifica` actual contra
+  `app/fichas-50-valid.json` por `id`) generalizado a un cruce género→familia botánica sobre las
+  43 plantas seguras encontró el segundo caso en un solo script, sin sesión dedicada de
+  recuperación.
+- Leer el código de la página (`fc = ... ? ... : null` vs. `fm = plant.ficha_mistica`) en vez de
+  solo inferir del HTML confirmó la causa exacta del gap de gating, no solo su síntoma.
+
+### Cierre 2026-07-30 (ciclo cloud 02:36 UTC)
+- QA 8/8 OK aparte de los hallazgos ya conocidos (Gumroad, `olivo`/cardo mariano, `lavanda`) y el
+  nuevo de `ashwagandha-fruto`/Saúco + gap de gating en `ficha_mistica`. Build pasa sin fixes.
+- **Checkout Gumroad sigue roto**, ~1 día 8h, séptimo ciclo consecutivo. Sin tocar la env var sin
+  OK de Papu.
+- **Hallazgo nuevo y el más significativo hasta ahora: `ficha_mistica` no tiene ningún gate de
+  verificación, y `ashwagandha-fruto` sirve en vivo el perfil místico de Saúco.** Sin tocar el
+  dato ni el gating este ciclo — ambas son decisiones de producto (¿corregir la fila o extender
+  el gate a las 52?) fuera del QA de solo-lectura. Pasa a tarea manual #2.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `olivo`/cardo mariano y
+  `lavanda` reconfirmados sin cambio. Tabla `citas` sigue bloqueada (>31 ciclos). `leads`/
+  `purchases` en 0 filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`:
+  0/11/4/1, sin cambio. Imágenes: 71 archivos/29 huérfanos, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → producto verificado end-to-end, sin cambios.
+- 2 borradores sociales nuevos (ángulo del gap de gating en `ficha_mistica` para Instagram y
+  LinkedIn: "el candado que protege la ciencia no protege la mística"), sin publicar. Ver
+  `kimiko/bitacora/2026-07-30-0236.md`.
+- Sin commits de código este ciclo (build pasa, sin fixes necesarios); bitácora y memoria las
+  commitea el paso dedicado del workflow.
