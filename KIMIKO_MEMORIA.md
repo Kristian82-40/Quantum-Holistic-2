@@ -1354,3 +1354,39 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-30-1026.md`.
 - 1 commit de código este ciclo (`46f1022`, build verificado en verde); bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+## 2026-07-30 14:09 UTC — Ciclo cloud: QA limpio, fix del ciclo anterior confirmado en producción
+
+### Aprendizajes
+- **Verificar un fix no es solo "el build pasa" — hay que reconfirmarlo contra producción con la
+  misma prueba que destapó el bug original.** Este ciclo repitió exactamente la comprobación que
+  encontró la fuga de `ficha_mistica` en las 9 plantas peligrosas (`/diccionario/cannabis/`
+  servía "Uso Ceremonial"/chakra/planeta de Salvia officinalis) y confirmó 0 coincidencias de
+  esos términos en el HTML actual — el commit `46f1022` sigue sirviendo correctamente en
+  producción, no solo en el build local. **Regla derivada: cuando un ciclo anterior aplica un
+  fix, el primer QA siguiente debe reconfirmarlo con la misma prueba que detectó el problema
+  original contra producción real, no darlo por sentado porque el build pasa.**
+- Ciclo sin hallazgos nuevos ni commits: útil como línea base de que ningún otro dato se movió
+  (leads/purchases en 0, `citas` bloqueada, gate `ficha_verificada` sin cambios, `npm audit` sin
+  cambios, imágenes huérfanas sin cambio) — la ausencia de cambio también es señal cuando se
+  documenta explícitamente ciclo a ciclo, sobre todo para medir cuánto tiempo lleva abierto cada
+  incidente (Gumroad: décimo ciclo consecutivo, ~1 día 20h).
+
+### Cierre 2026-07-30 (ciclo cloud 14:09 UTC)
+- QA 8/8 OK, sin hallazgos nuevos. Build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder
+  de imagen y `ficha_mistica` bloqueada por el filtro hardcoded del ciclo anterior — reverificado
+  en producción, sigue activo.
+- **Checkout Gumroad sigue roto**, ~1 día 20h, décimo ciclo consecutivo. Sin tocar la env var sin
+  OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `lavanda` (imagen rota)
+  reconfirmada sin cambio. Tabla `citas` sigue bloqueada (34 ciclos). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, 0 violaciones de checklist. `npm audit`: 0/11/4/1,
+  sin cambio. Imágenes: 71 archivos/29 huérfanos, sin cambio.
+- Las 25 fichas seguras contaminadas de `ficha_mistica` siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu, sin cambio este ciclo (tarea manual #2).
+- Funnel `/regalo/primera-noche` → lead → producto verificado (rutas 200), sin cambios.
+- 2 borradores sociales nuevos (ángulo del regalo "Primera Noche Tranquila" para Instagram y
+  gobernanza de datos evergreen para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-30-1409.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
+  memoria las commitea el paso dedicado del workflow.
