@@ -1390,3 +1390,44 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-30-1409.md`.
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-30 17:33 UTC — Ciclo cloud: QA limpio, sin novedades — confirmar antes de reportar como "hallazgo nuevo"
+
+### Aprendizajes
+- **Un dato que parece nuevo puede ser un incidente ya documentado — comprobar contra la
+  bitácora más reciente antes de escribir "hallazgo nuevo".** Al confirmar que
+  `NEXT_PUBLIC_GUMROAD_URL` está seteada en producción (el CTA de `/producto/ritual-descanso`
+  muestra "Comprar por 19€ →" en vez del formulario de espera) y que la URL de destino
+  (`kristian320.gumroad.com/l/ritual-descanso`) da 404, por un momento pareció un hallazgo nuevo
+  y crítico. Leer `kimiko/bitacora/2026-07-30-1409.md` antes de escribir la bitácora de este
+  ciclo mostró que es exactamente el mismo incidente documentado desde 2026-07-28 18:25:20 UTC:
+  la env var ya estaba seteada apuntando a esa misma URL rota, y ya llevaba diez ciclos
+  reportado como tarea manual #1. **Regla derivada: antes de calificar algo como "hallazgo
+  nuevo" en la bitácora, releer la bitácora inmediatamente anterior sobre ese mismo tema — un
+  estado que no ha cambiado desde hace varios ciclos no es una novedad solo porque este ciclo lo
+  descubrió de nuevo por su cuenta.**
+- Reverificado que la URL previa funcional `kristiantronco.gumroad.com/l/ugsqtg` sigue
+  respondiendo 200 — el revert simple sigue siendo una opción viable para Papu, no ha
+  caducado.
+
+### Cierre 2026-07-30 (ciclo cloud 17:33 UTC)
+- QA 8/8 OK, sin hallazgos nuevos. Build pasa sin fixes. 52 plantas, 9 peligrosas con
+  placeholder de imagen y `ficha_mistica` bloqueada por el filtro hardcoded, reverificado en
+  producción.
+- **Checkout Gumroad sigue roto**, ~1 día 23h, undécimo ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, incluso el dominio base 404) y URL
+  previa funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas. Sin tocar
+  la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha. `lavanda` (imagen
+  rota) reconfirmada sin cambio. Tabla `citas` sigue bloqueada (35 ciclos). `leads`/`purchases`
+  en 0 filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin
+  cambio. Imágenes: 71 archivos/~29 huérfanos, sin cambio.
+- Las 25 fichas seguras contaminadas de `ficha_mistica` siguen sin gate ni corrección —
+  decisión de producto pendiente de Papu, sin cambio este ciclo (tarea manual #2).
+- Funnel `/regalo/primera-noche` → lead → producto verificado (código + rutas 200), sin
+  cambios.
+- 2 borradores sociales nuevos (ángulo de despensa de fin de semana para Instagram y
+  transparencia operativa evergreen para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-30-1733.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
+  memoria las commitea el paso dedicado del workflow.
