@@ -1688,3 +1688,60 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+## 2026-07-31 21:10 UTC — Ciclo cloud: drift de 2.5 días en el rastreo del umbral de 24h de leads, corregido
+
+### Aprendizajes
+- **Una frase heredada de bitácora en bitácora puede arrastrar una fecha obsoleta durante muchos
+  ciclos si nadie recomputa contra la memoria completa.** El último test E2E real de `leads`
+  (`POST`/`DELETE`) documentado en toda la memoria fue el del trigésimo ciclo (2026-07-28 06:31
+  UTC) — pero once ciclos cloud y una sesión interactiva después, cada bitácora seguía repitiendo
+  "sin test E2E repetido, por debajo del umbral de 24h" sin volver a `grep`ear el hallazgo real.
+  Al rastrear explícitamente `grep -n "Test E2E real de leads repetido"` sobre todo el archivo
+  (no solo la bitácora inmediatamente anterior), quedó claro que el umbral llevaba ~2 días 14h
+  superado. **Regla derivada, refuerza la del ciclo de 2026-07-25 09:52 sobre no confiar en la
+  bitácora inmediatamente anterior para fechas: antes de escribir "último test real: HH:MM UTC",
+  hacer el `grep` del hallazgo textual en `KIMIKO_MEMORIA.md`, no copiar la frase de la bitácora
+  previa.** Repetido el test este ciclo sin incidencias (POST con email de prueba → verificado en
+  Supabase por `email` → `DELETE` por `id` → `content-range: */0` reconfirmado).
+- Reconfirmado con `npm audit --json` el desglose exacto (0 critical/11 high/4 moderate/1 low) y,
+  por primera vez, se identificó por nombre una de las dependencias afectadas (`ws`, memory
+  disclosure + DoS, fix sin breaking changes vía `npm audit fix`) en vez de solo citar el total
+  agregado — información más accionable para la tarea manual de Papu sobre vulnerabilidades.
+
+### Qué funciona
+- El patrón ya establecido de recruce rápido (`curl` + REST directo) para plantas peligrosas,
+  duplicados, `ficha_verificada`, blog backlog e imágenes en disco se repitió sin hallazgos nuevos
+  — sigue siendo la forma más barata de detectar regresiones sin canal DDL.
+
+### Cierre 2026-07-31 (ciclo cloud 21:10 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas, 9 peligrosas con placeholder de imagen, reverificado fila por fila.
+- **Hallazgo del ciclo: el test E2E real de `leads` llevaba ~2 días 14h sin repetirse** pese al
+  umbral de 24h — corregido este ciclo (POST/verificación/DELETE ejecutado sin incidencias,
+  `leads`/`purchases` de vuelta a 0 filas reales). Ver aprendizaje arriba para la causa raíz
+  (drift de la frase heredada entre bitácoras).
+- **Checkout Gumroad sigue roto**, ~3 días 2h45min, decimoctavo ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas. Sin tocar la env
+  var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. Duplicado `equinacea`/`echinacea` reconfirmado sin cambio. `blog_posts`: 90 draft/19
+  published, sin cambio (7+ drafts con violación de checklist reconfirmados por título). `npm
+  audit`: 0/11/4/1, sin cambio (vulnerabilidad de `ws` identificada por nombre este ciclo, fix
+  disponible sin breaking changes). Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2). Caso
+  `ashwagandha-fruto` reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- Tabla `citas`: última inserción (Paracelso, 10:43:33 UTC) tiene ~10h27min de antigüedad (< 24h)
+  — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h (~2026-08-01
+  10:43 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado extremo a
+  extremo con escritura real este ciclo (ver hallazgo arriba), sano.
+- 2 borradores sociales nuevos (ángulo "la guía sigue funcionando aunque el checkout no" para
+  Instagram; ángulo del propio hallazgo de drift de proceso para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-31-2110.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes de código necesarios); 1
+  escritura de datos de prueba (test E2E de leads) con limpieza confirmada. `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Bitácora y memoria las
+  commitea el paso dedicado del workflow.
