@@ -1468,3 +1468,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-30-2115.md`.
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-31 02:57 UTC — Ciclo cloud: QA limpio, línea base estable, ningún incidente cambió de estado
+
+### Aprendizajes
+- **Reverificar el cruce de contaminación de `ficha_mistica` con el método correcto (contenido
+  byte a byte, no solo `nombre_latino` distinto por `id`) evita un falso positivo grande.** Un
+  primer intento de este ciclo comparó únicamente `nombre_latino` de `plants` contra
+  `app/fichas-50-valid.json` por `id` y encontró 47/52 "mismatches" — una cifra muy superior a
+  las 34 (25 seguras + 9 peligrosas) ya documentadas desde el 2026-07-30. La causa: muchas filas
+  tienen contenido correcto y propio pero un `id` que simplemente no coincide con la fila
+  correspondiente del dataset de origen (expansión de 50→52 plantas con ids reasignados), lo cual
+  no es contaminación. Añadir la condición de que el contenido (`ficha_cientifica` o
+  `ficha_mistica`) sea **idéntico** al de esa fila de origen, no solo que el nombre difiera, bajó
+  el conteo a 34 — coincide exactamente con lo ya conocido. **Regla derivada: al reverificar un
+  hallazgo de cruce de datos ya documentado con precisión, replicar el criterio exacto usado
+  originalmente (aquí, igualdad de contenido + identidad distinta) antes de confiar en una
+  variante más simple del mismo cruce — una simplificación aparentemente equivalente puede
+  triplicar el conteo por una razón no relacionada con el bug real.**
+- Ciclo sin hallazgos nuevos: los tres incidentes abiertos (Gumroad, `lavanda` con imagen rota,
+  34 fichas místicas contaminadas incluyendo las 9 peligrosas ya mitigadas en UI) siguen
+  exactamente en el mismo estado que el ciclo de las 21:15 UTC del 30-jul. `leads`/`purchases`
+  siguen en 0 filas.
+
+### Cierre 2026-07-31 (ciclo cloud 02:57 UTC)
+- QA 7/7 OK, sin hallazgos nuevos. Build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder
+  de imagen y `ficha_mistica` bloqueada por el filtro hardcoded del 2026-07-30, reverificado en
+  producción.
+- **Checkout Gumroad sigue roto**, ~2 días 8h32min, decimotercer ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas. Sin tocar la env
+  var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas, 43/52 con ficha (las 9 peligrosas con
+  `ficha_cientifica: {}`). `lavanda` (imagen rota) reconfirmada sin cambio. Tabla `citas` sigue
+  bloqueada (37 ciclos, sin canal DDL). `leads`/`purchases` en 0 filas. `blog_posts`: 90
+  draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin cambio. Imágenes: 71 archivos, sin
+  cambio.
+- Las 25 fichas seguras contaminadas de `ficha_mistica` siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu, sin cambio este ciclo (tarea manual #2). Caso `ashwagandha-fruto`
+  reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- Funnel `/regalo/primera-noche` → lead → producto verificado (código + rutas 200), sin cambios.
+- 2 borradores sociales nuevos (ángulo de transparencia como parte del producto para Instagram;
+  ángulo de "sin cambios también es una entrega" para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-31-0257.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
+  memoria las commitea el paso dedicado del workflow.
