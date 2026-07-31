@@ -1607,3 +1607,53 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes de código necesarios); 1
   escritura de datos (cita diaria) vía REST. Bitácora y memoria las commitea el paso dedicado del
   workflow.
+
+## 2026-07-31 14:15 UTC — Ciclo cloud: QA limpio, aclarada la raíz de build correcta, 1 hallazgo menor de higiene de datos
+
+### Aprendizajes
+- **Este repo tiene dos `package.json` distintos: uno en la raíz (el proyecto real que despliega
+  Vercel, según `vercel.json` de la raíz con `buildCommand: npm run build`) y otro dentro de
+  `app/` (vestigio desactualizado, sin subcarpeta `app/app` ni `pages/`, con versiones de
+  dependencias distintas — `next@14.2.5` vs `next@^14.2.35` de la raíz).** Correr `npm ci && npm
+  run build` desde dentro de `app/` falla con "Couldn't find any `pages` or `app` directory"
+  porque Next.js busca un router dentro de `app/`, que ahí no existe — el `app/` real (con
+  `page.tsx`, `layout.tsx`, todas las rutas) actúa como el App Router del proyecto raíz, no como
+  proyecto independiente. **Regla derivada: el build de QA (paso 1.1) debe correrse siempre desde
+  la raíz del repo, nunca desde `app/` — si un ciclo futuro ve ese error de "pages or app
+  directory", no es un bug del código, es haber corrido el comando en el directorio equivocado.**
+  No se tocó ni se borró el `app/package.json` vestigial: no hay evidencia de que lo use ningún
+  proceso de CI/deploy, y borrarlo sin confirmarlo primero sería una acción irreversible de
+  limpieza fuera del alcance de un ciclo de QA.
+- **Hallazgo menor nuevo: `blog_posts.published` (boolean) no coincide con `blog_posts.status`
+  en 8/19 filas publicadas** (`published = false` con `status = 'published'`). No es un bug vivo
+  — tanto `app/blog/page.tsx` como `app/blog/[slug]/page.tsx` filtran exclusivamente por
+  `status=eq.published`, nunca leen `published` — pero es una columna con dato incorrecto que
+  podría inducir a error a cualquier código futuro (ej. un admin UI) que confíe en ella sin
+  revisar `status` primero. Se documenta como higiene de datos, no como incidente.
+
+### Cierre 2026-07-31 (ciclo cloud 14:15 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos (1 hallazgo menor de higiene de datos, ver arriba).
+  Build pasa sin fixes (corrido correctamente desde la raíz). 52 plantas, 9 peligrosas con
+  placeholder de imagen (`image_cientifica_url`/`image_mistica_url` null en las 9), reverificado
+  fila por fila.
+- **Checkout Gumroad sigue roto**, ~3 días 20h, decimosexto ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas, incluyendo el CTA
+  real servido. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. `leads`/`purchases` en 0 filas. `blog_posts`: 90 draft/19 published, sin cambio (aparte
+  del hallazgo menor de `published` desalineado). `npm audit`: 0/11/4/1, sin cambio. Imágenes: 71
+  archivos, sin cambio. Duplicado `equinacea`/`echinacea` reconfirmado sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu, sin cambio (tarea manual #2). Caso `ashwagandha-fruto`
+  reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- Tabla `citas`: sin inserción nueva este ciclo — la cita del ciclo de las 10:43 UTC tiene menos
+  de 24h de antigüedad (~3h30min). Próximo ciclo aplicable debe insertar una nueva.
+- Funnel `/regalo/primera-noche` → lead → producto verificado (código + rutas 200, PDF 200), sin
+  cambios.
+- 2 borradores sociales nuevos (ángulo del regalo sin urgencia de venta para Instagram; ángulo de
+  disciplina operativa al escalar un incidente de 16 ciclos para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-31-1415.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes de código necesarios);
+  `next-env.d.ts` regenerado por el build se revirtió sin commitear (cambio no funcional).
+  Bitácora y memoria las commitea el paso dedicado del workflow.
