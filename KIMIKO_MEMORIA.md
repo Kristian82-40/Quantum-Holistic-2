@@ -1556,3 +1556,54 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Ver `kimiko/bitacora/2026-07-31-0647.md`.
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-31 10:43 UTC — Ciclo cloud: la tabla `citas` deja de estar bloqueada tras 38 ciclos — primera cita insertada
+
+### Aprendizajes
+- **Un incidente de infraestructura documentado durante 38 ciclos consecutivos puede resolverse
+  sin ningún aviso previo — hay que reverificarlo con la misma prueba antes de actuar, no asumir
+  que sigue bloqueado por inercia de la bitácora.** Este ciclo repitió el `GET
+  /rest/v1/citas` que llevaba 38 ciclos devolviendo `PGRST205` ("tabla no existe en el schema
+  cache") y obtuvo `200 []`. En vez de dar por sentado que ya se podía escribir, se confirmó con
+  un `POST` de prueba (`201 Created`) que la tabla acepta escritura real, se leyó el esquema
+  devuelto (`id`, `texto`, `autor`, `fuente`, `fecha_publicacion`, `created_at` — superconjunto
+  del mínimo pedido por el protocolo) y se borró la fila de prueba antes de insertar la cita real
+  del día. **Regla derivada: cuando un estado bloqueado durante muchos ciclos cambia, tratarlo
+  con el mismo rigor que un hallazgo nuevo — confirmar con una prueba de escritura real, no solo
+  una lectura, antes de empezar a depender de la capacidad recién disponible.**
+- Kimiko no tiene ni tuvo acceso DDL (solo `SUPABASE_SERVICE_ROLE_KEY` vía REST), así que la
+  tabla la creó alguien más (presumiblemente Papu) entre el ciclo de las 06:47 UTC y este. No hay
+  forma de confirmar el momento exacto desde REST — se documenta como cambio de estado externo,
+  no como logro propio del ciclo.
+- Insertar la cita diaria no incluyó crear una UI que la muestre — el protocolo (paso 5.3) solo
+  pide la inserción en la tabla, no un componente visible. Se documenta explícitamente como
+  alcance no cubierto para que la decisión de construir esa UI (si se quiere) sea explícita y no
+  se asuma implementada.
+
+### Cierre 2026-07-31 (ciclo cloud 10:43 UTC)
+- QA 7/7 OK, sin hallazgos nuevos de código. Build pasa sin fixes. 52 plantas, 9 peligrosas con
+  placeholder de imagen y `ficha_mistica` bloqueada por el filtro hardcoded, reverificado en
+  producción.
+- **Hallazgo del ciclo: tabla `citas` operativa (200, no más `PGRST205`)**, tras 38 ciclos
+  bloqueada. Esquema confirmado con `id`/`texto`/`autor`/`fuente`/`fecha_publicacion`/
+  `created_at`. Primera cita insertada: *"Todas las cosas son veneno, y nada existe sin veneno;
+  solo la dosis hace que una cosa no sea venenosa."* — Paracelso (dominio público, siglo XVI),
+  pasa el filtro anti-pseudociencia (principio de toxicología, sin biodescodificación/nutrición
+  cuántica/cristales/reiki/chakras ni claims de curación).
+- **Checkout Gumroad sigue roto**, ~2 días 16h18min, decimoquinto ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas. Sin tocar la env
+  var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. `leads`/`purchases` en 0 filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm
+  audit`: 0/11/4/1, sin cambio. Imágenes: 71 archivos, sin cambio.
+- Las 25 fichas seguras contaminadas siguen sin gate ni corrección — decisión de producto
+  pendiente de Papu, sin cambio este ciclo (tarea manual #2). Caso `ashwagandha-fruto`
+  reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- Funnel `/regalo/primera-noche` → lead → producto verificado (código + rutas 200), sin cambios.
+- 2 borradores sociales nuevos (ángulo "cita del día" como puerta filosófica para Instagram;
+  ángulo de verificar antes de anunciar un desbloqueo para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-07-31-1043.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes de código necesarios); 1
+  escritura de datos (cita diaria) vía REST. Bitácora y memoria las commitea el paso dedicado del
+  workflow.
