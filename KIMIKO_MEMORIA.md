@@ -1513,3 +1513,46 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `kimiko/bitacora/2026-07-31-0257.md`.
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-31 06:47 UTC — Ciclo cloud: QA limpio, línea base estable, ningún incidente cambió de estado
+
+### Aprendizajes
+- **El payload RSC de Next.js escapa las comillas (`\"`), así que un grep literal de
+  `"Elemento Agua"` sobre el HTML servido falla aunque el dato SÍ esté ahí.** Al reverificar el
+  caso testigo `ashwagandha-fruto` este ciclo, un primer grep de la frase completa devolvió vacío
+  y por un momento pareció que el hallazgo de contaminación se había corregido solo. Fue un falso
+  negativo: el HTML real intercala el label y el valor en spans separados
+  (`<span>Elemento</span><span>Agua</span>`) y además el mismo contenido aparece una segunda vez
+  serializado como JSON con comillas escapadas dentro del script de hidratación. Buscar el label
+  (`Elemento`, `Chakra`, `Planeta`) y leer los ~150 caracteres siguientes confirmó que el valor
+  seguía siendo Agua/Corazón/Venus (perfil de Saúco), no el de Ashwagandha. **Regla derivada: al
+  verificar contenido renderizado por Next.js contra producción, no asumir que un grep exacto que
+  no matchea significa "ya no está" — el HTML de un RSC puede partir el texto entre tags o
+  escaparlo en el payload de hidratación; buscar por el label/ancla más cercano y extraer el
+  valor real antes de concluir que un hallazgo se resolvió.**
+- Ciclo sin hallazgos nuevos: los tres incidentes abiertos (Gumroad, `lavanda` con imagen rota,
+  34 fichas místicas/científicas contaminadas incluyendo las 9 peligrosas ya mitigadas en UI)
+  siguen exactamente en el mismo estado que el ciclo de las 02:57 UTC. `leads`/`purchases` siguen
+  en 0 filas.
+
+### Cierre 2026-07-31 (ciclo cloud 06:47 UTC)
+- QA 7/7 OK, sin hallazgos nuevos. Build pasa sin fixes. 52 plantas, 9 peligrosas con placeholder
+  de imagen y `ficha_mistica` bloqueada por el filtro hardcoded, reverificado en producción.
+- **Checkout Gumroad sigue roto**, ~2 días 12h22min, decimocuarto ciclo consecutivo. URL rota
+  (`kristian320.gumroad.com/l/ritual-descanso` → 404, dominio base también 404) y URL previa
+  funcional (`kristiantronco.gumroad.com/l/ugsqtg` → 200) ambas reconfirmadas, incluyendo el CTA
+  real servido en `/producto/ritual-descanso/`. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. Tabla `citas` sigue bloqueada (38 ciclos, sin canal DDL). `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin cambio.
+  Imágenes: 71 archivos, sin cambio.
+- Las 25 fichas seguras contaminadas siguen sin gate ni corrección — decisión de producto
+  pendiente de Papu, sin cambio este ciclo (tarea manual #2). Caso `ashwagandha-fruto`
+  reverificado en vivo con extracción del valor real del payload RSC (ver aprendizaje arriba),
+  sigue sirviendo el perfil místico de Saúco.
+- Funnel `/regalo/primera-noche` → lead → producto verificado (código + rutas 200), sin cambios.
+- 2 borradores sociales nuevos (ángulo "lo que se ve vs. lo que se sostiene" para Instagram;
+  ángulo coste de reverificar vs. coste de un dato mal etiquetado para LinkedIn), sin publicar.
+  Ver `kimiko/bitacora/2026-07-31-0647.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); bitácora y
+  memoria las commitea el paso dedicado del workflow.
