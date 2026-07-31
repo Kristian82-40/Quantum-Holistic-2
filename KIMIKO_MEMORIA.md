@@ -1657,3 +1657,34 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes de código necesarios);
   `next-env.d.ts` regenerado por el build se revirtió sin commitear (cambio no funcional).
   Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-07-31 17:42 UTC — Ciclo cloud: QA limpio, ningún incidente cambió de estado, cita diaria sin insertar (< 24h)
+
+### Cierre 2026-07-31 (ciclo cloud 17:42 UTC)
+- QA 7/7 OK, sin hallazgos nuevos. Build pasa sin fixes (corrido desde la raíz). 52 plantas,
+  9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado fila por
+  fila.
+- **Checkout Gumroad sigue roto**, ~2 días 23h17min, decimoséptimo ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` apunta a `kristian320.gumroad.com/l/ritual-descanso`
+  (404, dominio base también 404); `kristiantronco.gumroad.com/l/ugsqtg` (200) sigue siendo el
+  revert viable. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. Duplicado `equinacea`/`echinacea` reconfirmado sin cambio. `leads`/`purchases` en 0
+  filas. `blog_posts`: 90 draft/19 published, sin cambio (desalineación `published`/`status`
+  de 8/19 filas reportada el 14:15 UTC sigue igual, sin impacto en producción). `npm audit`:
+  0/11/4/1, sin cambio. Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2). Caso
+  `ashwagandha-fruto` reverificado en vivo (extracción del valor real del payload RSC), sigue
+  sirviendo el perfil místico de Saúco.
+- Tabla `citas`: última inserción (Paracelso) tiene ~7h de antigüedad (< 24h desde las 10:43 UTC)
+  — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h
+  (~2026-08-01 10:43 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200, PDF `/downloads/primera-noche-tranquila.pdf` → 200), sin cambios.
+- 2 borradores sociales nuevos (ángulo "lo que sí se sostiene mientras algo más está roto" para
+  Instagram; ángulo de qué significa "sin cambio" tras 17 ciclos para LinkedIn), sin publicar.
+  Ver `kimiko/bitacora/2026-07-31-1742.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Bitácora y memoria las
+  commitea el paso dedicado del workflow.
