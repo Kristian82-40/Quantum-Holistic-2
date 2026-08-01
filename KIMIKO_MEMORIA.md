@@ -1836,3 +1836,56 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Bitácora y memoria las
   commitea el paso dedicado del workflow.
+
+## 2026-08-01 13:27 UTC — Ciclo cloud: cita diaria insertada (umbral de 24h superado), Gumroad reconfirmado sin cambio vía API de Vercel
+
+### Aprendizajes
+- **La reconfirmación del `updatedAt` de `NEXT_PUBLIC_GUMROAD_URL` vía API de Vercel sigue siendo
+  la forma más barata de distinguir "nadie tocó esto" de "lo revisé y sigue igual por suerte".**
+  Este ciclo el timestamp devuelto (`1785263120881` ms → 2026-07-28 18:25:20.881 UTC) coincide
+  exacto con el valor documentado en ciclos anteriores — confirma que la env var no se ha tocado
+  desde el incidente original, veintidós ciclos después. Vale la pena seguir haciendo este chequeo
+  puntual (no enumerar todas las env vars, solo filtrar por `key=='NEXT_PUBLIC_GUMROAD_URL'` en
+  Python) en vez de solo repetir el `curl` a la URL rota, que confirma el síntoma pero no la causa.
+- La tabla `plants` (no `plantas`) usa `nombre_es`/`nombre_latino`, no `nombre_comun` — columna
+  confirmada al fallar una query con `42703` este ciclo. Anotado aquí para no repetir el error de
+  nombre de columna en futuros `curl` directos a PostgREST.
+
+### Qué funciona
+- El patrón de recruce rápido (`curl` + REST directo) para plantas peligrosas, duplicados,
+  `ficha_verificada`, blog backlog e imágenes en disco se repitió sin hallazgos nuevos.
+- Rastrear el hallazgo textual "Test E2E real de leads repetido" con `grep` sobre toda la memoria
+  (no solo la bitácora anterior) siguió dando la fecha correcta (2026-07-31 21:10 UTC) sin drift.
+
+### Cierre 2026-08-01 (ciclo cloud 13:27 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`,
+  reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 3 días 19h, vigésimo segundo ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` apunta a `kristian320.gumroad.com/l/ritual-descanso`
+  (404); `kristiantronco.gumroad.com/l/ugsqtg` (200) sigue siendo el revert viable.
+  `updatedAt` de la env var en Vercel reconfirmado sin cambio desde 2026-07-28 18:25:20 UTC. Sin
+  tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. `lavanda` (imagen rota) reconfirmada sin
+  cambio. Duplicado `equinacea`/`echinacea` reconfirmado sin cambio. `leads`/`purchases` en 0
+  filas (solo lectura, último test E2E real con escritura fue el ciclo de 2026-07-31 21:10 UTC,
+  ~16h17min antes, bajo el umbral de 24h). `blog_posts`: 90 draft/19 published, sin cambio
+  (desalineación de 8/19 filas reconfirmada). `npm audit`: 0/11/4/1, sin cambio. Imágenes: 71
+  archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2). Caso
+  `ashwagandha-fruto` reverificado en vivo, sigue sirviendo el perfil místico de Saúco.
+- **Tabla `citas`: nueva cita insertada este ciclo** — la anterior (Paracelso, 2026-07-31
+  10:43:33 UTC) llevaba ~26h44min de antigüedad, superando el umbral de 24h. Insertada: "Que tu
+  alimento sea tu medicina, y que tu medicina sea tu alimento." — Hipócrates (atribución
+  tradicional, dominio público, siglo V a.C.), pasa el filtro anti-pseudociencia.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200, PDF 200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código (sin match en
+  `app/`, `components/`, `lib/`).
+- 2 borradores sociales nuevos (ángulo de transparencia sobre la ficha de `ashwagandha-fruto` en
+  pausa para Instagram; ángulo de gobernanza/disciplina de no tocar producción ajena tras 22
+  ciclos para LinkedIn), sin publicar. Ver `kimiko/bitacora/2026-08-01-1327.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). 1 escritura real en
+  Supabase (cita diaria, dato permanente, no de prueba). Bitácora y memoria las commitea el paso
+  dedicado del workflow.
