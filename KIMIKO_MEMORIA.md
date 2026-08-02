@@ -2157,3 +2157,50 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-02 20:58 UTC — Ciclo cloud: QA limpio + verificación extendida de imágenes, ningún incidente cambió de estado
+
+### Aprendizajes
+- Se probó por primera vez (en este ciclo) el acceso directo a la API de Vercel
+  (`GET /v9/projects/{id}/env`) con `VERCEL_TOKEN` disponible en el entorno, en vez de solo confiar
+  en lo reportado en ciclos anteriores. Project ID confirmado: `prj_DASuxCUuV72w8CLpZejVij8XcXvL`
+  (`quantum-holistic-2`). El `updatedAt` de `NEXT_PUBLIC_GUMROAD_URL` (target `production`) es
+  `1785263120881` ms epoch = `2026-07-28T18:25:20.881Z`, coincide exactamente con lo ya registrado
+  — confirma que las lecturas previas eran correctas y que ahora hay un método directo y repetible
+  para verificarlo sin depender de la narrativa heredada.
+- Se extendió la verificación de imágenes de "solo confirmar `lavanda`" a probar en vivo las 43
+  URLs únicas de imagen de las 43 plantas seguras contra producción — único 404 fue `lavanda`,
+  las 42 restantes en 200. Este barrido completo (en vez de solo el hallazgo ya conocido) es más
+  caro pero cierra la posibilidad de que otro archivo se haya roto sin ser detectado por depender
+  solo del contador agregado "71 archivos, sin cambio".
+
+### Cierre 2026-08-02 (ciclo cloud 20:58 UTC)
+- QA 7/7 OK + verificación extendida de imágenes, sin hallazgos nuevos. Build pasa sin fixes
+  (corrido desde la raíz). 52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url`
+  en `null`, reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 5 días 2h33min, trigésimo ciclo consecutivo. CTA real servido
+  en `/producto/ritual-descanso/` (HTML de producción) apunta a
+  `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var reconfirmado vía API de Vercel directa, sin cambio desde
+  2026-07-28T18:25:20.881Z. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. `lavanda` (404) reconfirmado sin cambio (único 404 de 43 imágenes
+  probadas). `olivo`/cardo mariano reconfirmado sin cambio. `leads`/`purchases` en 0 filas (solo
+  lectura). `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin cambio.
+  Cobertura `afinidad_ayurvedica`: 43/43 plantas seguras, sin cambio. Imágenes: 71 archivos, sin
+  cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2).
+- Tabla `citas`: última inserción (Maimónides, 13:28:24 UTC del 08-02) tiene ~7h30min de
+  antigüedad — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h
+  (~2026-08-03 13:28 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200, PDF 200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código.
+- 2 borradores sociales nuevos (ángulo de transparencia sobre por qué un hallazgo técnico puede
+  persistir varios ciclos sin resolverse para Instagram; ángulo de gobernanza "trigésimo ciclo,
+  mismo bloqueador, misma disciplina" para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-08-02-2058.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
+  en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
