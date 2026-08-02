@@ -2079,3 +2079,42 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-02 13:28 UTC — Ciclo cloud: cita diaria insertada (Maimónides), Gumroad 28º ciclo consecutivo roto sin cambio
+
+### Cierre 2026-08-02 (ciclo cloud 13:28 UTC)
+- QA 7/7 OK, sin hallazgos nuevos. Build pasa sin fixes (corrido desde la raíz). 52 plantas,
+  9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado fila por
+  fila.
+- **Checkout Gumroad sigue roto, 4 días 19h de antigüedad, vigésimo octavo ciclo consecutivo.**
+  CTA real servido en `/producto/ritual-descanso/` apunta a
+  `https://kristian320.gumroad.com/l/ritual-descanso` (404); `kristiantronco.gumroad.com/l/ugsqtg`
+  (200) sigue siendo el revert viable. `updatedAt` de la env var en Vercel reconfirmado sin cambio
+  desde 2026-07-28 18:25:20.881 UTC. Código de `RitualCheckout.tsx` releído: el fallback de email
+  solo se activa si `NEXT_PUBLIC_GUMROAD_URL` no existe — como la env var existe (con URL
+  incorrecta), se sirve el CTA roto en vez del fallback. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. `lavanda` (404) reconfirmado sin cambio. `leads`/`purchases` en 0 filas
+  (solo lectura). `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin
+  cambio. Cobertura `afinidad_ayurvedica`: 43/43 plantas seguras (verificado excluyendo las 9
+  peligrosas), sin cambio. Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — pendiente
+  de Papu desde 2026-07-30. `ashwagandha-fruto` reverificado en vivo, sigue sirviendo el perfil
+  místico de Saúco (chakra Corazón) bajo el nombre de Ashwagandha en Fruto.
+- **Tabla `citas`: nueva cita insertada** (umbral de 24h superado por segundos: última cita,
+  Hipócrates, tenía exactamente 24h00min de antigüedad). Cita nueva: *"No debe el médico tratar la
+  enfermedad sino al enfermo que la sufre."* — Maimónides (aforismo médico de dominio público, sin
+  vocabulario pseudocientífico ni claims de curación). La tabla tiene ahora 3 filas: Paracelso
+  (2026-07-31), Hipócrates (2026-08-01), Maimónides (2026-08-02) — cadencia de ~24h respetada de
+  forma consistente desde que el canal se desbloqueó (ciclo 2026-07-31 10:43 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado, sin cambios.
+  "Tu Planta Aliada" sigue sin implementar en código; esquema ya propuesto en ciclos anteriores,
+  pendiente de OK de Papu.
+- 2 borradores sociales nuevos (ángulo de por qué la cita diaria respeta una cadencia de 24h en
+  vez de publicarse más seguido, para Instagram; ángulo de "tres bloqueadores, veintiocho ciclos,
+  cero decisiones unilaterales" como ejemplo de gobernanza en automatización, para LinkedIn), sin
+  publicar. Ver `kimiko/bitacora/2026-08-02-1328.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
+  Supabase: la cita diaria (dato permanente). Bitácora y memoria las commitea el paso dedicado del
+  workflow.
