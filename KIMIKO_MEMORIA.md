@@ -2118,3 +2118,42 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
   Supabase: la cita diaria (dato permanente). Bitácora y memoria las commitea el paso dedicado del
   workflow.
+
+## 2026-08-02 17:03 UTC — Ciclo cloud: QA limpio, ningún incidente cambió de estado, cita diaria sin insertar (< 24h)
+
+### Aprendizajes
+- Verificar el CTA de Gumroad leyendo el HTML real servido en producción (no solo releer
+  `RitualCheckout.tsx`) es la forma correcta de descartar un desajuste entre código "correcto" y
+  dato de runtime incorrecto. Este ciclo se confirmó explícitamente vía `curl -L` al HTML
+  renderizado que el `href` servido sigue siendo `kristian320.gumroad.com/l/ritual-descanso`
+  (404) — el código no tiene bug, el dato de la env var sigue mal. Vale la pena alternar entre
+  chequeo de código y chequeo de HTML en vivo en vez de asumir que uno sustituye al otro.
+
+### Cierre 2026-08-02 (ciclo cloud 17:03 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`,
+  reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 4 días 22h35min, vigésimo noveno ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` (verificado en HTML de producción) apunta a
+  `kristian320.gumroad.com/l/ritual-descanso` (404); `kristiantronco.gumroad.com/l/ugsqtg` (200)
+  sigue siendo el revert viable. `updatedAt` de la env var en Vercel reconfirmado sin cambio
+  desde 2026-07-28 18:25:20.881 UTC. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. `lavanda` (imagen rota, hallazgo del 2026-07-29) reconfirmado sin
+  cambio. `leads`/`purchases` en 0 filas (solo lectura este ciclo). `blog_posts`: 90 draft/19
+  published, sin cambio. `npm audit`: 0/11/4/1, sin cambio; `uuid`/`ws` confirmados con parche
+  sin breaking changes vía dry-run, sin aplicar (29 ciclos deferido a Papu). Cobertura
+  `afinidad_ayurvedica`: 43/43 plantas seguras, sin cambio. Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2).
+- Tabla `citas`: última inserción (Maimónides, 13:28:24 UTC del 08-02) tiene ~3h35min de
+  antigüedad — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h
+  (~2026-08-03 13:28 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código.
+- 2 borradores sociales nuevos (ángulo de la ausencia de cambios como señal comunicable para
+  Instagram; ángulo de verificar en producción vs. solo en código para LinkedIn), sin publicar.
+  Ver `kimiko/bitacora/2026-08-02-1703.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
+  en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
