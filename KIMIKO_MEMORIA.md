@@ -1992,3 +1992,58 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-02 06:38 UTC — Ciclo cloud: reconfirmado hallazgo de `lavanda` (imagen rota) tras varios ciclos sin mencionarlo por nombre
+
+### Aprendizajes
+- **El mismo patrón de drift narrativo del ciclo de 2026-07-31 21:10 UTC (leads) se repitió con el
+  hallazgo de `lavanda`.** Detectado y documentado el 2026-07-29 21:03 UTC (`image_cientifica_url`
+  apunta a un archivo retirado, 404 en producción), el dato en sí nunca cambió — pero las bitácoras
+  de los últimos ciclos dejaron de nombrarlo explícitamente (la última mención fue alrededor del
+  2026-07-30, antes de la racha 08-01/08-02). Al releer la fila completa vía REST en vez de confiar
+  en la lista de "sin cambio" heredada de la bitácora inmediatamente anterior, se confirmó que el
+  hallazgo sigue activo (`image_cientifica_url` = `/images/plants/lavanda-cientifica.jpg`, 404
+  directo). **Regla reforzada (ya derivada el 2026-07-31 para `leads`, ahora generalizada): un
+  hallazgo de datos que no está en un contador agregado (como "71 archivos, sin cambio") puede
+  desaparecer de la narrativa de bitácora en bitácora aunque el problema siga sin resolver. Antes
+  de cerrar el ciclo, vale la pena recruzar explícitamente contra la lista completa de hallazgos
+  abiertos documentados en la memoria, no solo repetir lo que dijo el ciclo anterior.**
+- `npm audit fix --dry-run` confirma que `uuid` y `ws` tienen parche disponible sin `--force` (sin
+  breaking changes); `next-intl` y `postcss` solo tienen parche vía `--force` (arrastra `next@16`,
+  breaking). Antes solo se sabía que "`ws` tiene fix sin breaking changes" por el texto del
+  advisory; ahora está confirmado mecánicamente con el dry-run, y se identifica `uuid` como
+  segunda dependencia con el mismo perfil de riesgo bajo.
+
+### Cierre 2026-08-02 (ciclo cloud 06:38 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`,
+  reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 4 días 12h9min, vigésimo sexto ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` apunta a `kristian320.gumroad.com/l/ritual-descanso`
+  (404); `kristiantronco.gumroad.com/l/ugsqtg` (200) sigue siendo el revert viable. `updatedAt`
+  de la env var en Vercel reconfirmado sin cambio desde 2026-07-28 18:25:20 UTC. Sin tocar la
+  env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. **`lavanda` (imagen rota, hallazgo del 2026-07-29) reconfirmado
+  explícitamente este ciclo tras varios ciclos sin mencionarlo por nombre** — sigue 404, sin
+  tocar el dato sin OK de Papu. `leads`/`purchases` en 0 filas (solo lectura este ciclo, último
+  test E2E con escritura fue el ciclo de 2026-07-31 21:10 UTC, ~9h28min antes, bajo el umbral de
+  24h). `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 0/11/4/1, sin cambio;
+  `uuid` y `ws` confirmados con parche sin breaking changes vía dry-run, sin aplicar (consistencia
+  con 26 ciclos deferidos a Papu). Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — decisión
+  de producto pendiente de Papu desde 2026-07-30 02:36 UTC (tarea manual #2). Caso
+  `ashwagandha-fruto` reverificado en vivo, sigue sirviendo el perfil místico de Saúco (chakra
+  Corazón) bajo el nombre de Ashwagandha en Fruto.
+- Tabla `citas`: última inserción (Hipócrates, 13:27:37 UTC del 08-01) tiene ~17h11min de
+  antigüedad — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h
+  (~2026-08-02 13:27 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código.
+- 2 borradores sociales nuevos (ángulo del hallazgo de `lavanda` recuperado del drift narrativo
+  para Instagram; ángulo de por qué la verificación recurrente necesita releer el historial
+  completo y no solo el ciclo anterior para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-08-02-0638.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
+  en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
