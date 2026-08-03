@@ -2204,3 +2204,38 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-03 02:58 UTC — Ciclo cloud: QA limpio, ningún incidente cambió de estado, cita diaria sin insertar (< 24h)
+
+### Cierre 2026-08-03 (ciclo cloud 02:58 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas (tabla `plants`), 9 peligrosas con `image_cientifica_url`/`image_mistica_url`
+  en `null`, reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 5 días 8h33min, trigésimo primer ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` (HTML de producción) apunta a
+  `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var reconfirmado vía API directa de Vercel, sin cambio desde
+  2026-07-28T18:25:20.881Z. Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. `lavanda` (404) reconfirmado sin cambio. `leads`/`purchases` en 0 filas
+  (solo lectura). `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 16 vulns
+  (1/4/11 low/moderate/high), sin cambio. Cobertura `afinidad_ayurvedica`: 43/43 plantas seguras,
+  sin cambio. Imágenes: 71 archivos, sin cambio. `ashwagandha-fruto` reverificado en vivo, sigue
+  sirviendo el perfil místico de Saúco (chakra Corazón, planeta Venus) bajo el nombre de
+  Ashwagandha en Fruto.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — pendiente
+  de Papu desde 2026-07-30 02:36 UTC.
+- Tabla `citas`: última inserción (Maimónides, 13:28:24 UTC del 08-02) tiene ~13h30min de
+  antigüedad — sin inserción nueva este ciclo, corresponde al próximo ciclo que supere las 24h
+  (~2026-08-03 13:28 UTC).
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código; cobertura de datos
+  íntegra (43/43), pendiente de OK de Papu.
+- 2 borradores sociales nuevos (ángulo de tener la cobertura de datos lista para "Tu Planta
+  Aliada" sin haber lanzado la función, para Instagram; ángulo de verificar por dos vías
+  independientes — API de Vercel + HTML de producción — en vez de una sola, para LinkedIn), sin
+  publicar. Ver `kimiko/bitacora/2026-08-03-0258.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build no se commitea (cambio no funcional). Sin escrituras nuevas en
+  Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
