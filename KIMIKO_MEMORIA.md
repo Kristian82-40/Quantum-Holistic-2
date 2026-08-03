@@ -2416,3 +2416,64 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-03 21:09 UTC — Ciclo cloud: drift de ~48h en el test E2E de leads (corregido), Gumroad sigue roto (36º ciclo)
+
+### Aprendizajes
+- **El mismo bug de drift del test E2E de `leads` que se corrigió el 2026-07-31 21:10 UTC volvió a
+  colarse.** Aquel ciclo diagnosticó la causa raíz exacta: cada bitácora copiaba "sin test E2E
+  repetido, por debajo del umbral de 24h" de la bitácora inmediatamente anterior sin recalcular
+  contra la fecha real del último test con escritura. Pese a quedar documentado como aprendizaje,
+  volvió a pasar: el ciclo de 2026-08-01 13:27 UTC sí hizo el test real, pero ningún ciclo desde
+  entonces (13 ciclos, hasta este de 21:09 UTC del 08-03) volvió a repetirlo — todos se limitaron a
+  leer `Content-Range` sin cuestionar si el "último test real" que arrastraban seguía siendo
+  reciente. Verificado con `grep -n "POST.*api/leads\|escritura real"` sobre el archivo completo,
+  no solo sobre la bitácora anterior. **Lección reforzada: un aprendizaje documentado una vez no
+  basta si el chequeo que lo aplica sigue siendo "copiar lo que dice la bitácora anterior" en vez
+  de "recalcular contra la memoria completa cada vez".** Vale la pena, en ciclos futuros, tratar
+  cualquier frase del tipo "bajo el umbral" en la bitácora inmediatamente anterior como una
+  afirmación a reverificar con `grep`, nunca como un hecho a copiar.
+- Corregido sin incidencias: `POST /api/leads/` (`source=kimiko_qa_e2e_test`) → verificado por
+  `id` en Supabase → `DELETE` de limpieza → tabla de vuelta a 0 filas.
+- El endpoint de listado de env vars de Vercel (`GET /v9/projects/{id}/env`) requiere el `id` del
+  proyecto (`prj_...`), no el slug/nombre — usar el slug (`quantum-holistic`) devuelve 0 resultados
+  sin error, lo que puede leerse por error como "sin env vars configuradas". El proyecto real es
+  `quantum-holistic-2` (`prj_DASuxCUuV72w8CLpZejVij8XcXvL`), confirmado vía `GET /v9/projects`.
+  Vale la pena fijar este ID en la memoria para no tener que redescubrirlo cada vez que cambie el
+  método de consulta.
+
+### Qué funciona
+- `grep -n "POST.*api/leads\|escritura real"` sobre el archivo completo de memoria (no solo sobre
+  la bitácora del ciclo inmediatamente anterior) es la forma correcta de rastrear la fecha real del
+  último test E2E con escritura — reconfirma el patrón ya establecido el 07-31, esta vez aplicado a
+  tiempo para detectar el drift antes de que un usuario real topara con un funnel no probado en 2
+  días.
+
+### Cierre 2026-08-03 (ciclo cloud 21:09 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null` y sin archivo
+  huérfano en disco, reverificado fila por fila. 71 imágenes, sin cambio.
+- **Checkout Gumroad sigue roto**, ~6 días 2h44min, trigésimo sexto ciclo consecutivo. CTA real
+  sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var sin cambio desde 2026-07-28T18:25:20.881Z. Sin tocar la env var sin OK
+  de Papu.
+- **Hallazgo y corrección del ciclo:** test E2E real de `leads` llevaba ~48h sin repetirse pese al
+  umbral de 24h ya establecido — ver Aprendizajes. Repetido este ciclo sin incidencias, funnel
+  sano.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio: 34 fichas (25 seguras + 9 peligrosas)
+  siguen pendientes de decisión de Papu desde 2026-07-30 02:36 UTC. Duplicado
+  `equinacea`/`echinacea` y `lavanda` (imagen 404) reconfirmados sin cambio. `blog_posts`: 90
+  draft/19 published, sin cambio, mismos 8 drafts con violación de checklist. `npm audit`: 16 vulns
+  (1/4/11 low/moderate/high), sin cambio. Cobertura `ficha_mistica.afinidad_ayurvedica`: 52/52
+  plantas (incluye las 9 peligrosas), sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado extremo a extremo
+  con escritura real (ver hallazgo). "Tu Planta Aliada" sigue sin implementar en código; propuesta
+  de esquema sin cambio, pendiente de OK de Papu.
+- 2 borradores sociales nuevos (ángulo "una cita al día, sin adornos" para Instagram; ángulo "el
+  propio sistema de verificación también se audita" para LinkedIn, sobre el hallazgo de este
+  ciclo), sin publicar. Ver `kimiko/bitacora/2026-08-03-2109.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
+  Supabase: el ciclo de prueba POST/DELETE en `leads` (limpiado, tabla de vuelta a 0 filas).
+  Bitácora y memoria las commitea el paso dedicado del workflow.
