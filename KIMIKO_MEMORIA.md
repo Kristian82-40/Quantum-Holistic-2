@@ -2325,3 +2325,52 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas
   en Supabase. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-03 14:46 UTC — Ciclo cloud: QA limpio, cita diaria insertada (Charaka Samhita), Gumroad sigue roto (34º ciclo)
+
+### Aprendizajes
+- Se probó por primera vez el endpoint de detalle de env var de Vercel con `?decrypt=true`
+  (`GET /v9/projects/{id}/env/{envId}?decrypt=true`) para intentar leer el valor real de
+  `NEXT_PUBLIC_GUMROAD_URL` en producción en vez de inferirlo solo del HTML servido. El listado
+  general (`GET /v9/projects/{id}/env`) reveló que el tipo de esa variable es `sensitive` (no
+  `encrypted` como la de `development`) — para variables `sensitive`, el endpoint de detalle
+  devuelve `"decrypted": false` y omite el campo `value` incluso con `?decrypt=true`; no es un
+  fallo de permisos, es el comportamiento esperado del tipo. La señal verificable sigue siendo
+  `updatedAt` (sin cambio) más el `href` real extraído del HTML de producción — no asumir que
+  "sensitive" es sinónimo de "encrypted" al diseñar futuras verificaciones vía API de Vercel.
+
+### Cierre 2026-08-03 (ciclo cloud 14:46 UTC)
+- QA 7/7 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la
+  raíz). 52 plantas (tabla `plants`), 9 peligrosas con `image_cientifica_url`/`image_mistica_url`
+  en `null`, reverificado fila por fila.
+- **Checkout Gumroad sigue roto**, 5 días 20h21min, trigésimo cuarto ciclo consecutivo. CTA real
+  servido en `/producto/ritual-descanso/` (`href` del HTML de producción) sigue apuntando a
+  `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  Env var de producción confirmada de tipo `sensitive` vía API de Vercel (ver Aprendizajes);
+  `updatedAt` reconfirmado sin cambio desde 2026-07-28T18:25:20.881Z. Sin tocar la env var sin OK
+  de Papu.
+- Gate `ficha_verificada` sin cambios: 0/52 verificadas. Duplicado `equinacea`/`echinacea`
+  reconfirmado sin cambio. `lavanda` (404) reconfirmado sin cambio. `leads` en 0 filas (solo
+  lectura). `blog_posts`: 90 draft/19 published, sin cambio. `npm audit`: 16 vulns
+  (1/4/11 low/moderate/high), sin cambio; `uuid`/`ws` reconfirmados con parche sin breaking
+  changes vía dry-run, sin aplicar (34 ciclos deferido a Papu). Cobertura `afinidad_ayurvedica`:
+  43/43 plantas seguras, sin cambio. Imágenes: 71 archivos, sin cambio.
+- Las 34 fichas contaminadas (25 seguras + 9 peligrosas) siguen sin gate ni corrección — pendiente
+  de Papu desde 2026-07-30 02:36 UTC.
+- Tabla `citas`: se insertó una cita nueva — **Charaka** ("No existe sustancia en el universo que
+  no sea medicina, si se usa en el momento adecuado, en la dosis correcta y de la forma
+  correcta.", fuente *Charaka Samhita*), autor no repetido frente a los 3 previos (Maimónides,
+  Hipócrates, Paracelso), tras superar el umbral de 24h (última cita tenía ~25h18min de
+  antigüedad). Pasa el filtro anti-pseudociencia; temáticamente coherente con el enfoque
+  ayurvédico del sitio sin duplicar el ángulo de la cita de Paracelso.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado (código + rutas
+  200, PDF 200), sin cambios. "Tu Planta Aliada" sigue sin implementar en código; cobertura de
+  datos íntegra (43/43), pendiente de OK de Papu.
+- 2 borradores sociales nuevos (ángulo "una cita, treinta y cuatro verificaciones" para Instagram;
+  ángulo sobre documentar la limitación exacta de una API en vez de inventar certeza, para
+  LinkedIn), sin publicar. Ver `kimiko/bitacora/2026-08-03-1446.md`.
+- Único cambio de código detectado fue `next-env.d.ts` regenerado por el build, revertido sin
+  commitear (cambio no funcional); sin commits de código este ciclo. Única escritura en Supabase
+  este ciclo: 1 fila nueva en `citas`. Bitácora y memoria las commitea el paso dedicado del
+  workflow.
