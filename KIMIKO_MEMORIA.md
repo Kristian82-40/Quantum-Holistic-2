@@ -2477,3 +2477,50 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
   Supabase: el ciclo de prueba POST/DELETE en `leads` (limpiado, tabla de vuelta a 0 filas).
   Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-04 02:41 UTC — Ciclo cloud: QA limpio, sin cambios de estado, Gumroad sigue roto (37º ciclo)
+
+### Aprendizajes
+- El "71 archivos de imagen" que se viene reconfirmando ciclo a ciclo se refiere específicamente a
+  `public/images/plants` (imágenes de plantas), no a `public/images` completo. Un `find` más amplio
+  sobre `public` da 87 (71 de plantas + 6 de `public/images/blog` + 8 de `public/images/blog/catalog`
+  + 2 sueltos en `public/images`). No es un drift de contenido, solo una ambigüedad de alcance en el
+  chequeo — vale la pena que futuros ciclos sigan acotando el `find`/conteo a `public/images/plants`
+  específicamente cuando el objetivo es verificar integridad de imágenes de plantas, para no
+  confundir un cambio real con una diferencia de alcance de búsqueda.
+- El test E2E real de `leads` (POST/verificación/DELETE) no tiene una cadencia fija documentada en
+  las instrucciones del ciclo — el hábito establecido en ciclos previos (repetirlo cuando pasa mucho
+  tiempo sin una escritura real) es una salvaguarda propia, no un requisito explícito del prompt.
+  Este ciclo se hizo apenas ~5h30min después del anterior (2026-08-03 21:09 UTC), así que no se
+  repitió por ser reciente — correcto no forzar una escritura de prueba en cada ciclo solo por
+  rutina.
+
+### Cierre 2026-08-04 (ciclo cloud 02:41 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. 71 imágenes en `public/images/plants` (ver Aprendizajes sobre alcance del conteo),
+  sin cambio real.
+- **Checkout Gumroad sigue roto**, ~6 días 8h15min, trigésimo séptimo ciclo consecutivo. CTA real
+  sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var sin cambio desde 2026-07-28T18:25:20.881Z. Sin tocar la env var sin OK
+  de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio: 34 fichas (25 seguras + 9 peligrosas)
+  siguen pendientes de decisión de Papu desde 2026-07-30 02:36 UTC. Duplicado
+  `equinacea`/`echinacea` (ambos slugs confirmados presentes) y `lavanda` (imagen 404) reconfirmados
+  sin cambio. `blog_posts`: 90 draft/19 published, sin cambio, mismos 8 drafts con violación de
+  checklist. `npm audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio. Cobertura
+  `ficha_mistica.afinidad_ayurvedica`: 52/52 plantas, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y rutas
+  200; test E2E real con escritura fue el ciclo anterior (21:09 UTC, ~5h30min de antigüedad), no se
+  repitió por ser reciente (ver Aprendizajes). "Tu Planta Aliada" sigue sin implementar en código;
+  propuesta de esquema sin cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Charaka, 14:46:06 UTC del 08-03) tiene ~11h55min de antigüedad —
+  sin inserción nueva este ciclo (no supera el umbral de 24h); corresponde al ciclo que lo supere
+  (~2026-08-04 14:46 UTC).
+- 2 borradores sociales nuevos (ángulo "seis días, treinta y siete comprobaciones, cero atajos" para
+  Instagram; ángulo sobre por qué el sistema no se autoriza a sí mismo a tocar el dinero pese a
+  tener el acceso técnico, para LinkedIn), sin publicar. Ver `kimiko/bitacora/2026-08-04-0241.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo. Bitácora y memoria las commitea el paso dedicado del workflow.
