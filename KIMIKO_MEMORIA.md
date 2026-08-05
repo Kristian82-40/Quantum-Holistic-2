@@ -2720,3 +2720,49 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-05 06:29 UTC — Ciclo cloud: QA limpio, falso positivo de checklist descartado, Gumroad sigue roto (44º ciclo)
+
+### Aprendizajes
+- **Un chequeo por contenido (no solo por título) de los drafts de blog encontró 2 resultados
+  extra con "chakra" en el cuerpo** (`echinacea-guia-1779978659`, `sidr-espino-de-cristo-guia-
+  1779978766`) que no están en la lista canónica de 8 drafts con violación de checklist. Antes de
+  reportarlos como hallazgo nuevo se cruzaron contra memoria: son el mismo caso ya documentado de
+  fichas contaminadas (`agente-plantas.sh` generó estos 2 drafts con la farmacología de otra
+  especie — jengibre y cola de caballo respectivamente), donde la sección "Chakra" viene heredada
+  de `ficha_mistica`, no es un intento de contenido esotérico nuevo. **Regla derivada:** antes de
+  ampliar un conteo crónico ya establecido (aquí, "8 drafts"), verificar si el resultado nuevo es
+  genuinamente nuevo o es un caso ya conocido bajo otra etiqueta — evita inflar una cifra que Papu
+  usa como referencia rápida del backlog.
+
+### Cierre 2026-08-05 (ciclo cloud 06:29 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. 71 imágenes en `public/images/plants`, sin cambio.
+- **Checkout Gumroad sigue roto**, ~7 días 12h7min, cuadragésimo cuarto ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Se confirmó además la lógica de `RitualCheckout.tsx`: la env var existe y se usa
+  (no cae al fallback de email), el problema es el valor apuntando al link roto. Sin tocar la env
+  var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio: 34 fichas (25 seguras + 9 peligrosas)
+  siguen pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~6 días 4h). Duplicado
+  `equinacea`/`echinacea` (ambos slugs confirmados presentes) y `lavanda` (imagen 404) reconfirmados
+  sin cambio. `blog_posts`: 90 draft/19 published (109 total), sin cambio, mismos 8 drafts con
+  violación de checklist por título (ver aprendizaje sobre el falso positivo descartado). `npm
+  audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y rutas
+  200; test E2E real con escritura fue el ciclo 2026-08-03 21:09 UTC (~1 día 9h23min de
+  antigüedad), todavía por debajo del umbral informal (~48h). "Tu Planta Aliada" sigue sin
+  implementar en código; propuesta de esquema sin cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Avicena, 17:53:04 UTC del 08-04) tiene ~12h39min de antigüedad —
+  sin inserción nueva este ciclo (no supera el umbral de 24h); corresponde al ciclo que lo supere
+  (~2026-08-05 17:53 UTC).
+- 2 borradores sociales nuevos (ángulo "44 veces la misma comprobación, cero veces la misma
+  sorpresa" para Instagram; ángulo "verificar dos veces para no arrastrar un falso positivo" para
+  LinkedIn), sin publicar. Ver `kimiko/bitacora/2026-08-05-0629.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo. Bitácora y memoria las commitea el paso dedicado del workflow.
