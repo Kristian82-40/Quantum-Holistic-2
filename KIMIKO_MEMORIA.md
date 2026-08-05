@@ -2829,3 +2829,34 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo. Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-05 17:43 UTC — Ciclo cloud: QA limpio, sin cambios de estado, Gumroad sigue roto (47º ciclo)
+
+### Cierre 2026-08-05 (ciclo cloud 17:43 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila.
+- **Checkout Gumroad sigue roto**, ~7 días 23h16min, cuadragésimo séptimo ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio: 34 fichas (25 seguras + 9 peligrosas)
+  siguen pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~6 días 15h6min). Duplicado
+  `equinacea`/`echinacea` (ambos slugs confirmados presentes) y `lavanda` (imagen 404) reconfirmados
+  sin cambio. `blog_posts`: 90 draft/19 published (109 total), sin cambio, mismos 8 drafts con
+  violación de checklist. `npm audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y rutas
+  200, sin cambios. `leads` en 0 filas — sin volumen suficiente para proponer variantes de A/B de
+  CTA este ciclo. "Tu Planta Aliada" sigue sin implementar en código; propuesta de esquema sin
+  cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Avicena, 17:53:04 UTC del 08-04) tiene ~23h48min de antigüedad —
+  todavía por debajo del umbral de 24h (por ~12min), sin inserción nueva este ciclo. Corresponde al
+  próximo ciclo, que cruzará el umbral cómodamente (~2026-08-05 17:53 UTC).
+- 2 borradores sociales nuevos (ángulo "casi 8 días, la misma cifra que no queremos redondear" para
+  Instagram; ángulo "el umbral de 12 minutos" para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-08-05-1743.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo. Bitácora y memoria las commitea el paso dedicado del workflow.
