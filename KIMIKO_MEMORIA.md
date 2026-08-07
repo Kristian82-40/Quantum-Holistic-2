@@ -3244,3 +3244,43 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~1 día 2h26min).
   Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-07 16:57 UTC — Ciclo cloud: QA limpio, cruce de 34 fichas reproducido desde cero, Gumroad sigue roto (57º ciclo)
+
+### Cierre 2026-08-07 (ciclo cloud 16:57 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio.
+- **Checkout Gumroad sigue roto**, ~9 días 22h30min, quincuagésimo séptimo ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio real: **34 fichas confirmadas**, esta vez
+  reproduciendo el script de cruce desde cero (no solo reconsultando la cifra) — identidad byte a
+  byte de `ficha_mistica` entre `plants` y `app/fichas-50-valid.json` cruzando por `id`, con
+  `nombre_latino` distinto entre ambas filas. Los 9 pares peligrosos coinciden exactamente con el
+  listado documentado en 2026-07-30 10:26 UTC. Pendientes de decisión de Papu desde 2026-07-30
+  02:36 UTC (~8 días 14h20min). `equinacea` (`id`:52, fuera del dataset original de 50) /
+  `echinacea` (`id`:21, dentro del dataset, no contaminada) y `lavanda` (imagen ahora en ruta local
+  `/images/plants/lavanda-cientifica.jpg`, sigue 404 en producción) reconfirmados sin cambio real
+  de estado. `blog_posts`: 90 draft/19 published (109 total), sin cambio; 7 títulos distintos/8
+  filas con violación de checklist por keyword de título, todas en `draft`, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código
+  (`app/api/leads/route.ts`, `app/regalo/primera-noche/RegaloForm.tsx`) y rutas 200, sin cambios.
+  Test E2E real con escritura fue el ciclo 2026-08-06 10:45 UTC (~1 día 6h12min de antigüedad, por
+  debajo del umbral informal de 48h) — no se repite este ciclo. `leads` en 0 filas — sin volumen
+  suficiente para proponer variantes de A/B de CTA este ciclo. "Tu Planta Aliada" sigue sin
+  implementar en código (grep sin match en app/, components/, lib/); propuesta de esquema sin
+  cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Galeno, 00:55:55 UTC del 08-07) tiene ~16h de antigüedad — sin
+  inserción nueva este ciclo (no supera el umbral de 24h); corresponde al ciclo que lo supere
+  (~2026-08-08 00:55 UTC).
+- 2 borradores sociales nuevos (ángulo "faltan dos horas para los 10 días" para Instagram; ángulo
+  "verificar dos veces no es desconfiar del sistema, es respetar el dato" para LinkedIn), sin
+  publicar. Ver `kimiko/bitacora/2026-08-07-1657.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~1 día 6h12min).
+  Bitácora y memoria las commitea el paso dedicado del workflow.
