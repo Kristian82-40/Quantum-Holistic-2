@@ -3081,3 +3081,63 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
   Supabase este ciclo: 1 fila nueva en `citas`. Bitácora y memoria las commitea el paso dedicado
   del workflow.
+
+## 2026-08-07 05:45 UTC — Ciclo cloud: QA limpio, casi-falso-positivo propio en cifra de fichas contaminadas evitado (54º ciclo)
+
+### Aprendizajes
+- **Un chequeo ingenuo propio casi produjo un falso positivo que habría inflado la cifra crónica de
+  34 a 52 fichas contaminadas.** Al reverificar la cifra "34 fichas contaminadas" (regla derivada
+  del ciclo 2026-08-06 10:45 UTC: recontar cifras crónicas desde la fuente, no solo comparar con el
+  ciclo anterior), el primer método usado fue buscar la presencia de `chakra`/`planeta_regente`/
+  `elemento` dentro de `ficha_mistica` — y dio 52/52, es decir, todas las plantas. Antes de escribir
+  eso en la bitácora, se revisó cómo se había derivado originalmente la cifra de 34 (ciclo
+  2026-07-30 06:34 UTC, documentado arriba): el método correcto no es "¿tiene campos esotéricos?"
+  (los tiene por diseño del esquema, en las 52 filas) sino "¿el contenido de `ficha_mistica` es
+  idéntico byte a byte al de otra especie distinta, cruzando por `id` contra
+  `app/fichas-50-valid.json`?". Reejecutado ese cruce exacto: 34 confirmadas (25 seguras + 9
+  peligrosas), sin cambio real. **Regla derivada: al recontar una cifra crónica desde la fuente
+  (práctica ya establecida), no basta con volver a consultar la base de datos con cualquier
+  filtro — hay que reusar o reconstruir el método de derivación original documentado en la memoria,
+  porque un filtro superficialmente razonable puede medir una propiedad distinta (aquí, "tiene
+  campos esotéricos" en vez de "tiene campos esotéricos de la especie equivocada") y producir un
+  número que parece una cifra corregida pero en realidad es una cifra distinta sobre una definición
+  distinta.**
+- `equinacea`/`echinacea` y `manzanilla` confirmados sin `id` coincidente en
+  `app/fichas-50-valid.json` (quedan fuera del cruce de las 34 por ser plantas añadidas después del
+  dataset original de 50 especies) — no es una fuga del gate, es una limitación conocida del método
+  de cruce por `id` para plantas fuera del dataset original.
+
+### Cierre 2026-08-07 (ciclo cloud 05:45 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio.
+- **Checkout Gumroad sigue roto**, ~9 días 11h20min, quincuagésimo cuarto ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio: **34 fichas confirmadas con el método de
+  cruce correcto** (25 seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30
+  02:36 UTC (~8 días 3h10min) — ver Aprendizajes sobre el casi-falso-positivo evitado este ciclo.
+  Duplicado `equinacea`/`echinacea` (ambos slugs confirmados presentes, ambos sin `id` en el
+  dataset original de 50) y `lavanda` (imagen 404) reconfirmados sin cambio. `blog_posts`: 90
+  draft/19 published (109 total), sin cambio; 7 títulos distintos / 8 filas con violación de
+  checklist por keyword, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código
+  (`app/api/leads/route.ts`, `app/regalo/primera-noche/RegaloForm.tsx`) y rutas 200, sin cambios.
+  Test E2E real con escritura fue el ciclo 2026-08-06 10:45 UTC (~19h de antigüedad, por debajo del
+  umbral informal de 48h) — no se repite este ciclo. `leads` en 0 filas — sin volumen suficiente
+  para proponer variantes de A/B de CTA este ciclo. "Tu Planta Aliada" sigue sin implementar en
+  código (grep sin match en app/, components/, lib/); propuesta de esquema sin cambio, pendiente de
+  OK de Papu.
+- Tabla `citas`: última inserción (Galeno, 00:55:55 UTC del 08-07) tiene ~4h50min de antigüedad —
+  sin inserción nueva este ciclo (no supera el umbral de 24h); corresponde al ciclo que lo supere
+  (~2026-08-07 21:00 UTC aprox).
+- 2 borradores sociales nuevos (ángulo "casi reporto un número que no era" para Instagram; ángulo
+  "un falso positivo que no llegó a la bitácora" para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-08-07-0545.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~19h). Bitácora y
+  memoria las commitea el paso dedicado del workflow.
