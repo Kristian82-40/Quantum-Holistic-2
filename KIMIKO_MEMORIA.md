@@ -3141,3 +3141,69 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~19h). Bitácora y
   memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-07 09:06 UTC — Ciclo cloud: casi-falso-negativo propio en cifra de fichas contaminadas evitado (55º ciclo)
+
+### Aprendizajes
+- **Un chequeo ingenuo propio casi produjo un falso negativo que habría reportado que la cifra
+  crónica de 34 fichas contaminadas había bajado a 13.** Al reverificar "34 fichas contaminadas"
+  (siguiendo la práctica establecida el 2026-08-06 10:45 UTC de recontar cifras crónicas desde la
+  fuente), el primer script cruzó por `id` contra `app/fichas-50-valid.json` y marcó como
+  contaminada toda fila cuyo `ficha_mistica` servido **difiriera** del `ficha_mistica` de la fila
+  con el mismo `id` en ese dataset. Resultado: 13, no 34. El error: el `id` compartido entre
+  `plants` y `fichas-50-valid.json` no implica que ambas filas describan la misma especie — es
+  justo el mecanismo del bug (`plants.id:35` es Cannabis sativa; `fichas-50-valid.json` `id:35` es
+  Salvia officinalis). El método correcto (documentado en los ciclos 2026-07-30 06:34 y 10:26 UTC)
+  no es "¿difiere del origen por id?" sino "¿es **idéntica byte a byte** al origen por id **y**
+  el `nombre_latino` de la fila difiere del `nombre_latino` de esa entrada de origen?" —
+  contaminación se detecta por coincidencia de contenido con identidad distinta, no por diferencia
+  de contenido. Reejecutado con el método correcto: 34 confirmadas (25 seguras + 9 peligrosas), y
+  los 9 pares peligrosos coinciden exactamente con el listado documentado en 2026-07-30 10:26 UTC.
+  **Regla derivada: cuando la memoria resume un método de cruce en una frase corta ("comparar
+  contra el origen por id"), esa frase puede ser ambigua entre operaciones opuestas (diferencia vs.
+  coincidencia-con-identidad-distinta) — antes de recontar una cifra crónica hay que releer la
+  bitácora original completa que la derivó (no solo la frase resumen) y reproducir 2-3 casos ya
+  conocidos como prueba de que el método nuevo replica el viejo antes de confiar en el número.**
+  Este es el segundo casi-error de método en dos ciclos consecutivos sobre la misma cifra (el
+  ciclo 2026-08-07 05:45 UTC evitó un falso positivo de 52; este evitó un falso negativo de 13) —
+  la cifra en sí es estable en 34, pero el proceso de reverificarla sigue siendo la parte frágil.
+- Recontado también el checklist de blog por dos métodos: buscar palabras prohibidas en título+
+  cuerpo dio 10 filas/9 títulos; el método correcto documentado ("violación por keyword de
+  título") dio 8 filas/7 títulos, sin cambio real frente al histórico. Mismo patrón de riesgo que
+  el hallazgo principal, detectado y corregido antes de escribir la bitácora.
+
+### Cierre 2026-08-07 (ciclo cloud 09:06 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 16 vulns (1/4/11 low/moderate/high), sin cambio.
+- **Checkout Gumroad sigue roto**, ~9 días 14h40min, quincuagésimo quinto ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio real: **34 fichas confirmadas con el
+  método de cruce correcto** (25 seguras + 9 peligrosas), pendientes de decisión de Papu desde
+  2026-07-30 02:36 UTC (~8 días 6h30min) — ver Aprendizajes sobre el casi-falso-negativo evitado
+  este ciclo. Duplicado `equinacea`/`echinacea` (`echinacea` sí tiene `id` en el dataset original y
+  no está contaminada por el método correcto; `equinacea` no tiene `id` en el dataset, igual que
+  `manzanilla`) y `lavanda` (imagen 404) reconfirmados sin cambio. `blog_posts`: 90 draft/19
+  published (109 total), sin cambio; 7 títulos distintos/8 filas con violación de checklist por
+  keyword de título, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código
+  (`app/api/leads/route.ts`, `app/regalo/primera-noche/RegaloForm.tsx`) y rutas 200, sin cambios.
+  Test E2E real con escritura fue el ciclo 2026-08-06 10:45 UTC (~22h20min de antigüedad, por
+  debajo del umbral informal de 48h) — no se repite este ciclo. `leads` en 0 filas — sin volumen
+  suficiente para proponer variantes de A/B de CTA este ciclo. "Tu Planta Aliada" sigue sin
+  implementar en código (grep sin match en app/, components/, lib/); propuesta de esquema sin
+  cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Galeno, 00:55:55 UTC del 08-07) tiene ~8h11min de antigüedad —
+  sin inserción nueva este ciclo (no supera el umbral de 24h); corresponde al ciclo que lo supere
+  (~2026-08-07 21:00 UTC aprox).
+- 2 borradores sociales nuevos (ángulo "esta vez el error casi iba al otro lado" para Instagram;
+  ángulo "un método que parece el mismo pero mide otra cosa" para LinkedIn), sin publicar. Ver
+  `kimiko/bitacora/2026-08-07-0906.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~22h). Bitácora y
+  memoria las commitea el paso dedicado del workflow.
