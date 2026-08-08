@@ -3432,3 +3432,41 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace menos de 48h).
   Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-08 12:54 UTC — Ciclo cloud: QA limpio, re-test E2E del funnel, Gumroad sigue roto (62º ciclo)
+
+### Cierre 2026-08-08 (ciclo cloud 12:54 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo anterior.
+- **Checkout Gumroad sigue roto**, ~10 días 18h29min, sexagésimo segundo ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio. Fichas contaminadas: sin recruce completo este ciclo
+  (última reproducción íntegra desde cero fue el ciclo 2026-08-07 16:57 UTC, 34 confirmadas: 25
+  seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~9 días
+  10h18min). `lavanda` (imagen 404 en producción) y duplicado `equinacea`/`echinacea`
+  reconfirmados sin cambio. `blog_posts`: 90 draft/19 published (109 total), sin cambio.
+- **Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` re-testeado con escritura
+  real** (la prueba anterior, 2026-08-06 10:45 UTC, ya llevaba ~2 días 2h de antigüedad, sobre el
+  umbral informal de 48h). `POST /api/leads/` en producción devolvió `200 {"ok":true}`, fila
+  apareció en `leads` con `source: kimiko_e2e_test`, se borró con `DELETE` (204), sin residuo.
+  **Nota operativa para próximos ciclos**: `POST /api/leads` sin barra final devuelve `308` (no
+  ejecuta el POST) — hay que llamar con barra final (`/api/leads/`) o seguir el redirect
+  preservando el método. `leads`: 0 filas en reposo. "Tu Planta Aliada" sigue sin implementar en
+  código; propuesta de esquema sin cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Voltaire, 01:46:57 UTC del 08-08) tiene ~11h7min de antigüedad
+  al arrancar el ciclo — por debajo del umbral de 24h, sin inserción nueva este ciclo.
+- 2 borradores sociales nuevos (ángulo "diez días y medio, y una prueba que había que repetir"
+  para Instagram, sobre repetir el test del funnel al superar el umbral de 48h en vez de confiar
+  en el resultado de hace dos días; ángulo "el redirect que casi arruina una prueba" para
+  LinkedIn, sobre el hallazgo del 308 en `/api/leads` sin barra final), sin publicar. Ver
+  `kimiko/bitacora/2026-08-08-1254.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
+  Supabase este ciclo: 1 fila de prueba en `leads` (insertada y borrada en el mismo ciclo, sin
+  residuo, para el re-test E2E del funnel). Bitácora y memoria las commitea el paso dedicado del
+  workflow.
