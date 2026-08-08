@@ -3321,3 +3321,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~1 día 9h57min).
   Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-08 01:47 UTC — Ciclo cloud: umbral de citas superado, nueva inserción, Gumroad sigue roto (59º ciclo)
+
+### Cierre 2026-08-08 (ciclo cloud 01:47 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: **17 vulns (1/4/12)**, +1 high frente al ciclo anterior (16: 1/4/11)
+  — la nueva es `ws` (uninitialized memory disclosure / DoS), transitiva de dev tooling; fix
+  requiere `--force` con cambio breaking (`eslint-config-next@16.3.0`), no se toca sin OK de Papu.
+- **Checkout Gumroad sigue roto**, ~10 días 7h22min, quincuagésimo noveno ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`/fichas contaminadas sin cambio real: 34 fichas confirmadas con el método
+  de cruce correcto (25 seguras + 9 peligrosas; identidad de contenido en `ficha_mistica` cruzando
+  por `id` contra `app/fichas-50-valid.json` con `nombre_latino` distinto), pendientes de decisión
+  de Papu desde 2026-07-30 02:36 UTC (~8 días 23h11min). Duplicado `equinacea`/`echinacea` y
+  `lavanda` (imagen 404) reconfirmados sin cambio. `blog_posts`: 90 draft/19 published (109 total),
+  sin cambio; 7 títulos distintos/8 filas con violación de checklist por keyword de título, todas
+  en `draft`, sin cambio.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código
+  (`app/api/leads/route.ts`, `app/regalo/primera-noche/RegaloForm.tsx`) y rutas 200, sin cambios.
+  Test E2E real con escritura fue el ciclo 2026-08-06 10:45 UTC (~1 día 15h de antigüedad, por
+  debajo del umbral informal de 48h) — no se repite este ciclo. `leads` en 0 filas — sin volumen
+  suficiente para proponer variantes de A/B de CTA este ciclo. "Tu Planta Aliada" sigue sin
+  implementar en código (grep sin match en app/, components/, lib/); propuesta de esquema sin
+  cambio, pendiente de OK de Papu.
+- Tabla `citas`: la última inserción (Galeno, 00:55:55 UTC del 08-07) llegó a ~24h50min de
+  antigüedad al arrancar el ciclo — **superó el umbral de 24h por primera vez desde que se sigue
+  esta regla de forma consistente**. Insertada nueva fila: cita de Voltaire (atribuida, siglo
+  XVIII, *Diccionario Filosófico*, dominio público) sobre el arte de la medicina y la naturaleza
+  como curadora — pasa el filtro anti-pseudociencia (sin energía/chakras/cristales/reiki, sin
+  claim de curación propio). Precedente útil: el umbral se evalúa por antigüedad real, no por
+  ventana horaria fija, así que el ciclo que lo detecta puede no ser siempre el mismo horario del
+  día.
+- 2 borradores sociales nuevos (ángulo "diez días se convirtieron en más de diez" para Instagram;
+  ángulo "una cita nueva después de casi 25 horas" para LinkedIn, sobre por qué un umbral por
+  antigüedad es más robusto que un horario fijo), sin publicar. Ver
+  `kimiko/bitacora/2026-08-08-0147.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Única escritura en
+  Supabase este ciclo: 1 fila nueva en `citas` (umbral de 24h superado). Bitácora y memoria las
+  commitea el paso dedicado del workflow.
