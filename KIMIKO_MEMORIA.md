@@ -3736,3 +3736,49 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~27h47min, sin leads
   que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-09 20:36 UTC — Ciclo cloud: QA limpio, hallazgo de dos entradas Vercel para Gumroad, sigue roto (70º ciclo)
+
+### Cierre 2026-08-09 (ciclo cloud 20:36 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo anterior.
+- **Checkout Gumroad sigue roto**, ~12 días 2h11min, septuagésimo ciclo consecutivo. CTA real sigue
+  apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  **Hallazgo nuevo:** `NEXT_PUBLIC_GUMROAD_URL` existe como dos variables Vercel distintas en el
+  proyecto `quantum-holistic-2` (`prj_DASuxCUuV72w8CLpZejVij8XcXvL`): una `development`
+  (`encrypted`, id `vf27pDQT5ZT5iBel`, sin relevancia para el CTA real) y una `production`
+  (`sensitive`, id `L6v4bSqxUSFYv5U5`) — la de `production` es la que sirve el CTA roto y su
+  `updatedAt` reconfirmado sin cambio desde 2026-07-28T18:25:20.881Z. Ciclos previos solo habían
+  encontrado/reportado una entrada; a partir de ahora, siempre verificar ambas (`target`) antes de
+  concluir "sin cambio", porque un `updatedAt` reciente en la de `development` no implicaría nada
+  sobre la de `production`. Sin tocar ninguna env var sin OK de Papu.
+- Código de fallback en `RitualCheckout.tsx` reconfirmado correcto (waitlist por email si la env
+  var no existe); el problema sigue siendo el valor de la env var de producción, no la lógica del
+  componente.
+- Gate `ficha_verificada`: 0/52, sin cambio. Fichas contaminadas: sin recruce completo este ciclo
+  (última reproducción íntegra desde cero fue el ciclo 2026-08-07 16:57 UTC, 34 confirmadas: 25
+  seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~10 días
+  18h00min). `lavanda` (imagen 404 reconfirmada en vivo este ciclo) y duplicado
+  `equinacea`/`echinacea` (mismo `nombre_latino`, `Echinacea purpurea`, ids 52 y 21) reconfirmados
+  sin cambio. `blog_posts`: 90 draft/19 published (109 total), sin cambio; los mismos 8 drafts con
+  violación de checklist (4 chakras + reiki + cristales + biodescodificación + nutrición cuántica)
+  reconfirmados por `ilike` sobre `title`.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y
+  rutas 200, sin cambios. Test E2E real con escritura más reciente sigue siendo el del
+  2026-08-08 12:54 UTC (~31h42min de antigüedad, por debajo del umbral informal de 48h) — no se
+  repite este ciclo. `leads` en 0 filas. "Tu Planta Aliada" sigue sin implementar en código;
+  propuesta de esquema sin cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Florence Nightingale, 01:52:10 UTC del 08-09) tiene ~18h44min de
+  antigüedad al arrancar el ciclo — por debajo del umbral de 24h, sin inserción nueva este ciclo.
+- 2 borradores sociales nuevos (ángulo "doce días, dos minutos" para Instagram, sobre la diferencia
+  entre los 11 segundos que separan las dos entradas de la env var en Vercel y los doce días que
+  lleva rota la de producción; ángulo "verificar dos veces cuando hay dos entradas" para LinkedIn,
+  sobre por qué un sistema de monitoreo no puede asumir que "la variable existe" alcanza, tiene que
+  verificar cuál variable en qué entorno sirve el CTA real), sin publicar. Ver
+  `kimiko/bitacora/2026-08-09-2036.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~31h42min, sin leads
+  que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
