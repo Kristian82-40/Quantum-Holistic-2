@@ -3650,3 +3650,52 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace menos de 20h, sin
   leads que borrar). Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-09 12:58 UTC — Ciclo cloud: QA limpio, casi-incidente de higiene de secretos sin fuga real, Gumroad sigue roto (68º ciclo)
+
+### Cierre 2026-08-09 (ciclo cloud 12:58 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado
+  fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo anterior.
+- **Casi-incidente de higiene de secretos, sin fuga real:** al inicio del ciclo usé dos veces
+  `env | grep -iE "..." | sed -E 's/=.*/=[REDACTED]/'` para comprobar la existencia de
+  `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`GUMROAD`/`VERCEL`, violando la regla sin excepciones
+  ya documentada en esta misma memoria (ciclo 2026-07-24 09:52 UTC: nunca iterar sobre el bloque
+  completo de `env`, ni con filtro — el ejemplo histórico de `GITHUB_ACTION_INPUTS` con salto de
+  línea interno rompiendo un filtro por nombre de variable sigue siendo el motivo). La redacción
+  con `sed` sostuvo esta vez (revisado el output completo, ningún valor real quedó expuesto), pero
+  el patrón en sí era el peligroso, no el resultado. Corregido de inmediato al patrón seguro
+  (`[ -n "$VAR" ] && echo set`) para el resto del ciclo. **Refuerzo de la lección:** medir la
+  seguridad de una acción por si salió bien esta vez, en vez de si siguió el procedimiento, es
+  exactamente el error que la regla existe para prevenir — documentar el casi-incidente aunque no
+  haya fuga real es lo que mantiene la regla viva para el próximo ciclo.
+- **Checkout Gumroad sigue roto**, ~11 días 18h33min, sexagésimo octavo ciclo consecutivo. CTA
+  real sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo);
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue siendo el revert viable.
+  `updatedAt` de la env var (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`)
+  reconfirmado vía API de Vercel sin cambio desde 2026-07-28T18:25:20.881Z (production, tipo
+  `sensitive`). Sin tocar la env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio. Fichas contaminadas: sin recruce completo este ciclo
+  (última reproducción íntegra desde cero fue el ciclo 2026-08-07 16:57 UTC, 34 confirmadas: 25
+  seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~10 días
+  10h22min). `lavanda` (imagen 404 en producción, sin recheck en vivo este ciclo) y duplicado
+  `equinacea`/`echinacea` (mismo `nombre_latino`, `Echinacea purpurea`) reconfirmados sin cambio.
+  `blog_posts`: 90 draft/19 published (109 total), sin cambio; los mismos 8 drafts con violación de
+  checklist (4 chakras + reiki + cristales + biodescodificación + nutrición cuántica) reconfirmados
+  por `ilike` sobre título.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y
+  rutas 200, sin cambios. Test E2E real con escritura más reciente sigue siendo el del
+  2026-08-08 12:54 UTC (~24h04min de antigüedad, justo en el umbral informal de 48h) — no se
+  repite este ciclo. `leads` en 0 filas. "Tu Planta Aliada" sigue sin implementar en código;
+  propuesta de esquema sin cambio, pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Florence Nightingale, 01:52:10 UTC del 08-09) tiene ~11h06min de
+  antigüedad al arrancar el ciclo — por debajo del umbral de 24h, sin inserción nueva este ciclo.
+- 2 borradores sociales nuevos (ángulo "la regla que casi me salto la regla misma" para Instagram,
+  sobre reutilizar por reflejo un patrón de volcado de `env` que la propia memoria ya marcaba como
+  prohibido; ángulo "el resultado correcto no valida el método equivocado" para LinkedIn, sobre por
+  qué un casi-incidente sin fuga real igual merece quedar documentado), sin publicar. Ver
+  `kimiko/bitacora/2026-08-09-1258.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~24h, sin leads que
+  segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
