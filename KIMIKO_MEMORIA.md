@@ -4504,3 +4504,49 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `leads` este ciclo (insertada y borrada en el mismo ciclo, sin residuo, para el re-test E2E del
   funnel — umbral de 48h superado); sin inserción de cita (por debajo del umbral de 24h). Bitácora
   y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-12 20:47 UTC — Ciclo cloud: QA limpio, sin cambios de estado, Gumroad sigue roto (88º ciclo)
+
+### Cierre 2026-08-12 (ciclo cloud 20:47 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo
+  anterior.
+- **Checkout Gumroad sigue roto**, ~15 días 2h21min, octogésimo octavo ciclo consecutivo. CTA real
+  sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo, y en el
+  href servido en el HTML de producción); `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en
+  vivo) sigue siendo el revert viable. Ambas entradas de `NEXT_PUBLIC_GUMROAD_URL` en Vercel
+  (proyecto `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`) reconfirmadas sin cambio:
+  `development` (id `vf27pDQT5ZT5iBel`) y `production` (id `L6v4bSqxUSFYv5U5`, tipo `sensitive` —
+  valor no legible ni con `decrypt=true`, sin cambio desde 2026-07-28T18:25:20.881Z, la que sirve
+  el CTA real). Sin tocar ninguna env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio. Fichas contaminadas: sin recruce completo este ciclo
+  (última reproducción íntegra desde cero fue el ciclo 2026-08-07 16:57 UTC, 34 confirmadas: 25
+  seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30 02:36 UTC (~13 días
+  18h11min). `lavanda` (`image_cientifica_url` apunta a `lavanda-cientifica.jpg`, archivo 404
+  reconfirmado en vivo) y duplicado `equinacea`/`echinacea` (mismo `nombre_latino`, `Echinacea
+  purpurea`, ids 52 y 21) reconfirmados sin cambio. `blog_posts`: 90 draft/19 published (109
+  total), sin cambio; los mismos 8 drafts con violación de checklist reconfirmados por `ilike`
+  sobre `title`; los 19 published reconfirmados con 0 coincidencias de esos mismos términos. Los
+  ~80 drafts restantes siguen pendientes de revisión de contraindicaciones fila por fila, nunca
+  hecha por completo; por presunción negativa, siguen sin publicarse.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y
+  rutas 200, sin cambios. Test E2E con escritura real más reciente sigue siendo el de este mismo
+  día, ciclo 16:57 UTC (~3h50min de antigüedad, por debajo del umbral informal de 48h) — no se
+  repite este ciclo. `leads` en 0 filas. "Tu Planta Aliada" sigue sin implementar en código;
+  propuesta de esquema sin cambio, pendiente de OK de Papu. Revisión de imágenes: las 43 plantas
+  seguras tienen `image_cientifica_url` no nulo; test negativo repetido, las 9 peligrosas
+  confirmadas con ambas imágenes en `null`.
+- Tabla `citas`: última inserción (Juvenal, 05:40:28 UTC del 08-12) tiene ~15h07min de antigüedad
+  al arrancar el ciclo — por debajo del umbral de 24h, sin inserción nueva este ciclo. 12 citas en
+  la tabla, todas de autores distintos.
+- 2 borradores sociales nuevos (ángulo "quince días es más que dos semanas" para Instagram, sobre
+  por qué seguir contando en días y horas exactas evita que un bloqueo de ochenta y ocho
+  revisiones se sienta normal; ángulo "lo que no se puede leer también se puede verificar" para
+  LinkedIn, sobre confirmar que una env var `sensitive` en Vercel no cambió usando su `id` y
+  `updatedAt` sin necesitar exponer su valor), sin publicar. Ver
+  `kimiko/bitacora/2026-08-12-2047.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~3h50min, sin leads
+  que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
