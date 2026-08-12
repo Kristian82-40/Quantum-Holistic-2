@@ -4369,3 +4369,47 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Supabase este ciclo: la cita de Juvenal en `citas` (umbral de 24h superado); sin otras escrituras
   (funnel probado hace <48h, sin leads que segmentar). Bitácora y memoria las commitea el paso
   dedicado del workflow.
+
+## 2026-08-12 09:15 UTC — Ciclo cloud: QA limpio, corrección de cómputo interno, Gumroad sigue roto (85º ciclo)
+
+### Cierre 2026-08-12 (ciclo cloud 09:15 UTC)
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo
+  anterior.
+- **Checkout Gumroad sigue roto**, ~14 días 14h50min, octogésimo quinto ciclo consecutivo. CTA real
+  sigue apuntando a `kristian320.gumroad.com/l/ritual-descanso` (404 confirmado en vivo, y en el
+  HTML servido en producción); `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado en vivo) sigue
+  siendo el revert viable. Ambas entradas de `NEXT_PUBLIC_GUMROAD_URL` en Vercel (proyecto
+  `quantum-holistic-2`, `prj_DASuxCUuV72w8CLpZejVij8XcXvL`) reconfirmadas sin cambio: `development`
+  (id `vf27pDQT5ZT5iBel`) y `production` (id `L6v4bSqxUSFYv5U5`, sin cambio desde
+  2026-07-28T18:25:20.881Z, la que sirve el CTA real). Sin tocar ninguna env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio. Fichas contaminadas: sin recruce completo este ciclo
+  (última reproducción íntegra desde cero fue el ciclo 2026-08-07 16:57 UTC, 34 confirmadas: 25
+  seguras + 9 peligrosas), pendientes de decisión de Papu desde 2026-07-30 02:36 UTC. **Nota:** el
+  cómputo de antigüedad de esta pendiente venía arrastrando un error de +1 día desde ciclos
+  anteriores (ej. "14 días 3h04min" en el ciclo 05:40 UTC cuando el valor correcto era ~13 días
+  3h04min); recalculado desde cero este ciclo con `datetime` en Python: ~13 días 6h39min al cierre.
+  No afecta al problema de fondo (sigue sin decisión de Papu), solo corrige el reporte. `lavanda`
+  (imagen 404 reconfirmada en vivo este ciclo) y duplicado `equinacea`/`echinacea` (mismo
+  `nombre_latino`, `Echinacea purpurea`, ids 52 y 21) reconfirmados sin cambio. `blog_posts`: 90
+  draft/19 published (109 total), sin cambio; los mismos 8 drafts con violación de checklist
+  reconfirmados por `ilike` sobre `title`; los 19 published reconfirmados con 0 coincidencias de
+  esos mismos términos.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código y
+  rutas 200, sin cambios. `leads` en 0 filas, sin nueva escritura E2E este ciclo (la más reciente
+  sigue siendo la del 2026-08-10 13:16 UTC, ~1 día 20h de antigüedad, por debajo del umbral informal
+  de 48h). "Tu Planta Aliada" sigue sin implementar en código; propuesta de esquema sin cambio,
+  pendiente de OK de Papu.
+- Tabla `citas`: última inserción (Juvenal, 05:40:28 UTC del 08-12) tiene ~3h35min de antigüedad al
+  arrancar el ciclo — por debajo del umbral de 24h, sin inserción nueva este ciclo. 12 citas en la
+  tabla, todas de autores distintos.
+- 2 borradores sociales nuevos (ángulo "el número no es el punto, la fecha sí" para Instagram, sobre
+  por qué el contador de ciclos importa menos que la fecha de origen fija del 28 de julio; ángulo
+  "corregir un cálculo de trece días no cambia el problema" para LinkedIn, sobre la diferencia entre
+  precisión interna y progreso real, a propósito del error de cómputo corregido este ciclo), sin
+  publicar. Ver `kimiko/bitacora/2026-08-12-0915.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
+  Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~1 día 20h, sin leads
+  que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
