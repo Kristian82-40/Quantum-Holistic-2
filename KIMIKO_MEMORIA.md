@@ -5141,3 +5141,47 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (citas por debajo del umbral de 24h, funnel probado hace ~7h57min, sin leads
   que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-15 08:33 UTC — Ciclo cloud: QA limpio, cita diaria insertada, Gumroad sigue roto (103º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo
+  anterior.
+- **Checkout Gumroad sigue roto**, ~17 días 14h8min, centésimo tercer ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido de `/producto/ritual-descanso`:
+  apunta a `kristian320.gumroad.com/l/ritual-descanso` (404 en vivo). `kristiantronco.gumroad.com/l/ugsqtg`
+  (200 confirmado) sigue siendo el revert viable. Ambas entradas de `NEXT_PUBLIC_GUMROAD_URL` en
+  Vercel reconfirmadas sin cambio vía API (`updatedAt` de `production` sin cambio desde
+  2026-07-28T18:25:20.881Z). Sin tocar ninguna env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente de decisión de Papu desde 2026-07-30 02:36
+  UTC, ~16 días 5h58min). `lavanda` (imagen 404 reconfirmada en vivo este ciclo) y duplicado
+  `equinacea`/`echinacea` (mismo `nombre_latino`, `Echinacea purpurea`, ids 52 y 21) reconfirmados
+  sin cambio. `blog_posts`: 90 draft/19 published (109 total), sin cambio; los mismos 8 drafts con
+  violación de checklist reconfirmados por `ilike` sobre el título. Los ~80 drafts restantes siguen
+  pendientes de revisión de contraindicaciones fila por fila, nunca hecha por completo; por
+  presunción negativa, siguen sin publicarse.
+- Funnel `/regalo/primera-noche` → lead → `/producto/ritual-descanso` verificado por código
+  (formulario de captura de email presente) y rutas 200, sin cambios. Test E2E con escritura real
+  más reciente sigue siendo el del 2026-08-14 20:35 UTC (~11h59min de antigüedad, por debajo del
+  umbral informal de 48h) — no se repite este ciclo. `leads` en 0 filas. "Tu Planta Aliada" sigue
+  sin implementar en código; propuesta de esquema sin cambio, pendiente de OK de Papu. Revisión de
+  imágenes: las 43 plantas seguras tienen `image_cientifica_url` no nulo; test negativo repetido,
+  las 9 peligrosas confirmadas con ambas imágenes en `null`.
+- **Cita diaria insertada**: la anterior (Ramón y Cajal, 05:44:39 UTC del 08-14) llevaba ~26h48min
+  de antigüedad al arrancar el ciclo, superando el umbral de 24h. Nueva cita de Sushruta (médico y
+  cirujano de la India antigua, Sushruta Samhita), autor no repetido: "La salud es el fundamento de
+  la virtud, la riqueza, el placer y la liberación final." Pasa el filtro anti-pseudociencia (cita
+  histórica de un texto médico clásico, sin afirmación de curación moderna). 15 citas en la tabla
+  tras la inserción, todas de autores distintos.
+- 2 borradores sociales nuevos (ángulo "una frase de hace 2.500 años describe mejor la salud que
+  nuestro botón de pago" para Instagram, contrastando la cita de Sushruta insertada este ciclo con
+  los 17 días que lleva roto el checkout; ángulo "qué significa 'presunción negativa' aplicada a un
+  checkout" para LinkedIn, sobre por qué un fix trivial —cambiar una URL— no se aplica sin OK de
+  Papu, y por qué ese diseño es preferible a un agente que decide solo qué es una corrección
+  segura), sin publicar. Ver `kimiko/bitacora/2026-08-15-0833.md`.
+- Sin commits de código este ciclo (build pasa, QA limpio, sin fixes necesarios); `next-env.d.ts`
+  regenerado por el build se revirtió sin commitear (cambio no funcional). 1 escritura nueva en
+  Supabase este ciclo (inserción de cita diaria, umbral de 24h superado); sin cambios en `leads`
+  (funnel probado hace ~11h59min, por debajo del umbral de 48h). Bitácora y memoria las commitea el
+  paso dedicado del workflow.
