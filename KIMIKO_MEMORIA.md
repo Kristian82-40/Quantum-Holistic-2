@@ -5500,3 +5500,31 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   regenerado por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en
   Supabase este ciclo (cita por debajo del umbral de 24h, funnel probado hace ~1 día 19h54min, sin
   leads que segmentar). Bitácora y memoria las commitea el paso dedicado del workflow.
+
+## 2026-08-16 20:29 UTC — Ciclo cloud: QA limpio, sin cambios de estado, Gumroad sigue roto (112º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes. 52 plantas en tabla
+  `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en `null`, reverificado fila
+  por fila. `npm audit`: 17 vulns (1/4/12), sin cambio. `middleware.ts` confirmado en la raíz,
+  cadena de redirect `/admin` intacta. Las 7 rutas del checklist en 200.
+- **Checkout Gumroad sigue roto**, 19 días 2h3min, centésimo décimo segundo ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido (siguiendo el 308 de barra
+  final) de `/producto/ritual-descanso`: apunta a `kristian320.gumroad.com/l/ritual-descanso` (404
+  en vivo). `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado) sigue siendo el revert viable.
+  Ambas entradas de `NEXT_PUBLIC_GUMROAD_URL` en Vercel reconfirmadas sin cambio vía API
+  (`updatedAt` de `production` sin cambio desde 2026-07-28T18:25:20.881Z). Sin tocar sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente desde 2026-07-30, ~17 días 18h). Duplicado
+  `equinacea`/`echinacea` (ids 52/21) sin cambio. `lavanda` sigue con imagen 404 en vivo.
+  `blog_posts`: 90 draft / 19 published (109 total), sin cambio; ninguno de los 16 drafts
+  identificados en ciclos previos (8 en temas prohibidos, 8 pendientes de contraindicaciones) se
+  publicó ni se reescribió.
+- Funnel `/regalo/primera-noche` → lead → producto verificado por código, rutas 200 sin cambios.
+  E2E con escritura real: última vez 2026-08-14 20:35 UTC (~1 día 23h54min, roza el umbral de 48h),
+  no repetido este ciclo — se evaluará el próximo. `leads` en 0 filas, sin datos para A/B. "Tu
+  Planta Aliada" sin implementar, pendiente de OK de Papu.
+- **Cita diaria**: última (Séneca, 08:33:33 UTC 08-16) con ~11h56min de antigüedad al arrancar el
+  ciclo, por debajo del umbral de 24h — sin inserción nueva. Cruza el umbral ~08:33 UTC del 08-17.
+- Sin borradores sociales nuevos (los 2 de `2026-08-16-0125.md` siguen sin publicar, no
+  duplicados). Sin commits de código (build pasa, QA limpio; `next-env.d.ts` regenerado por el
+  build revertido sin commitear). Sin escrituras nuevas en Supabase este ciclo. Ver
+  `kimiko/bitacora/2026-08-16-2029.md`.
