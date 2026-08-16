@@ -5426,3 +5426,41 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Supabase este ciclo (inserción de cita diaria, umbral de 24h superado); sin cambios en `leads`
   (funnel sin E2E repetido, bajo el umbral de 48h). Bitácora y memoria las commitea el paso
   dedicado del workflow.
+
+## 2026-08-16 12:41 UTC — Ciclo cloud: QA limpio, corregido bug de metodología en el filtro de drafts en violación (bug OR/AND en PostgREST), Gumroad sigue roto (110º ciclo)
+
+- QA 8/8 OK, build pasa sin fixes. 52 plantas en `plants`, 9 peligrosas con ambas imágenes en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio. `middleware.ts`
+  confirmado en la raíz, cadena de redirect `/admin` intacta. `app/api/webhooks/btcpay/route.ts`
+  observado en el output del build — preexistente, no tocado, BTCPay sigue descartado como
+  pasarela sin evaluarse.
+- **Checkout Gumroad sigue roto**, ~18 días 18h16min, 110º ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. Mismo estado: CTA real apunta a `kristian320.gumroad.com/l/ritual-descanso`
+  (404 en vivo), revert viable a `kristiantronco.gumroad.com/l/ugsqtg` (200). Env vars en Vercel
+  sin cambio. Sin tocar sin OK de Papu.
+- **Bug de metodología corregido**: el conteo de "10 drafts en violación" de ciclos previos usaba
+  múltiples parámetros `title=ilike.*term*` en la misma query REST a PostgREST, que se interpretan
+  como AND, no OR — y además mezclaba términos del checklist de temas *prohibidos*
+  (biodescodificación, nutrición cuántica, cristales/gemoterapia, reiki, chakras) con términos de
+  la categoría *requiere contraindicaciones* (adaptógenos, ayuno, rasayanas, detox), que el propio
+  checklist no prohíbe, solo exige que el contenido incluya contraindicaciones. Con sintaxis
+  `or=(...)` correcta y categorías separadas: **8 drafts en temas prohibidos** (chakras ×4,
+  cristales/gemoterapia ×1, reiki ×1, biodescodificación ×1, nutrición cuántica ×1) + **8 drafts
+  en categoría de contraindicaciones** (ayuno ×4, detox ×2, adaptógenos ×1, rasayanas ×1) = 16
+  drafts identificados, no 10. No es regresión de contenido (totales draft/published sin cambio,
+  ninguno publicado) — fue una corrección de metodología de conteo, útil para futuros ciclos: usar
+  siempre `or=(...)` en PostgREST para filtros OR sobre múltiples términos, nunca parámetros
+  repetidos.
+- `blog_posts`: 90 draft / 19 published, sin cambio en totales. Gate `ficha_verificada` 0/52 sin
+  cambio (pendiente desde 2026-07-30, ~17 días 10h). Duplicado `equinacea`/`echinacea` (ids 52/21)
+  sin cambio. `lavanda` sigue con imagen 404 en vivo.
+- Funnel `/regalo/primera-noche` → lead → producto verificado por código, rutas 200 sin cambios.
+  E2E con escritura real: última vez 2026-08-14 20:35 UTC (~1 día 16h, bajo el umbral de 48h), no
+  repetido. `leads` en 0 filas, sin datos para A/B. "Tu Planta Aliada" sin implementar, pendiente
+  de OK de Papu.
+- **Cita diaria**: última (Séneca, 08:33:33 UTC 08-16) con ~4h8min de antigüedad al arrancar el
+  ciclo, muy por debajo del umbral de 24h — sin inserción nueva. Cruza el umbral ~08:33 UTC del
+  08-17.
+- Sin borradores sociales nuevos (los 2 de `2026-08-16-0125.md` siguen sin publicar, no
+  duplicados). Sin commits de código (build pasa, QA limpio). Sin escrituras nuevas en Supabase
+  este ciclo. Ver `kimiko/bitacora/2026-08-16-1241.md`.
