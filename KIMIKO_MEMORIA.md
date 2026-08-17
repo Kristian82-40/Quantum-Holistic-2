@@ -5528,3 +5528,36 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   duplicados). Sin commits de código (build pasa, QA limpio; `next-env.d.ts` regenerado por el
   build revertido sin commitear). Sin escrituras nuevas en Supabase este ciclo. Ver
   `kimiko/bitacora/2026-08-16-2029.md`.
+
+
+## 2026-08-17 01:23 UTC — Ciclo cloud: QA limpio, funnel re-testeado con escritura real, Gumroad sigue roto (113º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio frente al ciclo
+  anterior.
+- **Checkout Gumroad sigue roto**, ~19 días 6h58min, centésimo décimo tercer ciclo consecutivo
+  desde 2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido de
+  `/producto/ritual-descanso`: apunta a `kristian320.gumroad.com/l/ritual-descanso` (404 en vivo).
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado) sigue siendo el revert viable. Ambas
+  entradas de `NEXT_PUBLIC_GUMROAD_URL` en Vercel reconfirmadas sin cambio vía API (`updatedAt` de
+  `production` sin cambio desde 2026-07-28T18:25:20.881Z). Sin tocar ninguna env var sin OK de
+  Papu.
+- **Funnel re-testeado con escritura real** (la prueba anterior, 2026-08-14 20:35 UTC, llevaba
+  ~2 días 4h48min de antigüedad, sobre el umbral informal de 48h). `POST /api/leads` en producción
+  devolvió `200 {"ok":true}`; fila apareció en `leads` con `id c007916b-a988-4a69-8f61-da521f232bb2`,
+  `source: kimiko_e2e_test`, `dosha: vata`; se borró con `DELETE` (204), sin residuo. `leads`: 0
+  filas en reposo tras el test.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente desde 2026-07-30, ~17 días 23h). Duplicado
+  `equinacea`/`echinacea` (ids 52/21) sin cambio. `lavanda` sigue con imagen 404 en vivo.
+  `blog_posts`: 90 draft / 19 published (109 total), sin cambio; los 16 drafts identificados en
+  ciclos previos (8 en temas prohibidos, 8 pendientes de contraindicaciones) reconfirmados sin
+  cambio, ninguno publicado ni reescrito.
+- **Cita diaria**: última (Séneca, 08:33:33 UTC 08-16) con ~16h49min de antigüedad al arrancar el
+  ciclo, por debajo del umbral de 24h — sin inserción nueva. Cruza el umbral ~08:33 UTC del 08-17,
+  después de este ciclo. 16 citas en la tabla en total.
+- Sin borradores sociales nuevos (los 2 de `2026-08-16-0125.md` siguen sin publicar, no
+  duplicados). Sin commits de código (build pasa, QA limpio; `next-env.d.ts` regenerado por el
+  build revertido sin commitear). 1 escritura de prueba en `leads` este ciclo (insertada y borrada
+  en el mismo ciclo, sin residuo, para el re-test E2E del funnel — umbral de 48h superado); sin
+  inserción de cita. Ver `kimiko/bitacora/2026-08-17-0123.md`.
