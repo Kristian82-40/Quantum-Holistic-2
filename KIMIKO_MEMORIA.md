@@ -5561,3 +5561,41 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   build revertido sin commitear). 1 escritura de prueba en `leads` este ciclo (insertada y borrada
   en el mismo ciclo, sin residuo, para el re-test E2E del funnel — umbral de 48h superado); sin
   inserción de cita. Ver `kimiko/bitacora/2026-08-17-0123.md`.
+
+
+## 2026-08-17 04:46 UTC — Ciclo cloud: QA limpio, funnel re-testeado, corregido bug de metodología en conteo de drafts adaptógenos (114º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulns (1/4/12), sin cambio.
+- **Checkout Gumroad sigue roto**, ~19 días 10h20min, 114º ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido de
+  `/producto/ritual-descanso`: apunta a `kristian320.gumroad.com/l/ritual-descanso` (404 en vivo).
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado) sigue siendo el revert viable. Ambas
+  entradas de `NEXT_PUBLIC_GUMROAD_URL` en Vercel reconfirmadas sin cambio vía API (`updatedAt` de
+  `production` sin cambio desde 2026-07-28T18:25:20.881Z). Sin tocar ninguna env var sin OK de
+  Papu.
+- **Funnel re-testeado con escritura real** (la prueba anterior, 2026-08-14 20:35 UTC, llevaba
+  ~2 días 8h10min de antigüedad, sobre el umbral informal de 48h). `POST /api/leads` en producción
+  devolvió `200 {"ok":true}`; fila apareció en `leads` con `id bae35ae5-750d-4bd5-ad18-d8c3f896a99c`,
+  `source: kimiko_e2e_test`, `dosha: pitta`; se borró con `DELETE` (204), sin residuo. `leads`: 0
+  filas en reposo tras el test.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente desde 2026-07-30, ~18 días 2h). Duplicado
+  `equinacea`/`echinacea` (ids 52/21) sin cambio. `lavanda` sigue con imagen 404 en vivo.
+- **Bug de metodología corregido en el conteo de drafts en violación**: el término de búsqueda
+  `adaptógeno` (singular masculino) no capturaba, por coincidencia de subcadena literal (`ilike`),
+  los títulos con formas plurales `Adaptógenas`/`Adaptógenos`. Con la raíz `adaptógen` corregida,
+  la categoría de contraindicaciones pasa de 8 a 11 drafts (ayuno ×4, adaptógenos ×4, detox ×2,
+  rasayanas ×1). Sumado a los 8 de temas prohibidos (sin cambio): **19 drafts identificados en
+  total, no 16**. No es regresión de contenido (totales draft/published 90/19 sin cambio, ninguno
+  publicado). Lección para futuros ciclos: al filtrar por raíz de palabra en español con `ilike`,
+  usar el lema sin la vocal final de género/número (`adaptógen*`, no `adaptógeno*`) para cubrir
+  singular/plural y masculino/femenino.
+- **Cita diaria**: última (Séneca, 08:33:33 UTC 08-16) con ~20h13min de antigüedad al arrancar el
+  ciclo, por debajo del umbral de 24h — sin inserción nueva. Cruza el umbral ~08:33 UTC del 08-17,
+  antes del próximo ciclo esperado.
+- Sin borradores sociales nuevos (los 2 de `2026-08-16-0125.md` siguen sin publicar, no
+  duplicados). Sin commits de código (build pasa, QA limpio; `next-env.d.ts` regenerado por el
+  build revertido sin commitear). 1 escritura de prueba en `leads` este ciclo (insertada y borrada
+  en el mismo ciclo, sin residuo, para el re-test E2E del funnel — umbral de 48h superado); sin
+  inserción de cita. Ver `kimiko/bitacora/2026-08-17-0446.md`.
