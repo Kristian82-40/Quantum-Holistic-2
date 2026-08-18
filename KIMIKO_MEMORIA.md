@@ -5850,3 +5850,42 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Supabase este ciclo (cita a ~7min del umbral de 24h, funnel probado hace ~27h54min, sin leads que
   segmentar). Bitácora y memoria las commitea el paso dedicado del workflow. Ver
   `kimiko/bitacora/2026-08-18-0840.md`.
+
+
+## 2026-08-18 12:51 UTC — Ciclo cloud: QA limpio, cita diaria insertada, Gumroad sigue roto (122º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulnerabilidades (1/4/12), sin cambio. Las 7
+  rutas del checklist en 200, `/admin` sin sesión redirige correctamente a `/login/`,
+  `middleware.ts` confirmado en la raíz.
+- **Checkout Gumroad sigue roto**, ~20 días 18h, 122º ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido de
+  `/producto/ritual-descanso`: apunta a `kristian320.gumroad.com/l/ritual-descanso` (404 en vivo).
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado) sigue siendo el revert viable. Entrada de
+  `NEXT_PUBLIC_GUMROAD_URL` en Vercel (proyecto `quantum-holistic-2`, target `production`, tipo
+  `sensitive`) reconfirmada sin cambio vía API de solo lectura (`updatedAt` sin cambio desde
+  2026-07-28T18:25:20.881Z). Código de `RitualCheckout.tsx` confirmado correcto (usa la env var con
+  fallback de captura de email); el problema es solo el valor configurado. Sin tocar ninguna env
+  var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente desde 2026-07-30 ~02:36 UTC, ~19 días 10h).
+  Duplicado `equinacea`/`echinacea` (ids 52/21) sin cambio. `lavanda` sigue con imagen 404 en vivo.
+  `blog_posts`: 90 draft / 19 published (109 total), sin cambio; los 19 drafts identificados
+  previamente (8 en temas prohibidos, 11 en categoría de contraindicaciones) reconfirmados sin
+  cambio, ninguno publicado ni reescrito. Nota: el campo `chakra` en la sección mística del
+  diccionario de plantas es contenido de producto ya existente, fuera del alcance del checklist
+  anti-pseudociencia del blog (ese checklist aplica solo a publicación autónoma de posts nuevos).
+- Funnel `/regalo/primera-noche` → lead → producto verificado por código, rutas 200 sin cambios.
+  E2E con escritura real: última vez 2026-08-17 04:46 UTC (~32h05min, bajo el umbral de 48h), no
+  repetido este ciclo. `leads` en 0 filas, sin datos para A/B. "Tu Planta Aliada" sin implementar
+  (confirmado por grep), pendiente de OK de Papu.
+- **Cita diaria**: insertada nueva cita — "Una onza de prevención vale una libra de cura." —
+  Benjamin Franklin (dominio público, autor no repetido, pasa filtro anti-pseudociencia). Cruzó el
+  umbral de 24h desde la anterior (Francis Bacon, 08:47:20 UTC del 08-17). 18 citas en la tabla
+  tras la inserción, todas de autores distintos.
+- Sin borradores sociales nuevos este ciclo (los 2 pendientes de `2026-08-16-0125.md` siguen sin
+  publicar, no se duplican para evitar ruido en la bitácora).
+- Único commit de datos este ciclo: 1 fila nueva en `citas` (Benjamin Franklin). Sin commits de
+  código (build pasa sin fixes necesarios); `next-env.d.ts` regenerado por el build se revirtió sin
+  commitear (cambio no funcional). Bitácora y memoria las commitea el paso dedicado del workflow.
+  Ver `kimiko/bitacora/2026-08-18-1251.md`.
