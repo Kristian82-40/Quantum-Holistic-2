@@ -6471,3 +6471,44 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   por el build se revirtió sin commitear (cambio no funcional). Sin escrituras nuevas en Supabase
   este ciclo (cita bajo el umbral de 24h, leads en 0, sin datos que segmentar). Bitácora y memoria
   las commitea el paso dedicado del workflow. Ver `kimiko/bitacora/2026-08-21-1252.md`.
+
+
+## 2026-08-21 16:39 UTC — Ciclo cloud: QA limpio, cita diaria insertada, Gumroad sigue roto (140º ciclo)
+
+- QA 8/8 OK, sin hallazgos críticos nuevos de código. Build pasa sin fixes (corrido desde la raíz).
+  52 plantas en tabla `plants`, 9 peligrosas con `image_cientifica_url`/`image_mistica_url` en
+  `null`, reverificado fila por fila. `npm audit`: 17 vulnerabilidades (1/4/12), sin cambio. Las 7
+  rutas del checklist en 200 tras redirect (308 por `trailingSlash: true`, esperado), `/admin` sin
+  sesión redirige correctamente a `/login/?redirect=%2Fadmin%2F`, `middleware.ts` confirmado en la
+  raíz.
+- **Checkout Gumroad sigue roto**, ~23 días 22h, 140º ciclo consecutivo desde
+  2026-07-28T18:25:20.881Z. CTA real reconfirmado en el HTML servido de
+  `/producto/ritual-descanso`: apunta a `kristian320.gumroad.com/l/ritual-descanso` (404 en vivo).
+  `kristiantronco.gumroad.com/l/ugsqtg` (200 confirmado) sigue siendo el revert viable. Entrada de
+  `NEXT_PUBLIC_GUMROAD_URL` en Vercel (proyecto `quantum-holistic-2`,
+  `prj_DASuxCUuV72w8CLpZejVij8XcXvL`, target `production`, tipo `sensitive`) reconfirmada sin
+  cambio vía API de solo lectura (`updatedAt` sin cambio desde 2026-07-28T18:25:20.881Z). Sin
+  tocar ninguna env var sin OK de Papu.
+- Gate `ficha_verificada`: 0/52, sin cambio (pendiente desde 2026-07-30 ~02:36 UTC, ~22 días 14h).
+  Duplicado `equinacea`/`echinacea` (ids 52/21) sin cambio. `lavanda` sigue con imagen 404 en vivo.
+  `blog_posts`: 90 draft / 19 published (109 total), sin cambio; los 19 drafts identificados
+  previamente (8 en temas prohibidos, 11 en categoría de contraindicaciones) reconfirmados sin
+  cambio, ninguno publicado ni reescrito.
+- **Hallazgo nuevo:** entre los 19 posts ya publicados, uno ("El Aceite de Oliva Virgen Extra: Un
+  Tesoro de Curación de la Naturaleza") tiene lenguaje de "curación" en el título, rozando la regla
+  anti-claims. Sin mandato para despublicar contenido ya publicado por iniciativa propia; queda
+  documentado para revisión de Papu. Sin más coincidencias reales tras revisar los 19 títulos
+  (un posible match de "Vipassana" fue falso positivo por subcadena).
+- Funnel `/regalo/primera-noche` → lead → producto verificado por código, rutas 200 sin cambios.
+  `leads` en 0 filas, sin datos para A/B. "Tu Planta Aliada" sin implementar (confirmado por grep),
+  pendiente de OK de Papu.
+- **Cita diaria**: la última (Arthur Schopenhauer, 12:54:42 UTC del 08-20) superó el umbral de 24h
+  (~27h45min al arrancar el ciclo) → se insertó una cita nueva de Mahatma Gandhi ("Es la salud la
+  verdadera riqueza, y no piezas de oro y plata."), autor de dominio público sin repetir, pasa
+  filtro anti-pseudociencia. Tabla `citas` ahora en 21 filas, todas de autores distintos.
+- Sin borradores sociales nuevos este ciclo (los 2 pendientes de `2026-08-16-0125.md` siguen sin
+  publicar, no se duplican para evitar ruido en la bitácora).
+- Sin commits de código este ciclo (build pasa sin fixes necesarios); `next-env.d.ts` regenerado
+  por el build se revirtió sin commitear (cambio no funcional). Escritura nueva en Supabase: 1 fila
+  en `citas` (cita diaria). Bitácora y memoria las commitea el paso dedicado del workflow. Ver
+  `kimiko/bitacora/2026-08-21-1639.md`.
