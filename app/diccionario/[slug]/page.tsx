@@ -7,25 +7,10 @@ import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
+import { PLANTAS_PELIGROSAS } from '@/lib/plantas-peligrosas';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
-
-// Plantas peligrosas: nunca se sirve su ficha mística, ni siquiera si la
-// planta tiene datos cargados en la base — el contenido de ficha_mistica no
-// pasa por ningún proceso de verificación y para estas 9 puede describir
-// "uso ceremonial" fabricado que no corresponde a la especie real.
-const PLANTAS_PELIGROSAS = new Set([
-  'aconito',
-  'datura',
-  'datura-metel',
-  'amanita-muscaria',
-  'cannabis',
-  'cornezuelo-centeno',
-  'beleno-negro',
-  'tejo',
-  'hierba-mora',
-]);
 
 interface FichaCientifica {
   familia_botanica?: string;
@@ -58,6 +43,11 @@ interface Plant {
   ficha_cientifica: FichaCientifica | null;
   ficha_mistica: FichaMistica | null;
   ficha_verificada: boolean;
+  publicada: boolean;
+}
+
+function esVisible(plant: Plant): boolean {
+  return plant.publicada && !PLANTAS_PELIGROSAS.has(plant.slug);
 }
 
 async function getPlant(slug: string): Promise<Plant | null> {
@@ -82,7 +72,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params;
   const plant = await getPlant(slug);
-  if (!plant) return { title: 'Planta no encontrada' };
+  if (!plant || !esVisible(plant)) return { title: 'Planta no encontrada' };
   const latino = plant.nombre_latino ? ` (${plant.nombre_latino})` : '';
   return {
     title: `${plant.nombre_es} — Diccionario Botánico`,
@@ -97,7 +87,7 @@ export default async function PlantPage(
 ) {
   const { slug } = await params;
   const plant = await getPlant(slug);
-  if (!plant) notFound();
+  if (!plant || !esVisible(plant)) notFound();
 
   const hasImage = existsSync(
     path.join(process.cwd(), 'public', 'images', 'plants', `${plant.slug}-cientifica.jpg`)

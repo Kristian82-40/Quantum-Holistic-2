@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
+import { PLANTAS_PELIGROSAS } from '@/lib/plantas-peligrosas';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,7 @@ interface Plant {
   categoria: 'Maestras' | 'Sagradas' | 'Magicas';
   image_cientifica_url: string | null;
   ficha_verificada: boolean;
+  publicada: boolean;
 }
 
 async function getPlants(): Promise<Plant[]> {
@@ -31,11 +33,12 @@ async function getPlants(): Promise<Plant[]> {
   if (!url || !key) return [];
   try {
     const res = await fetch(
-      `${url}/rest/v1/plants?select=id,slug,nombre_es,nombre_latino,categoria,image_cientifica_url,ficha_verificada&order=nombre_es`,
+      `${url}/rest/v1/plants?select=id,slug,nombre_es,nombre_latino,categoria,image_cientifica_url,ficha_verificada,publicada&order=nombre_es`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: 'no-store' }
     );
     if (!res.ok) return [];
-    return res.json();
+    const data: Plant[] = await res.json();
+    return data.filter((p) => p.publicada && !PLANTAS_PELIGROSAS.has(p.slug));
   } catch {
     return [];
   }
