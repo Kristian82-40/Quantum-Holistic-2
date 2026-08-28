@@ -7701,3 +7701,58 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo: inserción de la cita diaria (id `8360ce53-24e2-4fa6-8c9e-309dd8f97fda`). `leads` en 0,
   sin datos que segmentar. Bitácora y memoria las commitea el paso dedicado del workflow. Ver
   `kimiko/bitacora/2026-08-28-1010.md`.
+
+
+## 2026-08-28 16:27 UTC — Ciclo cloud: gate `ficha_verificada` saltó a 42/52, 5 fichas mal
+## emparejadas bajadas, bug de listado de peligrosas corregido (175º ciclo)
+
+### Aprendizajes (cicatriz → check permanente)
+- **Un flag de verificación que cambia fuera de un ciclo de Kimiko no es garantía de que se
+  verificó correctamente — hay que auditar igual, sin descuento de confianza.** Tras 29 días con
+  `ficha_verificada` en 0/52, este ciclo lo encontró en 42/52 `true` (cambio hecho directo en
+  Supabase, sin commit de código asociado). Audité a fondo las 6 permitidas por ciclo
+  (`ashwagandha`, `valeriana`, `manzanilla`, `salvia`, `echinacea`, `equinacea`) y **5 de 6 tenían
+  la imagen de otra especie** (`manzanilla` mostraba granadas, `salvia` mostraba algo tipo
+  jengibre/cúrcuma, etc.) — verificado cruzando `nombre_latino` de Supabase contra el contenido
+  visual real del archivo, no contra el nombre del slug. **Check permanente: cuando
+  `ficha_verificada` suba de golpe sin que sea obra propia del ciclo, tratarlo como no auditado
+  y aplicar la comprobación de imagen igual que si acabara de ponerse en `true` — el campo
+  `updated_at`/el propio flag no certifica que alguien miró la imagen.** Bajé las 5 mal
+  emparejadas (`publicada=false`, `ficha_verificada=false`); quedan 31 verificadas sin auditar
+  todavía (límite de 6/ciclo), con riesgo real dado el ratio de fallo de este ciclo (5/6).
+- **El campo `publicada` nunca estaba conectado a ningún filtro de código — hallazgo mientras
+  se auditaba lo anterior, no buscado a propósito.** `app/diccionario/page.tsx` traía las 52
+  filas sin filtrar y `app/diccionario/[slug]/page.tsx` solo comprobaba `ficha_verificada` para
+  ocultar `ficha_cientifica`/`ficha_mistica`. Resultado: **las 9 plantas peligrosas tenían página
+  propia indexable y aparecían en el listado** (sin datos clínicos ni místicos, esos sí estaban
+  bien bloqueados vía `PLANTAS_PELIGROSAS` en el propio `[slug]/page.tsx`, pero la existencia y
+  el listado no). Corregido en `86b6bce`: nueva `lib/plantas-peligrosas.ts` compartida, ambas
+  rutas excluyen `PLANTAS_PELIGROSAS` y devuelven `notFound()`/filtran cuando `publicada=false`.
+  **Check permanente: cuando un ciclo futuro reverifique el límite inamovible de las 9
+  peligrosas, no basta con mirar los campos de Supabase (`image_*_url` en `null`) — hay que
+  probar la URL directa (`curl .../diccionario/<slug-peligroso>/`) y el HTML del listado, porque
+  el gate real puede vivir en código y desincronizarse del dato.**
+- **Probar un cambio de código que depende de Supabase en local requiere exportar
+  `NEXT_PUBLIC_SUPABASE_URL` explícitamente** (el secret del entorno cloud solo trae
+  `SUPABASE_URL`, sin el prefijo `NEXT_PUBLIC_`) — sin eso `getPlants()`/`getPlant()` devuelven
+  vacío/null silenciosamente (el código tiene `if (!url || !key) return [...]` sin log) y todas
+  las rutas parecen 404/vacías por "falta de datos" cuando en realidad es una var de entorno con
+  nombre distinto al que lee el código. Repetir `NEXT_PUBLIC_SUPABASE_URL="$SUPABASE_URL"
+  SUPABASE_SERVICE_ROLE_KEY="$SUPABASE_SERVICE_ROLE_KEY" npm start` antes de dar por buena una
+  prueba local que involucre `/diccionario`.
+
+### Cierre 2026-08-28 (ciclo cloud 16:27 UTC)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns).
+- **Commit `86b6bce`** desplegado y verificado en producción (`dpl_47JpmU8EyKzMFuLgqgwXchn8vAm1`,
+  READY): fix del gate `publicada` en diccionario.
+- **5 plantas bajadas en Supabase** por cruce de imagen/especie: `manzanilla`, `ashwagandha`,
+  `valeriana`, `salvia`, `echinacea`. `equinacea` (mismo duplicado, imagen correcta) se dejó como
+  única entrada visible del par.
+- Gate tras el ciclo: 37/38 plantas no peligrosas visibles están verificadas, 31 de esas 37 sin
+  auditoría de imagen todavía — pendiente para próximos ciclos, prioridad alta dado el 5/6 de
+  fallo de hoy.
+- Gumroad sigue roto, ~30 días 22h, sin cambio de env var. `blog_posts` 90 draft/19 published sin
+  cambio, sin contenido nuevo (el hallazgo de plantas consumió el ciclo). `leads` en 0. Cita
+  diaria (John Locke, 10:09:53 UTC) por debajo del umbral de 24h, sin inserción nueva.
+- Ver `kimiko/bitacora/2026-08-28-1627.md`.
