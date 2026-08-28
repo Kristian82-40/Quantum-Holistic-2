@@ -7702,7 +7702,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   sin datos que segmentar. Bitácora y memoria las commitea el paso dedicado del workflow. Ver
   `kimiko/bitacora/2026-08-28-1010.md`.
 
-
 ## 2026-08-28 16:27 UTC — Ciclo cloud: gate `ficha_verificada` saltó a 42/52, 5 fichas mal
 ## emparejadas bajadas, bug de listado de peligrosas corregido (175º ciclo)
 
@@ -7756,3 +7755,18 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   cambio, sin contenido nuevo (el hallazgo de plantas consumió el ciclo). `leads` en 0. Cita
   diaria (John Locke, 10:09:53 UTC) por debajo del umbral de 24h, sin inserción nueva.
 - Ver `kimiko/bitacora/2026-08-28-1627.md`.
+
+## 2026-08-28 16:31 UTC — MODO ORDEN: disparo sin orden real (buzón vacío)
+
+- Primer `repository_dispatch` de tipo `kimiko-buzon` documentado en esta memoria. Llegó con
+  `client_payload: null`, no `{ draft_id: ... }` como siempre envía
+  `kimiko/buzon/api/telegram.js` tras un mensaje real de Telegram. `kimiko_drafts` en Supabase
+  (`vctetjugbvyllwjpxcxh`) confirmado con 0 filas en total (no solo 0 `pendiente`), tabla
+  responde 200 vía REST. Conclusión: disparo sin orden real detrás — probablemente una prueba
+  manual del workflow, o un mensaje que nunca llegó a insertarse. No hay project_id de Vercel
+  documentado para el despliegue de `kimiko/buzon`, así que no pude cruzar con sus logs.
+- **Check nuevo para MODO ORDEN:** si `client_payload` es `null` (no un objeto con `draft_id`,
+  aunque sea `null` dentro del objeto) y la tabla `kimiko_drafts` no tiene filas `pendiente` ni
+  `en_curso`, no hay orden que ejecutar — documentar en bitácora y cerrar el ciclo sin inventar
+  trabajo ni saltar a las tareas de `MODO CICLO` (el modo lo decide `$GITHUB_EVENT_NAME`, no la
+  ausencia de datos). Ver `kimiko/bitacora/2026-08-28-1631.md`.
