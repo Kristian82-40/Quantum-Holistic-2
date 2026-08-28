@@ -1,0 +1,16 @@
+{
+  "name": "kimiko",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kimiko — agente operativo de Quantum Holistic. Le mandas una foto por Telegram y devuelve el anuncio listo para publicar en Instagram.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node --check api/telegram.js && node --check lib/claude.js && node --check lib/telegram.js && node --check lib/db.js && node --check lib/imagen.js && node --check lib/instagram.js && node --check lib/brand.js && node --check lib/env.js",
+    "test": "node scripts/test-local.js",
+    "webhook": "bash scripts/set-webhook.sh",
+    "keys": "bash scripts/subir-keys.sh"
+  }
+}
