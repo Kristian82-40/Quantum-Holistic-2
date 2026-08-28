@@ -14,6 +14,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TG_TOKEN    = process.env.TELEGRAM_BOT_TOKEN;
 const TG_SECRET   = process.env.TELEGRAM_WEBHOOK_SECRET;
 const GH_TOKEN    = process.env.GH_DISPATCH_TOKEN;
+const OWNER_CHAT_ID = process.env.TELEGRAM_OWNER_CHAT_ID;
 
 const GH_DISPATCH_URL =
   'https://api.github.com/repos/Kristian82-40/Quantum-Holistic-2/dispatches';
@@ -53,6 +54,14 @@ export default async function handler(req, res) {
   const update = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
   const msg = update?.message || update?.edited_message;
   const chatId = msg?.chat?.id;
+
+  // 2. Filtro de remitente
+  if (!OWNER_CHAT_ID) {
+    console.warn('kimiko-buzon: TELEGRAM_OWNER_CHAT_ID no definida — aceptando todos los remitentes (configúrala en Vercel)');
+  } else if (chatId && String(chatId) !== String(OWNER_CHAT_ID)) {
+    // Remitente no autorizado: silencio total, 200 para que Telegram no reintente
+    return res.status(200).send('ok');
+  }
 
   try {
     // 2. Guardar en kimiko_drafts con estado 'pendiente'

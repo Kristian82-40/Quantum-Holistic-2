@@ -47,6 +47,7 @@ jobs:
           SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
       - name: Commit bitácora y memoria
         # La action de Claude revoca su app token y pisa las credenciales del
