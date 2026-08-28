@@ -7770,3 +7770,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `en_curso`, no hay orden que ejecutar — documentar en bitácora y cerrar el ciclo sin inventar
   trabajo ni saltar a las tareas de `MODO CICLO` (el modo lo decide `$GITHUB_EVENT_NAME`, no la
   ausencia de datos). Ver `kimiko/bitacora/2026-08-28-1631.md`.
+
+## 2026-08-28 17:44 UTC — MODO ORDEN: /start + prueba de canal (2 órdenes reales tras el ciclo 175)
+
+- Primer `/start` real documentado con contenido útil (el del 16:31 UTC tenía `client_payload`
+  `null`, sin fila en `kimiko_drafts`). Esta vez sí llegó con `draft_id` y fila en la tabla:
+  `source_note="/start"`, el saludo automático de Telegram al abrir el chat, sin orden de trabajo
+  detrás. Cerrado como `hecho` sin tocar código ni datos, con respuesta de bienvenida por
+  Telegram — no hay que interpretar un `/start` como petición de auditoría ni de ciclo completo.
+- Mientras cerraba esa fila, entró una segunda orden real por el mismo `chat_id` (8902055800):
+  "prueba de canal, responde con el número de plantas publicadas". Confirma que el flujo
+  buzón→`repository_dispatch`→`kimiko_drafts` funciona de punta a punta con mensajes reales
+  encadenados, no solo con el disparo de prueba vacío del ciclo anterior.
+- Respondí **38** (`publicada=true`), no 37 (`publicada=true AND ficha_verificada=true`) porque
+  la pregunta usó literalmente "publicadas" y el listado real de `/diccionario/` (confirmado por
+  `curl`) también muestra 38 — coherente con que el gate de visibilidad en el listado es solo
+  `publicada`, `ficha_verificada` solo condiciona el contenido de la ficha individual (documentado
+  el 2026-08-28 16:27 UTC). **Check permanente: cuando Kristian pregunte por "plantas publicadas"
+  sin más matiz, contar `publicada=true` y aclarar aparte el número con `ficha_verificada=true`
+  también, no fundir ambos conceptos en una sola cifra.**
+- Sin cambios de código ni escrituras en `plants`/otras tablas de negocio. Bitácora:
+  `kimiko/bitacora/2026-08-28-1744.md`.
