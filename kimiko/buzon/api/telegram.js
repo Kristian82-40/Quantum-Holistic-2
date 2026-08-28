@@ -14,7 +14,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TG_TOKEN    = process.env.TELEGRAM_BOT_TOKEN;
 const TG_SECRET   = process.env.TELEGRAM_WEBHOOK_SECRET;
 const GH_TOKEN    = process.env.GH_DISPATCH_TOKEN;
-const OWNER_CHAT_ID = process.env.TELEGRAM_OWNER_CHAT_ID;
+const OWNER_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 const GH_DISPATCH_URL =
   'https://api.github.com/repos/Kristian82-40/Quantum-Holistic-2/dispatches';
