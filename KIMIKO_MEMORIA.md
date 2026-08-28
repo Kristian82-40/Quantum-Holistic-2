@@ -7791,3 +7791,23 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   también, no fundir ambos conceptos en una sola cifra.**
 - Sin cambios de código ni escrituras en `plants`/otras tablas de negocio. Bitácora:
   `kimiko/bitacora/2026-08-28-1744.md`.
+
+## 2026-08-28 17:51 UTC — MODO ORDEN: orden ya resuelta por otra ejecución al llegar yo
+
+- Disparo con `client_payload.draft_id` de una orden real ("qué planta está publicada sin
+  verificar y por qué le falta la ficha"). Al consultar la fila en `kimiko_drafts` ya estaba
+  `status='hecho'`, `copy` y `tg_message_id` rellenos, `updated_at` posterior al último commit
+  del repo: otra ejecución (paralela o justo anterior) ya la había recogido, resuelto y
+  respondido por Telegram, pero no llegó a dejar bitácora/memoria antes de terminar. Cola
+  revisada entera: 0 `pendiente`, 0 `en_curso`, nada más que hacer.
+- **Check permanente:** si el `draft_id` del `client_payload` ya está `status='hecho'` (o
+  `'bloqueado'`) al consultarlo, no lo reproceses ni reinventes la respuesta — verifica que lo
+  que ya se contestó siga siendo cierto (repetir las comprobaciones concretas que cita el `copy`
+  contra el estado actual del repo/BD, no solo confiar en el texto) y, si sigue siendo correcto,
+  cierra el ciclo documentándolo en bitácora sin volver a escribir en Supabase ni mandar un
+  segundo mensaje por Telegram. Evita respuestas duplicadas a Kristian por una carrera entre
+  ejecuciones del workflow.
+- Verificación hecha: `lavanda-cientifica.jpg` sigue sin existir en
+  `public/images/plants/`, y `lavanda` sigue siendo la única fila con
+  `publicada=true AND ficha_verificada=false`. La respuesta ya enviada era correcta y completa.
+  Bitácora: `kimiko/bitacora/2026-08-28-1751.md`.
