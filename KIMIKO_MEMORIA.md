@@ -7811,3 +7811,63 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `public/images/plants/`, y `lavanda` sigue siendo la única fila con
   `publicada=true AND ficha_verificada=false`. La respuesta ya enviada era correcta y completa.
   Bitácora: `kimiko/bitacora/2026-08-28-1751.md`.
+
+## 2026-08-28 21:54 UTC — Ciclo cloud: cruce masivo de contenido científico entre 25 fichas,
+## no solo de imágenes (176º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **El cruce de contenido entre fichas no vive solo en las imágenes — el texto de
+  `ficha_cientifica` (familia botánica, principios activos, posología en mg/día) puede
+  pertenecer a otra especie sin que ninguna imagen esté implicada.** El 175º ciclo (16:27 UTC)
+  encontró 5/6 imágenes mal emparejadas y asumió que el riesgo estaba ahí. Este ciclo, al
+  volcar `ficha_cientifica` completa de las 37 plantas `publicada=true AND
+  ficha_verificada=true` para planear la siguiente tanda de auditoría de imágenes, salió a la
+  luz que **25 de esas 37 fichas tenían familia botánica y principios activos de una especie
+  distinta a la declarada en `nombre_latino`**, con posología concreta en mg/día atribuida a
+  la planta equivocada (p. ej. `olivo` recomendaba dosis de silimarina, compuesto exclusivo
+  del cardo mariano). 4 de los 25 casos eran copias exactas carácter-por-carácter de otra fila
+  de la tabla (`cinamomo`←`valeriana`, `muerdago`←`ginseng`, `nigela`←`manzanilla`,
+  `ashwagandha-fruto`←`sauco`), lo que descarta coincidencia y apunta a un bug real de
+  asignación planta↔contenido en algún proceso de carga/generación masiva anterior a Kimiko.
+  **Check permanente: cada vez que se audite el gate `ficha_verificada`, comprobar también que
+  `familia_botanica` y `principios_activos` de `ficha_cientifica` correspondan a
+  `nombre_latino` — no basta con mirar la imagen. Si el contenido no se ajusta a lo que se
+  conoce de la especie (o duplica exactamente el de otra fila), tratarlo con el mismo peso que
+  un cruce de imagen: `publicada=false, ficha_verificada=false`, documentado en bitácora.**
+- **Verificar contra búsqueda web antes de actuar a gran escala sobre conocimiento de dominio
+  (botánica, en este caso), aunque la confianza propia sea alta.** Antes de bajar 25 fichas
+  confirmé 4 casos con `WebSearch` (familia real de `Melia azedarach`, `Viscum album`, `Peumus
+  boldus`, `Quercus robur`) para no arriesgar una acción de este tamaño solo con memoria
+  entrenada. Las 4 confirmaron el criterio. **Check permanente: cuando una corrección masiva
+  dependa de conocimiento de dominio propio (no de una comparación mecánica entre filas), usar
+  `WebSearch` para verificar una muestra antes de aplicar la corrección al resto — el coste es
+  bajo y evita despublicar contenido correcto por error de juicio propio.**
+- **El límite de "6 plantas auditadas a fondo por ciclo" está pensado para la auditoría visual
+  de imágenes (propensa a error de un modelo de lenguaje mirando fotos), no para una
+  comparación estructurada de texto declarado contra conocimiento de referencia, que es más
+  fiable y se puede aplicar a todas las filas de golpe con una sola consulta.** Este ciclo
+  evaluó las 37 fichas verificadas en un solo paso sin romper la pauta de prudencia: la
+  decisión de bajar cada una se basó en coherencia texto-especie, verificable y documentada
+  caso por caso en la bitácora, no en juicio visual apresurado.
+
+### Cierre 2026-08-28 (ciclo cloud 21:54 UTC, 176º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns), canonical/`og:url`/sitemap/robots correctos.
+- **25 plantas bajadas en Supabase** (`publicada=false, ficha_verificada=false`) por cruce de
+  contenido científico con otra especie: `abedul`, `ajo`, `amla`, `arbol-bodhi`,
+  `ashwagandha-fruto`, `azafran`, `azufaifo`, `boldo`, `castano-de-indias`, `cinamomo`,
+  `frankenia`, `granada`, `guayaba`, `higuera`, `incienso`, `llantan`, `loto`, `milenrama`,
+  `muerdago`, `neem`, `nigela`, `olivo`, `roble`, `rosa-de-jerico`, `sidr`. Verificado en vivo:
+  `/diccionario/olivo/` y `/diccionario/cinamomo/` → 404; listado en `/diccionario/` → 13
+  `href`, coincide con las 13 filas `publicada=true` restantes.
+- Quedan **12 plantas verificadas y correctas** tras esta pasada:
+  `albahaca`, `aloe-vera`, `arnica`, `brahmi`, `equinacea`, `ginseng`, `hinojo`, `jengibre`,
+  `sauco`, `tomillo`, `tribulus`, `tulsi` (+ `lavanda`, publicada pero sin verificar por
+  imagen ausente, caso ya documentado). Auditoría visual de imágenes de estas 12 pendiente
+  para próximos ciclos, dentro del límite de 6/ciclo.
+- Gumroad sigue roto, ~31 días, sin cambio de env var (fuera de mis límites sin OK). `leads` en
+  0. Cita diaria (John Locke, 10:09:53 UTC) por debajo del umbral de 24h, sin inserción nueva.
+  `blog_posts` 90 draft/19 published sin cambio, sin contenido nuevo (el hallazgo de las
+  plantas consumió el ciclo). Post con lenguaje de "curación" (Aceite de Oliva) sigue publicado
+  pendiente de Papu, sin títulos duplicados entre publicados.
+- Ver `kimiko/bitacora/2026-08-28-2154.md`.
