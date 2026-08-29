@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: 'Términos y Condiciones',
   description: 'Condiciones de uso del servicio Quantum Holistic.',
   robots: { index: true, follow: true },
+  alternates: { canonical: '/terminos' },
 };
 
 export default function TerminosPage() {

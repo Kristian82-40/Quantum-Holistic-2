@@ -8,6 +8,7 @@ import styles from './page.module.css';
 export const metadata: Metadata = {
   title: 'Papu — Fundador · Quantum Holistic',
   description: 'Eco-chef medicinal, especialista en MTC, Ayurveda y nutrición herborista. Fundador de Quantum Holistic.',
+  alternates: { canonical: '/terapeutas/papu' },
 };
 
 const CONSULT_EMAIL_SUBJECT = encodeURIComponent('Reserva de consulta con Papu — €65');

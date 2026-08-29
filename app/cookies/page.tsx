@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: 'Política de Cookies',
   description: 'Información sobre el uso de cookies en Quantum Holistic.',
   robots: { index: true, follow: true },
+  alternates: { canonical: '/cookies' },
 };
 
 export default function CookiesPage() {

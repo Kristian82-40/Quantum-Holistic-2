@@ -47,10 +47,13 @@ export async function generateMetadata(
   const supa = await getSupabasePost(slug);
   const post = supa ?? getPostBySlug(slug);
   if (!post) return {};
+  const canonical = `/blog/${slug}`;
   return {
     title: post.title,
     description: post.excerpt,
-    openGraph: { title: post.title, description: post.excerpt, type: 'article' },
+    alternates: { canonical },
+    openGraph: { title: post.title, description: post.excerpt, url: canonical, type: 'article' },
+    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt },
   };
 }
 

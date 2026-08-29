@@ -14,6 +14,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Diccionario Botánico — 50+ Plantas Medicinales',
   description: 'Directorio de plantas medicinales con su tradición y simbolismo. Las fichas científicas se publican solo tras verificación planta a planta.',
+  alternates: { canonical: '/diccionario' },
 };
 
 interface Plant {

@@ -74,11 +74,16 @@ export async function generateMetadata(
   const plant = await getPlant(slug);
   if (!plant || !esVisible(plant)) return { title: 'Planta no encontrada' };
   const latino = plant.nombre_latino ? ` (${plant.nombre_latino})` : '';
+  const title = `${plant.nombre_es} — Diccionario Botánico`;
+  const description = plant.ficha_verificada
+    ? `Ficha completa de ${plant.nombre_es}${latino}: propiedades, indicaciones, contraindicaciones y tradición ancestral.`
+    : `${plant.nombre_es}${latino}: tradición y simbolismo. La ficha científica está en revisión y no se publica hasta verificarla.`;
+  const canonical = `/diccionario/${plant.slug}`;
   return {
-    title: `${plant.nombre_es} — Diccionario Botánico`,
-    description: plant.ficha_verificada
-      ? `Ficha completa de ${plant.nombre_es}${latino}: propiedades, indicaciones, contraindicaciones y tradición ancestral.`
-      : `${plant.nombre_es}${latino}: tradición y simbolismo. La ficha científica está en revisión y no se publica hasta verificarla.`,
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical, type: 'article' },
   };
 }
 

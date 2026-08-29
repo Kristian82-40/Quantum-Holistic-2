@@ -11,6 +11,7 @@ import styles from './page.module.css';
 export const metadata: Metadata = {
   title: 'Blog — Nutrición KM0, Herbología & Bienestar',
   description: 'Artículos sobre nutrición de proximidad, herbología, depuración y bienestar holístico basados en ciencia y tradición.',
+  alternates: { canonical: '/blog' },
 };
 
 interface SupabasePost {

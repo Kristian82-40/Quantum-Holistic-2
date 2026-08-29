@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: 'Política de Privacidad',
   description: 'Cómo Quantum Holistic recoge, usa y protege tus datos personales.',
   robots: { index: true, follow: true },
+  alternates: { canonical: '/privacidad' },
 };
 
 export default function PrivacidadPage() {
