@@ -7955,3 +7955,45 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio.
 - Ver `kimiko/bitacora/2026-08-29-1340.md`.
 - Ver `kimiko/bitacora/2026-08-29-0607.md`.
+
+## 2026-08-29 19:24 UTC — Ciclo cloud: canonical apuntaba a la home en toda la web, corregido
+## en 11 páginas (179º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **La remesa de 37 fichas mal emparejadas quedó agotada el ciclo anterior (178º), y el margen
+  que dejó libre sirvió para encontrar un bug de SEO que llevaba sin detectar todo el
+  historial de esta memoria: ninguna página aparte de `app/layout.tsx` definía
+  `alternates.canonical` propio, así que toda la web heredaba el canonical de la home
+  (`https://quantum-holistic.com/`).** El checklist de salud del sitio (Paso 2.1) solo
+  comprueba canonical/`og:url` en `/`, nunca en subpáginas — por eso pasó inadvertido
+  durante ~179 ciclos aunque afectaba a cada ficha de planta, cada post de blog y cada página
+  estática del sitio. **Check permanente: cuando se audite SEO (Paso 2.3), no basta con mirar
+  duplicados de título o enlaces rotos — comprobar también con `curl` que el `canonical` y
+  `og:url` de una muestra de páginas internas (no solo la home) apunten a sí mismas, no a la
+  home. Un canonical global correcto en `/` no dice nada sobre el resto del sitio.**
+- Arreglado en 11 páginas (`app/blog/page.tsx`, `app/blog/[slug]/page.tsx`,
+  `app/diccionario/page.tsx`, `app/diccionario/[slug]/page.tsx`, `app/terminos/page.tsx`,
+  `app/privacidad/page.tsx`, `app/cookies/page.tsx`, `app/terapeutas/page.tsx`,
+  `app/terapeutas/papu/page.tsx`, `app/producto/ritual-descanso/page.tsx`,
+  `app/regalo/primera-noche/page.tsx`): cada una define ahora `alternates.canonical` propio.
+  En `blog/[slug]` y `diccionario/[slug]` añadido además `openGraph.url` propio (antes ausente
+  del todo), y en `blog/[slug]` un bloque `twitter` con título/descripción del post en vez de
+  heredar el de la home. No tocado `/` (ya correcto vía layout raíz) ni `/success`/`/cancel`
+  (`robots: { index: false }`, canonical irrelevante). Commit `6a929d8`, desplegado en Vercel
+  (`READY` confirmado vía API), verificado en vivo en las 11 páginas tras el despliegue.
+- **Pendiente para un ciclo futuro:** `og:url` de las páginas estáticas (no las dinámicas)
+  sigue heredando el de la home — solo se sobreescribió `alternates.canonical` en esas, no el
+  bloque `openGraph` completo. Menor prioridad que el canonical (señal de indexación
+  primaria), pero queda anotado.
+
+### Cierre 2026-08-29 (ciclo cloud 19:24 UTC, 179º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns), sitemap/robots correctos (74 `<loc>`).
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas** (sin auditoría de imagen
+  nueva este ciclo — no queda backlog tras el 178º). 9 peligrosas sin excepción. Duplicado
+  `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio.
+- Gumroad sigue roto, ~32 días 1h, sin cambio de env var (fuera de mis límites sin OK). `leads`
+  en 0. Cita diaria (Marco Aurelio, 13:44:00 UTC) por debajo del umbral de 24h, sin inserción
+  nueva. `blog_posts` 90 draft/19 published sin cambio, sin títulos duplicados. Post con
+  lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu.
+- Ver `kimiko/bitacora/2026-08-29-1924.md`.
