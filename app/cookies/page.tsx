@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   description: 'Información sobre el uso de cookies en Quantum Holistic.',
   robots: { index: true, follow: true },
   alternates: { canonical: '/cookies' },
+  openGraph: {
+    title: 'Política de Cookies',
+    description: 'Información sobre el uso de cookies en Quantum Holistic.',
+    url: '/cookies',
+  },
 };
 
 export default function CookiesPage() {

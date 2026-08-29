@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   description:
     'Guía de 14 páginas con protocolo herbal y rutina nocturna para recuperar un descanso profundo, basada en macrobiótica y herbología ancestral.',
   alternates: { canonical: '/producto/ritual-descanso' },
+  openGraph: {
+    title: 'El Ritual del Descanso',
+    description:
+      'Guía de 14 páginas con protocolo herbal y rutina nocturna para recuperar un descanso profundo, basada en macrobiótica y herbología ancestral.',
+    url: '/producto/ritual-descanso',
+  },
 };
 
 export default function RitualDescansoPage() {

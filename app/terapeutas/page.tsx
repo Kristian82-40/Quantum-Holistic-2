@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: 'Terapeutas — Quantum Holistic',
   description: 'Directorio de terapeutas verificados: nutrición, herbología, MTC, Ayurveda y bienestar holístico.',
   alternates: { canonical: '/terapeutas' },
+  openGraph: {
+    title: 'Terapeutas — Quantum Holistic',
+    description: 'Directorio de terapeutas verificados: nutrición, herbología, MTC, Ayurveda y bienestar holístico.',
+    url: '/terapeutas',
+  },
 };
 
 interface Terapeuta {

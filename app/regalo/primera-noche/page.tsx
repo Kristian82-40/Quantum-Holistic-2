@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   description:
     'Guía gratuita en PDF con un ritual sencillo para tu primera noche de descanso profundo, basada en herbología y macrobiótica.',
   alternates: { canonical: '/regalo/primera-noche' },
+  openGraph: {
+    title: 'Tu Primera Noche Tranquila — Guía gratuita',
+    description:
+      'Guía gratuita en PDF con un ritual sencillo para tu primera noche de descanso profundo, basada en herbología y macrobiótica.',
+    url: '/regalo/primera-noche',
+  },
 };
 
 export default function PrimeraNochePage() {

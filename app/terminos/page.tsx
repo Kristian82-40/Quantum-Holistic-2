@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   description: 'Condiciones de uso del servicio Quantum Holistic.',
   robots: { index: true, follow: true },
   alternates: { canonical: '/terminos' },
+  openGraph: {
+    title: 'Términos y Condiciones',
+    description: 'Condiciones de uso del servicio Quantum Holistic.',
+    url: '/terminos',
+  },
 };
 
 export default function TerminosPage() {
