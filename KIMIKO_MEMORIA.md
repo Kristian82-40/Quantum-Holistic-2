@@ -7915,4 +7915,43 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   inserción nueva. `blog_posts` 90 draft/19 published sin cambio, sin contenido nuevo (el
   hallazgo de imágenes consumió el ciclo). Post con lenguaje de "curación" (Aceite de Oliva)
   sigue publicado pendiente de Papu, sin títulos duplicados entre publicados.
+
+## 2026-08-29 13:40 UTC — Ciclo cloud: última tanda de imágenes auditada, 5/6 mal emparejadas
+## de nuevo, remesa de 37 fichas "verificadas" fuera de ciclo queda agotada (178º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **La remesa de 37 fichas que llegó con `ficha_verificada=true` sin commit de Kimiko (detectada
+  el 175º ciclo, 2026-08-28 16:27 UTC) queda completamente auditada tras este ciclo: de las 37,
+  25 cayeron por texto (176º), 12 por imagen (5+3+... entre 175º/177º/178º) y solo 4 sobrevivieron
+  correctas (`albahaca`, `arnica`, `equinacea`, `hinojo`).** Ratio final de esa remesa: 33/37
+  mal emparejadas o con contenido cruzado (89%). **Check permanente: cualquier fila nueva que
+  aparezca con `ficha_verificada=true` sin corresponder a un cambio hecho por un ciclo de Kimiko
+  documentado en esta memoria debe tratarse como no auditada por defecto, con el mismo peso de
+  sospecha que tuvo esta remesa — el histórico ya deja claro que la probabilidad base de que esté
+  bien es baja, no una excepción.**
+- Auditadas `hinojo`, `jengibre`, `sauco`, `tomillo`, `tribulus`, `tulsi` (las 6 que quedaban de
+  las 12 con texto ya verificado en el 176º ciclo). Solo `hinojo` correcta (lámina histórica de
+  *Foeniculum vulgare*, etiquetada en alemán "Gebräuchlicher Fenchel"). Las otras 5: `tulsi` tenía
+  una flor de loto, `sauco` un árbol de frutos tipo amla pegados al tronco, `tomillo` una planta
+  rastrera tipo brahmi/*Bacopa monnieri* junto al agua, `jengibre` un abedul, y `tribulus` la
+  imagen real de albahaca sagrada (que debería ser de `tulsi`) — confirma que las imágenes no solo
+  están mal emparejadas sino barajadas entre sí dentro del propio lote. Ninguna de las 5
+  corresponde a una de las 9 peligrosas. Bajadas las 5 (`publicada=false, ficha_verificada=false`),
+  confirmado 404 en vivo y listado actualizado a 5 publicadas / 4 verificadas.
+
+### Cierre 2026-08-29 (ciclo cloud 13:40 UTC, 178º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns), canonical/`og:url`/sitemap/robots correctos.
+- **5 plantas bajadas en Supabase** por imagen mal emparejada: `tulsi`, `sauco`, `tomillo`,
+  `jengibre`, `tribulus`. Quedan **5 publicadas / 4 verificadas**: `albahaca`, `arnica`,
+  `equinacea`, `hinojo` (+ `lavanda`, publicada pero sin verificar por imagen ausente, caso ya
+  documentado). No queda ninguna ficha pendiente de la remesa de 37 — cualquier auditoría futura
+  de imagen partirá de fichas verificadas por un ciclo de Kimiko o por Papu.
+- Gumroad sigue roto, ~32 días, sin cambio de env var (fuera de mis límites sin OK). `leads` en 0.
+  **Cita diaria insertada**: Marco Aurelio (Meditaciones, Libro VII), 28 citas en la tabla tras la
+  inserción (antes 27, la anterior de John Locke llevaba ~27h30min). `blog_posts` 90 draft/19
+  published sin cambio, sin contenido nuevo (auditoría de imágenes consumió el ciclo). Post con
+  lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu. Duplicado
+  `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio.
+- Ver `kimiko/bitacora/2026-08-29-1340.md`.
 - Ver `kimiko/bitacora/2026-08-29-0607.md`.
