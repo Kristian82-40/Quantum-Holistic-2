@@ -7871,3 +7871,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   plantas consumió el ciclo). Post con lenguaje de "curación" (Aceite de Oliva) sigue publicado
   pendiente de Papu, sin títulos duplicados entre publicados.
 - Ver `kimiko/bitacora/2026-08-28-2154.md`.
+
+## 2026-08-29 06:07 UTC — Ciclo cloud: 3 de 6 imágenes auditadas mal emparejadas, una es una
+## planta peligrosa (Datura) bajo el nombre de Aloe Vera (177º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Una imagen mal emparejada no es solo un problema de catálogo cuando la imagen intrusa
+  pertenece a una de las 9 plantas peligrosas.** Auditando las primeras 6 fichas sin revisar
+  tras la purga de texto del 176º ciclo (`albahaca`, `aloe-vera`, `arnica`, `brahmi`,
+  `equinacea`, `ginseng`), encontré que `aloe-vera-cientifica.jpg` es en realidad una fotografía
+  de *Datura* (flor blanca en trompeta, tallo espinoso, hojas lobuladas) — no una suculenta en
+  roseta. Esto no es solo un error de contenido: es un riesgo de identificación real, porque la
+  web presentaba una planta tóxica con el nombre y ficha de una planta segura de uso tópico.
+  **Check permanente: cuando una imagen mal emparejada aparezca en la auditoría, comprobar
+  además si la imagen intrusa podría corresponder a alguna de las 9 peligrosas (aconito, datura,
+  datura-metel, amanita-muscaria, cannabis, cornezuelo-centeno, beleno-negro, tejo,
+  hierba-mora) — ese caso pesa como hallazgo de seguridad, no solo de catálogo, y debe
+  destacarse aparte en la bitácora y en las tareas manuales de Kristian.**
+- `brahmi` (imagen de una especie con flores amarillas tipo guisante y raíz gruesa, similar a
+  *Astragalus*, nada que ver con Bacopa monnieri) y `ginseng` (imagen de un roble adulto con
+  bellotas, nada que ver con la hierba de raíz de Panax ginseng) también mal emparejadas.
+  `albahaca`, `arnica` y `equinacea` sí correspondían a su especie. Bajadas las 3 mal
+  emparejadas (`publicada=false, ficha_verificada=false`), verificado 404 en vivo y listado
+  actualizado a 10 plantas publicadas / 9 verificadas.
+- **Racha de hallazgos consecutivos (175º: 5/6 imágenes mal; 176º: 25/37 textos mal; 177º: 3/6
+  imágenes mal) apunta a un problema sistémico en el proceso de carga de `plants`, no a errores
+  aislados** — documentado como tarea manual para que Papu revise el origen, no solo seguir
+  auditando fila a fila indefinidamente.
+
+### Cierre 2026-08-29 (ciclo cloud 06:07 UTC, 177º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns), canonical/`og:url`/sitemap/robots correctos.
+- Texto de las 12 fichas verificadas (familia botánica + principios activos) revisado contra
+  `nombre_latino`: las 12 coherentes, sin acción de texto este ciclo.
+- **3 plantas bajadas en Supabase** por imagen mal emparejada: `aloe-vera` (imagen real es
+  Datura, planta peligrosa), `brahmi`, `ginseng`. Quedan **10 publicadas / 9 verificadas**:
+  `albahaca`, `arnica`, `equinacea`, `hinojo`, `jengibre`, `sauco`, `tomillo`, `tribulus`,
+  `tulsi` (+ `lavanda`, publicada pero sin verificar por imagen ausente, caso ya documentado).
+  Auditoría visual de `hinojo`, `jengibre`, `sauco`, `tomillo`, `tribulus`, `tulsi` pendiente
+  para el próximo ciclo (límite de 6/ciclo agotado este ciclo).
+- Gumroad sigue roto, ~31 días 12h, sin cambio de env var (fuera de mis límites sin OK). `leads`
+  en 0. Cita diaria (John Locke, 10:09:53 UTC del 08-28) por debajo del umbral de 24h, sin
+  inserción nueva. `blog_posts` 90 draft/19 published sin cambio, sin contenido nuevo (el
+  hallazgo de imágenes consumió el ciclo). Post con lenguaje de "curación" (Aceite de Oliva)
+  sigue publicado pendiente de Papu, sin títulos duplicados entre publicados.
+- Ver `kimiko/bitacora/2026-08-29-0607.md`.
