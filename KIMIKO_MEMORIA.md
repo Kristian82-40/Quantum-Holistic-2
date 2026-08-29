@@ -7997,3 +7997,51 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   nueva. `blog_posts` 90 draft/19 published sin cambio, sin títulos duplicados. Post con
   lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu.
 - Ver `kimiko/bitacora/2026-08-29-1924.md`.
+
+## 2026-08-29 22:33 UTC — Ciclo cloud: og:url propio en las 9 páginas estáticas restantes,
+## Gumroad recibió env var pero el enlace sigue en 404 (180º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **El fix de canonical del 179º ciclo dejó una brecha a medio cerrar: `alternates.canonical`
+  quedó propio por página, pero `openGraph.url` no se tocó en ninguna de las 9 páginas
+  estáticas, así que seguían sirviendo el `og:url` de la home aunque su canonical ya fuera
+  correcto.** Confirmado con `curl` en `/blog`, `/diccionario`, `/terminos`, `/terapeutas/papu`,
+  etc.: `<link rel="canonical">` apuntaba a sí misma pero `property="og:url"` seguía apuntando a
+  `/`. **Check permanente: cuando un fix de SEO toque `alternates.canonical`, comprobar en el
+  mismo `curl` si `openGraph.url` (y no solo el canonical) también quedó corregido — son dos
+  meta tags independientes en Next.js Metadata API y arreglar uno no arregla el otro.** Añadido
+  bloque `openGraph: { title, description, url }` propio en las 9 páginas
+  (`app/blog/page.tsx`, `app/diccionario/page.tsx`, `app/terminos/page.tsx`,
+  `app/privacidad/page.tsx`, `app/cookies/page.tsx`, `app/terapeutas/page.tsx`,
+  `app/terapeutas/papu/page.tsx`, `app/producto/ritual-descanso/page.tsx`,
+  `app/regalo/primera-noche/page.tsx`). Commit `17df359`, desplegado (`dpl_8RLvyQzL...`, `READY`
+  confirmado vía API Vercel) y verificado en vivo en las 9: `og:url` ya propio en cada una. Las
+  páginas dinámicas (`blog/[slug]`, `diccionario/[slug]`) ya lo tenían desde el 179º ciclo, sin
+  tocar.
+- **Una env var que aparece de golpe no implica que el problema que documentaba esté resuelto —
+  hay que probar el destino final, no solo el origen.** `NEXT_PUBLIC_GUMROAD_URL` llevaba ~32
+  días ausente de producción en Vercel (13 vars documentadas en ciclos previos); este ciclo
+  aparece como 14ª var, tipo `sensitive` (no legible vía API), y `/producto/ritual-descanso` ya
+  enlaza a `https://kristian320.gumroad.com/l/ritual-descanso` en el HTML servido. Pero esa URL
+  responde **404** al hacer `curl` directo — el producto no está publicado (o el slug no
+  coincide) en el lado de Gumroad. **Check permanente: cuando una env var ausente durante mucho
+  tiempo aparezca puesta, no dar el incidente por cerrado solo con verla en la lista de Vercel —
+  seguir la cadena hasta el HTML servido y, si hay una URL externa involucrada, hacer `curl`
+  contra ella también.** No es algo que pueda arreglar yo (gestión de cuenta Gumroad, fuera de
+  mis herramientas y de los límites de pagos del Paso 5) — documentado como tarea manual.
+
+### Cierre 2026-08-29 (ciclo cloud 22:33 UTC, 180º)
+- Build pasa sin fixes salvo el propio commit de este ciclo (verificado antes y después de los
+  cambios). 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts` en la raíz,
+  `npm audit` sin cambio (17 vulns), sitemap/robots correctos.
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas** (sin backlog nuevo de
+  auditoría — ninguna fila `ficha_verificada=true` fuera de las ya auditadas). 9 peligrosas sin
+  excepción. Duplicado `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio.
+- **Commit `17df359`** desplegado y verificado: `openGraph.url` propio en las 9 páginas
+  estáticas restantes.
+- Gumroad: env var puesta por primera vez en ~32 días, pero enlace en 404 — ver tarea manual.
+  `leads` en 0. Cita diaria (Marco Aurelio, 13:44 UTC) por debajo del umbral de 24h, sin
+  inserción nueva. `blog_posts` 90 draft/19 published sin cambio, sin títulos duplicados. Post
+  con lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu (ciclo 140,
+  40 ciclos sin cambio).
+- Ver `kimiko/bitacora/2026-08-29-2233.md`.
