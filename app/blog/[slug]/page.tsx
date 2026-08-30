@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
-import { getPostBySlug } from '@/lib/posts';
+import { getPostBySlug, cleanPostTitle } from '@/lib/posts';
 import styles from './page.module.css';
 
 interface SupabasePost {
@@ -30,7 +30,8 @@ async function getSupabasePost(slug: string): Promise<SupabasePost | null> {
     );
     if (!res.ok) return null;
     const data = await res.json();
-    return data[0] ?? null;
+    const post = data[0] ?? null;
+    return post ? { ...post, title: cleanPostTitle(post.title) } : null;
   } catch {
     return null;
   }

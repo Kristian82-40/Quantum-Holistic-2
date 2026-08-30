@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
-import { POSTS } from '@/lib/posts';
+import { POSTS, cleanPostTitle } from '@/lib/posts';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -59,7 +59,7 @@ export default async function BlogPage() {
       ? supabasePosts.map((p) => ({
           slug: p.slug,
           cat: p.category,
-          title: p.title,
+          title: cleanPostTitle(p.title),
           excerpt: p.excerpt,
           date: formatDate(p.created_at),
           readingTime: '5 min',

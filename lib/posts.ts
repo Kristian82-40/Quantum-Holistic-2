@@ -8,6 +8,14 @@ export interface Post {
   content:     string; // HTML simple
 }
 
+// Algunos registros de blog_posts en Supabase guardan el sufijo de marca ya
+// incrustado en el título. app/layout.tsx aplica un title template ('%s | Quantum
+// Holistic') a todo metadata.title, así que usar ese título tal cual duplica el
+// sufijo tanto en <title> como en el <h1> visible.
+export function cleanPostTitle(title: string): string {
+  return title.replace(/\s*\|\s*Quantum Holistic\s*$/i, '').trim();
+}
+
 export const POSTS: Post[] = [
   {
     slug:        'plantas-depurativas-temporada',
