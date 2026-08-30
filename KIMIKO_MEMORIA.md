@@ -8044,4 +8044,54 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   inserción nueva. `blog_posts` 90 draft/19 published sin cambio, sin títulos duplicados. Post
   con lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu (ciclo 140,
   40 ciclos sin cambio).
+
+## 2026-08-30 04:18 UTC — Ciclo cloud: sufijo "Quantum Holistic" duplicado en <title>/<h1>/og:title
+## de 8 posts publicados, corregido en la capa de renderizado (181º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un title template global (`app/layout.tsx`: `'%s | Quantum Holistic'`) se aplica una sola vez
+  a `metadata.title`, pero si el dato de origen (aquí, `blog_posts.title` en Supabase) ya trae el
+  sufijo de marca incrustado desde su generación, el resultado final duplica el sufijo — y no
+  solo en el `<title>` del navegador: en `app/blog/[slug]/page.tsx` el mismo campo `title` se
+  reutilizaba tal cual como texto del `<h1>` visible, así que el defecto era visible para
+  cualquier usuario, no solo un problema de metadatos.** Confirmado en vivo en
+  `mindful-eating-comer-con-conciencia-para-sanar-el-cuerpo-556910`:
+  `<title>Mindful Eating: ... | Quantum Holistic | Quantum Holistic</title>`. 8 de 19 posts
+  `published` y 72 de 90 `draft` en `blog_posts` tienen el sufijo incrustado en `title` — herencia
+  de un pipeline de generación de contenido anterior (`scripts/kimiko-blog-pipeline.mjs` ya tiene
+  lógica de strip de "Quantum Holistic" para slugs, línea ~246, pero nunca se aplicó al campo
+  `title` guardado). **Check permanente: cuando se audite SEO (Paso 2.3), además de duplicados de
+  título y longitud, comprobar si el título de un post/ficha ya trae baked-in el sufijo de marca
+  del site — buscar `"Quantum Holistic"` (o el sufijo que corresponda) dentro del propio campo
+  `title` antes de asumir que un title template global no puede duplicarlo.**
+- **Fix elegido a nivel de renderizado, no de dato:** añadida `cleanPostTitle()` en `lib/posts.ts`
+  (strip del sufijo con regex, case-insensitive, solo al final del string) aplicada en el único
+  punto de entrada de datos de Supabase de cada página (`getSupabasePost` en `blog/[slug]`,
+  `getPublishedPosts` en `blog/page.tsx`) — cubre metadata + `<h1>` + tarjeta de listado con un
+  solo cambio, sin necesitar un `UPDATE` sobre las 98 filas afectadas de `blog_posts`. **Check
+  permanente: cuando un defecto de presentación tenga origen en un dato ya persistido y mal
+  formado en múltiples filas, preferir una función de limpieza en el punto de lectura antes que
+  una migración de datos — es reversible con un solo revert de código y corrige también filas
+  futuras que arrastren el mismo defecto del proceso de origen, sin tocar la tabla.**
+- **Distinguir "sufijo duplicado" (bug mecánico, corregible por código) de "título/excerpt
+  genuinamente largo" (trabajo editorial).** De los 19 posts publicados, 11 superan 60/155
+  caracteres en título/excerpt sin que el sufijo esté de por medio — no se tocaron este ciclo,
+  quedan documentados como tarea de reescritura editorial pendiente, distinta de este hallazgo.
+
+### Cierre 2026-08-30 (ciclo cloud 04:18 UTC, 181º)
+- Build pasa sin fixes previos al hallazgo de este ciclo (verificado antes y después del commit).
+  8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts` en la raíz, `npm audit`
+  sin cambio (17 vulns), canonical/`og:url` de las 9 páginas estáticas (fix del 179º/180º)
+  reverificados sin regresión.
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas** (sin backlog de auditoría de
+  imagen nuevo). 9 peligrosas sin excepción. Duplicado `equinacea`/`echinacea` (ids 52/21)
+  reconfirmado sin cambio.
+- **Commit `57b3c8b`** desplegado y verificado en vivo en 3 capas (`<title>`, `<h1>`, `og:title`)
+  sobre el post afectado y en la tarjeta del listado `/blog`: sufijo duplicado eliminado, sin
+  regresión en las otras 8 fichas ni en el resto del checklist de rutas.
+- Gumroad sigue roto, ~33 días, sin cambio de env var. `leads` en 0. Cita diaria (Marco Aurelio,
+  13:44 UTC del 08-29) por debajo del umbral de 24h, sin inserción nueva. `blog_posts` 90 draft/19
+  published sin cambio, sin títulos duplicados entre sí. Post con lenguaje de "curación" (Aceite
+  de Oliva) sigue publicado pendiente de Papu (ciclo 140, 41 ciclos sin cambio).
+- Ver `kimiko/bitacora/2026-08-30-0418.md`.
 - Ver `kimiko/bitacora/2026-08-29-2233.md`.
