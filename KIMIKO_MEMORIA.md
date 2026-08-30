@@ -8171,4 +8171,58 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   desde el 180º ciclo.
 - Único cambio de datos: cita diaria insertada (Proverbios 17:22), 29 citas en la tabla tras la
   inserción (antes 28, la anterior de Marco Aurelio llevaba 29h24min). Sin commits de código.
+
+## 2026-08-30 22:32 UTC — Ciclo cloud: leyendo el `content` real de los "49 títulos
+## publicables" del 182º ciclo, 12 son solo fragmentos rotos y los que sí tienen
+## contenido traen atribuciones históricas fabricadas (184º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un desglose de backlog por título único (182º ciclo) no basta para decidir qué es
+  "publicable" — hay que abrir el campo `content` de cada candidato antes de contarlo como
+  tal.** El 182º ciclo redujo "90 drafts" a 59 títulos únicos y estimó ~49 "con contenido
+  potencialmente publicable" tras descontar temas prohibidos y lenguaje de "curación" en el
+  *título*. Este ciclo leyó el `content` real de esos candidatos y encontró que **12 de los 59
+  grupos no tienen ninguna copia con contenido usable — todas sus filas son fragmentos de
+  10 a 220 caracteres** (una cita suelta, media frase), no artículos recortables. En total
+  **32 de las 90 filas `draft` (36%) tienen `content` por debajo de 300 caracteres.** Esto baja
+  el techo real de "publicable" de 49 a un máximo de 47, y confirma que el filtro por *título*
+  del 182º ciclo era necesario pero no suficiente. **Check permanente: antes de tratar un grupo
+  de título único del backlog de `blog_posts` como candidato a publicación, leer `content`
+  completo de al menos una copia — si la copia más larga del grupo está por debajo de ~800
+  caracteres, es un fragmento roto de generación, no un artículo pendiente de edición, y no
+  cuenta para la cifra de "publicables".**
+- **El mismo patrón de atribuciones histórico-científicas fabricadas que corrompió `plants`
+  (176º-178º ciclos) también aparece en `blog_posts`, en el contenido largo que sí es un
+  artículo real.** Las 3 muestras de contenido largo (>800 car.) leídas enteras este ciclo
+  traían las tres atribuciones falsas o inventadas: el magnesio descrito como "*Shunyata*"
+  dentro del sistema ayurvédico de doshas (no es un término ayurvédico real para un mineral),
+  el silicio orgánico descrito como "conocido como 'Jing' (精)" en medicina tradicional china
+  (mismo patrón: término real de MTC aplicado a un mineral sin base histórica), y el kéfir
+  descrito como "originario de las tradiciones de la medicina ayurvédica" (es originario del
+  Cáucaso). **Check permanente: cuando se evalúe un post de `blog_posts` para publicación
+  (Paso 2.4), además del filtro de temas prohibidos/lenguaje de curación, comprobar si el texto
+  atribuye conceptos o términos de una tradición médica (MTC, ayurveda, etc.) a algo que esa
+  tradición no reconoce realmente — mismo criterio de sospecha que ya se aplica a
+  `familia_botanica`/`principios_activos` en `plants`, aquí aplicado a contenido de blog.**
+- **No se tocó ninguna fila de `blog_posts`** (ni se publicó, ni se borraron las filas rotas, ni
+  se corrigieron las atribuciones fabricadas) — mismo criterio que ciclos anteriores: sin
+  mandato para actuar sobre datos ya vivos, solo para documentarlos con precisión hasta que
+  Kristian/Papu decidan qué hacer con el pipeline de origen (tarea manual anotada).
+
+### Cierre 2026-08-30 (ciclo cloud 22:32 UTC, 184º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200 (incluida la cadena completa de
+  `/admin` → `/login`), `middleware.ts` en la raíz, `npm audit` sin cambio (17 vulns),
+  canonical/`og:url` de la muestra de páginas internas sin regresión sobre 179º/180º,
+  sitemap/robots correctos.
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas**, 9 peligrosas intactas.
+  Duplicado `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio. `kimiko_drafts`: cola
+  vacía, 0 pendientes.
+- `blog_posts` 90 draft/19 published sin cambio de conteo, sin títulos duplicados entre los 19
+  publicados. Post con lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de
+  Papu (ciclo 140, 44 ciclos sin cambio). Sin commits de código ni escritura en Supabase este
+  ciclo — el hallazgo fue de análisis de contenido, no de bug corregible mecánicamente.
+- `leads` en 0. Gumroad sigue en 404, sin cambio de env var desde el 180º ciclo. Cita diaria
+  (Proverbios 17:22, 19:09:07 UTC de hoy) a ~3h20min del umbral de 24h al comprobar, sin
+  inserción nueva.
+- Ver `kimiko/bitacora/2026-08-30-2232.md`.
 - Ver `kimiko/bitacora/2026-08-30-1909.md`.
