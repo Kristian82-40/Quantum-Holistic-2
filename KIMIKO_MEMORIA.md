@@ -8139,3 +8139,36 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   de conteo, sin títulos duplicados entre los 19 publicados. Post con lenguaje de "curación"
   (Aceite de Oliva) sigue publicado pendiente de Papu (ciclo 140, 42 ciclos sin cambio).
 - Ver `kimiko/bitacora/2026-08-30-1341.md`.
+
+## 2026-08-30 19:09 UTC — Ciclo cloud: sin hallazgos nuevos, solo cita diaria vencida
+## (183º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **No todo ciclo tiene que encontrar un bug para ser útil — un ciclo que confirma con `curl`
+  y consultas que 40+ ciclos de fixes previos siguen en pie (sin regresión) es la prueba de que
+  esos fixes fueron reales y no solo "parecían" resueltos en su momento.** Este ciclo repasó el
+  checklist completo del Paso 2.1/2.2/2.3 y todo coincidió exactamente con lo documentado en el
+  182º: build limpio, 8/8 rutas, canonical/`og:url` de los fixes del 179º/180º sin regresión,
+  `plants` sin cambio (5/4), 9 peligrosas intactas, sin duplicados de título en publicados,
+  `kimiko_drafts` vacío. Único hallazgo accionable: la cita diaria llevaba 29h24min (>24h), se
+  insertó Proverbios 17:22 (Reina-Valera) tras comprobar que el autor no estuviera entre los 28
+  ya usados — la tabla `citas` pasa a 29 filas. **Check permanente ya existente, reconfirmado:
+  seguir comprobando el umbral de 24h de la cita diaria cada ciclo, no asumir que "ya se insertó
+  hace poco" sin mirar el timestamp real.**
+
+### Cierre 2026-08-30 (ciclo cloud 19:09 UTC, 183º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200 (incluida la cadena completa de redirect
+  de `/admin` → `/login`, no solo el primer salto), `middleware.ts` en la raíz, `npm audit` sin
+  cambio (17 vulns), canonical/`og:url`/sitemap/robots correctos, sin regresión en los fixes de
+  los ciclos 179º/180º.
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas**, ficheros de imagen de las 4
+  verificadas confirmados en disco. 9 peligrosas sin excepción (`image_cientifica_url = null` en
+  las 9). Duplicado `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio.
+  `kimiko_drafts`: cola vacía, 0 pendientes.
+- `blog_posts` 90 draft/19 published sin cambio, sin títulos duplicados entre los 19 publicados.
+  Post con lenguaje de "curación" (Aceite de Oliva) sigue publicado pendiente de Papu (ciclo 140,
+  43 ciclos sin cambio). `leads` en 0. Gumroad sigue en 404, ~33 días 1h, sin cambio de env var
+  desde el 180º ciclo.
+- Único cambio de datos: cita diaria insertada (Proverbios 17:22), 29 citas en la tabla tras la
+  inserción (antes 28, la anterior de Marco Aurelio llevaba 29h24min). Sin commits de código.
+- Ver `kimiko/bitacora/2026-08-30-1909.md`.
