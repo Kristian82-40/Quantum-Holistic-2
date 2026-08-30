@@ -8095,3 +8095,47 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   de Oliva) sigue publicado pendiente de Papu (ciclo 140, 41 ciclos sin cambio).
 - Ver `kimiko/bitacora/2026-08-30-0418.md`.
 - Ver `kimiko/bitacora/2026-08-29-2233.md`.
+
+## 2026-08-30 13:41 UTC — Ciclo cloud: el backlog crónico de "90 drafts" es ~49 títulos únicos,
+## el resto es duplicado exacto o filas de prueba (182º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un bloqueador crónico citado ciclo tras ciclo por su conteo bruto puede estar inflado por
+  ruido que nunca se ha desglosado.** El backlog de "90 drafts pendientes de revisión de Papu"
+  lleva documentado sin desglosar desde 2026-07-23 (>40 ciclos citando el mismo número). Al
+  normalizar el `title` de las 90 filas (quitando el sufijo ` | Quantum Holistic` y mayúsculas)
+  salió que **20 grupos de título duplicado cubren 51 de las 90 filas (57%)** — hasta 5 copias
+  idénticas de la misma fila con `id` distinto (`la sabiduría del bambú japonés`) — y **6 filas
+  son literalmente de prueba** (`test final` x2, `Test agente nocturno`, más 3 copias sueltas de
+  `Microbiota Intestinal...`). Descontando esas y los 8 de tema prohibido ya conocidos, quedan
+  ~49 títulos únicos con contenido potencialmente publicable, varios de ellos aún variantes muy
+  cercanas entre sí. **Check permanente: cuando una cifra de backlog se repita sin cambio durante
+  muchos ciclos, antes de seguir citándola tal cual, desglosarla al menos una vez por
+  título/contenido normalizado — la cifra real accionable puede ser mucho menor que la cifra
+  bruta, y eso cambia la conversación con Kristian/Papu de "90 cosas por revisar" a "49 títulos,
+  la mitad de ellos aún necesitan fusionarse o limpiarse antes de poder evaluarse uno a uno".**
+  No se tocó ninguna fila de `blog_posts` (ni se borraron las 6 de prueba, ni se publicó nada) —
+  mismo criterio que con los datos de `plants`: sin mandato para actuar sobre datos ya vivos,
+  solo para documentarlos con precisión.
+- **El lenguaje "curativo"/"poder curativo"/"sana" no es un caso aislado (el de Aceite de Oliva,
+  ciclo 140) sino un patrón que aparece en 14 de los ~49 títulos únicos del backlog.** Cualquier
+  tanda futura de revisión de este backlog debe tratar ese patrón de título como el primer filtro
+  a aplicar, no como una excepción puntual — y recordar que adaptógenos/ayuno/rasayanas dentro de
+  ese conjunto necesitan además las contraindicaciones obligatorias del Paso 2.4 antes de poder
+  publicarse.
+
+### Cierre 2026-08-30 (ciclo cloud 13:41 UTC, 182º)
+- Build pasa sin fixes. 8/8 rutas del checklist en 200, `/admin` redirige bien, `middleware.ts`
+  en la raíz, `npm audit` sin cambio (17 vulns), canonical/`og:url`/sitemap/robots correctos
+  (reverificados sin regresión en las páginas tocadas por los fixes del 179º/180º).
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas**, sin backlog de auditoría de
+  imagen nuevo. 9 peligrosas sin excepción. Duplicado `equinacea`/`echinacea` (ids 52/21)
+  reconfirmado sin cambio. `kimiko_drafts` (órdenes de Kristian): cola vacía, 0 pendientes.
+- Sin commits de código ni escritura en Supabase este ciclo — el hallazgo fue de análisis, no de
+  bug corregible mecánicamente.
+- Gumroad sigue roto, ~33 días 1h, sin cambio de env var desde el 180º ciclo. `leads` en 0. Cita
+  diaria (Marco Aurelio, 13:44 UTC del 08-29) a ~23h57min del umbral de 24h al arrancar el ciclo,
+  por debajo por 3 minutos — sin inserción nueva. `blog_posts` 90 draft/19 published sin cambio
+  de conteo, sin títulos duplicados entre los 19 publicados. Post con lenguaje de "curación"
+  (Aceite de Oliva) sigue publicado pendiente de Papu (ciclo 140, 42 ciclos sin cambio).
+- Ver `kimiko/bitacora/2026-08-30-1341.md`.
