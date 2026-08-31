@@ -8349,3 +8349,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   el `<title>` por defecto de la home (sin `metadata.title` propio) — páginas funcionales, no
   de contenido, prioridad baja.
 - Ver `kimiko/bitacora/2026-08-31-1610.md`.
+
+## 2026-08-31 21:26 UTC — Ciclo cloud: `layout.tsx` servidor añade `metadata` a 3 páginas
+## de cliente sin tocar su lógica; cita candidata de Aristóteles descartada por no poder
+## verificarse (187º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un hallazgo de SEO aparcado como "requiere refactor"/"prioridad baja" puede tener un fix
+  de bajo riesgo sin explorar.** El 186º ciclo documentó que `/chat`, `/registro`,
+  `/registro/terapeuta` y `/gracias` heredaban el `<title>` de la home porque sus `page.tsx`
+  son Client Components (`'use client'`) y no pueden exportar `metadata` — asumiendo
+  implícitamente que arreglarlo exigía tocar la lógica de cliente. En Next.js App Router basta
+  con añadir un `layout.tsx` (Server Component) en la misma carpeta que solo exporte
+  `metadata` y devuelva `children`, sin modificar la página en absoluto. **Check permanente:
+  antes de aparcar un hallazgo de SEO/metadata como deuda técnica de alto riesgo, comprobar si
+  el patrón `layout.tsx` servidor + página cliente intacta lo resuelve sin refactor.**
+  Aplicado a las 3 carpetas (`/registro/terapeuta` hereda el layout de `/registro` por ser
+  subcarpeta, y además solo hace `redirect()` en servidor, nunca renderiza). `title` de cada
+  una ≤40 car. (límite ya documentado en el 186º ciclo por el template global de marca).
+  `/gracias` marcada `robots: { index: false }`, mismo patrón que `/success` y `/cancel`
+  (páginas post-transacción ya `noindex` en el repo) — `/chat` y `/registro` indexables, igual
+  que `/login`. Commit `ad0e221`, desplegado (`dpl_B6tC6Ne93P54qjWxVUkQJSx1RxPc`, `READY`),
+  verificado en vivo sin necesidad de esperar TTL de caché (metadata estática de build, no usa
+  `revalidate` en `fetch`). 8/8 rutas y cadena de `/admin` reverificadas sin regresión.
+- **La misma disciplina de "verificar contra una fuente antes de creer una atribución" que ya
+  se aplica a `familia_botanica`/`principios_activos` en `plants` (176º-178º) y a contenido de
+  `blog_posts` (184º) debe aplicarse también a la tabla `citas`, que es contenido público sin
+  revisión humana previa.** Al buscar una cita nueva para el umbral de 24h de este ciclo,
+  estuve a punto de insertar "el descanso es un fin en sí mismo" atribuida a Aristóteles
+  (Política) por parecer plausible; `WebSearch` no encontró esa cita textual en ninguna fuente,
+  así que la descarté. En su lugar usé Proverbios 3:7-8 (Reina-Valera), verificado palabra por
+  palabra contra fuentes bíblicas online antes de insertarla. **Check permanente: antes de
+  insertar una cita nueva en `citas`, verificar el texto exacto con `WebSearch` si no hay
+  certeza alta de la cita literal — "suena a algo que dijo X" no es verificación.**
+
+### Cierre 2026-08-31 (ciclo cloud 21:26 UTC, 187º)
+- Build/lint limpios. `npm audit`: 9 vulnerabilidades sin cambio (todas semver-major). 8/8
+  rutas del checklist en 200 tras el deploy, `/admin` → `/login` intacto, `middleware.ts` en la
+  raíz, sin regresión.
+- `plants`: 52 filas, sin cambio, 5 publicadas / 4 verificadas, 9 peligrosas intactas,
+  duplicado `equinacea`/`echinacea` reconfirmado. `kimiko_drafts`: cola vacía, 0 pendientes.
+- `blog_posts`: 90 draft/19 published sin cambio de conteo. Post de Aceite de Oliva sigue
+  publicado pendiente de Papu (ciclo 140, 47 ciclos sin cambio).
+- `leads` en 0. Gumroad sigue en 404, sin cambio desde el 180º ciclo. Cita diaria insertada
+  (Proverbios 3:7-8), 30 citas en la tabla tras la inserción (antes 29).
+- Ver `kimiko/bitacora/2026-08-31-2126.md`.
