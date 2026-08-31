@@ -7,11 +7,11 @@ import styles from './page.module.css';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Terapeutas — Quantum Holistic',
+  title: 'Terapeutas',
   description: 'Directorio de terapeutas verificados: nutrición, herbología, MTC, Ayurveda y bienestar holístico.',
   alternates: { canonical: '/terapeutas' },
   openGraph: {
-    title: 'Terapeutas — Quantum Holistic',
+    title: 'Terapeutas',
     description: 'Directorio de terapeutas verificados: nutrición, herbología, MTC, Ayurveda y bienestar holístico.',
     url: '/terapeutas',
   },

@@ -6,11 +6,11 @@ import { SITE_CONFIG } from '@/lib/config';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Papu — Fundador · Quantum Holistic',
+  title: 'Papu — Fundador',
   description: 'Eco-chef medicinal, especialista en MTC, Ayurveda y nutrición herborista. Fundador de Quantum Holistic.',
   alternates: { canonical: '/terapeutas/papu' },
   openGraph: {
-    title: 'Papu — Fundador · Quantum Holistic',
+    title: 'Papu — Fundador',
     description: 'Eco-chef medicinal, especialista en MTC, Ayurveda y nutrición herborista. Fundador de Quantum Holistic.',
     url: '/terapeutas/papu',
   },
