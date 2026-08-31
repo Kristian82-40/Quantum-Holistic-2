@@ -8277,3 +8277,75 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   diaria (Proverbios 17:22, 19:09:07 UTC del 08-30) a ~9h del umbral de 24h al
   comprobar, sin inserción nueva.
 - Ver `kimiko/bitacora/2026-08-31-0422.md`.
+
+## 2026-08-31 16:10 UTC — Ciclo cloud: cero enlaces internos y `<title>`/meta description
+## fuera de límite en los 19 posts publicados, nunca medido en 186 ciclos previos (186º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **"Sin títulos duplicados" no es lo mismo que "dentro del límite de longitud" — 45+ ciclos
+  comprobaron lo primero y ninguno midió lo segundo.** Los 19 posts publicados tenían
+  `<title>` de 66 a 115 caracteres (límite 60) y meta description de 134 a 258 (límite 155).
+  La causa estructural: el layout raíz aplica `template: '%s | Quantum Holistic'` (+20
+  caracteres) a todo título de página hija, así que el campo `title` en `blog_posts` debe
+  quedar en ≤40 caracteres, no ≤60. **Check permanente: en el Paso 2.3, medir la longitud real
+  de `<title>` y `meta description` en el HTML servido (no solo comprobar duplicados), y
+  recordar que el límite del campo `title` en Supabase es ≤40 car., no ≤60, por el template
+  global de marca.**
+- **El campo `content` de `blog_posts` es texto plano sin ningún marcado, y no hay ningún
+  widget de "plantas relacionadas" en `app/blog/[slug]/page.tsx` que compense la falta de
+  enlaces en el texto — comprobado con regex sobre los 19 posts completos: 0 enlaces internos
+  en absoluto, ni al diccionario ni entre posts.** El Paso 2.3 exige enlazar cada post con al
+  menos una ficha del diccionario; nunca se había comprobado si esa regla se cumplía de
+  verdad. **Check permanente: comprobar enlaces internos reales en `content` (no asumir por
+  el título), y al enlazar, verificar primero que la planta objetivo esté genuinamente
+  mencionada por nombre en el texto — no forzar enlaces en posts que no la mencionan.**
+- **El caché de datos de Next.js (`next: { revalidate: 300 }` en el `fetch` de
+  `getSupabasePost()`) es independiente del caché de CDN/edge.** Tras hacer `UPDATE` en
+  Supabase, la página seguía sirviendo el valor viejo con `x-vercel-cache: MISS` (o sea, el
+  edge SÍ estaba pidiendo fresco, pero el `fetch()` interno de Next.js seguía devolviendo su
+  copia cacheada). Ni un redeploy de Vercel invalida este caché (persiste entre despliegues
+  por diseño). **Check permanente: tras un `UPDATE` en Supabase que alimenta una página con
+  `revalidate: N` en su `fetch`, esperar el TTL real antes de dar la verificación por buena —
+  un `MISS` en `x-vercel-cache` no significa que los datos sean frescos.**
+- **Antes de "arreglar" el filtro `ficha_verificada` en `/diccionario/[slug]/page.tsx` por
+  parecer que contradecía la letra del Paso 2.2 ("sale en la web solo si publicada AND
+  verificada"), leí el código completo y confirmé que es diseño deliberado y más seguro:**
+  `esVisible()` solo depende de `publicada`, pero `ficha_verificada=false` oculta la
+  `ficha_cientifica` (comentario explícito en el código: "solo se sirve tras verificación
+  humana") y muestra un aviso "en revisión" en su lugar — no un 404. No lo toqué. **Check
+  permanente: releer siempre el código real antes de tratar una discrepancia con las reglas
+  del prompt como bug — puede ser una implementación más conservadora, no un error.**
+
+### Cambios aplicados y verificados
+- **5 enlaces internos añadidos** (los únicos posts con mención genuina de una planta
+  publicada+verificada): `aromaterapia-...` y `el-sueno-como-medicina-...` → `/diccionario/lavanda/`;
+  `el-microbioma-...`, `la-conexion-intestino-cerebro-...` y `silicio-organico-...` →
+  `/diccionario/hinojo/`. `UPDATE` en `blog_posts.content`, verificado en vivo (200 en los
+  destinos). Quedan 14/19 posts sin enlace porque no mencionan ninguna de las 5 plantas
+  publicadas — no forzado, queda como backlog natural.
+- **19 `title`/`excerpt` reescritos** a ≤40/≤155 caracteres respectivamente, sin duplicados,
+  sin palabras de "curación"/"cura"/"sanar" nuevas (el título de Aceite de Oliva de paso dejó
+  de decir "Curación" — mejora incidental, cuerpo del post sin tocar, sigue pendiente de Papu
+  desde el ciclo 140). Verificado en vivo tras esperar el TTL del caché de datos: 19/19 dentro
+  de límite, sin duplicados.
+- **Bug de código corregido:** `/terapeutas` y `/terapeutas/papu` tenían "Quantum Holistic"
+  hardcodeado en su propio `metadata.title` además del sufijo del template global, duplicando
+  la marca en el `<title>` renderizado. Quitado en ambos archivos. Build/lint limpios, commit
+  `1dbdee1` pusheado y desplegado (`dpl_5JhdExFUHaZy6qcenLdmzmDiftGm`, `READY`), reverificado
+  en vivo sin duplicado y sin regresión en el resto del checklist.
+
+### Cierre 2026-08-31 (ciclo cloud 16:10 UTC, 186º)
+- Build/lint limpios. `npm audit`: 9 vulnerabilidades sin cambio (todas semver-major,
+  documentadas desde el 185º). 8/8 rutas del checklist en 200 tras el deploy, sin regresión.
+- `plants`: 52 filas, sin cambio, 5 publicadas / 4 verificadas, 9 peligrosas intactas,
+  duplicado `equinacea`/`echinacea` reconfirmado. `kimiko_drafts`: cola vacía, 0 pendientes.
+- `blog_posts`: 90 draft/19 published sin cambio de conteo. Post de Aceite de Oliva sigue
+  publicado pendiente de decisión de Papu (ciclo 140, 46 ciclos sin cambio) — solo se le tocó
+  el título por longitud/lenguaje, no el cuerpo.
+- `leads` en 0. Gumroad sigue en 404 (env var correcta en Vercel, problema del lado de
+  Gumroad). Cita diaria (Proverbios 17:22, 19:09:07 UTC del 08-30) a ~21h del umbral de 24h al
+  comprobar, sin inserción nueva.
+- Hallazgo menor sin arreglar: `/chat`, `/registro`, `/registro/terapeuta` y `/gracias` heredan
+  el `<title>` por defecto de la home (sin `metadata.title` propio) — páginas funcionales, no
+  de contenido, prioridad baja.
+- Ver `kimiko/bitacora/2026-08-31-1610.md`.
