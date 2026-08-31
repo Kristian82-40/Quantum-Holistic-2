@@ -8226,3 +8226,54 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   inserción nueva.
 - Ver `kimiko/bitacora/2026-08-30-2232.md`.
 - Ver `kimiko/bitacora/2026-08-30-1909.md`.
+
+## 2026-08-31 04:22 UTC — Ciclo cloud: `npm audit` nunca desglosado por paquete en 184
+## ciclos, `npm audit fix` baja 17 → 9 vulnerabilidades sin salto de versión mayor
+## (185º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un bloqueador crónico citado ciclo tras ciclo por su conteo bruto puede estar
+  ocultando una fracción resoluble sin riesgo — mismo patrón que el 182º ciclo encontró
+  en el backlog de "90 drafts", ahora en `npm audit`.** Durante 41+ ciclos (desde el
+  2026-07-23 aprox.) se citó "17 vulnerabilidades sin cambio" en bloque, sin que ningún
+  ciclo comprobara `npm audit --json` para ver cuántas tenían `fixAvailable` sin
+  `isSemVerMajor`. Resultó que 10 de las 17 sí lo tenían (`esbuild`, `js-yaml`,
+  `minimatch`, `nanoid`, `resend`, `svix`, `uuid`, `ws`, `@typescript-eslint/parser`,
+  `@typescript-eslint/typescript-estree`, `brace-expansion`) — corregibles con
+  `npm audit fix` sin `--force`, sin tocar `package.json` (todo ya estaba dentro del
+  rango semver declarado, solo se movió `package-lock.json`). **Check permanente: en el
+  Paso 2.1, no basta con comparar el conteo total de `npm audit` ciclo a ciclo — correr
+  `npm audit --json` y revisar `fixAvailable`/`isSemVerMajor` por paquete al menos de
+  forma periódica (p. ej. cuando el conteo lleve muchos ciclos sin cambio), porque un
+  conteo estancado no distingue "nada es corregible" de "nadie ha comprobado si algo lo
+  es".**
+- **Aplicado y verificado con el mismo rigor que un cambio de código:** `npm audit fix`
+  ejecutado, luego `rm -rf node_modules && npm ci` limpio desde cero (no confiar en el
+  estado de `node_modules` tras el fix), `npm run build` y `npm run lint` sin errores.
+  Commit `ec913e7` (solo `package-lock.json` + el `next-env.d.ts` autogenerado por
+  `npm ci`, sin tocar `package.json`), desplegado en Vercel (`dpl_GLrzV3Fkvh6mEbq2Lku8bqRx2aRA`,
+  `READY` confirmado vía API) y reverificado en vivo: 8/8 rutas en 200, cadena completa
+  de `/admin` → `/login/?redirect=...` intacta, canonical de la home sin regresión.
+- **Las 9 vulnerabilidades restantes** (`next` 16.3.3, `postcss`, `eslint-config-next`,
+  `glob`, `next-intl` 4.14.1) solo se resuelven con `npm audit fix --force` y salto de
+  versión mayor (Next.js y `next-intl` con posible breaking change) — no entran en el
+  criterio de "reversible y aditivo" de mis herramientas para dependencias de este peso;
+  quedan documentadas como decisión de producto/QA, no ejecutadas.
+
+### Cierre 2026-08-31 (ciclo cloud 04:22 UTC, 185º)
+- Build pasa (con el fix de este ciclo aplicado y reverificado con `npm ci` limpio).
+  `npm run lint` sin warnings/errores. 8/8 rutas del checklist en 200, `/admin` con
+  cadena de redirect completa a `/login`, `middleware.ts` en la raíz, canonical/`og:url`/
+  sitemap/robots correctos sin regresión sobre 179º/180º.
+- **`npm audit`: 17 → 9 vulnerabilidades** (1 moderate, 8 high restantes, todas
+  semver-major). Commit `ec913e7` desplegado y verificado.
+- `plants`: 52 filas, sin cambio, **5 publicadas / 4 verificadas**, 9 peligrosas intactas.
+  Duplicado `equinacea`/`echinacea` (ids 52/21) reconfirmado sin cambio. `kimiko_drafts`:
+  cola vacía, 0 pendientes.
+- `blog_posts` 90 draft/19 published sin cambio de conteo, sin títulos duplicados entre
+  los 19 publicados. Post con lenguaje de "curación" (Aceite de Oliva) sigue publicado
+  pendiente de Papu (ciclo 140, 45 ciclos sin cambio).
+- `leads` en 0. Gumroad sigue en 404, sin cambio de env var desde el 180º ciclo. Cita
+  diaria (Proverbios 17:22, 19:09:07 UTC del 08-30) a ~9h del umbral de 24h al
+  comprobar, sin inserción nueva.
+- Ver `kimiko/bitacora/2026-08-31-0422.md`.
