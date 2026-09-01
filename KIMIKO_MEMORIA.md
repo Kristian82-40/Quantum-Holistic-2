@@ -8495,3 +8495,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - `leads` en 0. `citas`: 30 filas, última inserción 21:26 UTC del 08-31 (~12h10 al comprobar),
   sin inserción nueva. `kimiko_drafts`: orden `/ciclo` cerrada `hecho`, cola vacía.
 - Ver `kimiko/bitacora/2026-09-01-0947.md`.
+
+## 2026-09-01 13:14 UTC — Ciclo cloud: checklist completo sin regresión ni hallazgos nuevos,
+## `lavanda` resuelta sin mi intervención (190º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Comprobar `updated_at` de las filas más recientes de `plants` antes de decidir si repetir
+  una auditoría visual completa es más barato que reabrir las 40 imágenes cada vez.** Tras el
+  hallazgo grave del 189º ciclo (17/40 imágenes cruzadas, incluida una peligrosa expuesta),
+  este ciclo comprobé primero si había habido algún `UPDATE` nuevo sobre `plants` mirando las
+  10 filas con `updated_at` más reciente: las 40 tocadas en el incidente seguían con el mismo
+  timestamp exacto (`2026-09-01T09:21:58Z`), señal de que nadie ha vuelto a tocar la tabla desde
+  entonces. Esto confirma que el check permanente del 189º ("tratar como sospechoso un `UPDATE`
+  masivo y auditar el lote completo") se activa por *cambio nuevo*, no por la mera existencia de
+  filas `ficha_verificada=true` — repetir la auditoría completa en cada ciclo sin que haya habido
+  ningún `UPDATE` nuevo sería trabajo sin señal que lo justifique. **Check permanente: antes de
+  decidir el alcance de la auditoría visual de `plants` en un ciclo, mirar `updated_at` de las
+  filas más recientes — solo escalar a auditoría completa si hay un `UPDATE` posterior al último
+  ciclo documentado.**
+- **Un hallazgo documentado como "pendiente de Kristian" puede resolverse sin que yo intervenga
+  ni lo note hasta el siguiente chequeo rutinario.** `lavanda` llevaba 45+ ciclos publicada con
+  imagen rota sin verificar (bug documentado repetidamente); en el 189º seguía igual. En este
+  ciclo apareció ya con `publicada=false, ficha_verificada=false`, sin que yo hiciera el
+  `UPDATE` — probablemente Kristian la corrigió a mano en la misma sesión que usó
+  `verify-plants.html`. No hay nada que arreglar ni anotar como cicatriz de proceso aquí, solo
+  registrar el hecho: el estado de una fila puede cambiar entre ciclos por acción humana directa,
+  así que cada ciclo debe releer el estado real en vez de asumir que sigue como en la última
+  bitácora.
+
+### Cierre 2026-09-01 (ciclo cloud 13:14 UTC, 190º)
+- Build/lint limpios (36/36 páginas). `npm audit`: 9 vulnerabilidades sin cambio (semver-major
+  desde el 185º). 8/8 rutas del checklist en 200 (vía redirect 308 de barra final), `/admin` →
+  `/login` intacto, `middleware.ts` en la raíz, canonical/`og:url` correctos, sitemap/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin cambio desde el 189º. 23 publicada+verificada, 9 peligrosas
+  confirmadas `publicada=false` una a una, `lavanda` ahora también despublicada (resuelta sin mi
+  intervención). Sin `UPDATE` nuevo desde el incidente del 189º (mismo `updated_at`), por lo que
+  no repetí la auditoría visual completa.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio de conteo. Los 22
+  `published` revisados por duplicados de título y longitud: ninguno.
+- `leads` en 0. `citas`: 30 filas, última inserción 21:26 UTC del 08-31 (~15h48 al comprobar),
+  sin inserción nueva. `kimiko_drafts`: cola vacía, 0 pendientes, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
+  fin, sin hallazgos que corregir.
+- Ver `kimiko/bitacora/2026-09-01-1314.md`.
