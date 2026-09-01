@@ -8432,3 +8432,66 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escritura en Supabase este ciclo — el hallazgo fue de inventario
   del repo, no un bug corregible mecánicamente.
 - Ver `kimiko/bitacora/2026-09-01-0402.md`.
+
+## 2026-09-01 09:47 UTC — Ciclo (MODO ORDEN, `/ciclo` por Telegram): verificación masiva de
+## `plants` con 42.5% de imágenes cruzadas, incluida una planta peligrosa expuesta como ficha
+## pública inocua (189º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **"El fichero existe en disco" y "el fichero corresponde a la especie correcta" son
+  comprobaciones distintas, y la regla de hierro del Paso 2.2 solo exige la primera por
+  escrito.** A las 09:21:58 UTC, algo/alguien (con toda probabilidad Kristian usando
+  `verify-plants.html`, la herramienta que encontré sin usar en el 188º ciclo) marcó de golpe
+  36 plantas nuevas como `publicada=true, ficha_verificada=true` (de 4 verificadas a 40), con
+  el mismo timestamp exacto en las 40 filas. Las 40 imágenes existían en disco — pasaban la
+  comprobación mecánica al pie de la letra — pero al auditar visualmente las 40 (no las 6
+  habituales, justificado por la magnitud del cambio) **17/40 (42.5%) mostraban una especie
+  distinta a la de su nombre**, y una de ellas era grave de verdad: **la ficha pública de
+  `llantán` mostraba una fotografía de *Amanita muscaria*** (una de las 9 peligrosas) sin
+  ningún aviso, y `aloe-vera` mostraba una *Datura* en flor. El patrón (`jengibre`↔abedul,
+  `tulsi`↔loto, `tribulus`↔posible tulsi real, `ginseng`↔roble, `manzanilla`↔granada...)
+  sugiere un mapping de imágenes desordenado al aplicar el JSON exportado por la herramienta
+  a los ficheros o a la base de datos, no fotos elegidas al azar. **Check permanente: cuando
+  se detecte un `UPDATE` masivo y repentino sobre `ficha_verificada` (muchas filas, mismo
+  timestamp, salto grande respecto al ciclo anterior), tratarlo como sospechoso por defecto y
+  auditar visualmente el lote completo (no el límite habitual de 6), sin esperar a que termine
+  el resto del checklist — la existencia del fichero en disco NO es evidencia de que la imagen
+  sea la especie correcta.** Las plantas con imagen cruzada se revirtieron a
+  `publicada=false, ficha_verificada=false` en el momento de encontrarlas (no al final del
+  ciclo), porque `ficha_verificada=false` con `publicada=true` NO oculta la imagen (ver
+  siguiente punto) — solo `publicada=false` la retira de verdad.
+- **`ficha_verificada=false` únicamente oculta el texto `ficha_cientifica`; la imagen
+  científica se sirve siempre que exista el fichero `public/images/plants/{slug}-cientifica.jpg`,
+  sin mirar ninguna columna de la base de datos** (confirmado leyendo
+  `app/diccionario/[slug]/page.tsx` y `app/diccionario/page.tsx`: la columna
+  `image_cientifica_url` ni siquiera se usa para construir el `<Image src>`, es dato muerto en
+  ese camino de render). **Check permanente: para ocultar de verdad una imagen de planta
+  sospechosa, hay que poner `publicada=false` (que si retira la ficha entera vía `esVisible()`),
+  no basta con `ficha_verificada=false`.**
+- **Cuando Kristian aprueba contenido por su cuenta (blog o plantas) fuera de mi ciclo, sigue
+  haciendo falta pasar el resultado por el checklist normal — su aprobación cambia el estado,
+  no sustituye la verificación.** En la misma ventana (09:22 UTC) también movió 11 posts de
+  `blog_posts`: 8 a `rejected` (los 8 tocaban temas prohibidos del Paso 2.4 — reiki, chakras,
+  cristales, biodescodificación, nutrición cuántica — sin falsos positivos, criterio correcto)
+  y 3 a `published`. De los 3 publicados, los 3 tenían `title` por encima de 40 caracteres (2
+  con el sufijo de marca duplicado a mano) y uno —el de adaptógenos (Ashwagandha/Rhodiola/
+  Maca)— se publicó sin ninguna contraindicación específica, solo un "consulta a un
+  profesional" genérico, violando el Paso 2.4 al pie de la letra. Corregido título/excerpt en
+  los 3 y añadida una sección de contraindicaciones por planta al de adaptógenos (en vez de
+  revertirlo a borrador, para respetar la decisión de publicar de Kristian sin dejar contenido
+  no conforme en vivo). **Check permanente: una aprobación humana de contenido nuevo entra al
+  mismo checklist de SEO/Paso 2.4 que cualquier otro post — no se asume conforme por venir de
+  Kristian.**
+
+### Cierre 2026-09-01 (ciclo 09:47 UTC, 189º, MODO ORDEN)
+- Build/lint limpios, `npm audit` sin cambio (9, semver-major). 8/8 rutas en 200, `/admin` →
+  `/login` intacto. `sitemap.xml` no se regenera solo (es `○` estático de build); como este
+  ciclo no tocó código no se redesplegó, así que temporalmente puede listar alguna de las 17
+  plantas revertidas hasta el próximo build — se autocorrige, anotado sin urgencia.
+- `plants`: 52 filas. 23 publicada+verificada (era 40, revertidas 17 por imagen cruzada), 9
+  peligrosas intactas, `lavanda` sigue publicada sin verificar (imagen rota, sin cambio).
+- `blog_posts`: 109 filas (79 draft / 22 published / 8 rejected). 3 posts nuevos con
+  título/excerpt corregidos; 1 con contraindicaciones añadidas.
+- `leads` en 0. `citas`: 30 filas, última inserción 21:26 UTC del 08-31 (~12h10 al comprobar),
+  sin inserción nueva. `kimiko_drafts`: orden `/ciclo` cerrada `hecho`, cola vacía.
+- Ver `kimiko/bitacora/2026-09-01-0947.md`.
