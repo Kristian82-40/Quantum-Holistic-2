@@ -8394,3 +8394,41 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - `leads` en 0. Gumroad sigue en 404, sin cambio desde el 180º ciclo. Cita diaria insertada
   (Proverbios 3:7-8), 30 citas en la tabla tras la inserción (antes 29).
 - Ver `kimiko/bitacora/2026-08-31-2126.md`.
+
+## 2026-09-01 04:02 UTC — Ciclo cloud: checklist completo sin regresión, herramienta manual
+## de verificación de imágenes (`verify-plants.html`) encontrada sin usar ni documentar
+## (188º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **No todo el repo se ha inventariado nunca de una pasada — un fichero de 18.5 MB en la raíz
+  puede llevar ahí todo el historial squasheado actual sin que ningún ciclo lo mencione.**
+  `verify-plants.html` es una página HTML autocontenida (imágenes en base64, sin red ni
+  Supabase) con un campo de texto junto a cada una de ~50 imágenes de plantas para que un
+  humano escriba la especie real, y un botón que exporta el resultado a JSON. No está
+  enlazada desde `app/`, `scripts/` ni ningún `README` — vive fuera de `public/`, así que no
+  se sirve en producción y no afecta al sitio, pero tampoco está documentada en ningún sitio
+  para que Kristian sepa que existe. Dado que la saga de imágenes mal emparejadas en `plants`
+  (176º-178º ciclos) se resuelve a mano a razón de 6 fichas auditadas por ciclo por mí, esta
+  herramienta permite a un humano repasar todas las imágenes restantes de un vistazo en una
+  sola sesión. **Check permanente: de vez en cuando (no cada ciclo), listar los ficheros
+  sueltos en la raíz del repo que no sean `.md` de documentación conocida y preguntarse si son
+  herramientas útiles sin surfacear — un `ls` ocasional en la raíz puede encontrar más que
+  releer el mismo checklist de rutas/SEO/plants.** Anotada como tarea manual de Kristian, no
+  movida ni tocada (sin mandato para reorganizar ficheros fuera de mi checklist habitual).
+
+### Cierre 2026-09-01 (ciclo cloud 04:02 UTC, 188º)
+- Build/lint limpios. `npm audit`: 9 vulnerabilidades sin cambio (todas semver-major desde el
+  185º). 8/8 rutas del checklist en 200, cadena completa `/admin` → `/login` intacta,
+  `middleware.ts` en la raíz, canonical/`og:url` (muestra de subpáginas) y metadata de páginas
+  cliente (fix del 187º) sin regresión, sitemap 74 `<loc>`/robots correctos.
+- `plants`: 52 filas, sin cambio, 5 publicadas / 4 verificadas, ficheros de imagen de las 4
+  confirmados en disco, 9 peligrosas intactas, duplicado `equinacea`/`echinacea` reconfirmado.
+  `kimiko_drafts`: cola vacía, 0 pendientes.
+- `blog_posts`: 90 draft/19 published sin cambio de conteo. Post de Aceite de Oliva sigue
+  pendiente de Papu (ciclo 140, 48 ciclos sin cambio).
+- `leads` en 0. Gumroad sigue en 404, sin cambio desde el 180º ciclo. Cita diaria (Proverbios
+  3:7-8, 21:26:28 UTC del 08-31) a ~6h36min del umbral de 24h al comprobar, sin inserción
+  nueva.
+- Sin commits de código ni escritura en Supabase este ciclo — el hallazgo fue de inventario
+  del repo, no un bug corregible mecánicamente.
+- Ver `kimiko/bitacora/2026-09-01-0402.md`.
