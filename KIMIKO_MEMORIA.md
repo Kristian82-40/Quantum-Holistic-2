@@ -8630,4 +8630,71 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Telegram este ciclo.
 - Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
   fin, octavo ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
+
+## 2026-09-02 22:33 UTC — Ciclo: `og:image` ausente en todo el sitio (nunca declarado en
+## el layout raíz ni en las páginas de post), arreglado con fallback de marca; nota de
+## "Aceite de Oliva pendiente" llevaba 50 ciclos copiada sin re-verificar (196º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **El Paso 2.3 exige "Open Graph" en cada post publicado, pero ningún ciclo anterior
+  comprobó específicamente la presencia de `og:image` — solo título/meta description/
+  canonical.** Ni `app/layout.tsx` ni `app/blog/[slug]/page.tsx` declaraban
+  `openGraph.images`/`twitter.images`; confirmé con `curl` contra producción que no
+  aparecía ningún `og:image` ni en la home ni en un post publicado. Arreglado: generé
+  una imagen de marca por defecto con Pollinations.ai FLUX (acuarela botánica, sin
+  texto, estilo del Paso 3) en `public/images/og-default.jpg`, y la usé como fallback
+  global en el layout raíz y por-post en `generateMetadata` del blog. **Check
+  permanente: el checklist de SEO del Paso 2.3 debe verificar explícitamente que
+  `og:image` (u otra imagen de Open Graph) aparece en el HTML servido, no solo
+  title/description/canonical — "Open Graph" completo incluye la imagen.**
+- **La columna `image_url` de `blog_posts` es dato muerto en el camino de render
+  (igual que `image_cientifica_url` en `plants`, cicatriz del 188º) y sus valores son
+  de dos tipos muy distintos: URLs absolutas de Pollinations.ai (siempre disponibles,
+  generadas al vuelo) y rutas locales `/images/blog/{slug}.jpg` que casi nunca tienen
+  fichero real en `public/`** (confirmé 404 en vivo en el post de Aceite de Oliva).
+  Al conectar `image_url` al nuevo `og:image` por-post, usé solo los valores que
+  empiezan por `http` y dejé que todo lo demás caiga al fallback de marca, para no
+  sustituir un `og:image` ausente por uno roto. **Check permanente: cualquier columna
+  de Supabase con nombre `*_url`/`*_image` que se vaya a conectar a render por primera
+  vez hay que tratarla como no confiable por defecto — comprobar en vivo si el valor es
+  una URL externa siempre disponible o una ruta local que puede no tener fichero, antes
+  de usarla sin fallback.**
+- **Una nota de cierre de ciclo copiada literalmente de la bitácora anterior sin volver
+  a consultar la fila concreta en Supabase puede quedar obsoleta durante decenas de
+  ciclos sin que nadie lo note, incluso si el checklist agregado (conteo de
+  `published`) sí reflejaba el cambio real desde el principio.** "Post de Aceite de
+  Oliva sigue pendiente de Papu" se repitió sin cambios desde el 140º ciclo (50
+  ciclos), pero el post se publicó de hecho el 09-01 a las 09:22:08 UTC (dentro del
+  mismo lote de 3 posts que Kristian aprobó a mano ese día, ya documentado en el 189º)
+  y pasó el check de duplicados de título/longitud sin incidencia desde el 190º. Lo
+  descubrí investigando el hallazgo de `og:image` de este ciclo, no en una relectura
+  rutinaria de esa línea. **Check permanente: cualquier nota de "pendiente de X" que
+  se repita más de ~10 ciclos seguidos debe re-verificarse contra la fila real en
+  Supabase (no solo copiarse), y si sigue pendiente de verdad, decir desde cuándo se
+  re-confirmó por última vez, no solo desde cuándo se escribió la primera vez.**
+
+### Cierre 2026-09-02 (ciclo 22:33 UTC, 196º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`: 9
+  vulnerabilidades sin cambio desde el 185º. 8/8 rutas del checklist en 200, `/admin` →
+  `/login` con la cadena completa verificada (308 + 307 + 200), `middleware.ts` en la
+  raíz, canonical/`og:url`/sitemap (85 `<loc>`)/robots correctos. Vercel: últimos 5
+  despliegues `READY`, nuevo despliegue tras el push confirmado `READY` (~40s).
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto), por
+  lo que no repetí la auditoría visual completa. 23 publicada+verificada, 9 peligrosas
+  confirmadas `publicada=false`, `lavanda` sigue despublicada, duplicado
+  `equinacea`/`echinacea` reconfirmado.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin `UPDATE` nuevo desde
+  el 189º. Nota "Aceite de Oliva pendiente de Papu" **retirada del checklist: en
+  realidad publicado desde el 09-01** (ver cicatriz arriba) — no hay nada pendiente de
+  Papu que yo sepa a día de hoy.
+- `leads` en 0. `citas`: última inserción hace ~13h58min, por debajo del umbral de 24h,
+  sin inserción nueva (31 filas sin cambio). `kimiko_drafts`: cola vacía, sin filas
+  colgadas en `en_curso`, sin orden de Telegram este ciclo.
+- **Commit de código este ciclo:** `3507557` — `og:image` de marca añadido al layout
+  raíz y por-post en el blog (con fallback seguro para `image_url` local roto).
+  Generé `public/images/og-default.jpg` con Pollinations.ai FLUX. Verificado en vivo
+  tras el despliegue: home, post con imagen externa y post con imagen local rota, los
+  tres casos sirven el `og:image` esperado (200, sin 404). Sin escritura en Supabase
+  este ciclo.
+- Ver `kimiko/bitacora/2026-09-02-2233.md`.
 - Ver `kimiko/bitacora/2026-09-02-1611.md`.
