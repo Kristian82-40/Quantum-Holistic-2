@@ -8588,4 +8588,28 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo.
 - Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
   fin, sexto ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
+
+### Cierre 2026-09-02 (ciclo 08:33 UTC, 194º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit`: 9 vulnerabilidades sin cambio desde el 185º.
+  8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena completa verificada (308 +
+  307 + 200), `middleware.ts` en la raíz, canonical/`og:url`/robots correctos. `sitemap.xml`: 85
+  `<loc>` (subió de 74, coherente con más contenido publicado desde el 189º). Vercel: últimos 5
+  despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto), por lo que no
+  repetí la auditoría visual completa. 23 publicada+verificada, 9 peligrosas confirmadas
+  `publicada=false`, `lavanda` sigue despublicada, duplicado `equinacea`/`echinacea` reconfirmado.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin `UPDATE` nuevo. Post de Aceite
+  de Oliva sigue pendiente de Papu (ciclo 140, 49 ciclos sin cambio).
+- `leads` en 0. **`citas` superó el umbral de 24h (35h11min sin inserción) y se insertó una
+  nueva:** antes de insertarla, descarté una cita candidata de Edison ("el médico del futuro no
+  dará medicinas...") tras confirmar con `WebSearch` que Snopes la documenta como no localizable
+  en los escritos de Edison y probablemente mal atribuida (muy citada por webs de quiropráctica
+  sin fuente primaria) — aplicando el check permanente del 187º ciclo de verificar toda cita antes
+  de insertarla. Usé en su lugar una cita de Plinio el Viejo verificada en Wikiquote con
+  referencia a fuente secundaria (*Historia Natural*, Libro VII, vía Goicoechea 1952): "En la
+  enfermedad el alma se recoge dentro de sí misma." 31 citas en la tabla tras la inserción (antes
+  30). `kimiko_drafts`: cola vacía, sin orden de Telegram este ciclo.
+- Sin commits de código este ciclo (checklist de código sin hallazgos); única escritura en
+  Supabase fue la cita diaria.
+- Ver `kimiko/bitacora/2026-09-02-0833.md`.
 - Ver `kimiko/bitacora/2026-09-02-0325.md`.
