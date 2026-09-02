@@ -34,11 +34,13 @@ export const metadata: Metadata = {
     title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
     description:
       'Tu cuerpo tiene su propia inteligencia. Planes nutricionales km0 y bienestar holístico personalizados con IA.',
+    images: [{ url: '/images/og-default.jpg', width: 1059, height: 556 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
     description: 'Tu cuerpo tiene su propia inteligencia. Descubre tu perfil holístico.',
+    images: ['/images/og-default.jpg'],
   },
   robots: {
     index: true,

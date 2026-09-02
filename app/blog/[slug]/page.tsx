@@ -17,6 +17,7 @@ interface SupabasePost {
   slug: string;
   category: string;
   created_at: string;
+  image_url?: string;
 }
 
 async function getSupabasePost(slug: string): Promise<SupabasePost | null> {
@@ -49,12 +50,17 @@ export async function generateMetadata(
   const post = supa ?? getPostBySlug(slug);
   if (!post) return {};
   const canonical = `/blog/${slug}`;
+  // Local image_url paths often point to files never uploaded to public/; only
+  // trust absolute URLs (Pollinations-generated), otherwise fall back to the
+  // site default so og:image never 404s.
+  const imageUrl = (post as SupabasePost).image_url;
+  const ogImage = imageUrl?.startsWith('http') ? imageUrl : '/images/og-default.jpg';
   return {
     title: post.title,
     description: post.excerpt,
     alternates: { canonical },
-    openGraph: { title: post.title, description: post.excerpt, url: canonical, type: 'article' },
-    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt },
+    openGraph: { title: post.title, description: post.excerpt, url: canonical, type: 'article', images: [ogImage] },
+    twitter: { card: 'summary_large_image', title: post.title, description: post.excerpt, images: [ogImage] },
   };
 }
 
