@@ -8613,3 +8613,21 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Supabase fue la cita diaria.
 - Ver `kimiko/bitacora/2026-09-02-0833.md`.
 - Ver `kimiko/bitacora/2026-09-02-0325.md`.
+
+### Cierre 2026-09-02 (ciclo 16:11 UTC, 195º, MODO CICLO)
+- Build/lint limpios. `npm audit`: 9 vulnerabilidades sin cambio desde el 185º.
+  8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena completa verificada (308 +
+  307 + 200), `middleware.ts` en la raíz, canonical/`og:url`/sitemap (85 `<loc>`)/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto), por lo que
+  no repetí la auditoría visual completa. 23 publicada+verificada, 9 peligrosas confirmadas
+  `publicada=false`, `lavanda` sigue despublicada, duplicado `equinacea`/`echinacea`
+  reconfirmado.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin `UPDATE` nuevo. Post de Aceite
+  de Oliva sigue pendiente de Papu (ciclo 140, 50 ciclos sin cambio).
+- `leads` en 0. `citas`: última inserción hace 7h36min, por debajo del umbral de 24h, sin
+  inserción nueva este ciclo (31 filas sin cambio). `kimiko_drafts`: cola vacía, sin orden de
+  Telegram este ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
+  fin, octavo ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
+- Ver `kimiko/bitacora/2026-09-02-1611.md`.
