@@ -8716,3 +8716,28 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
   fin, séptimo ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
 - Ver `kimiko/bitacora/2026-09-03-0326.md`.
+
+### Cierre 2026-09-03 (ciclo 08:41 UTC, 198º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`: 9
+  vulnerabilidades sin cambio desde el 185º. 8/8 rutas del checklist en 200, `/admin` →
+  `/login` (307), `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap (85
+  `<loc>`)/robots correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto) → no
+  repetí la auditoría visual completa. `blog_posts`: 109 filas (79/22/8), sin `UPDATE`
+  nuevo; comprobé igualmente duplicados de título entre los 22 publicados (ninguno) y
+  verifiqué en vivo el SEO completo (title/description/canonical/og:image) de un post al
+  azar — sin hallazgos.
+- **`citas` cruzó por primera vez el umbral de 24h sin inserción nueva** (última:
+  2026-09-02T08:35:24 UTC, ~24h06min al cierre de este ciclo, frente a 13h58min en el
+  196º). No es un fallo técnico — no hay endpoint roto ni error en logs, solo ausencia de
+  reservas nuevas — así que no lo trato como hallazgo a arreglar, pero lo anoto para
+  Kristian como observación de negocio (Paso 2.5, sin tocar el funnel). **Check
+  permanente: cuando `citas` (o cualquier tabla de conversión) cruce un umbral de
+  inactividad por primera vez tras ciclos por debajo de él, decirlo explícitamente en la
+  bitácora con el delta exacto, no solo repetir "sin inserción nueva" — el cruce del
+  umbral es la señal, no el conteo en sí.**
+- `leads` en 0. `kimiko_drafts`: cola vacía, sin filas colgadas en `en_curso`, sin orden
+  de Telegram este ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de
+  principio a fin, octavo ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
+- Ver `kimiko/bitacora/2026-09-03-0841.md`.
