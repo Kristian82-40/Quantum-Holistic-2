@@ -8859,4 +8859,61 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   filas colgadas en `en_curso`, sin orden de Telegram este ciclo.
 - Sin commits de código ni escritura en Supabase este ciclo — el hallazgo de
   hoy es metodológico (fiabilidad de `updated_at`), no un bug en producción.
+
+## 2026-09-03 22:36 UTC — `citas` (frases célebres) llevaba 3 ciclos sin la
+## cita diaria por confundirla con el funnel de reservas del Paso 5 (201º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **La tabla `citas` no tiene nada que ver con reservas de terapia ni con el
+  funnel de pago del Paso 2.5/5 — son citas/frases célebres de dominio público
+  sobre salud y bienestar que se muestran en el sitio.** Hay una práctica
+  autoimpuesta y documentada desde hace decenas de ciclos (explícita al menos
+  desde el 184º-187º): cuando pasan 24h sin una fila nueva, busco una cita
+  verificable de dominio público, sin lenguaje de curación ni pseudociencia,
+  verifico el texto exacto con `WebSearch` si no hay certeza alta ("suena a
+  algo que dijo X" no es verificación, regla del 186º), y la inserto. El 198º
+  ciclo cruzó el umbral de 24h por primera vez y, en lugar de aplicar esa
+  práctica, lo registró como "observación de negocio... Paso 2.5, sin tocar
+  el funnel" — leyendo el nombre de la tabla como si fuera el funnel de
+  citas/reservas protegido por el límite del Paso 5. Los ciclos 199º y 200º
+  copiaron esa lectura sin volver a comprobar qué contiene realmente la
+  tabla, así que la cita diaria quedó sin insertarse ~62h en total (3 ciclos)
+  antes de que este ciclo lo detectara. **Check permanente: antes de aplicar
+  un límite del Paso 5 (o cualquier regla de "no tocar X") a una tabla o
+  entidad por su nombre, confirmar qué contiene de verdad — columnas, unas
+  pocas filas — en vez de asumir por la palabra. En español "citas" es
+  ambiguo (reservas vs. frases célebres) y ya ha causado una desviación real
+  de comportamiento.**
+- Corregido: cita nueva insertada tras descartar un candidato de Séneca sin
+  fuente primaria verificable (parece ser de Rabelais, tampoco confirmado con
+  certeza alta) y verificar en su lugar Proverbios 4:22 (Reina-Valera) contra
+  varias fuentes independientes. 32 citas en la tabla tras la inserción (antes
+  31). Detalle completo en `kimiko/bitacora/2026-09-03-2236.md`.
+
+### Cierre 2026-09-03 (ciclo 22:36 UTC, 201º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm ci`
+  limpio. **`npm audit` no completó este ciclo** — colgado sin salida ni error
+  en tres intentos (dos en foreground con timeout, uno en background matado
+  tras varios minutos), pese a que `registry.npmjs.org` respondía 200 normal
+  por `curl`. No bloqueante (build/lint funcionan), pero no puedo confirmar
+  si las 9 vulnerabilidades conocidas siguen iguales — anotado como duda
+  abierta para Kristian, a vigilar si se repite. 8/8 rutas del checklist en
+  200, `/admin` → `/login` con la cadena completa verificada (308 + 307 +
+  200), `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap (85
+  `<loc>`)/robots correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at`
+  exacto) → no repetí la auditoría visual completa. 23 publicada+verificada, 9
+  peligrosas confirmadas `publicada=false`, `lavanda` sigue despublicada,
+  duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 109 filas (79/22/8), sin cambio de conteo. Chequeos baratos
+  repetidos sin condicionarlos a `updated_at` (regla del 200º): sin
+  duplicados de título, ninguno >60 car., los 22 publicados con `excerpt`
+  presente y ≤155 car. Único slug de diccionario enlazado sigue siendo
+  `hinojo` (200 en vivo). QA SEO en vivo de un post al azar sin hallazgos.
+- `leads` en 0. `citas`: hallazgo del ciclo (ver arriba) — cita diaria
+  insertada tras 3 ciclos sin ella por el malentendido corregido. 32 filas
+  tras la inserción. `kimiko_drafts`: cola vacía, sin filas colgadas en
+  `en_curso`, sin orden de Telegram este ciclo.
+- Sin commits de código este ciclo; única escritura en Supabase fue la cita
+  diaria en `citas`, verificada en vivo (conteo 31→32).
 - Ver `kimiko/bitacora/2026-09-03-1917.md`.
