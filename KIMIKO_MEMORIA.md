@@ -8740,4 +8740,69 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   de Telegram este ciclo.
 - Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de
   principio a fin, octavo ciclo seguido sin hallazgos nuevos tras el incidente del 189º.
+
+## 2026-09-03 16:02 UTC — Ciclo: enlace interno roto a `lavanda` en 2 posts del
+## blog, consecuencia no detectada durante 8 ciclos de la despublicación del 190º
+## (199º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Cuando una fila de `plants` cambia de `publicada=true` a `false` (por mí o,
+  como aquí, por acción humana directa fuera de mi control), cualquier enlace
+  interno ya insertado en `blog_posts.content` que apunte a esa ficha se rompe en
+  silencio, y ningún check existente lo cubre.** El 186º ciclo añadió 5 enlaces
+  `<a href="/diccionario/{slug}/">` a mano tras confirmar que las plantas
+  destino estaban publicada+verificada en ese momento. El 190º despublicó
+  `lavanda` (evento externo, documentado como "resuelto sin mi intervención", sin
+  relacionarlo con los enlaces). Desde entonces, el check de `plants` no repite
+  auditoría si `updated_at` no cambia, y el check de `blog_posts` tampoco repite el
+  barrido de enlaces internos en las mismas condiciones — ninguno de los dos
+  detecta que un cambio de estado en una tabla invalidó contenido ya publicado en
+  la otra. Lo encontré por accidente, comprobando en vivo el destino de un
+  enlace al hacer QA de un post al azar, no por un check sistemático. **Check
+  permanente: en cada ciclo (incluso sin `UPDATE` nuevo en `plants`), extraer con
+  regex todos los slugs `/diccionario/{slug}/` referenciados en el `content` de los
+  posts publicados y confirmar con una sola consulta que cada uno sigue
+  `publicada=true` — es barato (una query) y es la única forma de detectar esta
+  clase de rotura entre tablas.**
+- **Al des-enlazar un enlace interno roto, quitar solo el `<a href>` y dejar el
+  anchor text tal cual, sin sustituirlo por otra planta que sí esté publicada
+  aunque se mencione cerca en el mismo párrafo.** En `el-sueno-como-medicina-...`
+  el texto también menciona "valeriana" y "manzanilla" junto a "lavanda"; redirigir
+  el enlace a cualquiera de esas habría dejado un anchor text ("lavanda") apuntando
+  a una ficha distinta — peor que no tener enlace. Reafirma el check ya existente
+  del 186º ("no forzar enlaces en posts que no mencionan la planta destino") en su
+  forma inversa: tampoco forzar un enlace *distinto* al que el anchor text nombra.
+
+### Cambios aplicados y verificados
+- **2 `UPDATE` en `blog_posts.content`** (sin cambio de código, sin redeploy):
+  quitado `<a href="/diccionario/lavanda/">lavanda</a>` → `lavanda` en
+  `aromaterapia-y-aceites-esenciales-terapeuticos-1780097914` e
+  `el-sueno-como-medicina-higiene-del-sueno-y-ritmos-circadiano-1780097277`.
+  Verificado en vivo tras esperar el TTL de 300s del data cache de Next.js
+  (`revalidate: 300`): ambos posts sirven ya el texto plano, sin `<a>` roto.
+  Barrido completo de los 22 posts publicados confirma que el único slug de
+  diccionario enlazado ahora es `hinojo` (200, vivo), y que ninguna de las 9
+  plantas peligrosas aparece enlazada en contenido publicado.
+
+### Cierre 2026-09-03 (ciclo 16:02 UTC, 199º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit`: 9 vulnerabilidades sin cambio
+  desde el 185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa verificada (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto)
+  → no repetí la auditoría visual completa. 23 publicada+verificada, 9 peligrosas
+  confirmadas `publicada=false`, `lavanda` sigue despublicada (imagen ausente
+  confirmada, no la reactivo), duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 109 filas (79/22/8), sin `UPDATE` nuevo salvo el fix de este ciclo.
+  Sin duplicados de título. Hallazgo del ciclo: enlace roto a `lavanda` en 2 posts,
+  corregido (ver arriba).
+- `leads` en 0. `citas`: última inserción 2026-09-02T08:35:24 UTC, ~31h27min sin
+  inserción nueva al cierre — sigue creciendo desde el cruce de umbral del 198º
+  (24h06min). Observación de negocio, sin tocar el funnel. `kimiko_drafts`: cola
+  vacía, sin filas colgadas en `en_curso`, sin orden de Telegram este ciclo.
+- Sin commit de código este ciclo; única escritura fue el `UPDATE` de contenido en
+  Supabase descrito arriba, verificado en vivo.
+- Ver `kimiko/bitacora/2026-09-03-1602.md`.
+- Ver `kimiko/bitacora/2026-09-03-0841.md`.
 - Ver `kimiko/bitacora/2026-09-03-0841.md`.
