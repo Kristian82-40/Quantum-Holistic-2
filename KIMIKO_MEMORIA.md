@@ -8805,4 +8805,58 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Supabase descrito arriba, verificado en vivo.
 - Ver `kimiko/bitacora/2026-09-03-1602.md`.
 - Ver `kimiko/bitacora/2026-09-03-0841.md`.
-- Ver `kimiko/bitacora/2026-09-03-0841.md`.
+
+## 2026-09-03 19:17 UTC — `blog_posts.updated_at` no se actualiza en `UPDATE`
+## vía REST: la regla "sin `UPDATE` nuevo → no repetir auditoría" es poco fiable
+## (200º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **`blog_posts` no tiene trigger que mantenga `updated_at` al día en escrituras
+  vía Supabase REST.** Lo descubrí comprobando que el fix del 199º (quitar el
+  `<a href="/diccionario/lavanda/">` de 2 posts) seguía vivo: el `content`
+  reflejaba el cambio, pero `updated_at` de ambas filas seguía en
+  `2026-05-30T06:38:08`, la fecha original del post, sin rastro del `UPDATE`
+  del 199º. Desde el 189º he venido usando "`updated_at` máximo sin cambio →
+  no repetir auditoría completa de `blog_posts`" para ahorrar trabajo en
+  ciclos sin novedad — pero esa regla asume que toda escritura mueve
+  `updated_at`, y queda demostrado que no es así al menos para `UPDATE`s
+  hechos directamente vía REST (los míos, y probablemente cualquiera que no
+  pase por una ruta de la app que lo setee a mano). **Check permanente: no
+  usar `updated_at` como único proxy de "nada ha cambiado" en `blog_posts` (ni
+  en ninguna tabla sin trigger de `updated_at` confirmado). Los chequeos
+  baratos y deterministas — barrido de enlaces internos rotos, duplicados de
+  título, longitud de meta description — hay que repetirlos cada ciclo sin
+  condicionarlos a que `updated_at` haya cambiado; solo la auditoría visual
+  cara (comparar imagen con especie en `plants`) puede seguir limitada por
+  presupuesto de "hasta 6 por ciclo", no por esta señal.** Aplica igual a
+  `plants`: si alguna vez actualizo una fila de `plants` vía REST sin que
+  `updated_at` se mueva, la regla usada desde el 189º ("mismo `updated_at`
+  exacto → no repetir auditoría visual") tampoco sería fiable — de momento no
+  hay evidencia de que `plants` tenga el mismo problema (no le he hecho ningún
+  `UPDATE` de contenido desde el 189º para comprobarlo), pero queda como duda
+  abierta, no como hecho confirmado.
+
+### Cierre 2026-09-03 (ciclo 19:17 UTC, 200º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`: 9
+  vulnerabilidades sin cambio desde el 185º. 8/8 rutas del checklist en 200,
+  `/admin` → `/login` con la cadena completa verificada (308 + 307 + 200),
+  `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap (85
+  `<loc>`)/robots correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, sin `UPDATE` nuevo desde el 189º (mismo `updated_at` exacto)
+  → no repetí la auditoría visual completa. 23 publicada+verificada, 9
+  peligrosas confirmadas `publicada=false`, `lavanda` sigue despublicada,
+  duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 109 filas (79/22/8). Descubrí que `updated_at` no refleja el
+  `UPDATE` del 199º (ver cicatriz arriba) — de aquí en adelante repito los
+  chequeos baratos cada ciclo sin condicionarlos a `updated_at`. Barrido
+  completo de enlaces internos: único slug enlazado es `hinojo`
+  (publicada+verificada, 200 en vivo), fix del 199º a `lavanda` sigue vivo
+  verificado directamente en el `content`. Sin duplicados de título, sin
+  títulos >60 car. QA SEO en vivo de un post al azar sin hallazgos.
+- `leads` en 0. `citas`: última inserción 2026-09-02T08:35:24 UTC, ~34h41min sin
+  inserción nueva al cierre, sigue creciendo desde el cruce de umbral del 198º.
+  Observación de negocio, sin tocar el funnel. `kimiko_drafts`: cola vacía, sin
+  filas colgadas en `en_curso`, sin orden de Telegram este ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — el hallazgo de
+  hoy es metodológico (fiabilidad de `updated_at`), no un bug en producción.
+- Ver `kimiko/bitacora/2026-09-03-1917.md`.
