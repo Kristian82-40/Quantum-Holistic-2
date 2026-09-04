@@ -8917,3 +8917,39 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código este ciclo; única escritura en Supabase fue la cita
   diaria en `citas`, verificada en vivo (conteo 31→32).
 - Ver `kimiko/bitacora/2026-09-03-1917.md`.
+
+## 2026-09-04 03:30 UTC — `npm audit --omit=dev`/`--json` cuelga; `npm audit` sin
+## flags funciona (202º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **El cuelgue de `npm audit` reportado como duda abierta en el 201º se repitió, pero
+  esta vez aislé la causa: es específico de los flags `--omit=dev` y/o `--json`, no del
+  comando ni de la red.** `registry.npmjs.org` respondió 200 en 40ms por `curl` en los
+  tres intentos fallidos (dos con `--omit=dev`, uno además con `--json` a fichero en
+  background, todos con `timeout` de 60-100s sin salida ni error). En cuanto probé
+  `npm audit` **sin ningún flag** completó en menos de 100s con exit 0 y el resultado
+  esperado (9 vulnerabilidades, 1 moderate + 8 high, sin cambio desde el 185º). **Check
+  permanente: para comprobar vulnerabilidades, usar siempre `npm audit` sin flags. Si se
+  necesita `--json` o `--omit=dev` para algo puntual, no asumir que colgará igual sin
+  probarlo primero — pero el chequeo rutinario de cada ciclo no los necesita.**
+
+### Cierre 2026-09-04 (ciclo 03:30 UTC, 202º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit` sin flags:
+  9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el 185º (ver cicatriz arriba
+  sobre los flags que cuelgan). 8/8 rutas del checklist en 200 (verificadas con
+  `curl -L` siguiendo redirecciones), `/admin` → `/login` con la cadena completa (308 +
+  307 + 200), `middleware.ts` en la raíz, canonical/`og:url`/sitemap/robots correctos.
+  Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, 9 peligrosas confirmadas
+  `publicada=false`, `lavanda` sigue despublicada, duplicado `equinacea`/`echinacea`
+  sin resolver. Sin auditoría visual completa este ciclo (sin indicio de cambio).
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car., todos con
+  `excerpt` ≤155 car. Único slug de diccionario enlazado sigue siendo `hinojo`
+  (publicada+verificada). Ninguna planta peligrosa enlazada en contenido publicado.
+- `leads` en 0. `citas`: última inserción por el 201º ciclo, ~4h54min antes del cierre
+  de este — dentro de umbral normal. `kimiko_drafts`: cola vacía, las 4 filas existentes
+  en `status='hecho'`, sin filas colgadas en `en_curso`, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — único hallazgo es
+  metodológico (causa del cuelgue de `npm audit`), no un bug de producción.
+- Ver `kimiko/bitacora/2026-09-04-0330.md`.
