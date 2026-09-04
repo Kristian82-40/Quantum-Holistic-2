@@ -8953,3 +8953,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escritura en Supabase este ciclo — único hallazgo es
   metodológico (causa del cuelgue de `npm audit`), no un bug de producción.
 - Ver `kimiko/bitacora/2026-09-04-0330.md`.
+
+### Cierre 2026-09-04 (ciclo 15:58 UTC, 203º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit` (sin flags): 9
+  vulnerabilidades (1 moderate, 8 high) sin cambio desde el 185º. 8/8 rutas del checklist en 200,
+  `/admin` → `/login` con la cadena completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/sitemap (85 `<loc>`)/robots correctos. Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, 9 peligrosas confirmadas `publicada=false`.
+  Reconfirmé a mano que no existe ningún fichero `lavanda*` en `public/images/plants/`, así que
+  su despublicación sigue siendo correcta. Duplicado `equinacea`/`echinacea` sin resolver (sigue
+  fuera de mi alcance: implica borrar/fusionar una fila). Sin auditoría visual completa este
+  ciclo (sin indicio de cambio).
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car., todos con `excerpt`
+  ≤155 car. Único slug de diccionario enlazado sigue siendo `hinojo` (publicada+verificada).
+  Ninguna planta peligrosa enlazada en contenido publicado.
+- `leads` en 0. `citas`: última inserción por el 201º ciclo, ~17h22min antes del cierre de este —
+  dentro de umbral normal, sin acción necesaria. `kimiko_drafts`: cola vacía, las 4 filas
+  existentes en `status='hecho'`, sin filas colgadas en `en_curso`, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
+  fin, sin hallazgos nuevos respecto al 202º.
+- Ver `kimiko/bitacora/2026-09-04-1558.md`.
