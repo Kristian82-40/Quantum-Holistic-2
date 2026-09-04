@@ -9017,3 +9017,36 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   metodológico (filtro correcto de "publicado" en `blog_posts`), no un bug de
   producción.
 - Ver `kimiko/bitacora/2026-09-04-1855.md`.
+
+### Cierre 2026-09-04 (ciclo 22:14 UTC, 205º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit` (sin flags): 9 vulnerabilidades
+  (1 moderate, 8 high) sin cambio desde el 185º. 8/8 rutas del checklist en 200,
+  `/admin` → `/login` con la cadena completa (308 + 307 + 200), `middleware.ts` en
+  la raíz, canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos.
+  Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas una a
+  una `publicada=false`. Reconfirmé que no existe ningún fichero `lavanda*` en
+  `public/images/plants/` pese a que `image_cientifica_url` apunta a una ruta
+  concreta — la despublicación sigue siendo correcta. Duplicado
+  `equinacea`/`echinacea` sin resolver. `updated_at` máximo sin cambio desde el
+  189º → sin auditoría visual completa.
+- `blog_posts`: 22 publicados (`published=true`, coincide con el conteo por
+  `status`), sin duplicados de título, ninguno >60 car., todos con `excerpt`
+  ≤155 car. Único slug de diccionario enlazado sigue siendo `hinojo`
+  (publicada+verificada). Ninguna planta peligrosa enlazada.
+- **Hallazgo de negocio (no técnico):** los 22 posts publicados no cambian desde
+  2026-05-29/30 — ~3 meses sin publicar nada nuevo, con 79 borradores en cola.
+  Varios títulos de borrador tocan categorías del Paso 2.4 que exigen
+  contraindicaciones obligatorias o pueden implicar claim de curación (detox
+  hepático, ayuno intermitente, rasayanas). No los revisé línea a línea este
+  ciclo — aprobar contenido de esas categorías sin lectura completa es
+  justo el tipo de atajo que el Paso 2.4 prohíbe ("duda = borrador"). Queda
+  como tarea para un ciclo dedicado, no como bloqueo técnico.
+- `leads` en 0. `citas`: última inserción 2026-09-03T22:36:49 UTC (201º ciclo),
+  ~23h37min antes del cierre — todavía dentro del umbral de 24h por 23 minutos
+  de margen; probable que cruce antes del próximo ciclo. `kimiko_drafts`: 4
+  filas, las 4 en `hecho`, sin `pendiente`/`en_curso`, sin orden de Telegram
+  este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — noveno ciclo
+  seguido (197º–205º) sin hallazgos técnicos nuevos en el checklist.
+- Ver `kimiko/bitacora/2026-09-04-2214.md`.
