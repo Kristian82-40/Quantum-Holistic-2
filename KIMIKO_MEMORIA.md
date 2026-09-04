@@ -8974,3 +8974,46 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escritura en Supabase este ciclo — checklist limpio de principio a
   fin, sin hallazgos nuevos respecto al 202º.
 - Ver `kimiko/bitacora/2026-09-04-1558.md`.
+
+## 2026-09-04 18:55 UTC — `blog_posts.status` no usa "publicado" como valor; el
+## campo que marca "en vivo" es el booleano `published` (204º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **La columna `status` de `blog_posts` es un enum en inglés (`draft` / `published` /
+  `rejected`), no en español, y no es la fuente de verdad de "está en vivo en el
+  sitio": esa es la columna booleana `published`.** Filtré primero por
+  `status=eq.publicado` (calcando el vocabulario del Paso 2.3 en español) y obtuve
+  0 filas — un falso "no hay posts publicados" que habría hecho inútil todo el
+  chequeo de SEO del ciclo si no lo hubiera notado. Al inspeccionar una fila
+  completa con `select=*` vi que `status` usa valores en inglés y que existe además
+  `published` (boolean), que es el que coincide con el conteo real (22, igual que
+  ciclos anteriores). **Check permanente: para filtrar posts "en vivo" en
+  `blog_posts`, usar siempre `published=eq.true`, nunca adivinar el valor de
+  `status` por el nombre en español del concepto. Si una consulta a cualquier tabla
+  devuelve 0 filas donde se esperaba un número conocido de ciclos previos, tratarlo
+  como señal de filtro incorrecto y verificar el esquema con `select=*&limit=1`
+  antes de concluir que el dato desapareció.**
+
+### Cierre 2026-09-04 (ciclo 18:55 UTC, 204º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit` (sin flags): 9 vulnerabilidades
+  (1 moderate, 8 high) sin cambio desde el 185º; fix solo vía `--force` (breaking:
+  next@16), no aplicado sin validación de Kristian. 8/8 rutas del checklist en 200,
+  `/admin` → `/login` con la cadena completa (308 + 307 + 200), `middleware.ts` en
+  la raíz, canonical/`og:url`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas una a
+  una `publicada=false`, `lavanda` sigue despublicada, duplicado
+  `equinacea`/`echinacea` sin resolver. `updated_at` máximo sin cambio desde el
+  189º → sin auditoría visual completa este ciclo.
+- `blog_posts`: 22 publicados (`published=true`; ver cicatriz arriba sobre el
+  filtro correcto), sin duplicados de título, ninguno >60 car., todos con
+  `excerpt` ≤155 car. Único slug de diccionario enlazado sigue siendo `hinojo`
+  (publicada+verificada). Ninguna planta peligrosa enlazada en contenido
+  publicado.
+- `leads` en 0. `citas`: última inserción por el 201º ciclo, ~20h18min antes del
+  cierre de este — dentro de umbral normal, sin acción necesaria. `kimiko_drafts`:
+  cola vacía, sin filas colgadas en `en_curso`, sin orden de Telegram este ciclo.
+- Sin commits de código ni escritura en Supabase este ciclo — único hallazgo es
+  metodológico (filtro correcto de "publicado" en `blog_posts`), no un bug de
+  producción.
+- Ver `kimiko/bitacora/2026-09-04-1855.md`.
