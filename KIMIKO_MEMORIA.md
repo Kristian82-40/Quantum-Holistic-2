@@ -9182,3 +9182,56 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   limpio, duodécimo ciclo consecutivo (197º–208º) sin hallazgos técnicos
   nuevos en el checklist, pero con un hallazgo real de calidad de contenido.
 - Ver `kimiko/bitacora/2026-09-05-0812.md`.
+
+## 2026-09-05 18:01 UTC — el backlog de blog no es una cola de "casi listos":
+## ≈80% de los títulos únicos duplican el tema de un post ya publicado bajo
+## otro título (209º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- El 208º dejó anotado, para un solo candidato, que hay que cruzar tema
+  contra publicados antes de calificar un borrador como publicable. Este
+  ciclo apliqué ese cruce **en bloque** a los 46 títulos únicos con
+  contenido real del backlog (de 79 `draft` + 8 `rejected`), en vez de
+  candidato a candidato, y el resultado cambia la naturaleza del problema:
+  **≈37 de los 46 (≈80%) son el mismo tema que un post ya publicado**, solo
+  con título/framing distinto — en un caso ("Microbiota Intestinal: Cómo
+  Cuidar tu Segundo Cerebro") duplica *tres* posts publicados a la vez. De
+  los ≈9 títulos que sí son tema nuevo, revisé a fondo los tres más
+  prometedores (sin categoría prohibida ni claim de curación en el título) y
+  los tres fallan: dos variantes de "Acupuntura y Auriculoterapia" afirman
+  que la técnica trata Alzheimer, Parkinson y accidente cerebrovascular
+  (claim de curación sobre enfermedad grave, no matizable) y citan fuentes
+  vagas no verificables, además de superar el límite de título (84 y 71
+  car.); "Los Rasayanas Ayurvédicos" supera el límite de título (72 car.)
+  antes de llegar siquiera al filtro de contenido. **Check permanente: antes
+  de revisar el backlog de blog línea a línea, cruzar TODOS los títulos
+  únicos con contenido real contra los ya publicados de una sola vez (no
+  uno a uno según se van revisando) — el pipeline que generó el backlog
+  repite el mismo puñado de temas con títulos distintos, así que ese cruce
+  en bloque descarta la mayoría del trabajo antes de leer un solo párrafo de
+  contenido.**
+- No publiqué nada este ciclo. Detalle completo en
+  `kimiko/bitacora/2026-09-05-1801.md`.
+
+### Cierre 2026-09-05 (ciclo 18:01 UTC, 209º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas
+  `publicada=false`. `updated_at` máximo sin cambio desde el 189º → sin
+  auditoría visual completa. Duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car.,
+  todos con `excerpt` ≤155 car. Único slug de diccionario enlazado sigue
+  siendo `hinojo`. Backlog de borradores auditado en bloque por primera vez
+  — ver cicatriz arriba. Sigue sin publicarse nada nuevo.
+- `leads` en 0. `citas`: última inserción del 206º ciclo, ~14h32min antes del
+  cierre — dentro del umbral normal, sin acción necesaria. `kimiko_drafts`:
+  cola vacía, sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — decimotercer
+  ciclo consecutivo (197º–209º) sin hallazgos técnicos nuevos en el
+  checklist, pero con un hallazgo de fondo sobre la naturaleza del backlog
+  de contenido.
+- Ver `kimiko/bitacora/2026-09-05-1801.md`.
