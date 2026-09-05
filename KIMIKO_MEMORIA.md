@@ -9050,3 +9050,55 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escrituras en Supabase este ciclo — noveno ciclo
   seguido (197º–205º) sin hallazgos técnicos nuevos en el checklist.
 - Ver `kimiko/bitacora/2026-09-04-2214.md`.
+
+## 2026-09-05 03:30 UTC — el backlog de 79 borradores de blog no es solo "sin
+## revisar": 32 son fragmentos rotos y el resto casi todo cae en categorías
+## sensibles del Paso 2.4 (206º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **Un recuento de filas en `blog_posts` con `status='draft'` no dice nada sobre
+  si esas filas son borradores publicables.** El 205º dejó anotado "79 borradores
+  en cola" como una cifra homogénea. Al entrar al contenido real (`select=*`,
+  no solo `title`), 32 de las 79 resultaron ser fragmentos rotos — una sola
+  frase suelta como `content`, sin `excerpt`, `tags=null` — más varias filas
+  literalmente de prueba (`Test agente nocturno`, `test final` ×2). De los 47
+  restantes con contenido real, 18 títulos están duplicados (hasta 4 copias de
+  la misma pieza), y casi todos los títulos únicos que quedan tocan justo las
+  categorías del Paso 2.4 que exigen contraindicaciones obligatorias (ayuno,
+  adaptógenos, rasayanas, detox hepático) o usan lenguaje de claim de curación
+  directamente en el título ("El Poder Curativo de...", "...para Sanar el
+  Cuerpo"). **Check permanente: antes de calificar cualquier acumulación de
+  filas como "pendiente de revisión" (borradores, leads, tickets), mirar el
+  contenido real de una muestra representativa, no solo el recuento — un
+  conteo puede esconder basura estructural (fragmentos rotos, duplicados,
+  pruebas) que cambia la naturaleza de la tarea de "revisar" a "depurar antes
+  de revisar".**
+- No publiqué nada este ciclo — ningún borrador calificó como limpio sin lectura
+  línea a línea completa, y resolver los duplicados exige elegir una versión
+  canónica antes de que valga la pena aplicar el filtro de contenido. Detalle
+  completo en `kimiko/bitacora/2026-09-05-0330.md`.
+
+### Cierre 2026-09-05 (ciclo 03:30 UTC, 206º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas
+  `publicada=false`, `lavanda` sigue despublicada, duplicado
+  `equinacea`/`echinacea` sin resolver. `updated_at` máximo sin cambio desde el
+  189º → sin auditoría visual completa.
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car.,
+  todos con `excerpt` ≤155 car. Único slug de diccionario enlazado sigue
+  siendo `hinojo`. Backlog de 79 borradores investigado a fondo por primera
+  vez — ver cicatriz arriba. Sigue sin publicarse nada nuevo.
+- `leads` en 0. `citas`: última inserción del 201º ciclo llevaba ~28h51min al
+  cierre, cruzando el umbral de 24h — cita nueva insertada tras verificar con
+  `WebSearch` la Constitución de la OMS (1946/1948, dominio público, sin
+  lenguaje de curación). 33 filas tras la inserción (antes 32). `kimiko_drafts`:
+  cola vacía, las 4 filas existentes en `hecho`, sin orden de Telegram este
+  ciclo.
+- Única escritura en Supabase este ciclo fue la cita diaria en `citas`,
+  verificada en vivo (32→33). Sin commits de código.
+- Ver `kimiko/bitacora/2026-09-05-0330.md`.
