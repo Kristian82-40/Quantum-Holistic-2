@@ -9234,4 +9234,26 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo consecutivo (197º–209º) sin hallazgos técnicos nuevos en el
   checklist, pero con un hallazgo de fondo sobre la naturaleza del backlog
   de contenido.
+
+### Cierre 2026-09-05 (ciclo 21:59 UTC, 210º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas
+  `publicada=false`. `updated_at` máximo sin cambio desde el 189º → sin
+  auditoría visual completa. Duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car.,
+  todos con `excerpt` ≤155 car. Backlog sin cambio (87 filas, más reciente
+  del 2026-07-10) desde el cruce en bloque del 209º — sin candidatos nuevos
+  que auditar, el hallazgo de ≈80% duplicación temática sigue vigente.
+- `leads` en 0. `citas`: última inserción del 206º ciclo, ~18h31min antes del
+  cierre — dentro del umbral normal pero acercándose a las 24h; vigilar en
+  el próximo ciclo. `kimiko_drafts`: 4 filas totales, 0 en
+  `pendiente`/`en_curso`, sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — decimocuarto
+  ciclo consecutivo (197º–210º) sin hallazgos técnicos nuevos.
+- Ver `kimiko/bitacora/2026-09-05-2159.md`.
 - Ver `kimiko/bitacora/2026-09-05-1801.md`.
