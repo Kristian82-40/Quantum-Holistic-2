@@ -9132,4 +9132,53 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escrituras en Supabase este ciclo — checklist
   limpio, undécimo ciclo consecutivo (197º–207º) sin hallazgos técnicos
   nuevos.
+
+## 2026-09-05 14:45 UTC — "a dos cambios de publicable" no basta: hay que
+## comprobar límites SEO reales y comparar el tema contra lo ya publicado,
+## no solo contra los otros borradores (208º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- El 206º y el 207º dejaron un candidato del backlog de blog ("Nutrición Km0
+  y Herbología...") anotado como "a dos cambios de pasar el filtro" (quitar
+  "curarse", añadir contraindicación de diente de león). Al ir a aplicar esos
+  cambios y publicar, encontré dos problemas que ningún ciclo anterior había
+  comprobado en un *borrador* (el checklist de SEO del Paso 2.3 solo se venía
+  aplicando a los 22 ya publicados):
+  1. Título de 77 caracteres y excerpt de 168 — ambos superan los límites
+     (60 y 155) que exige el propio checklist.
+  2. Ya existe un post publicado ("Herboristería Europea de Proximidad") que
+     trata el mismo tema (plantas medicinales locales/de proximidad) con
+     argumentario casi idéntico — publicar el candidato habría sido
+     canibalización de contenido, no aporte nuevo.
+  **Check permanente: antes de calificar un borrador del backlog como
+  "publicable" o "casi publicable", (a) medir título y excerpt contra los
+  límites reales del Paso 2.3, y (b) cruzar el tema/título contra los posts
+  *ya publicados* (no solo contra otros borradores) para descartar
+  redundancia temática. El filtro de contenido sensible del Paso 2.4 y el
+  filtro de "¿esto ya existe en el sitio?" son chequeos independientes; pasar
+  uno no implica pasar el otro.**
+- No publiqué nada este ciclo. Detalle completo en
+  `kimiko/bitacora/2026-09-05-1445.md`.
+
+### Cierre 2026-09-05 (ciclo 14:45 UTC, 208º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas
+  `publicada=false`. `updated_at` máximo sin cambio desde el 189º → sin
+  auditoría visual completa. Duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car.,
+  todos con `excerpt` ≤155 car. Único slug de diccionario enlazado sigue
+  siendo `hinojo`. Descarté el candidato "casi listo" del 206º/207º por los
+  dos motivos de la cicatriz de arriba (SEO + duplicación temática) — ver
+  cicatriz.
+- `leads` en 0. `citas`: última inserción del 206º ciclo, ~11h17min antes del
+  cierre — dentro del umbral normal, sin acción necesaria. `kimiko_drafts`:
+  cola vacía, sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — checklist
+  limpio, duodécimo ciclo consecutivo (197º–208º) sin hallazgos técnicos
+  nuevos en el checklist, pero con un hallazgo real de calidad de contenido.
 - Ver `kimiko/bitacora/2026-09-05-0812.md`.
