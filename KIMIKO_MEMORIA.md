@@ -9102,3 +9102,34 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Única escritura en Supabase este ciclo fue la cita diaria en `citas`,
   verificada en vivo (32→33). Sin commits de código.
 - Ver `kimiko/bitacora/2026-09-05-0330.md`.
+
+### Cierre 2026-09-05 (ciclo 08:12 UTC, 207º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (308 + 307 + 200), `middleware.ts` en la raíz,
+  canonical/`og:url`/`og:image`/sitemap (85 `<loc>`)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 23 publicada+verificada, las 9 peligrosas confirmadas
+  `publicada=false`. `updated_at` máximo sin cambio desde el 189º → sin
+  auditoría visual completa. Duplicado `equinacea`/`echinacea` sin resolver.
+- `blog_posts`: 22 publicados, sin duplicados de título, ninguno >60 car.,
+  todos con `excerpt` ≤155 car. Único slug de diccionario enlazado sigue
+  siendo `hinojo`. Retomé el backlog de borradores del 206º y filtré por
+  contenido real + títulos únicos (25 candidatos de 79). Leí a fondo el más
+  prometedor (`nutricion-km0-herbologia-plantas-medicinales-de-proximidad-1783698312`,
+  único título sin claim de curación ni categoría sensible ya en el título) y
+  encontré que usa el verbo "curarse" en excerpt/cierre (claim de curación
+  aunque en tono de "alimento como medicina") y describe apoyo hepático del
+  diente de león sin la contraindicación específica de cálculos biliares. No
+  lo publiqué — "duda = borrador" — pero dejé anotados los dos cambios
+  exactos que le faltan, en vez de repetir que "el backlog está sucio". Los
+  otros 24 candidatos no se revisaron línea a línea (la mayoría ya toca en el
+  título categorías sensibles o claim directo).
+- `leads` en 0. `citas`: última inserción del 206º ciclo, ~4h44min antes del
+  cierre — dentro del umbral normal, sin acción necesaria. `kimiko_drafts`:
+  cola vacía, sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — checklist
+  limpio, undécimo ciclo consecutivo (197º–207º) sin hallazgos técnicos
+  nuevos.
+- Ver `kimiko/bitacora/2026-09-05-0812.md`.
