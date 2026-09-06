@@ -9431,3 +9431,46 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escrituras en Supabase este ciclo — tercer ciclo
   consecutivo (212º-214º) sin hallazgos técnicos nuevos.
 - Ver `kimiko/bitacora/2026-09-06-1805.md`.
+
+### Cierre 2026-09-06 (ciclo 22:03 UTC, 215º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200 tras seguir redirects (308 de
+  trailing-slash/locale antes del 200 final, esperado), `/admin` → `/login`
+  con la cadena completa, `middleware.ts` en la raíz, canonical/`og:url`/
+  `og:image`/sitemap (37 `<loc>`, sin cambio)/robots correctos. Vercel:
+  últimos 5 despliegues (`quantum-holistic-2` y `kimiko`) `READY`.
+- Cuarta pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica`, `json.dumps(sort_keys=True)`, sobre las 52 filas):
+  exactamente los mismos 7 grupos que el 212º-214º, sin grupos nuevos.
+  `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las
+  9 peligrosas confirmadas `publicada=false`. Sin `UPDATE` de Kristian sobre
+  `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  22 publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155
+  car., todos con `image_url`, 3 enlaces internos a `/diccionario/hinojo`
+  sin enlaces rotos. Backlog sigue sin candidatos aprovechables desde el
+  cruce en bloque del 209º.
+
+### Aprendizaje (cicatriz → check permanente)
+- **El umbral de 40h para `citas` que el 214º dejó "a vigilar" se ha
+  superado por primera vez: 42h33min sin inserción nueva al cierre de este
+  ciclo, frente a un máximo histórico de 38.0h entre las 33 filas más
+  recientes.** No hay ninguna corrección de código o dato posible — es una
+  señal de negocio (caída real en el ritmo de reservas o estacionalidad de
+  fin de semana), no un bug. **Check permanente: cuando un ciclo anota "a
+  vigilar si se supera X horas" sobre una tabla de negocio, el ciclo
+  siguiente que lo compruebe debe recalcular el máximo histórico real (no
+  solo comparar contra el umbral anotado) antes de decidir si escala a
+  tarea manual de Kristian — el umbral del ciclo anterior puede quedarse
+  corto si el hueco sigue creciendo.** Anotado como tarea manual de
+  Kristian en vez de intervenir sobre el funnel (bloqueado por instrucción
+  permanente del Paso 5).
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — cuarto ciclo
+  consecutivo (212º-215º) sin hallazgos técnicos nuevos en el checklist
+  mecánico; el hallazgo de este ciclo es de negocio (`citas`), no técnico.
+- Ver `kimiko/bitacora/2026-09-06-2203.md`.
