@@ -9337,3 +9337,36 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   (19 `UPDATE` sobre `plants`) — rompe la racha de 14 ciclos sin cambios,
   con el hallazgo más grave desde el 176º-177º.
 - Ver `kimiko/bitacora/2026-09-06-0327.md`.
+
+### Cierre 2026-09-06 (ciclo 08:26 UTC, 212º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit` sin cambio (9, desde el
+  185º). 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa, `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap
+  (37 `<loc>`, sin cambio desde el fix del 211º)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- Apliqué por primera vez el check permanente del 211º (cruce mecánico de
+  hash de `ficha_cientifica` sobre las 52 filas de golpe, no solo las
+  publicadas). Los 3 pares de copia exacta del 211º siguen `publicada=false`.
+  **Encontré dos pares de copia exacta nuevos, no vistos en el 211º:
+  `muerdago`/`ginseng` y `sauco`/`ashwagandha-fruto`.** Ambos pares ya
+  estaban `publicada=false` por otras razones, así que sin blast radius en
+  vivo — pero es la prueba de que el check del 211º, corrido por primera vez
+  sobre las 52 filas completas en vez de solo las 23 que eran "publicada"
+  entonces, encuentra más basura de la que ese ciclo alcanzó a ver. **Check
+  permanente ampliado: el cruce de hash de `ficha_cientifica` debe correr
+  sobre las 52 filas (no solo las publicadas) en cada ciclo — los pares que
+  aparecen entre filas ya despublicadas no son ruido, son candidatos a
+  repetir el bug del 211º en cuanto alguien las reactive sin pasar por este
+  cruce.** `plants`: 52 filas, 4 publicada+verificada sin cambio. Imágenes de
+  las 4 fichas vivas confirmadas en disco. `/diccionario` en producción
+  verificado con las 4 fichas correctas y ninguna más.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Sin candidatos nuevos en el backlog desde el cruce en bloque del 209º.
+- `citas`: última inserción ~29h antes del cierre — dentro del rango de
+  huecos habituales (24-40h) confirmado en el 211º, sin acción. `leads` en 0.
+  `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`: cola vacía,
+  sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo (solo bitácora
+  y memoria) — los dos pares nuevos no requieren acción porque ya estaban
+  despublicados.
+- Ver `kimiko/bitacora/2026-09-06-0826.md`.
