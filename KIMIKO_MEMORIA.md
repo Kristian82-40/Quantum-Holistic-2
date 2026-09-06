@@ -9405,3 +9405,29 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sin commits de código ni escrituras en Supabase este ciclo (solo bitácora
   y memoria) — segundo ciclo consecutivo sin hallazgos técnicos nuevos.
 - Ver `kimiko/bitacora/2026-09-06-1508.md`.
+
+### Cierre 2026-09-06 (ciclo 18:05 UTC, 214º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa (307), `middleware.ts` en la raíz, canonical/`og:url`/`og:image`
+  correctos, sitemap (37 `<loc>`, sin cambio)/robots correctos. Vercel:
+  últimos 5 despliegues `READY`.
+- Tercera pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica`, `json.dumps(sort_keys=True)` sobre las 52 filas):
+  exactamente los mismos 7 grupos que el 212º y 213º, sin grupos nuevos. Las
+  9 peligrosas siguen `publicada=false` compartiendo placeholder. `plants`:
+  52 filas, 4 publicada+verificada sin cambio (`albahaca`, `arnica`,
+  `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Sin `UPDATE`
+  de Kristian sobre `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio,
+  sin duplicados de título en publicados. Backlog sigue sin candidatos
+  aprovechables desde el cruce en bloque del 209º.
+- `citas`: última inserción 38h39min antes del cierre — dentro del rango de
+  huecos habituales (24-40h, confirmado en el 211º) pero en el extremo alto;
+  sin abrir vigilancia nueva, a revisar si el próximo ciclo supera 40h.
+  `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola vacía (4 filas, todas `hecho`), sin orden de Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — tercer ciclo
+  consecutivo (212º-214º) sin hallazgos técnicos nuevos.
+- Ver `kimiko/bitacora/2026-09-06-1805.md`.
