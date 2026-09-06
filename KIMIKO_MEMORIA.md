@@ -9316,9 +9316,10 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Build/lint limpios (36/36 páginas) antes y después del fix de
   `sitemap.ts`. `npm audit` sin cambio (9, semver-major desde el 185º). 8/8
   rutas del checklist en 200, `/admin` → `/login` con la cadena completa,
-  `middleware.ts` en la raíz, canonical/`og:url` correctos. `sitemap.xml`
-  aún con 85 `<loc>` sin refrescar (revalidate 1h / próximo deploy, no
-  urgente). Vercel: últimos 5 despliegues `READY`.
+  `middleware.ts` en la raíz, canonical/`og:url` correctos. Commit `231069e`
+  empujado y desplegado (`READY`) dentro del ciclo: `sitemap.xml` verificado
+  en producción tras el deploy, pasó de 85 a 37 `<loc>`, ya solo lista las
+  4 fichas correctas. Vercel: últimos 5 despliegues `READY`.
 - `plants`: 52 filas. **23→4 publicada+verificada** (19 bajadas por cruce de
   contenido científico, ver cicatriz). Las 9 peligrosas confirmadas
   `publicada=false`. Duplicado `equinacea`/`echinacea` sigue sin resolver de
