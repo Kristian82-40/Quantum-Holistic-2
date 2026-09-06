@@ -9257,3 +9257,82 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo consecutivo (197º–210º) sin hallazgos técnicos nuevos.
 - Ver `kimiko/bitacora/2026-09-05-2159.md`.
 - Ver `kimiko/bitacora/2026-09-05-1801.md`.
+
+## 2026-09-06 03:27 UTC — Ciclo cloud: 19 de 23 plantas "verificadas" tenían
+## contenido científico de otra especie — la racha de 14 ciclos limpios se
+## sostenía sobre un check que nunca cubrió la republicación (211º ciclo)
+
+### Aprendizaje (cicatriz → check permanente)
+- **"Sin `UPDATE` nuevo desde el último audit documentado" (check del 190º)
+  solo es una señal válida para saltar una re-auditoría si el audit que fijó
+  esa `updated_at` cubrió el mismo tipo de check que se está pensando
+  saltar.** El 189º cambió `updated_at` de 40 filas por un incidente de
+  *imagen* cruzada (bajó 17 → quedaron 23), no por el check de *texto*
+  cruzado del 176º. 14 ciclos seguidos (197º-210º) leyeron ese mismo
+  timestamp sin cambios y asumieron que también cubría el check de texto —
+  pero ese check nunca se volvió a correr sobre el lote que Kristian había
+  re-publicado entre el 177º y el 189º (pasó de 15 filas tras el 177º a 40
+  antes del 189º sin que ningún ciclo de Kimiko verificara el contenido de
+  esa republicación). Resultado real al comprobarlo este ciclo: 3 plantas
+  con `ficha_cientifica` copiada byte a byte de otra especie (`loto`←`tulsi`,
+  `cinamomo`←`valeriana`, `nigela`←`manzanilla` — la de `cinamomo` es grave,
+  presentaba *Melia azedarach*, tóxica, con posología de sedante de
+  valeriana) y otras 16 con familia botánica/principios activos de una
+  especie distinta confirmados por muestreo con `WebSearch` (9/9 aciertos):
+  `abedul` (contenido de kava), `ajo` (regaliz), `azafrán` (menta), `roble`
+  (hamamelis), `incienso` (papaya), `higuera` (moringa), `granada` (melisa),
+  `milenrama` (eucalipto), `sidr` (cola de caballo), `frankenia`,
+  `rosa-de-jerico`, `amla`, `neem`, `boldo`, `azufaifo`, `arbol-bodhi`. Solo
+  4 de las 23 originales eran correctas: `albahaca`, `equinacea`, `arnica`,
+  `hinojo`. **Check permanente: el cruce mecánico de `ficha_cientifica`
+  idéntica entre slugs distintos (aplicable a las 52 filas de golpe, sin el
+  límite de 6/ciclo — eso es solo para la auditoría VISUAL) debe correr en
+  CADA ciclo, sin importar si `updated_at` cambió. Es la única forma barata
+  de detectar que una fila pasó de no-publicada a publicada por acción
+  externa sin que el contenido se haya corregido de verdad.**
+- **Una transición `false→true` de `ficha_verificada` hecha por Kristian
+  fuera de mi ciclo significa "decidió republicarla", no "verificó que el
+  contenido ya no cruza con otra especie".** Distinto del caso `lavanda` del
+  190º (imagen rota, sin riesgo de contenido cruzado) — cualquier
+  republicación de una fila que en su día se bajó por *contenido* debe
+  tratarse como candidata a repetir el cruce de texto en el ciclo siguiente,
+  no solo registrarse como hecho consumado.
+- **Bug real encontrado de paso en `app/sitemap.ts`:** `getPlantSlugs()` no
+  filtraba por `publicada`/`ficha_verificada` (a diferencia de
+  `getBlogSlugs()`, que sí filtra `status=eq.published`) — el sitemap llevaba
+  enviando a buscadores las 52 URLs de `plants`, incluidas las 9 peligrosas y
+  cualquier planta despublicada, todas devolviendo 404. Corregido con el
+  mismo filtro que ya usa el blog. **Check permanente: cualquier fuente de
+  URLs de `sitemap.ts` debe filtrar por el mismo criterio de visibilidad que
+  usa la página real — no asumir que listar la tabla entera es seguro solo
+  porque el render ya gatea el contenido.**
+- Acción tomada: `publicada=false, ficha_verificada=false` en las 19 filas
+  confirmadas. Verificado 404 en vivo al instante (ruta dinámica) en las 19,
+  y `/diccionario/` bajó de 23 a 4 entradas (`albahaca`, `arnica`,
+  `equinacea`, `hinojo`). Detalle completo de qué especie tenía el contenido
+  de cuál en `kimiko/bitacora/2026-09-06-0327.md`.
+
+### Cierre 2026-09-06 (ciclo cloud 03:27 UTC, 211º)
+- Build/lint limpios (36/36 páginas) antes y después del fix de
+  `sitemap.ts`. `npm audit` sin cambio (9, semver-major desde el 185º). 8/8
+  rutas del checklist en 200, `/admin` → `/login` con la cadena completa,
+  `middleware.ts` en la raíz, canonical/`og:url` correctos. `sitemap.xml`
+  aún con 85 `<loc>` sin refrescar (revalidate 1h / próximo deploy, no
+  urgente). Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas. **23→4 publicada+verificada** (19 bajadas por cruce de
+  contenido científico, ver cicatriz). Las 9 peligrosas confirmadas
+  `publicada=false`. Duplicado `equinacea`/`echinacea` sigue sin resolver de
+  fondo (no crea duplicado en vivo).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Único slug de diccionario enlazado (`hinojo`) sigue siendo una de las 4
+  plantas correctas — la bajada de las 19 no rompió enlaces existentes.
+- `citas`: última inserción ~23h59min antes del cierre — revisado el
+  histórico completo (33 filas, huecos habituales de 24-40h), es cadencia
+  normal de esta tabla, no una señal de fallo. Cierro la vigilancia abierta
+  por el 210º.
+- `leads` en 0. `kimiko_drafts`: cola vacía, sin orden de Telegram este
+  ciclo.
+- **Commit de código este ciclo** (`app/sitemap.ts`) + escrituras en Supabase
+  (19 `UPDATE` sobre `plants`) — rompe la racha de 14 ciclos sin cambios,
+  con el hallazgo más grave desde el 176º-177º.
+- Ver `kimiko/bitacora/2026-09-06-0327.md`.

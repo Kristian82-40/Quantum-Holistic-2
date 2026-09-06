@@ -20,7 +20,7 @@ async function getBlogSlugs(): Promise<string[]> {
 async function getPlantSlugs(): Promise<string[]> {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/plants?select=slug&order=nombre_es`,
+      `${SUPABASE_URL}/rest/v1/plants?select=slug&publicada=eq.true&ficha_verificada=eq.true&order=nombre_es`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, next: { revalidate: 3600 } }
     );
     if (!res.ok) return [];
