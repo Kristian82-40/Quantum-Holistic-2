@@ -9370,3 +9370,38 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   y memoria) — los dos pares nuevos no requieren acción porque ya estaban
   despublicados.
 - Ver `kimiko/bitacora/2026-09-06-0826.md`.
+
+### Cierre 2026-09-06 (ciclo 15:08 UTC, 213º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit` sin cambio (9, desde el
+  185º). 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa, `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap
+  (37 `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- Segunda pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas, no solo publicadas): mismos grupos
+  de duplicado exacto que el 212º, sin grupos nuevos. Las 9 peligrosas
+  siguen `publicada=false` compartiendo el placeholder. Los 5 pares
+  conocidos (`ashwagandha-fruto`/`sauco`, `cinamomo`/`valeriana`,
+  `ginseng`/`muerdago`, `loto`/`tulsi`, `manzanilla`/`nigela`) y
+  `echinacea`/`equinacea` siguen igual que en el 212º. **Nota técnica para
+  quien repita este check: `ficha_cientifica` es una columna JSON, no texto
+  — hay que comparar con `JSON.stringify(valor)` antes de hashear, o
+  `.trim()` revienta con `TypeError`.** `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Sin `UPDATE` de Kristian
+  sobre `plants` desde el 212º.
+- SEO: 22 publicados sin títulos duplicados, todos con `excerpt` (usa esa
+  columna como meta description vía `generateMetadata`, la tabla
+  `blog_posts` no tiene columna `meta_description` propia) ≤155 car. y
+  `image_url`. 3 enlaces internos a `/diccionario/` en el contenido
+  publicado, los 3 a `hinojo`, sin enlaces rotos.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Backlog ya calificado como no aprovechable por el cruce en bloque del
+  209º, sin candidatos nuevos.
+- `citas`: última inserción ~35h39min antes del cierre, dentro del rango de
+  huecos habituales (24-40h) del 211º, sin acción. `leads` en 0, `purchases`
+  en 0, `products` sin cambio (2). `kimiko_drafts`: cola vacía, sin orden de
+  Telegram este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo (solo bitácora
+  y memoria) — segundo ciclo consecutivo sin hallazgos técnicos nuevos.
+- Ver `kimiko/bitacora/2026-09-06-1508.md`.
