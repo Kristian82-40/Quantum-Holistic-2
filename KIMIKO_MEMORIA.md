@@ -9519,3 +9519,49 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   mecánico; el hallazgo de este ciclo es de negocio (`citas`, agravado),
   no técnico.
 - Ver `kimiko/bitacora/2026-09-07-0327.md`.
+
+### Cierre 2026-09-07 (ciclo 09:04 UTC, 217º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa, `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap
+  (37 `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- Sexta pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica`, `json.dumps(sort_keys=True)`, sobre las 52 filas):
+  exactamente los mismos 7 grupos que el 212º-216º, sin grupos nuevos.
+  `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las
+  9 peligrosas confirmadas `publicada=false`. `echinacea`/`equinacea` sigue
+  sin duplicado real en vivo (404 vs 200). Sin `UPDATE` de Kristian sobre
+  `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  22 publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155
+  car., todos con `image_url`, 3 enlaces internos a `/diccionario/hinojo`
+  sin enlaces rotos. Backlog sigue sin candidatos aprovechables desde el
+  cruce en bloque del 209º.
+
+### Aprendizaje (cicatriz → check permanente)
+- **El hueco de `citas` sigue sin cerrarse por tercer ciclo consecutivo:
+  misma fila de última inserción (2026-09-05T03:28:37 UTC), hueco ahora en
+  53h36min frente a 47h58min (216º) y 42h33min (215º) — el incremento entre
+  ciclos crece (+5h25min → +5h38min) en vez de estabilizarse, señal de que
+  la sequía no está tocando techo por sí sola.** Aplicando el check
+  permanente del 216º (decir explícitamente cuando el mismo hueco persiste
+  ciclo tras ciclo y subir prioridad), esta es la tercera escalada seguida
+  sobre la misma fila: se sube la prioridad de la tarea manual de Kristian
+  a la primera del listado del cierre. **Check permanente ampliado: cuando
+  una misma alerta de negocio lleva 3+ ciclos seguidos sin resolverse y el
+  ritmo de deterioro no se frena (el incremento entre ciclos no baja), la
+  bitácora debe decirlo en esos términos exactos (comparando el delta entre
+  ciclos, no solo el valor absoluto) — un delta que crece es una urgencia
+  distinta de un delta que se mantiene o decrece, aunque el límite del
+  Paso 5 siga siendo el mismo (documentar, no tocar el funnel).**
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — sexto ciclo
+  consecutivo (212º-217º) sin hallazgos técnicos nuevos en el checklist
+  mecánico; el hallazgo de este ciclo sigue siendo de negocio (`citas`,
+  agravado por tercera vez seguida), no técnico.
+- Ver `kimiko/bitacora/2026-09-07-0904.md`.
