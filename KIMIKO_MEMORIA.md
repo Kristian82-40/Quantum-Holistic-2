@@ -9609,3 +9609,62 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   mecánico; el hallazgo de este ciclo sigue siendo de negocio (`citas`, ahora
   acelerando), no técnico.
 - Ver `kimiko/bitacora/2026-09-07-1726.md`.
+
+### Cierre 2026-09-07 (ciclo 22:39 UTC, 219º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200 (con `-L`; `trailingSlash: true` en
+  `next.config.js` hace que la petición sin `-L` devuelva 308 antes del 200 —
+  no es una regresión, es el comportamiento esperado del config, y queda
+  anotado por si un ciclo futuro lo confunde con un fallo real).
+  `/admin` → `/login/?redirect=%2Fadmin%2F` (200) con la cadena completa,
+  `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap (37
+  `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- Octava pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica`, `json.dumps(sort_keys=True)`, sobre las 52 filas):
+  exactamente los mismos 7 grupos que el 212º-218º, sin grupos nuevos.
+  `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las
+  9 peligrosas confirmadas `publicada=false`. `echinacea`/`equinacea` sigue
+  sin duplicado real en vivo (404 vs 200). Sin `UPDATE` de Kristian sobre
+  `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio. 22
+  publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155 car.,
+  todos con `image_url`. Draft más reciente actualizado en 2026-07-10, previo
+  al cruce en bloque del 209º: backlog sigue sin candidatos nuevos.
+
+### Corrección de método (no cicatriz nueva — se retracta un check permanente previo)
+- **Los check permanentes ampliados de los cierres 217º y 218º ("delta entre
+  ciclos que crece = aceleración de la sequía de `citas`") estaban mal
+  planteados y quedan derogados.** El hueco de `citas` es
+  `ahora − última_inserción`, con la última inserción fija desde
+  2026-09-05T03:28:37 UTC. Si no entra fila nueva, el delta entre dos
+  cierres consecutivos es aritméticamente casi igual al tiempo real
+  transcurrido entre esos cierres — es decir, mide la cadencia con la que
+  se ejecuta Kimiko (que varía porque el disparo es `schedule`, no un
+  cronómetro fijo), no la velocidad de la sequía del negocio. Verificado
+  con las horas de los propios cierres: 216º→217º (5h37min) ≈ delta
+  reportado (+5h38min); 217º→218º (8h22min) ≈ delta reportado (+8h24min,
+  el que se leyó como "aceleración" pero era solo un hueco más largo entre
+  ejecuciones); 218º→219º (5h13min) ≈ nuevo delta (+5h10min), que bajó, lo
+  que de haberse mantenido la lógica anterior se habría leído como
+  "desaceleración" — ambas lecturas son ruido del calendario de ejecución,
+  no señal de negocio. **Check permanente corregido: para alertas del tipo
+  `ahora − última_fila_fija`, no narrar ni interpretar el delta entre
+  cierres como tendencia. Reportar solo el hueco absoluto (y, si se quiere
+  cadencia, días naturales sin fila nueva) — nunca comparar deltas entre
+  ciclos consecutivos como si fueran una velocidad del negocio, porque esa
+  comparación está contaminada por el propio horario de Kimiko.** El hueco
+  real y verificado: **67h10min (más de 2 días y 19h)** sin una reserva
+  nueva en `citas`, quinto ciclo consecutivo (215º-219º) sobre la misma
+  fila — esto solo, sin narrativa de aceleración, ya es motivo suficiente
+  para mantener la tarea manual de Kristian en primer puesto.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — octavo ciclo
+  consecutivo (212º-219º) sin hallazgos técnicos nuevos en el checklist
+  mecánico; el hallazgo de este ciclo es de negocio (`citas`) más la
+  corrección de método de arriba.
+- Ver `kimiko/bitacora/2026-09-07-2239.md`.
