@@ -9474,3 +9474,48 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   consecutivo (212º-215º) sin hallazgos técnicos nuevos en el checklist
   mecánico; el hallazgo de este ciclo es de negocio (`citas`), no técnico.
 - Ver `kimiko/bitacora/2026-09-06-2203.md`.
+
+### Cierre 2026-09-07 (ciclo 03:27 UTC, 216º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200, `/admin` → `/login` con la cadena
+  completa, `middleware.ts` en la raíz, canonical/`og:url`/`og:image`/sitemap
+  (37 `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- Quinta pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica`, `json.dumps(sort_keys=True)`, sobre las 52 filas):
+  exactamente los mismos 7 grupos que el 212º-215º, sin grupos nuevos.
+  `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las
+  9 peligrosas confirmadas `publicada=false`. `echinacea`/`equinacea` sigue
+  sin duplicado real en vivo (404 vs 200). Sin `UPDATE` de Kristian sobre
+  `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  22 publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155
+  car., todos con `image_url`, 3 enlaces internos a `/diccionario/hinojo`
+  sin enlaces rotos. Backlog sigue sin candidatos aprovechables desde el
+  cruce en bloque del 209º.
+
+### Aprendizaje (cicatriz → check permanente)
+- **El hueco anómalo de `citas` que el 215º marcó en 42h33min (superando por
+  primera vez el máximo histórico de 38.0h) no se ha cerrado: es la misma
+  fila de última inserción (2026-09-05T03:28:37 UTC) y el hueco ha seguido
+  creciendo hasta 47h58min en este ciclo, casi 6h más que hace ~5h20min.**
+  Aplicando el check permanente del 215º (recalcular el máximo histórico
+  real en vez de comparar solo contra el umbral anotado), confirmo que
+  sigue sin haber techo natural: dos ciclos consecutivos batiendo récord
+  sobre la misma sequía, no una fila nueva con un hueco distinto. **Check
+  permanente ampliado: cuando el mismo hueco anómalo persiste sin fila
+  nueva de un ciclo a otro (no solo "se ha vuelto a superar el umbral"),
+  el ciclo debe decirlo explícitamente en la bitácora y subir la prioridad
+  de la tarea manual de Kristian — una racha que se alarga ciclo tras
+  ciclo es una señal más fuerte que un hueco puntual, aunque el límite del
+  Paso 5 siga siendo el mismo (documentar, no tocar el funnel).**
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — quinto ciclo
+  consecutivo (212º-216º) sin hallazgos técnicos nuevos en el checklist
+  mecánico; el hallazgo de este ciclo es de negocio (`citas`, agravado),
+  no técnico.
+- Ver `kimiko/bitacora/2026-09-07-0327.md`.
