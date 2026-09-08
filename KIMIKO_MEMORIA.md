@@ -9668,3 +9668,35 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   mecánico; el hallazgo de este ciclo es de negocio (`citas`) más la
   corrección de método de arriba.
 - Ver `kimiko/bitacora/2026-09-07-2239.md`.
+
+### Cierre 2026-09-08 (ciclo 03:33 UTC, 220º, MODO CICLO)
+- Build/lint limpios (36/36 páginas). `npm audit`: 9 vulnerabilidades (1
+  moderate, 8 high) sin cambio desde el 185º. 8/8 rutas del checklist en
+  200 (con `-L`), `/admin` → `/admin/` (308) → `/login/?redirect=%2Fadmin%2F`
+  (200), `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37 `<loc>`,
+  sin cambio)/robots correctos. Vercel: últimos 5 despliegues `READY`.
+- Novena pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas): exactamente los mismos 7 grupos
+  que el 212º-219º, sin grupos nuevos. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `echinacea`/`equinacea` sigue sin
+  duplicado real en vivo (404 vs 200). Sin `UPDATE` de Kristian sobre
+  `plants` desde el 212º.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  22 publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155
+  car., todos con `image_url`. Draft más reciente sigue en 2026-07-10:
+  backlog sin candidatos nuevos.
+- `citas`: última inserción sigue en la misma fila (2026-09-05T03:28:37
+  UTC), hueco en **72h04min** — sexto ciclo consecutivo (215º-220º) sobre
+  la misma sequía. Aplicando el check permanente corregido en el 219º
+  (no narrar el delta entre cierres como tendencia, solo reportar el hueco
+  absoluto), se mantiene como tarea manual de Kristian en primer puesto sin
+  añadir interpretación de aceleración/desaceleración.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — noveno ciclo
+  consecutivo (212º-220º) sin hallazgos técnicos nuevos en el checklist
+  mecánico; el hallazgo de este ciclo sigue siendo de negocio (`citas`).
+- Ver `kimiko/bitacora/2026-09-08-0333.md`.
