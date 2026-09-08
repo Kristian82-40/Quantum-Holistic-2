@@ -9780,3 +9780,37 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Escritura en Supabase este ciclo: 1 fila nueva en `citas` (Cervantes). Sin
   commits de código.
 - Ver `kimiko/bitacora/2026-09-08-0846.md`.
+
+### Cierre 2026-09-08 (ciclo 16:14 UTC, 222º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200 (con `-L`), `/admin` → `/admin/`
+  (308) → `/login/?redirect=%2Fadmin%2F` (200), `middleware.ts` en la raíz,
+  canonical/`og:url`/sitemap (37 `<loc>`, sin cambio)/robots correctos.
+  Vercel: últimos 5 despliegues `READY`.
+- Décima pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas): exactamente los mismos 7 grupos
+  que el 212º-221º, sin grupos nuevos. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `updated_at` máximo sin cambio (2026-09-01)
+  → sin auditoría visual completa este ciclo. `echinacea`/`equinacea` sigue
+  sin duplicado real en vivo (404 vs 200).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio. 22
+  publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155 car.,
+  todos con `image_url`, 3/22 enlazan a `/diccionario` (sin cambio). Draft
+  más reciente sigue en 2026-07-10 — confirmado que sigue siendo el mismo
+  candidato ya descartado en los ciclos 206º-209º (título/excerpt fuera de
+  límite + canibalización con "Herboristería Europea de Proximidad"), no
+  hace falta reabrir esa investigación.
+- `citas`: última fila sigue siendo la de Cervantes del 221º, hueco de
+  **7h28min** — dentro del umbral normal, sin necesidad de insertar esta
+  vez. Regresión del 221º confirmada estable.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  4 filas totales, todas `hecho`, cola vacía, sin orden de Telegram este
+  ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — décimo ciclo
+  consecutivo (212º-222º) sin hallazgos técnicos nuevos en el checklist
+  mecánico, y sin hallazgos de negocio nuevos (la corrección de `citas` del
+  221º se mantiene estable).
+- Ver `kimiko/bitacora/2026-09-08-1614.md`.
