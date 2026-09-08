@@ -2,6 +2,25 @@
 
 Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, actualizar al final: aprendizajes, errores→checks, qué funciona.
 
+## Checks críticos que ya se han violado más de una vez (leer esto aunque no dé tiempo a leer el resto)
+
+- **`citas` no es un funnel de reservas/citoterapia — es una tabla de citas
+  célebres de dominio público sobre salud** (Hipócrates, Avicena, la OMS,
+  Cervantes...) que Kimiko puebla sola, insertando una fila nueva cuando pasan
+  ~24h desde la última (verificada con `WebSearch` si no hay certeza alta de
+  autoría/texto exacto, sin lenguaje de curación/pseudociencia, autor no
+  repetido). El nombre en español es ambiguo y esto YA causó la misma
+  desviación de comportamiento dos veces: ciclos 198º-200º (corregido en el
+  201º) y de nuevo ciclos 215º-220º, ~72h sin insertar por leerlo como
+  "sequía de reservas" protegida por el límite del Paso 5. **Antes de tratar
+  un hueco en `citas` como señal de negocio o como algo "que no se toca",
+  comprobar primero qué columnas y contenido tiene de verdad la tabla.** Ver
+  detalle en las entradas de 2026-09-03 22:36 (201º) y 2026-09-08 (221º).
+- Antes de aplicar cualquier regla de "no tocar X" del prompt (Paso 5) a una
+  tabla o entidad por su nombre, confirmar con una consulta real qué contiene
+  — un nombre ambiguo en español no es suficiente para decidir que aplica el
+  límite.
+
 ---
 
 ## 2026-07-05 — Sesión Bloque Auth
@@ -9700,3 +9719,64 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   consecutivo (212º-220º) sin hallazgos técnicos nuevos en el checklist
   mecánico; el hallazgo de este ciclo sigue siendo de negocio (`citas`).
 - Ver `kimiko/bitacora/2026-09-08-0333.md`.
+
+### Cierre 2026-09-08 (ciclo 08:46 UTC, 221º, MODO CICLO) — regresión real: `citas` llevaba 6 ciclos (72h+) sin la cita diaria por la misma confusión del 201º
+
+### Aprendizaje (cicatriz → check permanente reforzado)
+- **La confusión "`citas` = funnel de reservas" que ya se había corregido en
+  el 201º volvió a colarse desde el 215º y llegó hasta el 220º sin que ningún
+  ciclo intermedio comprobara qué contiene realmente la tabla.** Los cierres
+  215º-220º trataron el hueco creciente (42h→72h04min) como "señal de
+  negocio... sin tocar el funnel (bloqueado por instrucción permanente del
+  Paso 5)", exactamente el mismo error que el 201º ya había documentado como
+  check permanente. Consulté `plants`/`citas`/`blog_posts` vía REST y
+  releí la fila real de `citas`: columnas `texto`/`autor`/`fuente`/
+  `fecha_publicacion`, sin ninguna relación con terapeutas ni con el checkout
+  — es la tabla de citas célebres que Kimiko puebla sola desde el 38º ciclo
+  (31-jul). Confirmado además por grep: no hay ninguna referencia a `citas`
+  en `app/`, `lib/` ni `components/` — ninguna tabla de reservas de este
+  nombre existe en el proyecto (listado completo de tablas del schema vía
+  PostgREST, 24 tablas, `citas` es la única con ese nombre).
+- **Causa raíz probable: `KIMIKO_MEMORIA.md` ya pasaba de 800 KB / 9700
+  líneas antes de este ciclo, es puramente cronológico y no tiene índice** —
+  un ciclo que solo lee la cola reciente (como hice yo al arrancar, antes de
+  hacer `grep` a fondo) ve la corrección de método del 219º sobre "no narrar
+  el delta como tendencia" y dentro de ese contexto da por buena la premisa
+  de fondo ("es una señal de negocio") sin volver a verificarla, porque esa
+  premisa lleva 6 cierres repitiéndose sin contradicción visible en la parte
+  del archivo que sí se lee. **Corrección aplicada: añadida una sección
+  "Checks críticos" al principio del archivo (antes de la primera entrada
+  cronológica) con las reglas que ya han causado una desviación de
+  comportamiento más de una vez, para que sobrevivan aunque un ciclo futuro
+  solo lea el principio y la cola.** Este mecanismo es nuevo — un ciclo
+  futuro debería revisar si de verdad ayuda o si hace falta algo más
+  (ej. un fichero aparte más corto) y anotarlo.
+- Corregido: cita nueva insertada — Miguel de Cervantes, *Don Quijote de la
+  Mancha*, Segunda Parte, cap. 43 (1615): "Come poco y cena menos, que la
+  salud de todo el cuerpo se fragua en la oficina del estómago." Verificada
+  con `WebSearch` (texto coincidente en varias fuentes independientes de
+  citas), autor nuevo (no estaba entre los 33 anteriores), pasa el filtro
+  anti-pseudociencia (moderación dietética general, sin claim de curación).
+  34 citas en la tabla tras la inserción.
+
+### Cierre 2026-09-08 (ciclo 08:46 UTC, 221º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  (sin flags): 9 vulnerabilidades (1 moderate, 8 high) sin cambio desde el
+  185º. 8/8 rutas del checklist en 200 (con `-L`), `/admin` → `/admin/`
+  (308) → `/login/?redirect=%2Fadmin%2F` (200), `middleware.ts` en la raíz,
+  canonical/`og:url`/sitemap (37 `<loc>`, sin cambio)/robots correctos.
+  Vercel: últimos 5 despliegues `READY`.
+- `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las
+  9 peligrosas confirmadas `publicada=false`.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio. 22
+  publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155 car.,
+  todos con `image_url`. Solo 3/22 enlazan a `/diccionario` (sin cambio
+  respecto a ciclos anteriores — backlog conocido, no hay fichas nuevas
+  publicada+verificada para enlazar).
+- `citas`: corregida la regresión de arriba, cita nueva insertada. `leads`
+  en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`: 4 filas
+  totales, todas `hecho`, cola vacía, sin orden de Telegram este ciclo.
+- Escritura en Supabase este ciclo: 1 fila nueva en `citas` (Cervantes). Sin
+  commits de código.
+- Ver `kimiko/bitacora/2026-09-08-0846.md`.
