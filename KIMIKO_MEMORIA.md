@@ -20,6 +20,20 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   tabla o entidad por su nombre, confirmar con una consulta real qué contiene
   — un nombre ambiguo en español no es suficiente para decidir que aplica el
   límite.
+- **`npm audit` llevaba desde el ciclo 185º reportando "9 vulnerabilidades (1
+  moderate, 8 high)" sin cambio — en el 223º (2026-09-09) la composición
+  cambió a 1 moderate, 7 high, 1 critical (mismo total, severidad nueva).**
+  La entrada crítica es el bloque de advisories de `next` (versión pinneada
+  `14.2.35`, sin parche disponible en la rama 14.x — `npm view next
+  versions` lo confirma). No asumir nunca que "el total no cambió" equivale
+  a "nada cambió": comprobar siempre el desglose por severidad, no solo la
+  cifra agregada. Antes de alarmar o de actuar, contrastar la exposición
+  real del proyecto contra next.config.js (`images.unoptimized`, uso de
+  Server Actions, `rewrites()`, CSP nonces) — varias de las CVEs del bloque
+  no aplican a esta configuración concreta. La única corrección de fondo es
+  una subida mayor (14→16, salta la 15, rompe `next-intl` 3→4 también) que
+  requiere decisión explícita de Kristian por su blast radius, no ejecutarla
+  de oficio. Detalle en el cierre del 223º.
 
 ---
 
@@ -9814,3 +9828,56 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   mecánico, y sin hallazgos de negocio nuevos (la corrección de `citas` del
   221º se mantiene estable).
 - Ver `kimiko/bitacora/2026-09-08-1614.md`.
+
+### Cierre 2026-09-09 (ciclo 03:38 UTC, 223º, MODO CICLO) — `npm audit` escala a 1 crítica tras 38 ciclos estable
+
+### Hallazgo (no cicatriz de comportamiento — diagnóstico nuevo, sin acción de código)
+- `npm audit` cambió de "1 moderate, 8 high" (estable desde el 185º) a **1
+  moderate, 7 high, 1 critical** (mismo total, 9). La crítica es el bloque
+  de advisories de `next` sobre la versión pinneada `14.2.35` (RCE en
+  Image Optimization API con AVIF, RCE en hosts Windows, entre ~23 GHSA
+  acumulados). Confirmado que no hay parche no-breaking: `14.2.35` es la
+  última release de la rama `14.2.x` (`npm view next versions`); el único
+  fix es `next@16.3.4` (`isSemVerMajor: true`), que además se salta la
+  v15 entera y arrastra un bump breaking de `next-intl` (3.x→4.x).
+  Exposición real revisada contra la config del proyecto antes de decidir
+  no tocar nada en caliente: `images.unoptimized: true` en
+  `next.config.js` desactiva el Image Optimizer (las CVEs de AVIF/DoS de
+  caché no aplican), sin Server Actions (`grep "'use server'"` sobre
+  `app/` sin resultados), sin `rewrites()`, sin CSP nonces, hosting en
+  Vercel no Windows — reduce el riesgo real de gran parte del bloque,
+  pero no lo cierra del todo. Ver detalle completo (regla anotada como
+  check crítico al principio del archivo) y exposición revisada en
+  `kimiko/bitacora/2026-09-09-0338.md`.
+- **Decisión tomada:** no ejecutar la subida mayor de Next.js de oficio —
+  blast radius alto (build, App Router, middleware, `next-intl` v4,
+  checkout/leads, todo por probar) para un riesgo real hoy mitigado por
+  config. Queda como tarea manual prioritaria de Kristian, con oferta de
+  hacerlo en rama/PR separada si autoriza.
+
+### Cierre 2026-09-09 (ciclo 03:38 UTC, 223º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). 8/8 rutas
+  del checklist en 200 (con `-L`), `/admin` → `/admin/` (308) →
+  `/login/?redirect=%2Fadmin%2F` (200), `middleware.ts` en la raíz,
+  canonical/`og:url`/sitemap (37 `<loc>`, sin cambio)/robots correctos.
+  Vercel: últimos 5 despliegues `READY`.
+- Undécima pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas): exactamente los mismos 7 grupos
+  que el 212º-222º, sin grupos nuevos. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `updated_at` máximo sin cambio
+  (2026-09-01) → sin auditoría visual completa este ciclo.
+  `echinacea`/`equinacea` sigue sin duplicado real en vivo (404 vs 200).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio. 22
+  publicados sin duplicados de título, todos ≤60 car., `excerpt` ≤155 car.,
+  todos con `image_url`, 3/22 enlazan a `/diccionario` (sin cambio). Draft
+  más reciente sigue en 2026-07-10, ya descartado en 206º-209º.
+- `citas`: última fila sigue siendo la de Cervantes del 221º, hueco de
+  **18h52min** — dentro del umbral normal, sin necesidad de insertar.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola de `pendiente` vacía, sin `en_curso` colgado, sin orden de Telegram
+  este ciclo.
+- Sin commits de código ni escrituras en Supabase este ciclo — el único
+  hallazgo (`npm audit` crítico) es diagnóstico, ver arriba.
+- Ver `kimiko/bitacora/2026-09-09-0338.md`.
