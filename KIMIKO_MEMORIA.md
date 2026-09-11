@@ -10143,3 +10143,31 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo consecutivo (212º-231º) sin hallazgos técnicos nuevos en el
   checklist mecánico, y sin hallazgos de negocio nuevos.
 - Ver `kimiko/bitacora/2026-09-10-2221.md`.
+
+### Cierre 2026-09-11 (ciclo 03:32 UTC, 232º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  sin cambio desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue
+  sin fix no-breaking. 8/8 rutas del checklist en 200 (con `-L`), `/admin`
+  → login (200), `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37
+  `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- Vigésima pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas): exactamente los mismos 7 grupos
+  que el 212º-231º, sin grupos nuevos. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `updated_at` máximo sin cambio
+  (2026-09-01) → sin auditoría visual completa este ciclo.
+  `echinacea`/`equinacea` sigue sin duplicado real en vivo (404 vs 200).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Draft más reciente sigue en 2026-07-10, ya descartado en 206º-209º.
+- `citas`: última fila sigue siendo Proverbios 12:25 (229º), hueco de
+  **~11h31min** — por debajo del umbral de ~24h, sin necesidad de insertar.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola de `pendiente` vacía, sin `en_curso` colgado, sin orden de Telegram
+  este ciclo (comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`).
+- Sin commits de código ni escrituras en Supabase este ciclo — vigésimo
+  ciclo consecutivo (212º-232º) sin hallazgos técnicos nuevos en el
+  checklist mecánico, y sin hallazgos de negocio nuevos.
+- Ver `kimiko/bitacora/2026-09-11-0332.md`.
