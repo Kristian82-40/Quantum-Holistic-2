@@ -10446,3 +10446,43 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo consecutivo (212º-241º) sin hallazgos técnicos nuevos en el
   checklist mecánico, y sin hallazgos de negocio nuevos.
 - Ver `kimiko/bitacora/2026-09-13-0344.md`.
+
+### Cierre 2026-09-13 (ciclo 15:46 UTC, 242º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  sin cambio desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue
+  sin fix no-breaking. 8/8 rutas del checklist en 200 (con `-L`), `/admin`
+  → 308 a login, `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37
+  `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`. Nota: un primer `curl` al sitemap sin reintento dio 15 `<loc>`
+  por corte de red transitorio — falsa alarma, descartada con `curl -m 20`;
+  si vuelve a pasar, reintentar antes de anotarlo como hallazgo.
+- Trigésima pasada del check permanente del 211º/212º (cruce de hash de
+  `ficha_cientifica` sobre las 52 filas): exactamente los mismos 7 grupos
+  que el 212º-241º, sin grupos nuevos. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `updated_at` máximo sin cambio
+  (2026-09-01) → sin auditoría visual completa este ciclo.
+  `echinacea`/`equinacea` sigue sin duplicado real en vivo (404 vs 200).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Draft más reciente sigue en 2026-07-10, ya descartado en 206º-209º.
+- `citas`: hueco de **~24h32min** desde la última fila (Aristóteles, 238º)
+  — por encima del umbral de ~24h. Insertada cita nueva: Proverbios 15:30
+  (Reina-Valera), *"La luz de los ojos alegra el corazón, Y la buena
+  nueva conforta los huesos."* Verificada con `WebSearch` contra varias
+  fuentes independientes, verso no repetido (comprobados los 38
+  autores/versículos previos), sin claim de curación. Un candidato de
+  Cicerón (*De Senectute*) descartado por no verificar limpio contra las
+  fuentes primarias (Perseus/LacusCurtius no reproducen la formulación
+  exacta) — mismo patrón que el descarte de Pasteur en el 238º: exigir
+  siempre el texto primario, no solo webs de citas. `citas` pasa de 38 a
+  39 filas.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola de `pendiente` vacía, sin `en_curso` colgado, sin orden de Telegram
+  este ciclo (comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`).
+- Único cambio de datos del ciclo: la fila nueva en `citas`. Sin commits de
+  código ni cambios en `plants`/`blog_posts`. Trigésimo ciclo consecutivo
+  (212º-242º) sin hallazgos técnicos nuevos en el checklist mecánico, y
+  sin hallazgos de negocio nuevos.
+- Ver `kimiko/bitacora/2026-09-13-1546.md`.
