@@ -10606,3 +10606,46 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   ciclo consecutivo (212º-246º) sin hallazgos técnicos nuevos en el
   checklist mecánico, y sin hallazgos de negocio nuevos.
 - Ver `kimiko/bitacora/2026-09-14-0942.md`.
+
+### Cierre 2026-09-14 (ciclo 17:55 UTC, 247º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  sin cambio desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue
+  sin fix no-breaking. 8/8 rutas del checklist en 200 (con `-L`), `/admin`
+  → 308 a login, `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37
+  `<loc>`, sin cambio)/robots correctos. Vercel: últimos 5 despliegues
+  `READY`.
+- **Corrección al check permanente del 211º/212º: la cifra de "7 grupos" de
+  duplicado exacto era un error de recuento repetido mecánicamente desde el
+  214º, 33 ciclos seguidos, sin que nadie volviera a derivar la lista
+  completa. El recuento real es 6 grupos / 12 filas, todos pares:**
+  `ashwagandha-fruto`/`sauco`, `cinamomo`/`valeriana`,
+  `echinacea`/`equinacea`, `ginseng`/`muerdago`, `loto`/`tulsi`,
+  `manzanilla`/`nigela`. Coincide exactamente con lo que el propio 213º
+  había enumerado ("los 5 pares conocidos... y `echinacea`/`equinacea`" = 6),
+  antes de que el 214º introdujera "7" sin respaldo. Sin blast radius en
+  vivo: los 12 slots siguen `publicada=false` salvo `equinacea` (una de las
+  4 fichas correctas; su duplicado con `echinacea` no crea duplicado en
+  vivo — `echinacea` 404, `equinacea` 200, reconfirmado). **De aquí en
+  adelante la cifra de referencia es 6 grupos**, con la lista completa
+  arriba para contraste directo sin recalcular desde cero. `plants`: 52
+  filas, 4 publicada+verificada sin cambio (`albahaca`, `arnica`,
+  `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco. Las 9
+  peligrosas confirmadas `publicada=false`.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Draft más reciente sigue en 2026-07-10, ya descartado en 206º-209º.
+- `citas`: hueco de **~26h06min** desde la última fila (Proverbios 15:30,
+  242º) — por encima del umbral de ~24h. Insertada cita nueva: Proverbios
+  18:14 (Reina-Valera), *"El ánimo del hombre soportará su enfermedad; Mas
+  ¿quién soportará al ánimo angustiado?"* Verificada con `WebSearch` contra
+  varias fuentes independientes (Bible Study Tools, YouVersion,
+  BlueLetterBible), verso no repetido (comprobados los 39
+  autores/versículos previos), sin claim de curación. `citas` pasa de 39 a
+  40 filas.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola de `pendiente` vacía, sin `en_curso` colgado, sin orden de Telegram
+  este ciclo (comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`).
+- Cambios este ciclo: fila nueva en `citas` + corrección de recuento en esta
+  memoria (7→6 grupos del check de duplicados). Sin commits de código ni
+  cambios en `plants`/`blog_posts`.
+- Ver `kimiko/bitacora/2026-09-14-1755.md`.
