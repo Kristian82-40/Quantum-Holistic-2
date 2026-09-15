@@ -10734,3 +10734,34 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   grupos, revirtiendo el error del 247º) en esta memoria. Sin commits de
   código, sin escrituras en Supabase.
 - Ver `kimiko/bitacora/2026-09-15-0353.md`.
+
+### Cierre 2026-09-15 (ciclo 09:16 UTC, 250º, MODO CICLO)
+- Build/lint limpios (36/36 páginas, `npx next lint` sin avisos). `npm audit`
+  sin cambio desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue
+  sin fix no-breaking. 8/8 rutas del checklist en 200, `/admin` → 308 a
+  `/admin/` → 307 a `/login/?redirect=...`, `middleware.ts` en la raíz,
+  canonical/`og:url`/sitemap (37 `<loc>`)/robots correctos. Vercel: últimos
+  5 despliegues `READY`.
+- Trigesimosexta pasada del check permanente del 211º/212º: rehecho el
+  cruce de hash de `ficha_cientifica` desde cero sobre las 52 filas de
+  `plants` (sin mirar la cifra anotada en el 249º), da los mismos **7
+  grupos / 21 filas** de la corrección del 249º (6 pares de fichas reales +
+  las 9 peligrosas compartiendo el placeholder). Confirma que la
+  corrección del 249º fue la buena; sin cambios. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `updated_at` máximo sin cambio
+  (2026-09-01) → sin auditoría visual completa este ciclo.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Draft más reciente sigue en 2026-07-10, ya descartado en 206º-209º.
+- `citas`: última fila sigue siendo Proverbios 18:14 (247º), hueco de
+  **~15h21min** — por debajo del umbral de ~24h, sin necesidad de insertar.
+  40 filas, sin cambio.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2). `kimiko_drafts`:
+  cola de `pendiente` vacía, sin `en_curso` colgado, sin orden de Telegram
+  este ciclo (comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`).
+- Sin commits de código ni escrituras en Supabase este ciclo — trigesimosexto
+  ciclo consecutivo (212º-250º) sin hallazgos técnicos nuevos en el
+  checklist mecánico, y sin hallazgos de negocio nuevos.
+- Ver `kimiko/bitacora/2026-09-15-0916.md`.
