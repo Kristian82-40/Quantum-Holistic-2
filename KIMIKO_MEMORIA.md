@@ -10989,3 +10989,42 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   de salud/bienestar, no duplicada) en cuanto se cruce, en vez de solo
   anotarlo como aviso para el ciclo siguiente.
 - Ver `kimiko/bitacora/2026-09-17-0353.md`.
+
+### Cierre 2026-09-17 (ciclo 09:19 UTC, 258º, MODO CICLO)
+- `kimiko_drafts` comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`: las 4 filas históricas siguen `hecho`, sin `en_curso`
+  colgado, sin orden de Telegram este ciclo.
+- Build/lint limpios (36/36 páginas, sin errores). `npm audit` sin cambio
+  desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue sin fix
+  no-breaking. 8/8 rutas del checklist en 200, `/admin` → `/login/?redirect=...`,
+  `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37 `<loc>`)/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- Cuadragésima cuarta pasada del check permanente del 211º/212º: **desliz
+  propio corregido dentro del ciclo** — primero hasheé por error los bytes
+  de `image_cientifica_url` en disco (dio 0 grupos), lo cual no es el check;
+  el check real es sobre la columna `ficha_cientifica` (JSON). Releída la
+  cicatriz del 211º y repetido sobre la columna correcta: mismos **7 grupos
+  / 21 filas** de siempre (6 pares de fichas reales + las 9 peligrosas
+  compartiendo el placeholder). Sin cambios. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `lavanda` tiene ya `image_cientifica_url`
+  rellena en la fila pero el fichero sigue ausente en disco (hallazgo desde
+  2026-09-03, despublicada, sin blast radius).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Repasados los 22 publicados: sin títulos duplicados, `excerpt` <155 car. e
+  `image_url` presente en todos.
+- `citas`: última fila sigue siendo 3 Juan 1:2 (insertada en el 257º), hueco
+  de ~5h23min — muy por debajo del umbral de ~24h, sin necesidad de
+  insertar. 42 filas, sin cambio.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Sin commits de código ni escrituras en Supabase este ciclo — cuadragésimo
+  cuarto ciclo consecutivo (212º-258º) sin hallazgos técnicos nuevos en el
+  checklist mecánico, y sin hallazgos de negocio nuevos.
+- **Check permanente aclarado:** el cruce de hash del 211º/212º es sobre la
+  columna `ficha_cientifica` (JSON, comparar con `JSON.stringify`), no sobre
+  los ficheros de `image_cientifica_url`. Un hash de imágenes en disco es un
+  check distinto y no sustituye a este — si en algún ciclo se quiere auditar
+  también contenido cruzado en las imágenes, debe declararse como check
+  aparte, no confundirse con este.
+- Ver `kimiko/bitacora/2026-09-17-0919.md`.
