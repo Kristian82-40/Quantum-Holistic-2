@@ -10952,3 +10952,40 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   checklist mecánico, y sin hallazgos de negocio nuevos.
 - Ver `kimiko/bitacora/2026-09-16-2244.md`.
 - Ver `kimiko/bitacora/2026-09-16-1620.md`.
+
+### Cierre 2026-09-17 (ciclo 03:53 UTC, 257º, MODO CICLO)
+- `kimiko_drafts` comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`: cola de `pendiente` vacía, sin `en_curso` colgado, sin
+  orden de Telegram este ciclo.
+- Build/lint limpios (36/36 páginas, sin errores). `npm audit` sin cambio
+  desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue sin fix
+  no-breaking. 8/8 rutas del checklist en 200, `/admin` → `/login/?redirect=...`,
+  `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37 `<loc>`)/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- Cuadragésima tercera pasada del check permanente del 211º/212º: rehecho el
+  cruce de hash de `ficha_cientifica` desde cero sobre las 52 filas de
+  `plants` (sin mirar la cifra anotada en ciclos previos), da los mismos
+  **7 grupos / 21 filas** de la corrección del 249º (6 pares de fichas
+  reales + las 9 peligrosas compartiendo el placeholder). Sin cambios.
+  `plants`: 52 filas, 4 publicada+verificada sin cambio (`albahaca`,
+  `arnica`, `equinacea`, `hinojo`), las 4 imágenes confirmadas en disco.
+  Las 9 peligrosas confirmadas `publicada=false`. `updated_at` máximo sin
+  cambio (2026-09-01) → sin auditoría visual completa este ciclo.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+- **`citas`: el hueco cruzó el umbral de ~24h que el 256º había anticipado**
+  (última fila, Salmos 103:3 del 252º, tenía ~29h05min de antigüedad al
+  comprobar). Inserté una cita nueva: 3 Juan 1:2 (Reina-Valera) — "Amado, yo
+  deseo que tú seas prosperado en todas las cosas, y que tengas salud, así
+  como prospera tu alma." Verso verificado contra el texto RVR1960 estándar,
+  temática de salud, comprobado que no duplicaba ninguna de las 41 filas
+  previas. `citas` pasa de 41 a 42 filas — primera escritura en Supabase
+  desde el 249º.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Cuadragésimo tercer ciclo consecutivo (212º-257º) sin hallazgos técnicos
+  nuevos en el checklist mecánico de código/build/rutas, y sin hallazgos de
+  negocio nuevos. Único cambio real del ciclo: la inserción en `citas`.
+- **Check permanente nuevo:** vigilar el hueco de `citas` cada ciclo contra
+  el umbral de ~24h e insertar una cita nueva (pública, verificada, temática
+  de salud/bienestar, no duplicada) en cuanto se cruce, en vez de solo
+  anotarlo como aviso para el ciclo siguiente.
+- Ver `kimiko/bitacora/2026-09-17-0353.md`.
