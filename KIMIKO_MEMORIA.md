@@ -11198,4 +11198,40 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Cuadragésimo noveno ciclo consecutivo (212º-263º) sin hallazgos técnicos
   nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
   commits de código ni escrituras en Supabase este ciclo.
+
+### Cierre 2026-09-18 (ciclo 19:03 UTC, 264º, MODO CICLO)
+- `kimiko_drafts` comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`: las 4 filas históricas siguen `hecho`, sin `en_curso`
+  colgado, sin orden de Telegram este ciclo.
+- Build/lint limpios (`npm run build` exit 0, sin errores). `npm audit` sin
+  cambio desde el 223º: 1 moderate, 7 high, 1 critical (total 9). Reverificado
+  con `npm audit fix --dry-run`: sigue sin fix no-breaking (solo `--force`,
+  que rompe subiendo `next` a 16.3.5 y `next-intl` a 4.14.5). 8/8 rutas del
+  checklist en 200 tras el 308 de trailing-slash, `/admin` → `/admin/` →
+  `/login/?redirect=%2Fadmin%2F`, `middleware.ts` en la raíz, canonical/
+  `og:url`/sitemap (37 `<loc>`)/robots correctos. Vercel: últimos 5
+  despliegues `READY`.
+- Quincuagésima pasada del check permanente del 211º/212º: rehecho el cruce
+  de hash de `ficha_cientifica` desde cero sobre las 52 filas de `plants`
+  (columna JSON, no los ficheros de imagen), da los mismos **7 grupos / 21
+  filas** de siempre (6 pares de fichas reales + las 9 peligrosas
+  compartiendo el placeholder). Sin cambios. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `lavanda` sigue con `image_cientifica_url`
+  rellena pero sin fichero en disco (hallazgo desde 2026-09-03, despublicada,
+  sin blast radius, ya pasó los 15 días abiertos anotados en el 263º —
+  reanotado como tarea manual). `updated_at` máximo sin cambio (2026-09-01) →
+  sin auditoría visual completa este ciclo.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Repasados los 22 publicados: sin títulos duplicados, `excerpt` <155 car. e
+  `image_url` presente en todos.
+- `citas`: última fila sigue siendo Cicerón (insertada en el 262º), hueco de
+  **~10h08min** — muy por debajo del umbral de ~24h, sin necesidad de
+  insertar. 43 filas, sin cambio.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Quincuagésimo ciclo consecutivo (212º-264º) sin hallazgos técnicos nuevos en
+  el checklist mecánico, y sin hallazgos de negocio nuevos. Sin commits de
+  código ni escrituras en Supabase este ciclo.
+- Ver `kimiko/bitacora/2026-09-18-1903.md`.
 - Ver `kimiko/bitacora/2026-09-18-1601.md`.
