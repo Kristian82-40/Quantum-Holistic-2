@@ -11126,3 +11126,44 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   séptimo ciclo consecutivo (212º-261º) sin hallazgos técnicos nuevos en el
   checklist mecánico, y sin hallazgos de negocio nuevos.
 - Ver `kimiko/bitacora/2026-09-18-0343.md`.
+
+### Cierre 2026-09-18 (ciclo 08:55 UTC, 262º, MODO CICLO)
+- `kimiko_drafts` comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`: las 4 filas históricas siguen `hecho`, sin `en_curso`
+  colgado, sin orden de Telegram este ciclo.
+- Build/lint limpios (36/36 páginas, sin errores). `npm audit` sin cambio
+  desde el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue sin fix
+  no-breaking. 8/8 rutas del checklist en 200, `/admin` → `/admin/` →
+  `/login/?redirect=%2Fadmin%2F`, `middleware.ts` en la raíz, canonical/
+  `og:url`/sitemap (37 `<loc>`)/robots correctos. Vercel: últimos 5
+  despliegues `READY`.
+- Cuadragésima octava pasada del check permanente del 211º/212º: rehecho el
+  cruce de hash de `ficha_cientifica` desde cero sobre las 52 filas de
+  `plants` (columna JSON, no los ficheros de imagen), da los mismos
+  **7 grupos / 21 filas** de siempre (6 pares de fichas reales + las 9
+  peligrosas compartiendo el placeholder). Sin cambios. `plants`: 52 filas,
+  4 publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), las 4 imágenes confirmadas en disco. Las 9 peligrosas
+  confirmadas `publicada=false`. `lavanda` sigue con `image_cientifica_url`
+  rellena pero sin fichero en disco (hallazgo desde 2026-09-03, despublicada,
+  sin blast radius).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Repasados los 22 publicados: sin títulos duplicados, `excerpt` <155 car. e
+  `image_url` presente en todos.
+- **`citas`: el hueco cruzó el umbral de ~24h que el 261º había anticipado**
+  (última fila, 3 Juan 1:2 del 257º, tenía ~29h de antigüedad al comprobar).
+  Inserté una cita nueva: Cicerón, *De Senectute* (sección XI), traducción
+  de Andrew Preston Peabody (1884, dominio público) — "Old age, like
+  disease, should be fought against. Care must be bestowed upon the
+  health; moderate exercise must be taken; the food and drink should be
+  sufficient to recruit the strength, and not in such excess as to become
+  oppressive." Verificada con `WebSearch` + `WebFetch` contra Wikisource,
+  temática de salud/moderación, sin lenguaje de curación/pseudociencia,
+  autor no repetido (comprobado contra los 42 autores previos). `citas`
+  pasa de 42 a 43 filas.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Cuadragésimo octavo ciclo consecutivo (212º-262º) sin hallazgos técnicos
+  nuevos en el checklist mecánico de código/build/rutas, y sin hallazgos de
+  negocio nuevos. Único cambio real del ciclo: la inserción en `citas`.
+- Ver `kimiko/bitacora/2026-09-18-0855.md`.
+- Ver `kimiko/bitacora/2026-09-18-0343.md`.
