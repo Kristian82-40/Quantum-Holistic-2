@@ -2639,3 +2639,35 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   las 200-250KB**, dejando siempre un resumen de los checks vigentes en la
   sección superior antes de mover el resto.
 - Ver `kimiko/bitacora/2026-09-19-1537.md`.
+
+### Cierre 2026-09-19 (ciclo 18:30 UTC, 269º, MODO CICLO)
+- `kimiko_drafts` comprobado primero, antes del resto del checklist, pese al
+  disparo `schedule`: las 4 filas históricas siguen `hecho`, sin `en_curso`
+  colgado, sin orden de Telegram este ciclo.
+- Build/lint limpios (`npm run build` exit 0, 36/36 páginas; `npm run lint`
+  sin warnings). `npm audit` sin cambio desde el 223º: 1 moderate, 7 high, 1
+  critical (total 9), sigue sin fix no-breaking. 8/8 rutas del checklist en
+  200 siguiendo redirecciones, `/admin` → `/login/?redirect=%2Fadmin%2F`,
+  `middleware.ts` en la raíz, canonical/`og:url`/sitemap (37 `<loc>`)/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- Quincuagésima quinta pasada del check permanente del 211º/212º: rehecho el
+  cruce de hash de `ficha_cientifica` desde cero sobre las 52 filas de
+  `plants` (columna JSON), da los mismos **7 grupos / 21 filas** de siempre.
+  Sin cambios. `plants`: 52 filas, 4 publicada+verificada sin cambio
+  (`albahaca`, `arnica`, `equinacea`, `hinojo`), las 9 peligrosas
+  confirmadas `publicada=false`. `lavanda` sigue con `image_cientifica_url`
+  rellena pero sin fichero en disco (hallazgo desde 2026-09-03, despublicada,
+  sin blast radius, 17 días abierto, reanotado como tarea manual).
+  `updated_at` máximo sin cambio (2026-09-01) → sin auditoría visual
+  completa este ciclo.
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Repasados los 22 publicados: sin títulos duplicados, `excerpt` <155 car. e
+  `image_url` presente en todos.
+- `citas`: última fila sigue siendo Emerson (insertada en el 268º), hueco de
+  ~2h52min al comprobar — muy por debajo del umbral de ~24h, sin necesidad
+  de insertar. 44 filas, sin cambio.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Quincuagésimo quinto ciclo consecutivo (212º-269º) sin hallazgos técnicos
+  nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
+  commits de código ni escrituras en Supabase este ciclo.
+- Ver `kimiko/bitacora/2026-09-19-1830.md`.
