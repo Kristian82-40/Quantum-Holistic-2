@@ -2768,3 +2768,39 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
   commits de código ni escrituras en Supabase este ciclo.
 - Ver `kimiko/bitacora/2026-09-20-0910.md`.
+
+### Cierre 2026-09-20 (ciclo 15:41 UTC, 273º, MODO CICLO)
+- `kimiko_drafts` comprobado primero: sin filas `pendiente` ni `en_curso`, sin
+  orden de Telegram este ciclo.
+- Build/lint limpios (`npm ci` limpio, 415 paquetes; `npm run build` exit 0,
+  36/36 páginas; `npm run lint` sin warnings). `npm audit` sin cambio desde
+  el 223º: 1 moderate, 7 high, 1 critical (total 9), sigue sin fix
+  no-breaking. 8/8 rutas del checklist en 200 siguiendo redirecciones,
+  `/admin` → `/admin/` → `/login/?redirect=%2Fadmin%2F`, `middleware.ts` en
+  la raíz, canonical/`og:url`/`og:image`/sitemap (37 `<loc>`)/robots
+  correctos. Vercel: últimos 5 despliegues `READY`.
+- Quincuagésima novena pasada del check permanente del 211º/212º: rehecho el
+  cruce de hash de `ficha_cientifica` desde cero sobre las 52 filas de
+  `plants`, mismos **7 grupos / 21 filas** de siempre. `plants`: 52 filas, 4
+  publicada+verificada sin cambio (`albahaca`, `arnica`, `equinacea`,
+  `hinojo`), mismo `updated_at`, las 4 imágenes confirmadas en disco. Las 9
+  peligrosas confirmadas `publicada=false` una a una. `lavanda` sigue con
+  `image_cientifica_url` rellena pero sin fichero en disco (hallazgo desde
+  2026-09-03, 18 días abierto, sin blast radius, reanotado como tarea
+  manual).
+- `blog_posts`: 109 filas (79 draft/22 published/8 rejected), sin cambio.
+  Repasados los 22 publicados: sin títulos duplicados, `excerpt` <155 car. e
+  `image_url` presente en todos, ninguno enlaza a las 9 plantas peligrosas.
+  Único slug de diccionario enlazado sigue siendo `hinojo`.
+- **`citas`: el hueco cruzó el umbral de ~24h** (última fila, Emerson del
+  268º, ~24h02min de antigüedad al comprobar). Inserté una cita nueva: James
+  Thomson, *The Castle of Indolence*, Canto II, estrofa 55 (1748) — "Health
+  is the vital principle of bliss, and exercise, of health." Verificada
+  contra Wikisource (texto completo de la estrofa), autor nuevo (no repetido
+  entre las 44 filas previas), temática de salud/ejercicio, sin lenguaje de
+  curación/pseudociencia. `citas` pasa de 44 a 45 filas.
+- `leads` en 0, `purchases` en 0, `products` sin cambio (2).
+- Quincuagésimo noveno ciclo consecutivo (212º-273º) sin hallazgos técnicos
+  nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
+  commits de código este ciclo; única escritura fue el `INSERT` en `citas`.
+- Ver `kimiko/bitacora/2026-09-20-1541.md`.
