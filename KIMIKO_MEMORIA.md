@@ -54,6 +54,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   hace más de dos semanas sin que se genere o suba la imagen — si algún
   ciclo decide generarla, seguir la regla de hierro del Paso 2.2 (verificar
   el fichero en disco antes de tocar `ficha_verificada`).
+- **El chat de la web (`/api/chat`, `components/ui/ChatBot.tsx`) dependía en
+  producción de `N8N_CHAT_WEBHOOK_URL` y `OLLAMA_URL`, dos servicios que solo
+  corren en la máquina local de Kristian (ver `app/CLAUDE.md`) — nunca
+  alcanzables desde una función serverless de Vercel. Hasta el 278º ciclo
+  (2026-09-21, orden de Telegram) esto no se había detectado: el chat llevaba
+  desplegado devolviendo siempre el mismo mensaje de error genérico, sin que
+  ningún ciclo lo hubiera probado en vivo con una petición `POST` real (el
+  checklist del Paso 2.1 solo cubre rutas `GET`). Arreglado en `e957d8a`:
+  cuando ambos backends fallan, responde con una búsqueda por palabras clave
+  sobre `plants` (publicada+verificada) y `blog_posts` (published) en vez de
+  un callejón sin salida — no requiere IA de pago, coherente con coste cero.
+  **Check permanente: además del checklist de rutas `GET` del Paso 2.1,
+  probar `POST https://quantum-holistic.com/api/chat` con un mensaje real de
+  vez en cuando (no hace falta cada ciclo) y confirmar que la respuesta no es
+  el fallback genérico salvo que de verdad no haya match de contenido.** Si
+  Kristian expone Ollama o n8n con una URL pública y actualiza las env vars
+  en Vercel, verificar que la ruta las usa antes de asumir que sigue en modo
+  fallback. Detalle en `kimiko/bitacora/2026-09-21-1249.md`.
 - **Este fichero (`KIMIKO_MEMORIA.md`) superó el límite de lectura de la
   herramienta Read (256KB) en el ciclo 268º (2026-09-19), con 11344 líneas
   y 912KB acumulados desde el ciclo 1º.** Las entradas de los ciclos 1º-198º
@@ -2935,3 +2953,24 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
   commits de código ni escrituras en Supabase este ciclo.
 - Ver `kimiko/bitacora/2026-09-21-0946.md`.
+
+### Cierre 2026-09-21 (ciclo 12:49 UTC, 278º, MODO ORDEN vía Telegram)
+- Orden de Kristian: "dime si el bot de la página funciona correctamente, y
+  si no, lo reparas". Cicatriz nueva (resumida arriba en los checks
+  críticos): el chat de la web llevaba desplegado en producción sin poder
+  responder nunca — dependía de `N8N_CHAT_WEBHOOK_URL`/`OLLAMA_URL`, servicios
+  solo locales de Kristian, inalcanzables desde Vercel. Nadie lo había
+  probado con un `POST` real antes.
+- Arreglado en `e957d8a`: fallback de contenido (plantas verificadas + blog
+  publicado) por palabras clave cuando n8n/Ollama fallan, en vez del mensaje
+  de error genérico. `npm run build` limpio (36/36), probado en local y
+  reprobado en caliente contra `quantum-holistic.com/api/chat` tras el
+  despliegue (`READY` confirmado por API de Vercel).
+- Hallazgo colateral sin tocar: el chip de sugerencia "Romero y memoria" del
+  propio `ChatBot.tsx` no tiene ninguna planta `romero` en `plants` (0 filas)
+  — desajuste de contenido preexistente entre UI y datos, anotado como tarea
+  manual, no como bug de este fix.
+- Fila `kimiko_drafts` `69eafe6f-b261-494f-a7a4-f16a47e3cbd1` cerrada `hecho`
+  con resumen en `copy`, mismo resumen enviado por Telegram al `chat_id`
+  autorizado. Sin más filas `pendiente` en la cola.
+- Ver `kimiko/bitacora/2026-09-21-1249.md`.
