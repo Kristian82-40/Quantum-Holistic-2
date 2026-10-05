@@ -766,3 +766,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   verificada; `romero` no existe en `plants`).
 - Las service role keys ya no estaban en `agente-plantas.sh`/`runner.sh` (0 JWT en claro). La rotación
   sigue sin confirmar.
+
+### Ciclo 2026-10-05-1654 (schedule)
+- Verificación corta: build OK, rutas 200 (tras 308 de trailing slash), admin redirige, 4 plantas publicadas con imagen en disco, leads/purchases 0. Gumroad sigue 404 (check permanente). No se hicieron cruce de hash ni auditoría SEO este ciclo.
