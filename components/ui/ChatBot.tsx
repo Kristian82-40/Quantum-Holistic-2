@@ -13,7 +13,7 @@ const SUGGESTIONS = [
   'Plantas para la digestión',
   'Detox de primavera',
   'Plan nutricional km0',
-  'Romero y memoria',
+  'Propiedades del hinojo',
 ]
 
 export default function ChatBot() {

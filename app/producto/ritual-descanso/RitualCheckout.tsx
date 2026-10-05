@@ -3,15 +3,13 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 
-const GUMROAD_URL = process.env.NEXT_PUBLIC_GUMROAD_URL || '';
-
-export default function RitualCheckout() {
+export default function RitualCheckout({ checkoutUrl }: { checkoutUrl: string | null }) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
 
-  if (GUMROAD_URL) {
+  if (checkoutUrl) {
     return (
-      <a href={GUMROAD_URL} className={styles.cta} target="_blank" rel="noopener noreferrer">
+      <a href={checkoutUrl} className={styles.cta} target="_blank" rel="noopener noreferrer">
         Comprar por 19€ →
       </a>
     );

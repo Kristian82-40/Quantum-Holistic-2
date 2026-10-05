@@ -72,6 +72,19 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   Kristian expone Ollama o n8n con una URL pública y actualiza las env vars
   en Vercel, verificar que la ruta las usa antes de asumir que sigue en modo
   fallback. Detalle en `kimiko/bitacora/2026-09-21-1249.md`.
+- **🔴 El checkout Gumroad lleva roto desde el 2026-07-28 y el archivado del
+  268º borró su check de esta memoria.** `NEXT_PUBLIC_GUMROAD_URL` en Vercel
+  apunta a `kristian320.gumroad.com/l/ritual-descanso` → **404**; la antigua
+  `kristiantronco.gumroad.com/l/ugsqtg` sigue en 200. Los ciclos 198º-279º
+  dejaron de reportarlo porque el aviso solo vivía en entradas ya archivadas
+  (reconfirmado en vivo el 2026-10-05, ~69 días caído, 0 ventas). Desde
+  2026-10-05 la página revalida el enlace cada hora (ISR) y, si Gumroad da
+  404/410, muestra la lista de espera en vez del 404 — eso no repara el
+  cobro. **Check permanente: cada ciclo, `curl -I` a la URL de Gumroad que
+  sirve `/producto/ritual-descanso`; si no es 200, escalar como tarea manual
+  #1.** Solo lo resuelve Kristian (publicar el producto en `kristian320` o
+  devolver la env var). **Lección: al archivar memoria, mover a esta sección
+  los bloqueantes que sigan abiertos — archivar un check vivo lo apaga.**
 - **Este fichero (`KIMIKO_MEMORIA.md`) superó el límite de lectura de la
   herramienta Read (256KB) en el ciclo 268º (2026-09-19), con 11344 líneas
   y 912KB acumulados desde el ciclo 1º.** Las entradas de los ciclos 1º-198º
@@ -742,3 +755,14 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
   nuevos en el checklist mecánico, y sin hallazgos de negocio nuevos. Sin
   commits de código este ciclo; única escritura fue el `INSERT` en `citas`.
 - Ver `kimiko/bitacora/2026-09-21-1801.md`.
+
+### Cierre 2026-10-05 (sesión interactiva)
+- Local estaba 297 commits por detrás de `origin/main`: hacer `git pull` antes de leer memoria/handoff.
+- **Checkout Gumroad sigue en 404 (~69 días)**, sin vigilancia desde el archivado del 268º. Check
+  restaurado arriba, en los checks críticos.
+- `/producto/ritual-descanso`: comprobación ISR (1h) del enlace; 404/410 → lista de espera (`leads`).
+  Build + lint limpios; probado con la URL buena (enlace) y la rota (formulario).
+- Chip "Romero y memoria" de `ChatBot.tsx` → "Propiedades del hinojo" (`hinojo` está publicada y
+  verificada; `romero` no existe en `plants`).
+- Las service role keys ya no estaban en `agente-plantas.sh`/`runner.sh` (0 JWT en claro). La rotación
+  sigue sin confirmar.
