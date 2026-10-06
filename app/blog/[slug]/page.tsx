@@ -5,6 +5,8 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import AdminPostControls from '@/components/ui/AdminPostControls';
+import { requireAdmin } from '@/lib/require-admin';
 import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
 import { getPostBySlug, cleanPostTitle } from '@/lib/posts';
 import styles from './page.module.css';
@@ -79,11 +81,15 @@ export default async function BlogPostPage(
   const cat      = supaPost?.category ?? staticPost!.cat;
   const date     = supaPost ? formatDate(supaPost.created_at) : staticPost!.date;
   const readTime = staticPost?.readingTime ?? '5 min';
+  const isAdmin = supaPost ? Boolean(await requireAdmin().catch(() => null)) : false;
 
   return (
     <>
       <Navbar />
       <main className={styles.main}>
+        {supaPost && isAdmin && (
+          <AdminPostControls id={supaPost.id} title={title} excerpt={excerpt} content={content} />
+        )}
         <article className={styles.article}>
           {/* Header */}
           <header className={styles.header}>

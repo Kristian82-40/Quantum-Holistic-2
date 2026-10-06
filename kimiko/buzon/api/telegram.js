@@ -43,6 +43,86 @@ async function tgSend(chatId, text) {
   });
 }
 
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+async function tgApi(method, body) {
+  const r = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/${method}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return r;
+}
+
+async function sbPatch(table, filter, body) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${filter}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: SUPABASE_KEY,
+      authorization: `Bearer ${SUPABASE_KEY}`,
+      'content-type': 'application/json',
+      prefer: 'return=minimal',
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`Supabase PATCH ${table}: ${await res.text()}`);
+}
+
+const tecladoNormal = (id) => ({
+  inline_keyboard: [
+    [
+      { text: '✏️ Modificar', callback_data: `edit:${id}` },
+      { text: '🙈 Despublicar', callback_data: `unpub:${id}` },
+    ],
+  ],
+});
+
+const tecladoDespublicado = (id) => ({
+  inline_keyboard: [[{ text: '👁 Volver a publicar', callback_data: `pub:${id}` }]],
+});
+
+// Botones sobre posts del blog. Falla cerrado: sin dueño configurado o desde
+// otro chat, solo se cierra el callback sin hacer nada.
+// NOTA: las acciones de borrado (del/delok/cancel) NO están implementadas
+// a propósito: Kimiko no borra datos (Paso 5). Eliminar un post se hace a mano.
+export async function manejarBoton(cb) {
+  const chatId = cb?.message?.chat?.id;
+  if (!OWNER_CHAT_ID || !chatId || String(chatId) !== String(OWNER_CHAT_ID)) {
+    await tgApi('answerCallbackQuery', { callback_query_id: cb?.id }).catch(() => {});
+    return;
+  }
+  const responder = (text) =>
+    tgApi('answerCallbackQuery', { callback_query_id: cb.id, ...(text ? { text } : {}) });
+  try {
+    const [accion, id] = String(cb.data || '').split(':');
+    if (!UUID_RE.test(id || '')) return void (await responder('Botón no válido'));
+    const mensaje = { chat_id: chatId, message_id: cb.message.message_id };
+
+    if (accion === 'unpub' || accion === 'pub') {
+      const publicar = accion === 'pub';
+      await sbPatch('blog_posts', `id=eq.${id}`, { status: publicar ? 'published' : 'draft' });
+      await tgApi('editMessageReplyMarkup', {
+        ...mensaje,
+        reply_markup: publicar ? tecladoNormal(id) : tecladoDespublicado(id),
+      });
+      return void (await responder(publicar ? 'Publicado' : 'Despublicado'));
+    }
+    if (accion === 'edit') {
+      await tgApi('sendMessage', {
+        chat_id: chatId,
+        text: `✏️ Responde a este mensaje diciendo qué quieres cambiar en el post. [post:${id}]`,
+        reply_markup: { force_reply: true },
+      });
+      return void (await responder());
+    }
+    await responder('Botón no válido');
+  } catch (e) {
+    console.error('kimiko-buzon boton error:', e?.message || e);
+    await responder('No he podido hacerlo').catch(() => {});
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(200).send('Kimiko buzón en pie 🌿');
 
@@ -52,7 +132,12 @@ export default async function handler(req, res) {
   }
 
   const update = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  if (update?.callback_query) {
+    await manejarBoton(update.callback_query);
+    return res.status(200).send('ok');
+  }
   const msg = update?.message || update?.edited_message;
+  if (!msg) return res.status(200).send('ok');
   const chatId = msg?.chat?.id;
 
   // 2. Filtro de remitente
@@ -65,11 +150,16 @@ export default async function handler(req, res) {
 
   try {
     // 2. Guardar en kimiko_drafts con estado 'pendiente'
+    let sourceNote = msg?.caption || msg?.text || null;
+    const respondido = msg?.reply_to_message?.text?.match(/\[post:([0-9a-f-]{36})\]/i);
+    if (respondido && UUID_RE.test(respondido[1]) && sourceNote) {
+      sourceNote = `Modifica el post de blog con id ${respondido[1]} (tabla blog_posts): ${sourceNote}`;
+    }
     const draft = {
       status: 'pendiente',
       chat_id: chatId ?? null,
       update_id: update.update_id ?? null,
-      source_note: msg?.caption || msg?.text || null,
+      source_note: sourceNote,
       tg_file_id: msg?.photo ? msg.photo[msg.photo.length - 1].file_id : null,
       raw_update: update,
     };
