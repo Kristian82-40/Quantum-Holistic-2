@@ -769,3 +769,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 
 ### Ciclo 2026-10-05-1654 (schedule)
 - Verificación corta: build OK, rutas 200 (tras 308 de trailing slash), admin redirige, 4 plantas publicadas con imagen en disco, leads/purchases 0. Gumroad sigue 404 (check permanente). No se hicieron cruce de hash ni auditoría SEO este ciclo.
+
+## Ciclo 2026-10-06-0112
+- Build OK, rutas 200, admin redirige, 4 plantas publicadas, hash 7/21 estable. Gumroad `kristian320` sigue 404 (check permanente). `citas` retomada con Thomas Fuller tras 15 días de hueco: comprobar el hueco de ~24h en cada ciclo, sin esperar a que se acumule.
