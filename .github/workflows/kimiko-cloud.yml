@@ -1,24 +1,29 @@
 name: Kimiko Cloud
 
+# Solo órdenes de Kristian por Telegram. Entran por el worker "kimiko" de Cloudflare, que solo acepta su chat_id,
+# las guarda en kimiko_drafts y lanza este workflow con repository_dispatch. No hay ciclo programado.
+# Kimiko Cloud NUNCA toca main: trabaja en una rama y abre un PR que Kristian fusiona (o cierra) desde Telegram.
+# main está protegida con un ruleset: solo un administrador puede actualizarla.
+# Coste: CLAUDE_CODE_OAUTH_TOKEN usa la suscripción de Kristian (sin API key) y los minutos de Actions son gratis en un repo público.
+
 on:
-  schedule:
-    - cron: "0 */4 * * *"   # cada 4h
-  workflow_dispatch:
   repository_dispatch:
-    types: [kimiko-buzon]
+    types: [kimiko-orden]
+  workflow_dispatch:
 
 concurrency:
   group: kimiko
   cancel-in-progress: false
 
 permissions:
-  contents: write
-  id-token: write
+  contents: write        # empujar la rama de trabajo (main la bloquea el ruleset)
+  pull-requests: write   # abrir el PR
+  id-token: write        # lo pide claude-code-action
 
 jobs:
-  ciclo:
+  orden:
     runs-on: ubuntu-latest
-    timeout-minutes: 180   # watchdog equivalente
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,26 +42,17 @@ jobs:
             echo 'KIMIKO_PROMPT_EOF'
           } >> "$GITHUB_OUTPUT"
 
-      - name: Kimiko — ciclo completo
+      - name: Kimiko — cumplir la orden
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: ${{ steps.load_prompt.outputs.content }}
           claude_args: "--dangerously-skip-permissions"
+          show_full_output: false   # el repo es público: los logs no muestran la conversación
         env:
           SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}   # llave sb_secret "kimiko_cloud", solo para esto
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-
-      - name: Commit bitácora y memoria
-        # La action de Claude revoca su app token y pisa las credenciales del
-        # checkout, así que este paso re-autentica con el token del workflow.
-        run: |
-          git config user.name "kimiko-bot"
-          git config user.email "kimiko@quantum-holistic.com"
-          git config --unset-all http.https://github.com/.extraheader || true
-          git remote set-url origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
-          git add kimiko/bitacora/ KIMIKO_MEMORIA.md || true
-          git diff --cached --quiet || git commit -m "kimiko: bitácora ciclo $(date -u +%Y-%m-%d-%H%M)"
-          git push origin HEAD:main
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   # para comprobar que la orden es de Kristian
+          GH_TOKEN: ${{ github.token }}                        # gh pr create
+          KIMIKO_DRAFT_ID: ${{ github.event.client_payload.draft_id }}
