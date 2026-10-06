@@ -1,4 +1,4 @@
-# Handoff — 2026-10-05 (sesión interactiva tras 279 ciclos Kimiko)
+# Handoff — 2026-10-06 (sesión interactiva)
 
 ## 🔴 BLOQUEANTE #1: el checkout Gumroad lleva caído desde el 2026-07-28 (~69 días)
 
@@ -14,6 +14,7 @@ a `https://kristiantronco.gumroad.com/l/ugsqtg` y redeploy.
 404/410, muestra el formulario de lista de espera (guarda en `leads`, `source=ritual_descanso_waitlist`)
 en vez de mandar al comprador a un error. Cuando el enlace vuelva a 200, el botón "Comprar"
 reaparece solo en ≤1h, sin redeploy. Un fallo de red/timeout **no** esconde el botón.
+**Verificado en vivo el 2026-10-06:** la página ya muestra la lista de espera (el `HIT` que vio el ciclo 18:03 era caché vieja).
 
 ## Estado del proyecto
 - Producción estable (`quantum-holistic.com`). Últimos ciclos: build/lint limpios, 8/8 rutas OK.
@@ -24,13 +25,12 @@ reaparece solo en ≤1h, sin redeploy. Un fallo de red/timeout **no** esconde el
 - Service role key: ya no está en claro en `agente-plantas.sh` ni `runner.sh`. Rotación sin confirmar.
 
 ## Módulo trabajado
-Monetización (checkout) + chatbot + memoria de Kimiko.
+Monetización: lista de espera del checkout.
 
 ## Archivos modificados
-- `app/producto/ritual-descanso/page.tsx`: comprobación ISR del enlace Gumroad.
-- `app/producto/ritual-descanso/RitualCheckout.tsx`: recibe `checkoutUrl` por prop.
-- `components/ui/ChatBot.tsx`: chip "Romero y memoria" → "Propiedades del hinojo" (no existe `romero` en `plants`).
-- `KIMIKO_MEMORIA.md`: check de Gumroad restaurado en checks críticos + cierre de sesión.
+- `app/api/leads/route.ts`: upsert con `?on_conflict=email` (antes un email repetido daba 409 contra `leads_email_key`)
+  y devuelve 502 si Supabase falla (antes respondía `ok:true` siempre y el lead se perdía sin aviso).
+- `KIMIKO_MEMORIA.md`: cierre de sesión.
 
 ## Próximos pasos (ordenados por prioridad)
 1. **Papu: arreglar Gumroad** (ver arriba). Bloquea todo ingreso.
@@ -47,6 +47,7 @@ Monetización (checkout) + chatbot + memoria de Kimiko.
   revertirlo cobraría en una cuenta que quizá ya no se vigila. Sí se elimina el daño visible (el 404).
 - **Solo 404/410 activan el fallback.** Si Gumroad bloquea la IP de Vercel o hay un timeout, se
   mantiene el botón de compra: un falso "roto" costaría ventas reales.
+- **Lead repetido = merge** (`resolution=merge-duplicates`, comportamiento original): el `source` pasa a ser el último formulario.
 - **Chip sustituido, no eliminado:** se mantienen 4 sugerencias, apuntando a una planta publicada y verificada.
 
 ## Notas para ajustar CLAUDE.md

@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Email inválido' }, { status: 400 });
   }
 
-  await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+  // on_conflict=email: sin él, PostgREST hace el upsert por `id` y un email repetido choca con leads_email_key (409).
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/leads?on_conflict=email`, {
     method: 'POST',
     headers: {
       apikey: SERVICE_KEY,
@@ -29,6 +30,11 @@ export async function POST(req: NextRequest) {
       created_at: new Date().toISOString(),
     }),
   });
+
+  if (!res.ok) {
+    console.error(`[leads] Supabase ${res.status}: ${await res.text()}`);
+    return NextResponse.json({ error: 'No se pudo guardar' }, { status: 502 });
+  }
 
   return NextResponse.json({ ok: true });
 }

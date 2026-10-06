@@ -780,3 +780,8 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 
 ### Ciclo 2026-10-06-1803 (schedule)
 - Drafts vacíos, build OK, rutas 200, 4 plantas con imagen en disco, 9 peligrosas despublicadas, hash 7/21, `citas` ~17h (sin insertar). Gumroad `kristian320` sigue 404 y la página aún sirve el enlace pese al chequeo ISR: **check nuevo: si el 404 persiste, mirar logs de Vercel para ver qué status recibe el `fetch` HEAD del servidor.** Detalle en `kimiko/bitacora/2026-10-06-1803.md`.
+
+### Cierre 2026-10-06 (sesión interactiva, tarde)
+- Sospecha del ciclo 18:03 resuelta: el fallback ISR **sí funciona**. En vivo `/producto/ritual-descanso/` ya sirve "Avísame cuando esté listo" y ningún enlace a Gumroad. El `HIT` de ~52 min era la versión vieja antes de regenerarse. No hacía falta tocar `page.tsx`.
+- `/api/leads` (lo único que recoge la lista de espera mientras Gumroad está caído) tenía dos fallos silenciosos: upsert sin `on_conflict=email` (un email repetido chocaba con `leads_email_key` → 409) y devolvía `ok:true` aunque Supabase fallara. Arreglado: `?on_conflict=email` + 502 si no hay `res.ok`. Build/lint/tsc limpios.
+- Gumroad `kristian320` sigue 404 (tarea #1 de Kristian).
