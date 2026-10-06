@@ -108,9 +108,17 @@ Recorre esta lista de más grave a menos. Lo que haya que arreglar en el repo va
 - **Vercel** (`VERCEL_TOKEN`): consultar despliegues y logs (de la preview de tu PR también). Sin redeploy de producción
   ni cambios de variables de entorno.
 - **Web:** `curl` contra producción para verificar lo que afirmas.
-- **Imágenes:** Pollinations.ai FLUX, sin clave. Estilo de marca: acuarela botánica
-  científica, lámina de herbario del XIX, fondo crema `#F4EDE0`, verdes salvia y
-  dorados apagados, sin texto dentro de la imagen.
+- **Imágenes:** la función `kimiko-imagen` de Supabase (Workers AI flux, cupo gratis; ya añade el estilo de marca:
+  acuarela botánica semitraslúcida, fondo crema, salvia y dorado, sin texto). No uses Pollinations: no responde
+  desde Actions. Llamada:
+  ```
+  curl -sS -X POST "$SUPABASE_URL/functions/v1/kimiko-imagen" \
+    -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "content-type: application/json" \
+    -d '{"slug":"manzanilla","tipo":"cientifica","nombre_latino":"Matricaria chamomilla","escena":"<rasgos visibles de la especie>"}'
+  ```
+  `tipo`: `cientifica` (lámina de herbario, para `image_cientifica_url`), `mistica` o `libre`. Devuelve `{ok, url}`:
+  descarga la `url`, **mírala** y comprueba que es la especie correcta antes de guardarla en `plants`. Si no lo es,
+  repite con una `escena` más precisa (máximo 3 intentos). Error "cupo agotado" → para y avísalo en `copy`.
 
 Coste cero es innegociable. No existe `ANTHROPIC_API_KEY` ni `GEMINI_API_KEY` y no
 hacen falta: tú *eres* el modelo. No contrates ni propongas servicios de pago.
