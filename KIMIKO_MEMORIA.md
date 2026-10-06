@@ -777,3 +777,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - **Cicatriz → check:** en modo CICLO, consultar `kimiko_drafts` con `status=eq.pendiente` ANTES del resto; el ciclo anterior dejó 2 órdenes de Telegram 5 días sin recoger.
 - Orden de botones de blog implementada salvo borrado y cambios a PROMPT.md/Paso 5 (límites). Detalle en `kimiko/bitacora/2026-10-06-1200.md`.
 - Gumroad sigue 404 (tarea #1 de Kristian).
+
+### Ciclo 2026-10-06-1803 (schedule)
+- Drafts vacíos, build OK, rutas 200, 4 plantas con imagen en disco, 9 peligrosas despublicadas, hash 7/21, `citas` ~17h (sin insertar). Gumroad `kristian320` sigue 404 y la página aún sirve el enlace pese al chequeo ISR: **check nuevo: si el 404 persiste, mirar logs de Vercel para ver qué status recibe el `fetch` HEAD del servidor.** Detalle en `kimiko/bitacora/2026-10-06-1803.md`.
