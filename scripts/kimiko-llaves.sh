@@ -35,6 +35,16 @@ pedir_llave() { # $1 = nombre
 
 echo "${B}🌿 Kimiko — llaves pendientes${N}  (registro sin valores en $LOG)"
 
+# ─── 0. Sesiones: wrangler (Cloudflare) y Supabase CLI ───────────────────────
+if ! npx -y wrangler whoami 2>/dev/null | grep -qi "logged in"; then
+  info "Wrangler no tiene sesión: se abre el navegador, pulsa Allow."
+  npx -y wrangler login || fail "No se pudo iniciar sesión en wrangler"
+fi
+if ! npx -y supabase projects list >/dev/null 2>&1; then
+  info "Supabase CLI no tiene sesión: se abre el navegador, acepta."
+  npx -y supabase login || info "Sin sesión de Supabase: el paso 1 se hará copiando y pegando."
+fi
+
 # ─── 1. CF_AI_TOKEN → Supabase ───────────────────────────────────────────────
 titulo "1/4  Token de Workers AI (imágenes gratis) → Supabase"
 info "Se abre Cloudflare: Create Token → plantilla 'Workers AI' → Continue to summary → Create Token → Copiar."
