@@ -772,3 +772,8 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 
 ## Ciclo 2026-10-06-0112
 - Build OK, rutas 200, admin redirige, 4 plantas publicadas, hash 7/21 estable. Gumroad `kristian320` sigue 404 (check permanente). `citas` retomada con Thomas Fuller tras 15 días de hueco: comprobar el hueco de ~24h en cada ciclo, sin esperar a que se acumule.
+
+### Cierre 2026-10-06 (ciclo 12:00 UTC, MODO CICLO con órdenes pendientes)
+- **Cicatriz → check:** en modo CICLO, consultar `kimiko_drafts` con `status=eq.pendiente` ANTES del resto; el ciclo anterior dejó 2 órdenes de Telegram 5 días sin recoger.
+- Orden de botones de blog implementada salvo borrado y cambios a PROMPT.md/Paso 5 (límites). Detalle en `kimiko/bitacora/2026-10-06-1200.md`.
+- Gumroad sigue 404 (tarea #1 de Kristian).
