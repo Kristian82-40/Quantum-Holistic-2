@@ -31,9 +31,19 @@ No se cambia de plataforma sin un "sí" explícito de Kristian en el chat.
 8. **Contenido de salud.** Sin promesas de curar, sin dosis, con contraindicaciones y aviso de consultar con un profesional. Todo contenido nuevo nace como borrador.
 9. **Cerrar cada sesión** actualizando `ESTADO.md` (qué cambió y con qué prueba) y, si hubo trabajo largo, una nota en `kimiko/bitacora/`.
 
-## 4. Skills y conectores
-- Solo se registran aquí herramientas que existen y se han probado. Un nombre en un prompt no es una capacidad.
-- Activos y probados: Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions), Telegram vía Kimiko.
-- Diseño: skill `frontend-design` + capturas reales de la web antes de proponer cambios.
+## 4. Skills (7-oct-2026)
+Cada skill es una forma de trabajar ligada a una herramienta real. Si la herramienta no está, se dice "pendiente", no se finge.
+
+| Skill | Qué significa aquí | Herramienta real | Estado |
+|---|---|---|---|
+| **UI UX to Max!** | Diseño y conversión de q-h.com: capturas reales, 2–3 propuestas, cambios en PR con vista previa de Vercel | skill `frontend-design` + Vercel Preview | activa |
+| **Claude Mem** | No perder el hilo: decisiones en `ESTADO.md`, diario en `KIMIKO_MEMORIA.md` y `kimiko/bitacora/`, memoria del proyecto en claude.ai | estos archivos + Supabase `kimiko_learnings` | activa |
+| **n8n MCP** | Flujos omnicanal (Telegram, leads, alertas) | n8n no está instalado ni conectado; hoy lo hacen `pg_cron` + Edge Functions + el worker de Telegram | pendiente: necesita servidor propio (coste) y decisión de Kristian |
+| **Light Tag** | Etiquetas estructuradas para plantas, leads y servicios en Supabase | columnas `tags` en Supabase vía migración | pendiente de diseñar el esquema |
+| **Diff-Only** | Cambiar solo las líneas necesarias y enseñar solo el diff | edición por bloques + PR | activa |
+
+## 5. Conectores
+- Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions), Gmail, Google Drive, Google Calendar, Notion. Telegram, a través de Kimiko.
+- No conectados: n8n, Instagram Graph API (faltan llaves de cuenta Business), Stripe en vivo.
 - Plantillas o skills de GitHub de terceros: leer el código antes de instalarlas; ninguna que envíe tokens a servidores ajenos.
-- Pendientes, con decisión de Kristian: Instagram Graph API (llaves de cuenta Business), n8n (necesita servidor propio).
+- Revisor automático de PRs con IA: retirado el 7-oct (necesitaba API de pago). La revisión la hace la sesión que abre el PR.

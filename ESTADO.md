@@ -38,6 +38,12 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | Kimiko prepara la pieza; Kristian publica a mano (decisión del 5-oct) | `kimiko_content` (1 fila) |
 | ❌ | Instagram automático: faltan `IG_USER_ID` e `IG_ACCESS_TOKEN` | `kimiko_config` |
 
+## Riesgos
+| | Qué | Prueba |
+|---|---|---|
+| ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
+| ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
+
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
 1. Crear el token de Workers AI y copiar el Account ID en Cloudflare, y pegarlos como `CF_AI_TOKEN` y `CF_ACCOUNT_ID` en Supabase → Edge Functions → Secrets.
 2. Reenviar o descartar las 2 órdenes pendientes del 6-oct.

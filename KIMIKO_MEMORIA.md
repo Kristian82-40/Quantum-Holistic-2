@@ -2,6 +2,11 @@
 
 Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, actualizar al final: aprendizajes, errores→checks, qué funciona.
 
+## Desde el 7-oct-2026: fuente de verdad
+- Reglas y skills en `CLAUDE.md` (UI UX to Max!, Claude Mem, Diff-Only activas; n8n y Light Tag pendientes). Estado con pruebas en `ESTADO.md`.
+- Arquitectura congelada: web en Vercel, cerebro y trabajo diario en Supabase, Telegram por el worker de Cloudflare, cambios por PR.
+- Prioridad de negocio: vender primero los servicios de Kristian (marca personal) y luego abrir el directorio de terapeutas.
+
 ## Checks críticos que ya se han violado más de una vez (leer esto aunque no dé tiempo a leer el resto)
 
 - **`citas` no es un funnel de reservas/citoterapia — es una tabla de citas
