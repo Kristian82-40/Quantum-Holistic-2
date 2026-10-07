@@ -1,4 +1,6 @@
 # PROJECT_CONTEXT — Quantum Holistic
+
+> ⚠️ **Obsoleto (mayo 2026).** La fuente de verdad es [`CLAUDE.md`](CLAUDE.md) (reglas) y [`ESTADO.md`](ESTADO.md) (estado con pruebas).
 **Última actualización:** 2026-05-12 · Generado automáticamente
 
 ---

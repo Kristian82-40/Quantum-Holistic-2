@@ -1,0 +1,40 @@
+{
+  "_revisar": "Pilares, voz, lettering y paletas son propuestas a partir del perfil de Kristian y de su descripción de la estética (acuarela semitraslúcida). Confirmar o ajustar.",
+  "proyectos": [
+    {
+      "id": "qh",
+      "nombre": "Quantum Holistic",
+      "sitio": "https://quantum-holistic.com",
+      "idioma": "es",
+      "activo": true,
+      "voz": "cercana, serena, de tradición e informativa; sin promesas médicas",
+      "pilares": [
+        "plantas medicinales y su tradición de uso",
+        "cocina medicinal y recetas de temporada",
+        "ayurveda y medicina tradicional china explicadas con sencillez",
+        "respiración, mindfulness y rutinas de bienestar"
+      ],
+      "estetica_imagen": "acuarela semitraslúcida con realismo en detalles sutiles, contornos modernos y letras modernas que se adaptan al motivo",
+      "frecuencia": {
+        "posts_por_dia": 1
+      },
+      "variaciones": {
+        "lettering": [
+          "caligrafía moderna fluida con trazo de pincel",
+          "sans-serif geométrica fina en mayúsculas",
+          "letras manuscritas de pincel seco",
+          "tipografía display de contorno fino",
+          "letras en capas semitraslúcidas superpuestas"
+        ],
+        "paletas": [
+          "verdes salvia y ocre",
+          "rosa cuarzo y violeta suave",
+          "azules glaciar y turquesa",
+          "terracota y dorado cálido",
+          "lavanda y verde menta",
+          "índigo y ámbar"
+        ]
+      }
+    }
+  ]
+}
