@@ -43,7 +43,8 @@ Cada skill es una forma de trabajar ligada a una herramienta real. Si la herrami
 | **Diff-Only** | Cambiar solo las líneas necesarias y enseñar solo el diff | edición por bloques + PR | activa |
 
 ## 5. Conectores
-- Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions), Gmail, Google Drive, Google Calendar, Notion. Telegram, a través de Kimiko.
+- Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions). Telegram, a través de Kimiko.
+- Disponibles pero sin probar en este proyecto: Gmail, Google Drive, Google Calendar, Notion.
 - No conectados: n8n, Instagram Graph API (faltan llaves de cuenta Business), Stripe en vivo.
 - Plantillas o skills de GitHub de terceros: leer el código antes de instalarlas; ninguna que envíe tokens a servidores ajenos.
 - Revisor automático de PRs con IA: retirado el 7-oct (necesitaba API de pago). La revisión la hace la sesión que abre el PR.
