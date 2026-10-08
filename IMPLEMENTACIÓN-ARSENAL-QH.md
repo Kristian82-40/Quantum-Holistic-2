@@ -1,3 +1,5 @@
+> ⚠️ **Histórico.** El 8-oct-2026 se retiraron las skills y aliases `qh-flow-state`/`flow-state`, `qh-deploy-gate`, `qh-rollback-gen`, `qh-schema-audit` y `qh-generar-imagenes` que cita este documento. Lo vigente: `CLAUDE.md` §4 (skills en `.claude/skills/`) y `ESTADO.md`.
+
 # IMPLEMENTACIÓN — Arsenal QH Completo
 
 **Fecha inicio:** 2026-05-12  
