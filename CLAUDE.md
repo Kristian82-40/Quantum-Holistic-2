@@ -17,7 +17,7 @@ No se cambia de plataforma sin un "sí" explícito de Kristian en el chat.
 | Base de datos y memoria | Supabase `vctetjugbvyllwjpxcxh` | tablas `kimiko_*`, `blog_posts`, `plants` |
 | Trabajo diario (blog + redes + vigilancia) | Supabase Edge Function `kimiko-diario`, lanzada por `pg_cron` | `supabase/functions/kimiko-diario` + `_kimiko/` |
 | Imágenes | Edge Functions `kimiko-imagen` (Workers AI flux) y `kimiko-ficha` (SVG→PNG) | `supabase/functions/` |
-| Entrada de Telegram | Cloudflare Worker `kimiko` (solo webhook) | pendiente de subir al repo (ver ESTADO) |
+| Entrada de Telegram y comandos `/estado`, `/auditar`, `/manual` | Cloudflare Worker `kimiko` (solo webhook) | `kimiko/worker` + `supabase/functions/_kimiko/src` |
 | Órdenes que tocan la web | GitHub Actions `Kimiko Cloud` → rama + PR | `.github/workflows/kimiko-cloud.yml`, `kimiko/PROMPT.md` |
 
 ## 3. Reglas de trabajo
