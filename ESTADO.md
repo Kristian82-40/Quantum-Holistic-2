@@ -4,7 +4,7 @@
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
-## Web q-h.com
+## Web quantum-holistic.com
 | | Qué | Prueba |
 |---|---|---|
 | ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
@@ -15,7 +15,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | La ficha pública no muestra el campo `fuentes` (la página no lo pinta) | `app/diccionario/[slug]/page.tsx` líneas 20–23 |
 | ⚠️ | Las 4 fichas publicadas muestran posología **con dosis** (choca con `qh-editorial`) | consulta a `plants` (`posologia` de hinojo: "2-3 g … 2-3 veces/día") |
 | ❌ | Blog: **0 de 88 borradores listos**; 25 para retocar y 63 para descartar (pruebas, esbozos, duplicados, temas fuera de línea) | `kimiko/informes/blog-borradores.md` |
-| ❌ | **`q-h.com` no es nuestro** (página de venta de Aftermarket); la web está en `quantum-holistic.com`. El correo `hola@quantumholistic.com` usa un dominio **sin MX** | `curl` y `dig` del 8-oct, `kimiko/informes/incoherencias.md` |
+| ✅ | **Dominio `quantum-holistic.com` (y `www.`) es nuestro**: comprado en Vercel el 1-may-2026, caduca el 1-may-2027 con renovación automática (de pago, ~1 vez al año), DNS en Vercel (`ns1/ns2.vercel-dns.com`). `q-h.com` **no** es nuestro (está en venta): no usarlo en textos ni enlaces | Vercel API `list_domains` y `list_project_domains`, 8-oct 17:20 |
+| ❌ | Correo: `hola@quantumholistic.com` (sin guion) no existe y `quantum-holistic.com` **no tiene MX** (no recibe correo). Decidido crear uno serio en `quantum-holistic.com` | Vercel `get_records`: 0 registros MX, 8-oct |
 | ❌ | Portada con cifras sin respaldo ("2.400+ planes", "340+ plantas", "98 %") y 3 testimonios; YouTube del pie da 404 | captura del 8-oct, `kimiko/informes/diseno.md` punto 1 |
 | ⚠️ | Captación: **0 leads, 1 perfil** | consultas a `leads` y `profiles` |
 | ⚠️ | Diseño: auditoría hecha con capturas (móvil y escritorio, 5 páginas), 10 problemas y 3 direcciones de acuarela. Sin scroll horizontal ni imágenes rotas | `kimiko/informes/diseno.md` + `kimiko/informes/diseno/`, Playwright 8-oct ~10:40 |
@@ -32,7 +33,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | `GROQ_API_KEY` (tercer motor gratis: 1.000 peticiones/día) | `kimiko/guia-tareas.sh` 8-oct ~16:45: Groq aceptó la llave (`/v1/models` → 200) y la huella en Supabase coincide. Falta verla en uso real: chequeo de mañana 06:00 UTC |
 | ✅ | Chequeo diario antes del post (llaves, cupo, web, crons) con aviso a Telegram y acción exacta | `{"accion":"chequeo"}` real el 8-oct; función `kimiko_estado_crons()` |
 | ✅ | Manual de tareas `kimiko_runbook` (4 tareas; `activa` pausa una tarea sin tocar código) | PR #10, migración aplicada |
-| ✅ | Auditoría semanal (cron `kimiko-auditoria`, domingos 08:00 UTC). Primera pasada: **84 posts con categoría sin normalizar**, 1 publicado con meta fuera de 50–160; 0 slugs duplicados, 0 sin imagen, 0 plantas sin verificar, 0 tablas sin RLS | `{"accion":"auditoria"}` real el 8-oct, Telegram enviado |
+| ✅ | Auditoría semanal (cron `kimiko-auditoria`, domingos 08:00 UTC). Primera pasada: 84 posts con categoría sin normalizar (**normalizados el 8-oct 17:15**: quedan 5 categorías, Sabiduría 38 · Bienestar Holístico 30 · Nutrición 18 · Herbología 16 · Ayurveda 9; copia en `blog_posts_categoria_backup_20261008`), 1 publicado con meta fuera de 50–160; 0 slugs duplicados, 0 sin imagen, 0 plantas sin verificar, 0 tablas sin RLS | `{"accion":"auditoria"}` real el 8-oct, Telegram enviado |
 | ✅ | Lo desplegado = lo del repo: `kimiko-diario` v15 = `main` (ningún cambio en `supabase/functions` después de `f60a168`) | GET a la función responde 405 "usa POST" (código de `f60a168`), 8-oct 11:49 |
 
 ## Kimiko — órdenes por Telegram
@@ -67,9 +68,9 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-1. Decir el **dominio bueno** (q-h.com no es suyo: está en venta; la web es `quantum-holistic.com`), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
+1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude), decir la **ciudad/país** del pie y de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
-3. Sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
+3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
 4. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
 
 Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
@@ -79,5 +80,5 @@ Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde);
 2. Imágenes correctas para valeriana, jengibre, lavanda, tomillo y salvia (`kimiko-imagen`, necesita `CF_AI_TOKEN`) y revisar las de árnica y equinácea publicadas.
 3. Pintar `fuentes` en `app/diccionario/[slug]/page.tsx` y quitar las dosis de las 4 fichas publicadas.
 4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
-5. Normalizar las 84 categorías antiguas del blog (cuando Kristian diga sí).
+5. ~~Normalizar las 84 categorías~~ hecho el 8-oct 17:15.
 6. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.

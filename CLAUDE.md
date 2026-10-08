@@ -13,7 +13,7 @@ No se cambia de plataforma sin un "sí" explícito de Kristian en el chat.
 
 | Pieza | Dónde vive | Código |
 |---|---|---|
-| Web q-h.com | Vercel, proyecto `quantum-holistic-2`, rama `main` | este repo (Next.js 14) |
+| Web **quantum-holistic.com** (el nombre «q-h.com» es solo un apodo: ese dominio no es nuestro) | Vercel, proyecto `quantum-holistic-2`, rama `main`. Dominio comprado en Vercel (1-may-2026, renovación automática), DNS en Vercel | este repo (Next.js 14) |
 | Base de datos y memoria | Supabase `vctetjugbvyllwjpxcxh` | tablas `kimiko_*`, `blog_posts`, `plants` |
 | Trabajo diario (blog + redes + vigilancia) | Supabase Edge Function `kimiko-diario`, lanzada por `pg_cron` | `supabase/functions/kimiko-diario` + `_kimiko/` |
 | Imágenes | Edge Functions `kimiko-imagen` (Workers AI flux) y `kimiko-ficha` (SVG→PNG) | `supabase/functions/` |
