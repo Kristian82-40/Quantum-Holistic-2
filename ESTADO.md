@@ -49,14 +49,18 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 |---|---|---|
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
-| ⚠️ | El worker guarda un secreto `ANTHROPIC_API_KEY` que ningún código usa | `wrangler secret list` del 8-oct · propuesta: borrarlo |
+| ✅ | Secreto sin uso `ANTHROPIC_API_KEY` borrado del worker (quedan 7) | `wrangler secret delete`, 8-oct |
+| ✅ | Avisos de seguridad de Supabase: de 1 ERROR + 10 WARN a 0 ERROR + 5 WARN (los que quedan son intencionados o de panel) | PR #17, migración aplicada, `get_advisors` del 8-oct |
+| ❓ | Protección de contraseñas filtradas (Auth) | ajuste de panel; según Supabase requiere plan Pro |
+| ✅ | gitleaks antes de cada commit, con reglas para llaves de Supabase (antes no las detectaba) | PR #18: commit con llave falsa bloqueado |
+| ✅ | 6 skills repetidas u obsoletas retiradas (`flow-state` y compañía) | PR #19 |
 | ✅ | Vigilancia: gitleaks y pruebas de Kimiko en cada PR | PR #16, run 37749905519 ("no leaks found", 38 pruebas). Historial completo: 0 fugas |
 | ❓ | Vigilancia: Lighthouse diario, resumen de Dependabot y guarda del NÚCLEO | corren cuando el workflow esté en `main`. Base del 8-oct (móvil): rend 75–91, acces 90–94, SEO 100 |
 | ✅ | Alertas y arreglos de seguridad de Dependabot activados en el repo | API de GitHub, 8-oct |
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-1. Fusionar en orden: **#9 → #10 → #16** (y #11 cuando quieras). Desde GitHub en el móvil.
+1. Fusionar en orden: **#9 → #10 → #16**; y #11, #17, #18 y #19 cuando quieras. Desde GitHub en el móvil.
 2. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com, sin tarjeta) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI").
 3. Escribir `/estado` al bot para probar los comandos. Y reenviar o descartar las 2 órdenes pendientes del 6-oct.
 
