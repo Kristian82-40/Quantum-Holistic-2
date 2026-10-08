@@ -7,6 +7,7 @@ import { crearDb } from '../_kimiko/lib/db.js';
 import { iaRest } from '../_kimiko/lib/ia-rest.js';
 import { fichaSVG, BUCKET_BLOG } from '../_kimiko/lib/imagen.js';
 import { enviarMensaje, BOTONES_PR } from '../_kimiko/lib/telegram.js';
+import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
 import config from '../_kimiko/config/projects.json' with { type: 'json' };
 
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d, null, 2), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -55,7 +56,16 @@ Deno.serve(async (req) => {
   if (p.accion === 'diag') {
     let formato = 'ausente';
     try { const m = JSON.parse(env.SUPABASE_SECRET_KEYS ?? ''); formato = Array.isArray(m) ? 'lista' : `objeto: ${Object.keys(m).join(', ')}`; } catch { formato = env.SUPABASE_SECRET_KEYS ? 'no-json' : 'ausente'; }
-    return json({ secret_keys: formato, gemini: !!env.GEMINI_API_KEY, telegram: !!env.TELEGRAM_BOT_TOKEN && !!env.TELEGRAM_CHAT_ID, workers_ai: !!env.CF_AI_TOKEN && !!env.CF_ACCOUNT_ID });
+    return json({ secret_keys: formato, gemini: !!env.GEMINI_API_KEY, telegram: !!env.TELEGRAM_BOT_TOKEN && !!env.TELEGRAM_CHAT_ID, workers_ai: !!env.CF_AI_TOKEN && !!env.CF_ACCOUNT_ID, groq: !!env.GROQ_API_KEY });
+  }
+  // Chequeo suelto (B3), sin escribir el post. avisar=true lo manda también a Telegram.
+  if (p.accion === 'chequeo') {
+    const proyecto = config.proyectos[0];
+    const fecha = new Date().toISOString().slice(0, 10);
+    const c = await chequeoDiario({ env, db, sitio: proyecto.sitio, fecha });
+    await db.insertar('kimiko_updates', { tipo: 'chequeo', project_id: proyecto.id, ok: c.ok, detalle: { fecha, fallos: c.fallos, ...c.datos, origen: 'manual' } }).catch(() => {});
+    if (p.avisar) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoChequeo(c, fecha) });
+    return json(c);
   }
 
   const trabajo = ejecutarDia({

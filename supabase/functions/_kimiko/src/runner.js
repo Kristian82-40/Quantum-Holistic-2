@@ -4,6 +4,13 @@ import { vigilarSitio } from '../lib/security.js';
 import { avisar, enviarBorrador } from '../lib/telegram.js';
 import { estadoGasto } from '../lib/budget.js';
 import { avisosCaducidad } from '../lib/vault.js';
+import { elegirPlanta, articuloSinIA } from '../lib/sin-ia.js';
+import { chequeoDiario, textoChequeo } from '../lib/chequeo.js';
+
+// La Edge Function vive como mucho 150 s (plan Free). El texto tiene hasta LIMITE_TEXTO_MS; después, sin IA.
+// Pasado LIMITE_IMAGEN_MS ya no se pide flux (hasta 40 s): se usa la ficha PNG, que tarda ~2 s.
+export const LIMITE_TEXTO_MS = 85000;
+export const LIMITE_IMAGEN_MS = 100000;
 
 const CAMPOS_REGLA = ['regla', 'rule', 'texto', 'text', 'content', 'contenido'];
 const aRegla = (fila) => { for (const c of CAMPOS_REGLA) if (typeof fila[c] === 'string') return fila[c]; return null; };
@@ -14,13 +21,13 @@ const pieBorrador = (art, post, origenImagen) => [
   '',
   art.extracto,
   '',
-  `Imagen: ${origenImagen === 'flux' ? 'acuarela (Workers AI)' : 'ficha de respaldo'} · Texto: ${art.modelo}`,
+  `Imagen: ${origenImagen === 'flux' ? 'acuarela (Workers AI)' : 'ficha de respaldo'} · Texto: ${art.modelo === 'plantilla-sin-ia' ? 'plantilla sin IA (fallaron Gemini, Workers AI y Groq)' : art.modelo}`,
   art.problemas.length ? `⚠️ Revisar: ${art.problemas.map((p) => p.motivo).join('; ')}` : '✅ Sin avisos del filtro legal',
   `Slug: ${post.slug}`,
 ].join('\n');
 
 // Un proyecto: artículo de blog (borrador) + pieza de redes. Lanza si falla; el registro lo hace quien llama.
-async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg }) {
+async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0 }) {
   if (forzarError) throw new Error('Error provocado a propósito (prueba de avisos)');
   const valido = validarProyecto(proyecto);
   if (!valido.ok) throw new Error(`proyecto incompleto: falta ${valido.faltan.join(', ')}`);
@@ -34,7 +41,18 @@ async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError
   ];
   const aprendizajes = (await db.seleccionar('kimiko_learnings', 'select=*&limit=50')).map(aRegla).filter(Boolean);
 
-  const art = await crearArticulo({ env, ai, proyecto, fecha, slot, recientes, aprendizajes, fetchImpl });
+  let art;
+  try {
+    art = await crearArticulo({ env, ai, proyecto, fecha, slot, recientes, aprendizajes, fetchImpl, hasta: t0 + LIMITE_TEXTO_MS });
+  } catch (e) {
+    if (!e.sinTexto) throw e;
+    // Modo sin IA: un día malo nunca se queda en blanco. Ficha con plantilla desde `plants`, como borrador.
+    const plantas = await db.seleccionar('plants', 'select=slug,nombre_es,nombre_latino,ficha_cientifica,ficha_verificada&ficha_cientifica=not.is.null');
+    const planta = elegirPlanta(plantas, recientes, fecha);
+    if (!planta) throw e;
+    art = { ...articuloSinIA({ planta, proyecto }), errores: e.errores || [], bruto: e.bruto };
+    reg.detalle.modo = 'sin-ia';
+  }
   reg.respuesta_bruta = art.bruto;
   Object.assign(reg.detalle, { modelo_texto: art.modelo, errores_texto: art.errores.map((e) => `${e.motor}: ${e.error.slice(0, 200)}`), neuronas: art.neuronas, problemas: art.problemas });
 
@@ -42,7 +60,7 @@ async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError
   if ((await db.seleccionar('blog_posts', `slug=eq.${encodeURIComponent(slug)}&select=id`)).length) slug = `${slug}-${slot}-${Date.now() % 100000}`;
 
   const img = await imagenDelPost({
-    ai, db, prompt: art.promptImagen, ruta: `blog/${proyecto.id}/${slug}`, forzarFicha,
+    ai, db, prompt: art.promptImagen, ruta: `blog/${proyecto.id}/${slug}`, forzarFicha: forzarFicha || Date.now() - t0 > LIMITE_IMAGEN_MS,
     ficha: { titulo: art.planta, subtitulo: art.nombreBotanico, pie: proyecto.sitio.replace(/^https?:\/\//, '') },
   });
   Object.assign(reg.detalle, { imagen: img.origen, imagen_url: img.url, aviso_imagen: img.aviso });
@@ -69,16 +87,28 @@ async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError
 }
 
 export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = fetch, opciones = {} }) {
-  const { forzarError = false, forzarFicha = false, slot = 1, origen = 'cron' } = opciones;
+  const { forzarError = false, forzarFicha = false, slot = 1, origen = 'cron', chequeo = origen === 'cron', t0 = Date.now() } = opciones;
   const mes = fecha.slice(0, 7);
   const resumen = [];
   const registros = [];
 
+  // Chequeo antes del post (solo en la ejecución de las 06:00, para no repetir avisos en cada reintento).
+  if (chequeo) {
+    for (const proyecto of proyectos.filter((p) => p.activo !== false)) {
+      try {
+        const c = await chequeoDiario({ env, db, sitio: proyecto.sitio, fecha, fetchImpl });
+        await db.insertar('kimiko_updates', { tipo: 'chequeo', project_id: proyecto.id, ok: c.ok, detalle: { fecha, fallos: c.fallos, ...c.datos } }).catch(() => {});
+        if (!c.ok) await avisar({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoChequeo(c, fecha), fetchImpl });
+        resumen.push(c.ok ? '🩺 Chequeo: todo en orden' : `🩺 Chequeo: ${c.fallos.length} aviso(s), enviados aparte`);
+      } catch (e) { resumen.push(`❌ chequeo: ${e.message}`); }
+    }
+  }
+
   for (const proyecto of proyectos.filter((p) => p.activo !== false)) {
     const reg = { tipo: 'blog', project_id: proyecto.id, ok: false, detalle: { fecha, slot, origen, neuronas: 0 }, respuesta_bruta: null };
-    const t0 = Date.now();
+    const inicio = Date.now();
     try {
-      resumen.push(`✅ ${await blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg })}`);
+      resumen.push(`✅ ${await blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0 })}`);
       reg.ok = true;
     } catch (e) {
       reg.detalle.error = e.message;
@@ -87,7 +117,7 @@ export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = f
       reg.detalle.telegram_error = tg.ok ? 'enviado' : tg.error;
       resumen.push(`❌ ${proyecto.id}: ${e.message}`);
     } finally {
-      reg.detalle.ms = Date.now() - t0;
+      reg.detalle.ms = Date.now() - inicio;
       registros.push(reg);
       // Siempre queda escrito, también si Telegram falló. Si Supabase falla, al menos va en el resumen.
       try { reg.detalle.update_id = (await db.insertar('kimiko_updates', reg))?.update_id; } catch (e) { resumen.push(`❌ no pude escribir kimiko_updates: ${e.message}`); }
