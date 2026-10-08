@@ -42,6 +42,9 @@ Cada skill es una forma de trabajar ligada a una herramienta real. Si la herrami
 | **Light Tag** | Etiquetas estructuradas para plantas, leads y servicios en Supabase | columnas `tags` en Supabase vía migración | pendiente de diseñar el esquema |
 | **Diff-Only** | Cambiar solo las líneas necesarias y enseñar solo el diff | edición por bloques + PR | activa |
 
+Skills propias de Claude (8-oct-2026), en `.claude/skills/` (Claude Code las carga solo; para el chat, subir el `.zip`). Solo sirven a Claude, no a Kimiko:
+`qh-sesion` (tokens e integridad; sustituye a `flow-state`), `qh-cambio-seguro` (plan → rama → prueba → PR), `qh-diseno` (tokens de marca y móvil primero), `qh-seguridad` (checklist antes de cada PR) y `qh-editorial` (salud + SEO de cada post).
+
 ## 5. Conectores
 - Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions). Telegram, a través de Kimiko.
 - Disponibles pero sin probar en este proyecto: Gmail, Google Drive, Google Calendar, Notion.
