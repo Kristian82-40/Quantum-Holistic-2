@@ -32,3 +32,4 @@ assets/ritual-descanso.pdf
 
 # Logs locales de scripts (QA nocturna, agentes)
 logs/
+kimiko/worker/.wrangler/

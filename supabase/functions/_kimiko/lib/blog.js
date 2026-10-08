@@ -1,7 +1,8 @@
 // Artículo diario del blog + pieza para redes, en UNA sola llamada de texto.
-// Texto: Gemini (capa gratuita) y, si falla, Workers AI. Siempre se guarda como borrador (published=false, status='draft').
+// Texto: Gemini (capa gratuita), Workers AI y Groq; si fallan los tres, ficha sin IA a partir de `plants`. Siempre se guarda como borrador (published=false, status='draft').
 import { generarJSONGemini } from './gemini.js';
 import { generarJSON as generarJSONWorkersAI, MODELO_TEXTO } from './ia.js';
+import { generarJSONGroq } from './groq.js';
 import { revisarArticulo, conAvisoBlog, revisarClaims, conAviso } from './legal.js';
 
 // Lista limpia y fija de categorías nuevas. Las filas antiguas (con variantes) no se tocan en esta fase.
@@ -105,44 +106,55 @@ export const promptImagen = (proyecto, d, variacion) =>
 
 const normalizarHashtags = (hs = []) => [...new Set(hs.map((h) => `#${String(h).replace(/^#+/, '').replace(/\s+/g, '')}`))].slice(0, 15);
 
-// Pide el texto: Gemini primero; si falla (cuota, red, JSON), Workers AI. Devuelve también las respuestas en bruto.
-export async function pedirTexto({ env, ai, system, user, fetchImpl = fetch }) {
+// Cadena de motores gratuitos: Gemini (3 intentos) → Workers AI → Groq. Si fallan todos, el error lleva sinTexto=true
+// y quien llama pasa al modo sin IA (ficha de planta con plantilla). `hasta` es la hora límite para pedir texto.
+export async function pedirTexto({ env, ai, system, user, fetchImpl = fetch, hasta = Infinity }) {
   const errores = [];
-  try {
-    const r = await generarJSONGemini({ apiKey: env.GEMINI_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl });
-    return { ...r, neuronas: 0, errores };
-  } catch (e) {
-    errores.push({ motor: 'gemini', error: e.message, bruto: e.bruto });
+  const motores = [
+    ['gemini', () => generarJSONGemini({ apiKey: env.GEMINI_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta })],
+    ['workers-ai', async () => {
+      if (!env.CF_ACCOUNT_ID || !env.CF_AI_TOKEN) throw new Error('faltan CF_ACCOUNT_ID o CF_AI_TOKEN');
+      return { ...(await generarJSONWorkersAI({ ai, system, user, schema: ESQUEMA, validar: validarRespuesta, maxTokens: 3000, reintentos: 1 })), modelo: MODELO_TEXTO };
+    }],
+    ['groq', () => generarJSONGroq({ apiKey: env.GROQ_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta })],
+  ];
+  let neuronas = 0;
+  for (const [motor, pedir] of motores) {
+    if (hasta - Date.now() < 8000) { errores.push({ motor, error: 'sin tiempo (límite de la función)' }); continue; }
+    try {
+      const r = await pedir();
+      return { ...r, neuronas: neuronas + (r.neuronas || 0), errores };
+    } catch (e) {
+      neuronas += e.neuronas || 0;
+      errores.push({ motor, error: e.message, bruto: e.bruto });
+    }
   }
-  try {
-    const r = await generarJSONWorkersAI({ ai, system, user, schema: ESQUEMA, validar: validarRespuesta, maxTokens: 3000 });
-    return { ...r, modelo: MODELO_TEXTO, errores };
-  } catch (e) {
-    errores.push({ motor: 'workers-ai', error: e.message, bruto: e.bruto });
-    const err = new Error(`Sin texto: ${errores.map((x) => `${x.motor}: ${x.error.slice(0, 160)}`).join(' | ')}`);
-    err.bruto = errores.map((x) => `[${x.motor}] ${x.bruto || x.error}`).join('\n---\n').slice(0, 20000);
-    err.neuronas = e.neuronas || 0;
-    throw err;
-  }
+  const err = new Error(`Sin texto: ${errores.map((x) => `${x.motor}: ${x.error.slice(0, 160)}`).join(' | ')}`);
+  err.bruto = errores.map((x) => `[${x.motor}] ${x.bruto || x.error}`).join('\n---\n').slice(0, 20000);
+  err.neuronas = neuronas;
+  err.sinTexto = true;
+  err.errores = errores;
+  throw err;
 }
 
-export async function crearArticulo({ env, ai, proyecto, fecha, slot = 1, recientes = [], aprendizajes = [], fetchImpl = fetch }) {
+export async function crearArticulo({ env, ai, proyecto, fecha, slot = 1, recientes = [], aprendizajes = [], fetchImpl = fetch, hasta = Infinity }) {
   const pilar = elegirPilar(proyecto, fecha, slot);
   const variacion = elegirVariacion(proyecto, fecha, slot);
   const system = promptSistema(proyecto, pilar, variacion, aprendizajes, recientes);
   let user = `Escribe el artículo del ${fecha}.`;
-  let r = await pedirTexto({ env, ai, system, user, fetchImpl });
+  let r = await pedirTexto({ env, ai, system, user, fetchImpl, hasta });
   const brutos = [r.bruto];
   let neuronas = r.neuronas || 0;
   const evaluar = (d) => ({ legal: revisarArticulo({ titulo: d.titulo, extracto: d.extracto, contenido: d.contenido_markdown }), social: revisarClaims(`${d.social_titular}. ${d.social_copy}`), duplicada: esDuplicada(d.titulo, recientes) });
   let ev = evaluar(r.datos);
   // Una corrección como mucho: cada vuelta gasta cuota gratuita y el borrador lo revisa Kristian igualmente.
-  if (!ev.legal.ok || !ev.social.ok || ev.duplicada) {
+  // Sin margen de tiempo no se corrige: mejor un borrador con avisos que ninguno.
+  if ((!ev.legal.ok || !ev.social.ok || ev.duplicada) && hasta - Date.now() > 40000) {
     const motivos = [...ev.legal.problemas, ...ev.social.problemas].map((p) => `${p.motivo}${p.frase ? `: "${p.frase.slice(0, 120)}"` : ''}`);
     if (ev.duplicada) motivos.push('El título repite un tema reciente; elige otra planta');
     user = `${user}\nCorrige esto en tu nueva versión: ${motivos.join('; ')}`;
     try {
-      const r2 = await pedirTexto({ env, ai, system, user, fetchImpl });
+      const r2 = await pedirTexto({ env, ai, system, user, fetchImpl, hasta });
       brutos.push(r2.bruto); neuronas += r2.neuronas || 0;
       const ev2 = evaluar(r2.datos);
       const nProb = (e) => e.legal.problemas.length + e.social.problemas.length + (e.duplicada ? 1 : 0);

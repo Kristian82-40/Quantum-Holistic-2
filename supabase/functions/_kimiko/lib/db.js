@@ -45,6 +45,11 @@ export function crearDb({ url, serviceKey, fetchImpl = fetch }) {
       }));
       return `${bucket}/${ruta}`;
     },
+    // Función SQL expuesta por PostgREST (solo las que tienen GRANT a service_role).
+    async rpc(nombre, args = {}) {
+      const r = await ok(await fetchImpl(`${url}/rest/v1/rpc/${nombre}`, { method: 'POST', headers: json, body: JSON.stringify(args) }));
+      return r.json();
+    },
     urlPublica: (bucket, ruta) => `${url}/storage/v1/object/public/${bucket}/${ruta}`,
     // SVG → PNG en la Edge Function kimiko-ficha, que lo sube ella misma al bucket "kimiko" con esta misma llave.
     async fichaPNG(svg, ruta) {

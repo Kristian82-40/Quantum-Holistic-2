@@ -1,0 +1,13 @@
+name = "kimiko"
+main = "entry/worker.js"
+compatibility_date = "2026-10-01"
+# URL pública solo para el webhook de Telegram (validado con secret_token + chat) y /admin/webhook (Bearer). Lo demás: 404.
+workers_dev = true
+preview_urls = false
+
+# Sin cron: el trabajo diario lo lanza pg_cron en Supabase (Edge Function kimiko-diario).
+[triggers]
+crons = []
+
+[observability]
+enabled = true

@@ -6,6 +6,7 @@ export function iaRest({ accountId, token, fetchImpl = fetch }) {
       if (!accountId || !token) throw new Error('Workers AI REST: faltan CF_ACCOUNT_ID o CF_AI_TOKEN');
       const r = await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${modelo}`, {
         method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' }, body: JSON.stringify(entrada),
+        signal: AbortSignal.timeout(40000), // una llamada colgada no puede comerse los 150 s de la función
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok || d.success === false) throw new Error(`Workers AI ${r.status}: ${JSON.stringify(d.errors || d).slice(0, 300)}`);
