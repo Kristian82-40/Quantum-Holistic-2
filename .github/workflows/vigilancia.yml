@@ -1,0 +1,155 @@
+name: Vigilancia
+
+# Vigilancia gratuita (repo público): secretos filtrados (gitleaks), pruebas de Kimiko, diseño/rendimiento/SEO de
+# q-h.com (Lighthouse) y PR de Dependabot. Los fallos llegan a Telegram a través de la Edge Function kimiko-diario
+# (accion "avisar-ci"), autenticada con SUPABASE_SERVICE_ROLE_KEY: no hace falta el token del bot en GitHub.
+# Sin actions de terceros: gitleaks se descarga de su release oficial y se comprueba su checksum.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "15 5 * * *"   # cada día 05:15 UTC: Lighthouse de producción (y lunes, resumen de Dependabot)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  GITLEAKS_VERSION: 8.30.1
+  SITIO: https://quantum-holistic.com
+  KIMIKO_URL: https://vctetjugbvyllwjpxcxh.supabase.co/functions/v1/kimiko-diario
+
+jobs:
+  gitleaks:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Instalar gitleaks (release oficial + checksum)
+        run: |
+          cd "$RUNNER_TEMP"
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          curl -sSLO "$base/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSLO "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          sha256sum -c --ignore-missing "gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          tar xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" gitleaks
+      - name: Buscar secretos
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            rango="${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}"
+          else
+            rango="${{ github.event.before }}..${{ github.sha }}"
+            git cat-file -e "${{ github.event.before }}" 2>/dev/null || rango="${{ github.sha }}~1..${{ github.sha }}"
+          fi
+          "$RUNNER_TEMP/gitleaks" git . --no-banner --redact --log-opts="$rango"
+      - name: Avisar por Telegram
+        if: failure()
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -n "$KEY" ] || { echo "Sin llave (PR de un fork o de Dependabot): no aviso"; exit 0; }
+          jq -n --arg u "$URL" '{accion:"avisar-ci", titulo:"🚨 gitleaks: posible secreto en el código", texto:"No fusiones este cambio. Si el secreto es real, rótalo ya: borrar el commit no basta (el repo es público).", url:$u}' \
+            | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-
+
+  nucleo-kimiko:
+    # Autoridad con límites (B6): un PR de Kimiko (rama kimiko/…) no puede cambiar el NÚCLEO de kimiko/PROMPT.md.
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'kimiko/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: El NÚCLEO no cambia
+        run: |
+          nucleo() { git show "$1:kimiko/PROMPT.md" | sed -n '/NÚCLEO — INMUTABLE: inicio/,/NÚCLEO — INMUTABLE: fin/p'; }
+          if [ "$(nucleo ${{ github.event.pull_request.base.sha }})" != "$(nucleo ${{ github.event.pull_request.head.sha }})" ]; then
+            echo "::error::Este PR de Kimiko cambia el NÚCLEO — INMUTABLE de kimiko/PROMPT.md. No se fusiona."
+            exit 1
+          fi
+          echo "NÚCLEO intacto"
+      - name: Avisar por Telegram
+        if: failure()
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          jq -n --arg u "$URL" '{accion:"avisar-ci", titulo:"⛔ Kimiko intentó cambiar su NÚCLEO", texto:"El PR toca la parte inmutable de kimiko/PROMPT.md. Ciérralo desde Telegram.", url:$u}' \
+            | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-
+
+  pruebas-kimiko:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node supabase/functions/_kimiko/pruebas.mjs
+
+  lighthouse:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Lighthouse de producción (móvil)
+        run: |
+          npx -y @lhci/cli@0.15.1 collect --numberOfRuns=1 \
+            --url="$SITIO/" --url="$SITIO/blog" --url="$SITIO/diccionario"
+      - name: Resumen y umbrales
+        id: resumen
+        run: |
+          node -e '
+            const fs = require("fs");
+            const dir = ".lighthouseci";
+            const umbral = { performance: 0.6, accessibility: 0.9, "best-practices": 0.8, seo: 0.9 };
+            const lineas = []; let malas = 0;
+            for (const f of fs.readdirSync(dir).filter((f) => /^lhr-.*\.json$/.test(f))) {
+              const r = JSON.parse(fs.readFileSync(`${dir}/${f}`, "utf8"));
+              const c = r.categories;
+              const p = (k) => Math.round((c[k]?.score ?? 0) * 100);
+              const bajo = Object.entries(umbral).filter(([k, u]) => (c[k]?.score ?? 0) < u).map(([k]) => k);
+              malas += bajo.length;
+              lineas.push(`${new URL(r.finalDisplayedUrl || r.requestedUrl).pathname}: rend ${p("performance")} · acces ${p("accessibility")} · buenas pr ${p("best-practices")} · SEO ${p("seo")}${bajo.length ? "  ⚠️ " + bajo.join(", ") : ""}`);
+            }
+            const texto = lineas.join("\n");
+            console.log(texto);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `malas=${malas}\ntexto<<EOF\n${texto}\nEOF\n`);
+          '
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: lighthouse, path: .lighthouseci, retention-days: 14 }
+      - name: Avisar por Telegram si baja de los umbrales
+        if: steps.resumen.outputs.malas != '0'
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TEXTO: ${{ steps.resumen.outputs.texto }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          jq -n --arg t "$TEXTO" --arg u "$URL" '{accion:"avisar-ci", titulo:"📉 Lighthouse de q-h.com bajo umbral (rend 60, acces 90, buenas pr 80, SEO 90)", texto:$t, url:$u}' \
+            | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-
+          exit 1
+
+  dependabot:
+    if: (github.event_name == 'schedule' && github.event.schedule == '15 5 * * *') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Resumen de PR de Dependabot (los lunes, o a mano)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%u)" != "1" ]; then echo "Solo los lunes"; exit 0; fi
+          prs=$(gh pr list -R "${{ github.repository }}" --author "app/dependabot" --state open --json number,title --jq '.[] | "#\(.number) \(.title)"')
+          [ -n "$prs" ] || { echo "Sin PR de Dependabot abiertos"; exit 0; }
+          echo "$prs"
+          jq -n --arg t "$prs" --arg u "${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Fdependabot" '{accion:"avisar-ci", titulo:"📦 Dependabot: PR pendientes de revisar", texto:$t, url:$u}' \
+            | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-

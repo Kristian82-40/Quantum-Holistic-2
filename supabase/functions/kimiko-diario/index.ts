@@ -32,13 +32,30 @@ async function igualSeguro(a: string, b: string) {
   return dif === 0;
 }
 
+// Solo una llave secreta o de servicio puede leer el endpoint de admin de Auth (mismo método que kimiko-imagen).
+async function esLlaveDeServicio(req: Request): Promise<boolean> {
+  const llave = req.headers.get('apikey') ?? (req.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '');
+  if (!llave || llave.length < 20) return false;
+  const r = await fetch(`${Deno.env.get('SUPABASE_URL')}/auth/v1/admin/users?per_page=1`, { headers: { apikey: llave, authorization: `Bearer ${llave}` } });
+  await r.body?.cancel();
+  return r.ok;
+}
+
 Deno.serve(async (req) => {
   const secreto = Deno.env.get('KIMIKO_CRON_SECRETO') ?? '';
-  if (req.method !== 'POST' || !secreto || !(await igualSeguro(req.headers.get('x-kimiko-secreto') ?? '', secreto))) {
-    return json({ error: 'no autorizado' }, 401);
-  }
+  if (req.method !== 'POST') return json({ error: 'usa POST' }, 405);
+  const porSecreto = !!secreto && (await igualSeguro(req.headers.get('x-kimiko-secreto') ?? '', secreto));
   const p = await req.json().catch(() => ({})) as Record<string, unknown>;
+  // GitHub Actions (vigilancia) solo puede pedir 'avisar-ci', con la llave de servicio que ya tiene como secreto.
+  if (!porSecreto && !(p.accion === 'avisar-ci' && (await esLlaveDeServicio(req)))) return json({ error: 'no autorizado' }, 401);
   const env = Deno.env.toObject();
+
+  // Aviso de GitHub Actions (gitleaks, Lighthouse, Dependabot) a Telegram. Texto recortado y marcado como de CI.
+  if (p.accion === 'avisar-ci') {
+    const texto = `⚙️ GitHub · ${String(p.titulo ?? 'vigilancia').slice(0, 80)}\n${String(p.texto ?? '').slice(0, 1500)}${typeof p.url === 'string' && p.url.startsWith('https://github.com/') ? `\n${p.url}` : ''}`;
+    const r = await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto });
+    return json({ telegram: r.ok ? 'enviado' : r.error }, r.ok ? 200 : 502);
+  }
   const db = crearDb({ url: env.SUPABASE_URL, serviceKey: llaveSecreta() });
 
   if (p.accion === 'probar-ficha') {
