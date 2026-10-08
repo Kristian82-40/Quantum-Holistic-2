@@ -2,10 +2,12 @@
 //  · Botones del borrador diario: Publicar / Corregir / Descartar.
 //  · Mensajes de Kristian (texto o foto): órdenes para Kimiko Cloud → kimiko_drafts + repository_dispatch.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
+//  · Comandos /estado, /auditar y /manual (solo lectura; ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
 import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, guardarFoto } from '../lib/telegram.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR } from '../lib/github.js';
+import { atenderComando } from './comandos.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const OK = () => new Response('ok');
@@ -86,7 +88,9 @@ export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
       if (ACCIONES[codigo]) await botonBorrador({ env, db, cq, codigo, id, fetchImpl });
       else if (codigo === 'prm' || codigo === 'prc') await botonPR({ env, db, cq, codigo, id, fetchImpl });
       else await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón desconocido', fetchImpl);
-    } else if (msg && (msg.text || msg.caption || msg.photo) && !String(msg.text || '').startsWith('/')) {
+    } else if (msg && String(msg.text || '').startsWith('/')) {
+      await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: await atenderComando({ texto: msg.text, db, fetchImpl }), fetchImpl });
+    } else if (msg && (msg.text || msg.caption || msg.photo)) {
       await orden({ env, db, update, msg, fetchImpl });
     }
   } catch (e) {

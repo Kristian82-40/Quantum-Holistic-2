@@ -14,6 +14,9 @@ import { generarJSONGemini } from './lib/gemini.js';
 import { pedirTexto, ESQUEMA } from './lib/blog.js';
 import { articuloSinIA, elegirPlanta } from './lib/sin-ia.js';
 import { chequeoDiario, textoChequeo } from './lib/chequeo.js';
+import { auditar, textoAuditoria } from './lib/auditoria.js';
+import { tareaActiva, textoManual } from './lib/runbook.js';
+import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import config from './config/projects.json' with { type: 'json' };
 
 let n = 0;
@@ -331,7 +334,7 @@ const redChequeo = ({ web = 200, llave = 200 } = {}) => async (url) => {
   return { status: llave };
 };
 const dbChequeo = (crons) => ({ seleccionar: async () => [{ detalle: { neuronas: 300 } }], rpc: async () => crons });
-const cronsOk = [{ jobname: 'kimiko-diario', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T06:00:00Z' }, { jobname: 'kimiko-reintento', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T07:30:00Z' }];
+const cronsOk = [{ jobname: 'kimiko-diario', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T06:00:00Z' }, { jobname: 'kimiko-reintento', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T07:30:00Z' }, { jobname: 'kimiko-auditoria', active: true, ultimo_estado: null, ultima_ejecucion: null }];
 const envCompleto = { GEMINI_API_KEY: 'k', GROQ_API_KEY: 'g', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1', ...CF };
 await prueba('chequeo: todo en orden', async () => {
   const c = await chequeoDiario({ env: envCompleto, db: dbChequeo(cronsOk), sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo(), ahora: Date.parse('2026-10-08T08:00:00Z') });
@@ -355,6 +358,52 @@ await prueba('ejecutor: a las 06:00 el chequeo va antes del post y avisa por Tel
   await ejecutarDia({ env: { GEMINI_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1' }, ai: aiFalso(), proyectos: [proyecto], fecha: '2026-10-06', db, fetchImpl: conChequeo });
   assert.equal(db.t.kimiko_updates[0].tipo, 'chequeo'); assert.equal(db.t.kimiko_updates[0].ok, false);
   assert.match(tg[0].cuerpo.text, /🩺 Chequeo 2026-10-06/); assert.equal(tg[1].metodo, 'sendPhoto');
+});
+
+// ── B1 y B4: manual de tareas y auditoría ──
+await prueba('manual: una tarea en pausa no se ejecuta; si la tabla no responde, todo sigue activo', async () => {
+  assert.equal(tareaActiva(null, 'post-diario'), true);
+  assert.equal(tareaActiva([{ id: 'post-diario', activa: false }], 'post-diario'), false);
+  const db = dbFalsa(); const base = db.seleccionar;
+  db.seleccionar = async (t, q) => (t === 'kimiko_runbook' ? [{ id: 'post-diario', activa: false }] : base(t, q));
+  const r = await ejecutarDia({ env: {}, ai: aiFalso(), proyectos: [proyecto], fecha: '2026-10-08', db, fetchImpl: red(), opciones: { chequeo: false } });
+  assert.equal(db.t.blog_posts.length, 0); assert.ok(r.resumen.some((l) => l.includes('en pausa')));
+  assert.match(textoManual([{ nombre: 'Post', cuando: '06:00', comprobacion: 'x', activa: true }]), /🟢 Post — 06:00/);
+});
+await prueba('auditoría: resume solo lo que falla y dice que no ha cambiado nada', async () => {
+  const limpio = { slugs_duplicados: { n: 0 }, categorias_no_normalizadas: { n: 0 }, publicados_sin_imagen: { n: 0 }, publicados_sin_meta: { n: 0 }, plantas_publicadas_sin_verificar: { n: 0 }, tablas_sin_rls: { n: 0 } };
+  const a = await auditar({ db: { rpc: async () => limpio } });
+  assert.equal(a.ok, true); assert.match(textoAuditoria(a, '2026-10-11'), /todo limpio/);
+  const b = await auditar({ db: { rpc: async () => ({ ...limpio, categorias_no_normalizadas: { n: 84, ejemplos: ['sabiduría', 'detox'] } }) } });
+  const t = textoAuditoria(b, '2026-10-11');
+  assert.equal(b.ok, false); assert.match(t, /categoría fuera de la lista fija: 84/); assert.match(t, /sabiduría, detox/); assert.match(t, /No he cambiado nada/);
+  assert.ok(!t.includes('RLS'));
+});
+
+// ── B7: comandos de Telegram ──
+const ESTADO_MD = '# ESTADO\n**Última revisión:** 8-oct-2026, 12:00 (Madrid) · por Claude\n| | Qué | Prueba |\n|---|---|---|\n| ✅ | Web arriba | curl |\n| ❌ | Faltan **CF_AI_TOKEN** | chequeo |\n| ⚠️ | Blog a medias | sql |\n';
+await prueba('comandos: /estado resume ESTADO.md, el último chequeo y el borrador de hoy', async () => {
+  assert.match(resumirEstado(ESTADO_MD), /revisado 8-oct-2026, 12:00 \(Madrid\)/);
+  assert.match(resumirEstado(ESTADO_MD), /✅ 1 · ⚠️ 1 · ❌ 1 · ❓ 0/); assert.match(resumirEstado(ESTADO_MD), /• Faltan CF_AI_TOKEN/);
+  const db = { seleccionar: async (t) => (t === 'kimiko_updates' ? [{ created_at: '2026-10-08T06:00:01Z', ok: false, detalle: { fallos: [{ que: 'Falta GROQ_API_KEY' }] } }] : [{ titular: 'Árnica', estado: 'revision' }]) };
+  const t = await atenderComando({ texto: '/estado', db, hoy: '2026-10-08', fetchImpl: async () => ({ ok: true, text: async () => ESTADO_MD }) });
+  assert.match(t, /📋 ESTADO.md/); assert.match(t, /• Falta GROQ_API_KEY/); assert.match(t, /"Árnica" \(revision\)/);
+});
+await prueba('comandos: /manual, /auditar (y su registro) y ayuda para lo desconocido', async () => {
+  const filas = []; const limpio = Object.fromEntries(['slugs_duplicados', 'categorias_no_normalizadas', 'publicados_sin_imagen', 'publicados_sin_meta', 'plantas_publicadas_sin_verificar', 'tablas_sin_rls'].map((k) => [k, { n: 0 }]));
+  const db = { seleccionar: async () => [{ nombre: 'Post', cuando: '06:00', comprobacion: 'x', activa: false }], rpc: async () => limpio, insertar: async (t, f) => filas.push(f) };
+  assert.match(await atenderComando({ texto: '/manual', db }), /⏸ Post — 06:00/);
+  assert.match(await atenderComando({ texto: '/auditar@KimikoBot', db }), /todo limpio/); assert.equal(filas[0].detalle.origen, 'telegram');
+  assert.equal(await atenderComando({ texto: '/start', db }), AYUDA);
+  assert.match(await atenderComando({ texto: '/auditar', db: { ...db, rpc: async () => { throw new Error('caída'); } } }), /No pude auditar: caída/);
+});
+await prueba('webhook: un comando de Kristian se responde y NO lanza Kimiko Cloud', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };
+  const s = await secretoWebhook('tok'); const db = dbFalsa(); db.insertarSiNuevo = async (t, f) => f; const tg = []; const gh = [];
+  const redC = async (url, o = {}) => { const u = String(url); if (u.includes('api.github.com')) { gh.push(u); return { ok: true, status: 204 }; } if (u.includes('api.telegram.org')) { tg.push(JSON.parse(o.body)); return { ok: true, json: async () => ({ ok: true }) }; } return { ok: true, text: async () => ESTADO_MD }; };
+  const pet = new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: 77, message: { message_id: 1, chat: { id: 42 }, text: '/manual' } }) });
+  await atenderTelegram({ request: pet, env, db, fetchImpl: redC });
+  assert.equal(gh.length, 0); assert.equal(db.t.kimiko_drafts, undefined); assert.match(tg[0].text, /Manual|manual/);
 });
 
 console.log(`\n${n} pruebas en verde`);
