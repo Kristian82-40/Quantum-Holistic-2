@@ -1,0 +1,15 @@
+# gitleaks: reglas por defecto + las llaves propias de este proyecto (las usa el pre-commit y el workflow Vigilancia).
+[extend]
+useDefault = true
+
+[[rules]]
+id = "supabase-secret-key"
+description = "Llave secreta de Supabase (sb_secret_…)"
+regex = '''sb_secret_[A-Za-z0-9_-]{20,}'''
+keywords = ["sb_secret_"]
+
+[[rules]]
+id = "supabase-service-role-jwt"
+description = "JWT de Supabase con rol service_role"
+regex = '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIs[A-Za-z0-9_-]*cm9sZSI6InNlcnZpY2Vfcm9sZS[A-Za-z0-9_-]*\.[A-Za-z0-9_-]{20,}'''
+keywords = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"]
