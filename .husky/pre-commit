@@ -1,1 +1,8 @@
+# Secretos: el repo es público. Si hay gitleaks, un secreto en lo preparado para commit lo bloquea.
+# Sin gitleaks (p. ej. Kimiko Cloud en Actions) solo avisa: allí lo vigila el workflow Vigilancia.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --staged --no-banner --redact || { echo "⛔ gitleaks: posible secreto en el commit. Sácalo y guárdalo en Supabase/Cloudflare/GitHub Secrets."; exit 1; }
+else
+  echo "ℹ️  gitleaks no instalado: me salto la búsqueda de secretos (la hace el workflow Vigilancia)."
+fi
 npx lint-staged
