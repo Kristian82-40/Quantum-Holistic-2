@@ -8,6 +8,8 @@ import { iaRest } from '../_kimiko/lib/ia-rest.js';
 import { fichaSVG, BUCKET_BLOG } from '../_kimiko/lib/imagen.js';
 import { enviarMensaje, BOTONES_PR } from '../_kimiko/lib/telegram.js';
 import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
+import { auditar, textoAuditoria } from '../_kimiko/lib/auditoria.js';
+import { leerRunbook, tareaActiva } from '../_kimiko/lib/runbook.js';
 import config from '../_kimiko/config/projects.json' with { type: 'json' };
 
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d, null, 2), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -66,6 +68,20 @@ Deno.serve(async (req) => {
     await db.insertar('kimiko_updates', { tipo: 'chequeo', project_id: proyecto.id, ok: c.ok, detalle: { fecha, fallos: c.fallos, ...c.datos, origen: 'manual' } }).catch(() => {});
     if (p.avisar) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoChequeo(c, fecha) });
     return json(c);
+  }
+  // Auditoría semanal (B4): la lanza el cron kimiko-auditoria los domingos o /auditar desde Telegram.
+  if (p.accion === 'auditoria') {
+    const fecha = new Date().toISOString().slice(0, 10);
+    if (p.origen === 'cron' && !tareaActiva(await leerRunbook(db), 'auditoria-semanal')) return json({ omitido: 'auditoria-semanal en pausa' });
+    try {
+      const a = await auditar({ db });
+      await db.insertar('kimiko_updates', { tipo: 'auditoria', project_id: 'qh', ok: a.ok, detalle: { fecha, origen: String(p.origen || 'manual'), hallazgos: a.hallazgos } }).catch(() => {});
+      const tg = await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoAuditoria(a, fecha) });
+      return json({ ...a, telegram: tg.ok ? 'enviado' : tg.error });
+    } catch (e) {
+      await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `❌ Auditoría ${fecha}: ${(e as Error).message}` });
+      return json({ error: (e as Error).message }, 500);
+    }
   }
 
   const trabajo = ejecutarDia({

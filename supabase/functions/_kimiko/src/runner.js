@@ -6,6 +6,7 @@ import { estadoGasto } from '../lib/budget.js';
 import { avisosCaducidad } from '../lib/vault.js';
 import { elegirPlanta, articuloSinIA } from '../lib/sin-ia.js';
 import { chequeoDiario, textoChequeo } from '../lib/chequeo.js';
+import { leerRunbook, tareaActiva, siFalla } from '../lib/runbook.js';
 
 // La Edge Function vive como mucho 150 s (plan Free). El texto tiene hasta LIMITE_TEXTO_MS; después, sin IA.
 // Pasado LIMITE_IMAGEN_MS ya no se pide flux (hasta 40 s): se usa la ficha PNG, que tarda ~2 s.
@@ -92,8 +93,9 @@ export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = f
   const resumen = [];
   const registros = [];
 
+  const runbook = await leerRunbook(db);
   // Chequeo antes del post (solo en la ejecución de las 06:00, para no repetir avisos en cada reintento).
-  if (chequeo) {
+  if (chequeo && tareaActiva(runbook, 'chequeo-diario')) {
     for (const proyecto of proyectos.filter((p) => p.activo !== false)) {
       try {
         const c = await chequeoDiario({ env, db, sitio: proyecto.sitio, fecha, fetchImpl });
@@ -104,7 +106,8 @@ export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = f
     }
   }
 
-  for (const proyecto of proyectos.filter((p) => p.activo !== false)) {
+  if (!tareaActiva(runbook, 'post-diario')) resumen.push('⏸ post-diario está en pausa en kimiko_runbook');
+  for (const proyecto of proyectos.filter((p) => p.activo !== false && tareaActiva(runbook, 'post-diario'))) {
     const reg = { tipo: 'blog', project_id: proyecto.id, ok: false, detalle: { fecha, slot, origen, neuronas: 0 }, respuesta_bruta: null };
     const inicio = Date.now();
     try {
@@ -113,7 +116,7 @@ export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = f
     } catch (e) {
       reg.detalle.error = e.message;
       reg.respuesta_bruta = e.bruto || reg.respuesta_bruta || String(e.stack || e.message).slice(0, 4000);
-      const tg = await avisar({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `❌ Kimiko ${fecha} · ${proyecto.id}\n${e.message}`, fetchImpl });
+      const tg = await avisar({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `❌ Kimiko ${fecha} · ${proyecto.id}\n${e.message}${siFalla(runbook, 'post-diario') ? `\nManual: ${siFalla(runbook, 'post-diario')}` : ''}`, fetchImpl });
       reg.detalle.telegram_error = tg.ok ? 'enviado' : tg.error;
       resumen.push(`❌ ${proyecto.id}: ${e.message}`);
     } finally {

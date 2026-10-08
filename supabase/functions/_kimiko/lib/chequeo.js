@@ -55,7 +55,7 @@ async function web(sitio, fetchImpl) {
 async function crons(db, ahora) {
   const filas = await db.rpc('kimiko_estado_crons');
   const fallos = [];
-  for (const nombre of ['kimiko-diario', 'kimiko-reintento']) {
+  for (const nombre of ['kimiko-diario', 'kimiko-reintento', 'kimiko-auditoria']) {
     const j = filas.find((f) => f.jobname === nombre);
     if (!j) fallos.push({ que: `No existe el cron ${nombre}`, accion: 'Pide a Claude Code que lo recree (está en supabase/migrations)' });
     else if (!j.active) fallos.push({ que: `El cron ${nombre} está desactivado`, accion: `Supabase → Integrations → Cron → ${nombre} → activar` });
