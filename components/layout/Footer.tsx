@@ -62,7 +62,6 @@ export default function Footer() {
         <div className={styles.social}>
           <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href={`mailto:${SITE_CONFIG.email}`}>Newsletter</a>
-          <a href={SITE_CONFIG.social.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
         </div>
       </div>
     </footer>

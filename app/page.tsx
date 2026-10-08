@@ -5,12 +5,10 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import MarqueeBand from '@/components/sections/MarqueeBand';
-import StatsBar from '@/components/sections/StatsBar';
 import Pillars from '@/components/sections/Pillars';
 import HowItWorks from '@/components/sections/HowItWorks';
 import ProDetail from '@/components/sections/ProDetail';
 import ProfileCTA from '@/components/sections/ProfileCTA';
-import Testimonials from '@/components/sections/Testimonials';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
 import ScrollReveal from '@/components/ui/ScrollReveal';
@@ -30,7 +28,6 @@ export default function HomePage() {
         <Hero />
         <MarqueeBand />
         <QuoteRail />
-        <StatsBar />
         <ScrollReveal>
           <Pillars />
         </ScrollReveal>
@@ -41,9 +38,6 @@ export default function HomePage() {
           <ProDetail />
         </ScrollReveal>
         <ProfileCTA />
-        <ScrollReveal>
-          <Testimonials />
-        </ScrollReveal>
         <ScrollReveal>
           <Pricing />
         </ScrollReveal>
