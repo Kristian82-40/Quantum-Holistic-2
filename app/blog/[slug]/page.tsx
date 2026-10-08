@@ -11,6 +11,8 @@ import CuentaScrollModal from '@/components/ui/CuentaScrollModal';
 import { getPostBySlug, cleanPostTitle } from '@/lib/posts';
 import styles from './page.module.css';
 
+const SITE_URL = 'https://quantum-holistic.com';
+
 interface SupabasePost {
   id: string;
   title: string;
@@ -83,8 +85,24 @@ export default async function BlogPostPage(
   const readTime = staticPost?.readingTime ?? '5 min';
   const isAdmin = supaPost ? Boolean(await requireAdmin().catch(() => null)) : false;
 
+  // Datos estructurados Article (SEO). "<" escapado para que el texto del post no pueda cerrar el <script>.
+  const imagen = supaPost?.image_url?.startsWith('http') ? supaPost.image_url : `${SITE_URL}/images/og-default.jpg`;
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title.slice(0, 110),
+    description: excerpt,
+    image: [imagen],
+    ...(supaPost ? { datePublished: supaPost.created_at } : {}),
+    inLanguage: 'es',
+    mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
+    author: { '@type': 'Organization', name: 'Quantum Holistic', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'Quantum Holistic', url: SITE_URL },
+  }).replace(/</g, '\\u003c');
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <Navbar />
       <main className={styles.main}>
         {supaPost && isAdmin && (
