@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 8-oct-2026, 12:00 (Madrid) · por Claude (chat): fusión de #9–#20, PR #29 y #30 · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 8-oct-2026, 16:40 (Madrid) · Claude (chat) fusionó `main` tras #29, #30 y #31; antes, Claude Code (informes de blog, diseño e incoherencias + 5 fichas; ver `kimiko/bitacora/2026-10-08-1250.md`) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -10,9 +10,15 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
 | ✅ | Rutas `/`, `/blog`, `/diccionario`, `/terapeutas`, `/login` responden 200 | Chequeo de `kimiko-diario` del 8-oct 08:13 UTC (`kimiko_updates` tipo `chequeo`) |
 | ⚠️ | Blog: 110 artículos, **solo 23 publicados** (último 6-oct) | `select count(*) … from blog_posts` |
-| ⚠️ | Diccionario: **4 de 52 plantas visibles** (`publicada and ficha_verificada`) | consulta a `plants` |
+| ⚠️ | Diccionario: **4 de 52 plantas visibles** (`publicada and ficha_verificada`) | consulta a `plants`, 8-oct 12:30 |
+| ⚠️ | 5 fichas completadas y **sin publicar** (valeriana, jengibre, lavanda, tomillo, salvia): sin dosis, embarazo y medicación, fuentes EMA/NCCIH. **Sus imágenes son de otra especie** (lavanda no tiene archivo): no publicar hasta cambiarlas | `kimiko/sql/fichas-5-plantas-2026-10-08.sql` aplicado; consulta: 5–7 contraindicaciones y 1–2 fuentes por ficha, 0 números en posología. Copia previa: `kimiko/recuperacion/restaurar-plantas-2026-10-08.sql` |
+| ⚠️ | La ficha pública no muestra el campo `fuentes` (la página no lo pinta) | `app/diccionario/[slug]/page.tsx` líneas 20–23 |
+| ⚠️ | Las 4 fichas publicadas muestran posología **con dosis** (choca con `qh-editorial`) | consulta a `plants` (`posologia` de hinojo: "2-3 g … 2-3 veces/día") |
+| ❌ | Blog: **0 de 88 borradores listos**; 25 para retocar y 63 para descartar (pruebas, esbozos, duplicados, temas fuera de línea) | `kimiko/informes/blog-borradores.md` |
+| ❌ | **`q-h.com` no es nuestro** (página de venta de Aftermarket); la web está en `quantum-holistic.com`. El correo `hola@quantumholistic.com` usa un dominio **sin MX** | `curl` y `dig` del 8-oct, `kimiko/informes/incoherencias.md` |
+| ❌ | Portada con cifras sin respaldo ("2.400+ planes", "340+ plantas", "98 %") y 3 testimonios; YouTube del pie da 404 | captura del 8-oct, `kimiko/informes/diseno.md` punto 1 |
 | ⚠️ | Captación: **0 leads, 1 perfil** | consultas a `leads` y `profiles` |
-| ❓ | Diseño: Kristian no está conforme | pendiente auditoría visual con capturas |
+| ⚠️ | Diseño: auditoría hecha con capturas (móvil y escritorio, 5 páginas), 10 problemas y 3 direcciones de acuarela. Sin scroll horizontal ni imágenes rotas | `kimiko/informes/diseno.md` + `kimiko/informes/diseno/`, Playwright 8-oct ~10:40 |
 
 ## Kimiko — trabajo diario (Supabase `kimiko-diario`)
 | | Qué | Prueba |
@@ -35,7 +41,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | Worker `kimiko` de Cloudflare recibe el webhook y comprueba el chat | código desplegado leído el 7-oct |
 | ✅ | El código del worker ya está en el repo (`kimiko/worker` + `_kimiko/src/webhook.js`) y se desplegó desde ahí | versión `21674e03` del 8-oct |
 | ❓ | Comandos `/estado`, `/auditar` y `/manual` | desplegados y con pruebas; falta que Kristian los pruebe desde Telegram |
-| ⚠️ | Órdenes del 6-oct: la de 19:05 era duplicada de la de 19:11 (hecha) → marcada `duplicada`. Queda `pendiente` la de 18:30 ("publicar más plantas en el diccionario"): decide Kristian. Arreglo para que no vuelva a pasar en silencio: PR #30 (falta desplegar el worker) | `kimiko_drafts`, 8-oct |
+| ⚠️ | Orden del 6-oct 18:30 (`2aa4e2e6`, más plantas en el diccionario) pasa a `en_revision`: 5 fichas listas para que Kristian las revise. La de las 19:05 está `duplicada` (la de 19:11 quedó `hecho`) | `kimiko_drafts` consultada el 8-oct 12:30 |
+| ❓ | Worker con el arreglo de órdenes mudas: PR #30 **fusionado** el 8-oct 16:34; **falta desplegar** (`wrangler deploy` en `kimiko/worker`) | `gh pr view 30` → MERGED |
 | ✅ | Kimiko Cloud (Actions) abre PR y no toca `main` | última ejecución 6-oct 19:11, success |
 
 ## Redes
@@ -60,13 +67,18 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-1. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com; su antirobots bloquea que lo haga Claude) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI"). `GEMINI_API_KEY` ya está (Gemini responde 503 por saturación, no por llave).
-2. Revisar y fusionar PR #29 (JSON-LD) y PR #30 (órdenes que fallan avisan). Tras #30, desplegar el worker (`wrangler deploy`, lo hace Code).
-3. Decir sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
-4. Escribir `/estado` al bot. Reenviar o descartar la orden del 6-oct 18:30.
-5. Subir las 5 skills en claude.ai y apagar los conectores Expedia, Kiwi, lastminute y Gamma del proyecto.
+1. Fusionar el PR de informes del 8-oct (#32).
+2. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com; su antirobots bloquea que lo haga Claude) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI"). `GEMINI_API_KEY` ya está (Gemini responde 503 por saturación, no por llave).
+3. Decir el **dominio bueno** (q-h.com no es suyo: está en venta; la web es `quantum-holistic.com`), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
+4. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
+5. Sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
+6. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
+7. Escribir `/estado` al bot. Subir las 5 skills en claude.ai y apagar los conectores Expedia, Kiwi, lastminute y Gamma del proyecto.
 
 ## Próximos pasos (en este orden)
-1. Normalizar las 84 categorías (cuando Kristian diga sí).
-2. Incoherencias a decidir: el pie de la web dice "Bristol, UK" y los correos usan `quantumholistic.com` (sin guion), distinto de `quantum-holistic.com`.
-3. Auditoría de diseño de q-h.com con capturas y 2–3 direcciones visuales (skill `qh-diseno`).
+1. Desplegar el worker (PR #30 ya en `main`).
+2. Imágenes correctas para valeriana, jengibre, lavanda, tomillo y salvia (`kimiko-imagen`, necesita `CF_AI_TOKEN`) y revisar las de árnica y equinácea publicadas.
+3. Pintar `fuentes` en `app/diccionario/[slug]/page.tsx` y quitar las dosis de las 4 fichas publicadas.
+4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
+5. Normalizar las 84 categorías antiguas del blog (cuando Kristian diga sí).
+6. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.
