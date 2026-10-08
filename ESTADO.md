@@ -1,13 +1,13 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 8-oct-2026, 12:50 (Madrid) · por Claude Code (trabajo autónomo: informes de blog, diseño e incoherencias + 5 fichas; ver `kimiko/bitacora/2026-10-08-1250.md`) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 8-oct-2026, 16:40 (Madrid) · Claude (chat) fusionó `main` tras #29, #30 y #31; antes, Claude Code (informes de blog, diseño e incoherencias + 5 fichas; ver `kimiko/bitacora/2026-10-08-1250.md`) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
 ## Web q-h.com
 | | Qué | Prueba |
 |---|---|---|
-| ✅ | Producción desplegada desde `main` (commit `8be6901`) | Vercel `quantum-holistic-2`: último despliegue de producción en estado READY |
+| ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
 | ✅ | Rutas `/`, `/blog`, `/diccionario`, `/terapeutas`, `/login` responden 200 | Chequeo de `kimiko-diario` del 8-oct 08:13 UTC (`kimiko_updates` tipo `chequeo`) |
 | ⚠️ | Blog: 110 artículos, **solo 23 publicados** (último 6-oct) | `select count(*) … from blog_posts` |
 | ⚠️ | Diccionario: **4 de 52 plantas visibles** (`publicada and ficha_verificada`) | consulta a `plants`, 8-oct 12:30 |
@@ -33,7 +33,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | Chequeo diario antes del post (llaves, cupo, web, crons) con aviso a Telegram y acción exacta | `{"accion":"chequeo"}` real el 8-oct; función `kimiko_estado_crons()` |
 | ✅ | Manual de tareas `kimiko_runbook` (4 tareas; `activa` pausa una tarea sin tocar código) | PR #10, migración aplicada |
 | ✅ | Auditoría semanal (cron `kimiko-auditoria`, domingos 08:00 UTC). Primera pasada: **84 posts con categoría sin normalizar**, 1 publicado con meta fuera de 50–160; 0 slugs duplicados, 0 sin imagen, 0 plantas sin verificar, 0 tablas sin RLS | `{"accion":"auditoria"}` real el 8-oct, Telegram enviado |
-| ✅ | Lo desplegado = lo del repo: `kimiko-diario` desplegada desde la rama del PR #16 (incluye #9 y #10) | `supabase functions deploy` del 8-oct · **hasta fusionar, producción va por delante de `main`** |
+| ✅ | Lo desplegado = lo del repo: `kimiko-diario` v15 = `main` (ningún cambio en `supabase/functions` después de `f60a168`) | GET a la función responde 405 "usa POST" (código de `f60a168`), 8-oct 11:49 |
 
 ## Kimiko — órdenes por Telegram
 | | Qué | Prueba |
@@ -42,7 +42,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | El código del worker ya está en el repo (`kimiko/worker` + `_kimiko/src/webhook.js`) y se desplegó desde ahí | versión `21674e03` del 8-oct |
 | ❓ | Comandos `/estado`, `/auditar` y `/manual` | desplegados y con pruebas; falta que Kristian los pruebe desde Telegram |
 | ⚠️ | Orden del 6-oct 18:30 (`2aa4e2e6`, más plantas en el diccionario) pasa a `en_revision`: 5 fichas listas para que Kristian las revise. La de las 19:05 está `duplicada` (la de 19:11 quedó `hecho`) | `kimiko_drafts` consultada el 8-oct 12:30 |
-| ❓ | Worker con el arreglo de órdenes mudas: **no desplegado**, el PR #30 sigue abierto | `gh pr view 30` → OPEN, 8-oct |
+| ❓ | Worker con el arreglo de órdenes mudas: PR #30 **fusionado** el 8-oct 16:34; **falta desplegar** (`wrangler deploy` en `kimiko/worker`) | `gh pr view 30` → MERGED |
 | ✅ | Kimiko Cloud (Actions) abre PR y no toca `main` | última ejecución 6-oct 19:11, success |
 
 ## Redes
@@ -62,20 +62,23 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | gitleaks antes de cada commit, con reglas para llaves de Supabase (antes no las detectaba) | PR #18: commit con llave falsa bloqueado |
 | ✅ | 6 skills repetidas u obsoletas retiradas (`flow-state` y compañía) | PR #19 |
 | ✅ | Vigilancia: gitleaks y pruebas de Kimiko en cada PR | PR #16, run 37749905519 ("no leaks found", 38 pruebas). Historial completo: 0 fugas |
-| ❓ | Vigilancia: Lighthouse diario, resumen de Dependabot y guarda del NÚCLEO | corren cuando el workflow esté en `main`. Base del 8-oct (móvil): rend 75–91, acces 90–94, SEO 100 |
+| ✅ | Vigilancia: Lighthouse y resumen de Dependabot ya corren desde `main` | run 37759305767 (manual, 8-oct 09:49 UTC): lighthouse, dependabot, gitleaks y pruebas en verde. Guarda del NÚCLEO: solo en PR de ramas `kimiko/` |
 | ✅ | Alertas y arreglos de seguridad de Dependabot activados en el repo | API de GitHub, 8-oct |
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-1. Fusionar los PR abiertos: #30 (órdenes mudas; después hay que desplegar el worker), #29, #31 y el de informes del 8-oct.
-2. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com, sin tarjeta) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI").
-3. Decir el **dominio bueno** (¿`quantum-holistic.com`?), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
+1. Fusionar el PR de informes del 8-oct (#32).
+2. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com; su antirobots bloquea que lo haga Claude) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI"). `GEMINI_API_KEY` ya está (Gemini responde 503 por saturación, no por llave).
+3. Decir el **dominio bueno** (q-h.com no es suyo: está en venta; la web es `quantum-holistic.com`), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
 4. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
-5. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
+5. Sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
+6. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
+7. Escribir `/estado` al bot. Subir las 5 skills en claude.ai y apagar los conectores Expedia, Kiwi, lastminute y Gamma del proyecto.
 
 ## Próximos pasos (en este orden)
-1. Imágenes correctas para valeriana, jengibre, lavanda, tomillo y salvia (`kimiko-imagen`, necesita `CF_AI_TOKEN`) y revisar las de árnica y equinácea publicadas.
-2. Pintar `fuentes` en `app/diccionario/[slug]/page.tsx` y quitar las dosis de las 4 fichas publicadas.
-3. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
-4. Normalizar las 84 categorías antiguas del blog (SQL del PR #31, con el visto bueno de Kristian).
-5. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.
+1. Desplegar el worker (PR #30 ya en `main`).
+2. Imágenes correctas para valeriana, jengibre, lavanda, tomillo y salvia (`kimiko-imagen`, necesita `CF_AI_TOKEN`) y revisar las de árnica y equinácea publicadas.
+3. Pintar `fuentes` en `app/diccionario/[slug]/page.tsx` y quitar las dosis de las 4 fichas publicadas.
+4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
+5. Normalizar las 84 categorías antiguas del blog (cuando Kristian diga sí).
+6. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.

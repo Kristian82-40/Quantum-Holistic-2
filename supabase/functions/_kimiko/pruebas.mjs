@@ -232,6 +232,13 @@ await prueba('órdenes: un texto de Kristian va a kimiko_drafts y despierta a Ki
   db.t.kimiko_drafts = [];
   await atenderTelegram({ request: pet(42, { text: 'Hazlo más corto', reply_to_message: { text: '… [post:11111111-2222-3333-4444-555555555555]' } }), env, db, fetchImpl: red2 });
   assert.match(db.t.kimiko_drafts[0].source_note, /^Modifica el post de blog con id 11111111-2222-3333-4444-555555555555/);
+  // Si GitHub falla, la orden no se queda muda en 'pendiente': se marca y se avisa.
+  db.t.kimiko_drafts = []; llamadas.length = 0;
+  const redGhCaido = async (url, o = {}) => { llamadas.push({ url: String(url), cuerpo: o.body ? JSON.parse(o.body) : null }); if (String(url).endsWith('/dispatches')) return { ok: false, status: 401, text: async () => 'Bad credentials' }; return { ok: true, status: 200, json: async () => ({ ok: true, result: {} }), text: async () => '' }; };
+  await atenderTelegram({ request: pet(42), env, db, fetchImpl: redGhCaido });
+  assert.equal(db.t.cambios.at(-1).tabla, 'kimiko_drafts'); assert.equal(db.t.cambios.at(-1).c.status, 'error_lanzar');
+  assert.ok(llamadas.some((l) => l.url.endsWith('/sendMessage') && /no pude despertar a Kimiko Cloud: GitHub POST \/dispatches 401/.test(l.cuerpo.text)));
+  assert.ok(!llamadas.some((l) => l.url.endsWith('/sendMessage') && /Recibido/.test(l.cuerpo.text)));
 });
 await prueba('órdenes: "Fusionar PR" fusiona por la API de GitHub y no repite si ya estaba fusionado', async () => {
   const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };

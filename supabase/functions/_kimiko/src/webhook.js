@@ -57,7 +57,15 @@ async function orden({ env, db, update, msg, fetchImpl }) {
   const fileId = msg.photo ? msg.photo[msg.photo.length - 1].file_id : null;
   const imagen = fileId ? await guardarFoto({ token: env.TELEGRAM_BOT_TOKEN, fileId, ruta: `ordenes/${update.update_id}.jpg`, subirStream: db.subirStream, fetchImpl }) : null;
   const fila = await db.insertar('kimiko_drafts', { status: 'pendiente', chat_id: msg.chat.id, update_id: update.update_id, source_note: nota || null, tg_file_id: fileId, imagen_ruta: imagen, tg_message_id: msg.message_id });
-  await despertarKimikoCloud(env.GH_TOKEN, fila.id, fetchImpl);
+  try {
+    await despertarKimikoCloud(env.GH_TOKEN, fila.id, fetchImpl);
+  } catch (e) {
+    // Antes la orden se quedaba en 'pendiente' sin avisar (pasó el 6-oct). Ahora queda marcada y Kristian lo sabe.
+    const motivo = String(e?.message ?? e).slice(0, 200);
+    await db.actualizar('kimiko_drafts', `id=eq.${fila.id}`, { status: 'error_lanzar', updated_at: new Date().toISOString() });
+    await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: `⚠️ Orden guardada, pero no pude despertar a Kimiko Cloud: ${motivo}\nReenvíala cuando esté arreglado.`, fetchImpl });
+    return fila.id;
+  }
   await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: 'Recibido 🌿 Kimiko Cloud se pone con ello. Si hay cambios en la web te llegará un PR para aprobar aquí.', fetchImpl });
   return fila.id;
 }
