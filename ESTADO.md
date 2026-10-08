@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 8-oct-2026, 16:40 (Madrid) · Claude (chat) fusionó `main` tras #29, #30 y #31; antes, Claude Code (informes de blog, diseño e incoherencias + 5 fichas; ver `kimiko/bitacora/2026-10-08-1250.md`) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 8-oct-2026, 17:10 (Madrid) · Claude (chat): #32 fusionado; Kristian puso las llaves de Groq y Workers AI con `kimiko/guia-tareas.sh` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -28,8 +28,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | Post del 8-oct: Gemini 503 ×3 y sin llaves de Workers AI ni Groq → salió en **modo sin IA** (borrador `2026-10-08-arnica-ficha-de-la-planta`, Telegram enviado) | `kimiko_updates` 08:13 UTC, `detalle.modo = sin-ia` |
 | ✅ | Cadena de texto: Gemini (3 intentos, 25 s máx. cada uno) → Workers AI → Groq → ficha sin IA. Un día malo ya no queda en blanco | PR #9 · 33 pruebas + ejecución real anterior |
 | ✅ | Causa del fallo silencioso de las 07:30 del 8-oct encontrada: Gemini se colgó y la función murió a los 150 s sin registro. Ahora todo lleva tiempo límite | logs de la función (`booted` → `shutdown`) |
-| ❌ | Faltan `CF_ACCOUNT_ID` y `CF_AI_TOKEN` en los secretos de Edge Functions | chequeo del 8-oct 08:13 UTC |
-| ❌ | Falta `GROQ_API_KEY` (tercer motor gratis: 1.000 peticiones/día, comprobado el 8-oct) | chequeo del 8-oct 08:13 UTC |
+| ✅ | `CF_ACCOUNT_ID` y `CF_AI_TOKEN` en los secretos de Edge Functions | `kimiko/guia-tareas.sh` 8-oct ~16:50: Cloudflare aceptó el token (200), huella SHA-256 en Supabase = la escrita, y `kimiko-imagen` `{"accion":"diag"}` → las dos `true` |
+| ✅ | `GROQ_API_KEY` (tercer motor gratis: 1.000 peticiones/día) | `kimiko/guia-tareas.sh` 8-oct ~16:45: Groq aceptó la llave (`/v1/models` → 200) y la huella en Supabase coincide. Falta verla en uso real: chequeo de mañana 06:00 UTC |
 | ✅ | Chequeo diario antes del post (llaves, cupo, web, crons) con aviso a Telegram y acción exacta | `{"accion":"chequeo"}` real el 8-oct; función `kimiko_estado_crons()` |
 | ✅ | Manual de tareas `kimiko_runbook` (4 tareas; `activa` pausa una tarea sin tocar código) | PR #10, migración aplicada |
 | ✅ | Auditoría semanal (cron `kimiko-auditoria`, domingos 08:00 UTC). Primera pasada: **84 posts con categoría sin normalizar**, 1 publicado con meta fuera de 50–160; 0 slugs duplicados, 0 sin imagen, 0 plantas sin verificar, 0 tablas sin RLS | `{"accion":"auditoria"}` real el 8-oct, Telegram enviado |
@@ -67,13 +67,12 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-1. Fusionar el PR de informes del 8-oct (#32).
-2. Pegar en Supabase → Edge Functions → Secrets: `GROQ_API_KEY` (console.groq.com; su antirobots bloquea que lo haga Claude) y `CF_AI_TOKEN` + `CF_ACCOUNT_ID` (Cloudflare, plantilla "Workers AI"). `GEMINI_API_KEY` ya está (Gemini responde 503 por saturación, no por llave).
-3. Decir el **dominio bueno** (q-h.com no es suyo: está en venta; la web es `quantum-holistic.com`), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
-4. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
-5. Sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
-6. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
-7. Escribir `/estado` al bot. Subir las 5 skills en claude.ai y apagar los conectores Expedia, Kiwi, lastminute y Gamma del proyecto.
+1. Decir el **dominio bueno** (q-h.com no es suyo: está en venta; la web es `quantum-holistic.com`), el **correo** de contacto, la **ciudad/país** de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
+2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
+3. Sí/no a `kimiko/sql/normalizar-categorias.sql` (84 posts; "detox" → Nutrición, ¿vale?).
+4. Revisar las 5 fichas nuevas en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
+
+Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
 
 ## Próximos pasos (en este orden)
 1. Desplegar el worker (PR #30 ya en `main`).
