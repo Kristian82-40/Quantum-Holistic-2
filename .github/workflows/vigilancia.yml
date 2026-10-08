@@ -124,7 +124,7 @@ jobs:
             console.log(texto);
             fs.appendFileSync(process.env.GITHUB_OUTPUT, `malas=${malas}\ntexto<<EOF\n${texto}\nEOF\n`);
           '
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with: { name: lighthouse, path: .lighthouseci, retention-days: 14 }
       - name: Avisar por Telegram si baja de los umbrales
