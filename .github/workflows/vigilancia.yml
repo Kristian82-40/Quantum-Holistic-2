@@ -109,7 +109,8 @@ jobs:
           node -e '
             const fs = require("fs");
             const dir = ".lighthouseci";
-            const umbral = { performance: 0.6, accessibility: 0.9, "best-practices": 0.8, seo: 0.9 };
+            // Medido el 8-oct (móvil): rend 75–91, acces 90–94, buenas pr 96, SEO 100. Umbral = caída real, no ruido de CI.
+            const umbral = { performance: 0.5, accessibility: 0.85, "best-practices": 0.85, seo: 0.9 };
             const lineas = []; let malas = 0;
             for (const f of fs.readdirSync(dir).filter((f) => /^lhr-.*\.json$/.test(f))) {
               const r = JSON.parse(fs.readFileSync(`${dir}/${f}`, "utf8"));
@@ -133,7 +134,7 @@ jobs:
           TEXTO: ${{ steps.resumen.outputs.texto }}
           URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          jq -n --arg t "$TEXTO" --arg u "$URL" '{accion:"avisar-ci", titulo:"📉 Lighthouse de q-h.com bajo umbral (rend 60, acces 90, buenas pr 80, SEO 90)", texto:$t, url:$u}' \
+          jq -n --arg t "$TEXTO" --arg u "$URL" '{accion:"avisar-ci", titulo:"📉 Lighthouse de q-h.com bajo umbral (rend 50, acces 85, buenas pr 85, SEO 90)", texto:$t, url:$u}' \
             | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-
           exit 1
 

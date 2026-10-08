@@ -50,7 +50,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
 | ⚠️ | El worker guarda un secreto `ANTHROPIC_API_KEY` que ningún código usa | `wrangler secret list` del 8-oct · propuesta: borrarlo |
-| ❓ | Vigilancia en Actions (gitleaks, Lighthouse, Dependabot, pruebas, NÚCLEO de Kimiko) | PR #16: corre al fusionar; historial de git escaneado con gitleaks el 8-oct: 0 fugas |
+| ✅ | Vigilancia: gitleaks y pruebas de Kimiko en cada PR | PR #16, run 37749905519 ("no leaks found", 38 pruebas). Historial completo: 0 fugas |
+| ❓ | Vigilancia: Lighthouse diario, resumen de Dependabot y guarda del NÚCLEO | corren cuando el workflow esté en `main`. Base del 8-oct (móvil): rend 75–91, acces 90–94, SEO 100 |
 | ✅ | Alertas y arreglos de seguridad de Dependabot activados en el repo | API de GitHub, 8-oct |
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
