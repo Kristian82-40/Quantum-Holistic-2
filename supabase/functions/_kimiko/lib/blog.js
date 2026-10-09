@@ -92,7 +92,7 @@ export function promptSistema(proyecto, pilar, variacion, aprendizajes, reciente
     'El contenido_markdown (700-1000 palabras) usa ## para secciones e incluye OBLIGATORIAMENTE una sección "## Precauciones y contraindicaciones"',
     '(embarazo, lactancia, interacciones con medicación, alergias) que termine recomendando consultar con un profesional sanitario. No pongas el título como # al principio.',
     `categoria: una de ${CATEGORIAS.join(', ')}.`,
-    `prompt_imagen_en: en inglés, solo la escena botánica (la planta, sus hojas, flores o raíces, y como mucho un objeto de cocina o herbolario), sin personas ni texto; el sistema añade el estilo.`,
+    `prompt_imagen_en: en inglés, SOLO la planta: un ramillete o ejemplar de esa especie con sus rasgos que la identifican (forma, color y textura de hojas, flores, tallo o raíz tal como son en la realidad). Sin cuencos, comida, utensilios, otras plantas, personas ni texto; el sistema añade el estilo.`,
     'social_*: versión corta para Instagram del mismo tema (copy de 80-150 palabras, 8-12 hashtags).',
     aprendizajes.length ? `Reglas del dueño (mandan sobre todo lo demás):\n- ${aprendizajes.join('\n- ')}` : '',
     recientes.length ? `No repitas estos temas recientes:\n- ${recientes.slice(0, 30).join('\n- ')}` : '',
@@ -101,8 +101,20 @@ export function promptSistema(proyecto, pilar, variacion, aprendizajes, reciente
   ].filter(Boolean).join('\n');
 }
 
-export const promptImagen = (proyecto, d, variacion) =>
-  `${d.prompt_imagen_en.replace(/\.$/, '')}. Botanical subject: ${d.nombre_botanico}. Style: semi-translucent watercolor illustration with subtle realistic details, modern clean contours, soft paper texture, generous negative space. Color palette: ${variacion.paleta}. No people, no faces, no hands, no text, no letters, no watermark. Botanical still life only.`;
+// La paleta del día solo tiñe el fondo: la planta va siempre con sus colores reales (antes salía azul o rosa).
+const PALETAS_EN = {
+  'verdes salvia y ocre': 'sage green and ochre', 'rosa cuarzo y violeta suave': 'rose quartz and soft violet',
+  'azules glaciar y turquesa': 'glacier blue and turquoise', 'terracota y dorado cálido': 'terracotta and warm gold',
+  'lavanda y verde menta': 'lavender and mint green', 'índigo y ámbar': 'indigo and amber',
+};
+export const promptImagen = (proyecto, d, variacion) => [
+  `Botanical watercolor illustration of ${d.nombre_botanico}, botanically accurate and instantly recognizable`,
+  d.prompt_imagen_en.replace(/\.$/, ''),
+  'A single specimen, centered, large in frame, crisp focus, true-to-life natural colors of the real plant',
+  'Fine botanical ink outlines with clean transparent watercolor washes, like a modern herbarium plate',
+  `Plain smooth cream background with a very faint ${PALETAS_EN[variacion.paleta] || 'sage green and gold'} wash, generous empty space`,
+  'No bowls, no food, no tools, no other plants, no people, no hands, no text, no letters, no watermark, no frame',
+].join('. ') + '.';
 
 const normalizarHashtags = (hs = []) => [...new Set(hs.map((h) => `#${String(h).replace(/^#+/, '').replace(/\s+/g, '')}`))].slice(0, 15);
 
