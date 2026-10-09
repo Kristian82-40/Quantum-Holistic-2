@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 9-oct-2026, 10:15 (Madrid) · Claude (chat): Groq primero en la cadena, reels diarios, fichas sin dosis, worker desplegable desde Actions (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 9-oct-2026, 11:20 (Madrid) · Claude Code: encargo «✅ Publicar» parado por falta de `CLOUDFLARE_API_TOKEN`; antes, Claude (chat): Groq primero en la cadena, reels diarios, fichas sin dosis, worker desplegable desde Actions (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -43,7 +43,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | El código del worker ya está en el repo (`kimiko/worker` + `_kimiko/src/webhook.js`) y se desplegó desde ahí | versión `21674e03` del 8-oct |
 | ❓ | Comandos `/estado`, `/auditar` y `/manual` | desplegados y con pruebas; falta que Kristian los pruebe desde Telegram |
 | ⚠️ | Orden del 6-oct 18:30 (`2aa4e2e6`, más plantas en el diccionario) pasa a `en_revision`: 5 fichas listas para que Kristian las revise. La de las 19:05 está `duplicada` (la de 19:11 quedó `hecho`) | `kimiko_drafts` consultada el 8-oct 12:30 |
-| ❓ | Worker con el arreglo de órdenes mudas (PR #30) **sin desplegar**. Desde el 9-oct se despliega solo con Actions (`desplegar-worker.yml`, PR #37) en cuanto existan los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en GitHub | workflow en `main`; secretos sin verificar (la API de secretos no es accesible desde la sesión) |
+| ❌ | Worker con el arreglo de órdenes mudas (PR #30) **sin desplegar**. Se despliega con Actions (`desplegar-worker.yml`, PR #37). `CLOUDFLARE_ACCOUNT_ID` puesto en GitHub el 9-oct; **falta `CLOUDFLARE_API_TOKEN`** (lo crea Kristian: `bash kimiko/guia-tareas.sh cloudflare`, en el Mac). Bloquea el encargo «✅ Publicar» por Telegram | `gh secret list` 9-oct 11:14: solo `CLOUDFLARE_ACCOUNT_ID` |
 | ✅ | Kimiko Cloud (Actions) abre PR y no toca `main` | última ejecución 6-oct 19:11, success |
 
 ## Redes

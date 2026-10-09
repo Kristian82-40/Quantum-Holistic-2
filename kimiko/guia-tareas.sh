@@ -60,6 +60,50 @@ http_con_llave() {
   printf 'header = "%s"\n' "$cabecera" | curl -s -o /dev/null -w '%{http_code}' --max-time 20 -K - "$url"
 }
 
+# ── Tarea suelta: token de Cloudflare para desplegar el worker desde Actions (9-oct) ──
+#   bash kimiko/guia-tareas.sh cloudflare
+# Sin este token, los botones de Telegram (✅ Publicar, 🗑 Retirar) no pueden llegar al worker nuevo.
+# CLOUDFLARE_ACCOUNT_ID ya lo puso Claude Code el 9-oct (no es secreto). El token va solo a GitHub Secrets.
+if [ "${1:-}" = "cloudflare" ]; then
+  titulo "Token de Cloudflare para GitHub Actions (0 €)"
+  command -v gh >/dev/null && gh auth status >/dev/null 2>&1 && ok "GitHub CLI con sesión abierta" || { mal "Falta la sesión de GitHub: gh auth login"; exit 1; }
+  gh secret list | grep -q '^CLOUDFLARE_ACCOUNT_ID' && ok "CLOUDFLARE_ACCOUNT_ID ya está en GitHub" || aviso "Falta CLOUDFLARE_ACCOUNT_ID: te lo pediré al final"
+  cat <<'PASOS'
+  Para qué: GitHub Actions despliega el worker "kimiko" (Telegram) sin el Mac cada vez que cambia su código.
+  1. Se abre dash.cloudflare.com/profile/api-tokens. Entra con kristiantroncoso@gmail.com si te lo pide.
+  2. Pulsa "Create Token".
+  3. En la plantilla "Edit Cloudflare Workers" pulsa "Use template".
+  4. Account Resources: Include → "Kristiantroncoso@gmail.com's Account".
+     Zone Resources: Include → All zones. No toques nada más (sin IP ni fecha de caducidad).
+  5. Pulsa "Continue to summary" y luego "Create Token".
+  6. Pulsa "Copy". Solo se ve una vez. Vuelve aquí y pégalo cuando te lo pida.
+PASOS
+  seguir || { aviso "Saltada"; exit 0; }
+  open "https://dash.cloudflare.com/profile/api-tokens"
+  pedir_llave CFDEPLOY "Pega el token de Cloudflare"
+  if [ "$(http_con_llave "Authorization: Bearer $CFDEPLOY" https://api.cloudflare.com/client/v4/user/tokens/verify)" != "200" ]; then
+    unset CFDEPLOY; mal "Cloudflare no acepta el token: no lo guardo. Repite desde el paso 2."; exit 1
+  fi
+  ok "Cloudflare acepta el token"
+  # A gh le llega por la entrada estándar: no aparece en la línea de comandos ni en el historial.
+  if printf '%s' "$CFDEPLOY" | gh secret set CLOUDFLARE_API_TOKEN >/dev/null; then ok "Guardado en GitHub → Secrets"
+  else unset CFDEPLOY; mal "No pude guardarlo en GitHub"; exit 1; fi
+  unset CFDEPLOY
+  if ! gh secret list | grep -q '^CLOUDFLARE_ACCOUNT_ID'; then
+    read -r -p "  Pega tu Account ID (32 caracteres, en la portada del panel; no es secreto): " CUENTA
+    printf '%s' "$CUENTA" | gh secret set CLOUDFLARE_ACCOUNT_ID >/dev/null && ok "CLOUDFLARE_ACCOUNT_ID guardado"
+  fi
+  aviso "Lanzo el despliegue del worker desde main y espero el resultado (1–2 min)…"
+  gh workflow run desplegar-worker.yml --ref main && sleep 8
+  RUN=$(gh run list --workflow desplegar-worker.yml --limit 1 --json databaseId -q '.[0].databaseId')
+  if gh run watch "$RUN" --exit-status >/dev/null 2>&1 && ! gh run view "$RUN" --log 2>/dev/null | grep -q "no se despliega"; then
+    ok "Worker desplegado desde Actions (run $RUN). Ya puedes cerrar esta ventana."
+  else
+    mal "El despliegue no salió bien: abre https://github.com/Kristian82-40/Quantum-Holistic-2/actions/runs/$RUN"
+  fi
+  exit 0
+fi
+
 # ── Antes de empezar ──────────────────────────────────────────────────────────
 titulo "Comprobaciones previas"
 command -v supabase >/dev/null && ok "Supabase CLI instalada" || { mal "Falta la CLI de Supabase (brew install supabase/tap/supabase)"; exit 1; }
