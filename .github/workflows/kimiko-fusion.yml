@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with: { ref: main, sparse-checkout: kimiko/fusion }
+        with: { sparse-checkout: kimiko/fusion }   # en horario y tras Vigilancia es siempre main
       - name: Revisar y fusionar
         env:
           PAT: ${{ secrets.KIMIKO_GH_TOKEN }}
