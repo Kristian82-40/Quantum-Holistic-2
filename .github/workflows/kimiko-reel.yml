@@ -44,7 +44,8 @@ jobs:
       - name: Herramientas (ffmpeg, Pillow) y fuentes de la marca
         run: |
           command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
-          pip install --quiet pillow
+          # Pillow en un entorno propio: «python3 -I» ignora los paquetes de usuario donde acababa pip.
+          python3 -m venv .venv && .venv/bin/pip install --quiet pillow
           mkdir -p fuentes
           curl -sSfL -o fuentes/CormorantGaramond.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/CormorantGaramond%5Bwght%5D.ttf'
           curl -sSfL -o fuentes/DMSans.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/dmsans/DMSans%5Bopsz,wght%5D.ttf'
@@ -56,7 +57,7 @@ jobs:
           FORZAR: ${{ inputs.forzar }}
           FUENTES: fuentes
           SALIDA: salida
-        run: python3 -I kimiko/reel/hacer_reel.py
+        run: .venv/bin/python -I kimiko/reel/hacer_reel.py
       - name: Avisar por Telegram si falla
         if: failure()
         env:
