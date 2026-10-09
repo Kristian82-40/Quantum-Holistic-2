@@ -50,7 +50,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | | Qué | Prueba |
 |---|---|---|
 | ⚠️ | Kimiko prepara la pieza; Kristian publica a mano (decisión del 5-oct) | `kimiko_content` |
-| ❓ | **Reels diarios**: GitHub Actions `kimiko-reel` (06:15, 07:45, 09:45, 12:45, 15:45 UTC) monta un MP4 1080×1920 de 16 s (imagen del post + 4 rótulos + aviso legal), lo sube a `kimiko/reels/qh/<fecha>.mp4` y `kimiko-diario` (`enviar-reel`) lo manda a Telegram con el texto listo. Primer pase real: 9-oct 09:45 UTC | PR #35; reel de prueba renderizado en local (16 s, h264+aac); runbook `reel-diario`. Falta ver la primera ejecución real |
+| ✅ | **Reels diarios**: GitHub Actions `kimiko-reel` (06:15, 07:45, 09:45, 12:45, 15:45 UTC) monta un MP4 1080×1920 de 16 s (imagen del post + 4 rótulos + aviso legal), lo sube a `kimiko/reels/qh/<fecha>.mp4` y `kimiko-diario` (`enviar-reel`) lo manda a Telegram con el texto listo. Primer pase real: 9-oct 10:31 UTC | PR #35; runbook `reel-diario`. La 1.ª ejecución en Actions (push de #43) falló: `python3 -I` no veía Pillow instalado con pip de usuario; arreglado con un venv (rama `claude/reel-venv`). Prueba: ejecución 37918169548 `success` y `kimiko_content.reel_url` = `kimiko/reels/qh/2026-10-09.mp4` |
 | ❌ | Instagram automático: faltan `IG_USER_ID` e `IG_ACCESS_TOKEN` | `kimiko_config` |
 
 ## Riesgos
@@ -78,7 +78,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
 
 ## Próximos pasos (en este orden)
-1. Confirmar el primer reel real (9-oct 09:45 UTC) y desplegar el worker en cuanto estén los secretos de Cloudflare en GitHub.
+1. Fusionar el arreglo del reel (venv) y desplegar el worker en cuanto estén los secretos de Cloudflare en GitHub.
 2. ~~Láminas de las 5 fichas~~ hechas el 8-oct. Árnica y equinácea: 2 candidatas de cada una generadas el 9-oct (`kimiko/plantas/{arnica,equinacea}-cientifica-1009{a,b}.jpg`), **sin aplicar**: Claude no puede verlas desde la sesión; las elige Kristian.
 3. ~~Pintar `fuentes` y quitar las dosis de las 4 fichas publicadas~~ hecho el 9-oct (#36, #38). Pendiente: categoría «Magicas» en las 4 fichas publicadas (no cuadra con hinojo, árnica…).
 4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
