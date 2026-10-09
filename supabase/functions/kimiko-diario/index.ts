@@ -6,6 +6,8 @@ import { ejecutarDia } from '../_kimiko/src/runner.js';
 import { crearDb } from '../_kimiko/lib/db.js';
 import { iaRest } from '../_kimiko/lib/ia-rest.js';
 import { fichaSVG, BUCKET_BLOG } from '../_kimiko/lib/imagen.js';
+import { generarImagen } from '../_kimiko/lib/ia.js';
+import { promptImagen } from '../_kimiko/lib/blog.js';
 import { enviarMensaje, BOTONES_PR, enviarVideo, pieReel } from '../_kimiko/lib/telegram.js';
 import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
 import { auditar, textoAuditoria } from '../_kimiko/lib/auditoria.js';
@@ -68,6 +70,24 @@ Deno.serve(async (req) => {
     if (r.ok) await db.actualizar('kimiko_content', `id=eq.${c.id}`, { reel_enviado_at: new Date().toISOString() });
     await db.insertar('kimiko_updates', { tipo: 'reel', project_id: 'qh', ok: r.ok, detalle: { id: c.id, url: c.reel_url, telegram: r.ok ? 'enviado' : r.error } }).catch(() => {});
     return json({ telegram: r.ok ? 'enviado' : r.error }, r.ok ? 200 : 502);
+  }
+  // Versiones de prueba de la imagen de una planta (1–3) con el prompt del blog: Kristian las ve en Telegram y elige.
+  // No toca ningún post; aplicar la elegida es un UPDATE aparte de blog_posts.image_url.
+  if (p.accion === 'probar-imagen' && typeof p.nombre_botanico === 'string' && typeof p.escena_en === 'string') {
+    const n = Math.min(Math.max(Number(p.n) || 2, 1), 3);
+    const prompt = promptImagen(null, { nombre_botanico: p.nombre_botanico.slice(0, 80), prompt_imagen_en: p.escena_en.slice(0, 600) }, { paleta: String(p.paleta ?? '') });
+    const ai = iaRest({ accountId: env.CF_ACCOUNT_ID, token: env.CF_AI_TOKEN });
+    const base = `pruebas/${p.nombre_botanico.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '')}-${Date.now().toString(36)}`;
+    const urls: string[] = [];
+    for (let i = 0; i < n; i++) {
+      try {
+        const img = await generarImagen({ ai, prompt });
+        urls.push(db.urlPublica(BUCKET_BLOG, await db.subir(BUCKET_BLOG, `${base}-${'abc'[i]}.${img.ext}`, img.bytes, img.mime)));
+      } catch (e) { urls.push(`(falló: ${(e as Error).message.slice(0, 120)})`); }
+    }
+    const texto = [`🎨 Imagen de prueba · ${p.nombre_botanico}`, ...urls.map((u, i) => `${'abc'[i]}: ${u}`), '', 'Dime qué letra te gusta (o «ninguna») y la pongo en el post.'].join('\n');
+    if (p.avisar !== false) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto, teclado: undefined });
+    return json({ prompt, urls });
   }
   if (p.accion === 'probar-ficha') {
     const r = await db.fichaPNG(fichaSVG({ titulo: 'Manzanilla', subtitulo: 'Matricaria chamomilla', pie: 'quantum-holistic.com' }), `pruebas/ficha-${Date.now()}.png`);

@@ -7,7 +7,8 @@ export const REINTENTOS = 2;
 
 // Neuronas por millón de tokens (precio en $ / 0,011 $ cada 1.000 neuronas), verificado el 6-oct-2026.
 const NEURONAS_MTOK = { in: 26636, out: 204818 };
-const NEURONAS_IMAGEN = 4 * 4.8 + 4 * 9.6; // 1024×1024 = 4 teselas de 512, 4 pasos
+const PASOS_IMAGEN = 8; // el máximo de flux-schnell: con 4 salían texturas y relieves raros (9-oct)
+const NEURONAS_IMAGEN = 4 * 4.8 + PASOS_IMAGEN * 9.6; // 1024×1024 = 4 teselas de 512
 export const neuronasTexto = (u = {}) => Math.round(((u.prompt_tokens || 0) * NEURONAS_MTOK.in + (u.completion_tokens || 0) * NEURONAS_MTOK.out) / 1e6);
 
 const MAX_BRUTO = 20000;
@@ -67,7 +68,7 @@ export function base64ABytes(b64) {
 }
 
 export async function generarImagen({ ai, prompt }) {
-  const r = await ai.run(MODELO_IMAGEN, { prompt: prompt.slice(0, 2048), steps: 4 });
+  const r = await ai.run(MODELO_IMAGEN, { prompt: prompt.slice(0, 2048), steps: PASOS_IMAGEN });
   if (!r?.image) throw new Error(`flux no devolvió imagen: ${aTexto(r).slice(0, 200)}`);
   return { bytes: base64ABytes(r.image), mime: 'image/jpeg', ext: 'jpg', neuronas: Math.round(NEURONAS_IMAGEN) };
 }

@@ -5,7 +5,7 @@ import { revisarPost, revisarFicha, publicarPieza, retirarPieza, comprobarURL } 
 import { estadoGasto } from './lib/budget.js';
 import { sellar, abrir, vencimientos, avisosCaducidad } from './lib/vault.js';
 import { evaluarCabeceras, vigilarSitio } from './lib/security.js';
-import { crearArticulo, markdownAHtml, slugificar, esDuplicada, elegirPilar, CATEGORIAS, validarRespuesta } from './lib/blog.js';
+import { crearArticulo, markdownAHtml, slugificar, esDuplicada, elegirPilar, CATEGORIAS, validarRespuesta, promptImagen } from './lib/blog.js';
 import { imagenDelPost } from './lib/imagen.js';
 import { ejecutarDia } from './src/runner.js';
 import { atenderTelegram } from './src/webhook.js';
@@ -517,5 +517,13 @@ await prueba('/pieza salvia manda el post y la ficha con su botón (sin lanzar K
   await atenderTelegram({ request: req, env, db: dbPiezas(), fetchImpl: webFalsa({ tg }) });
   const botones = tg.filter((x) => x.metodo === 'sendMessage').map((x) => x.cuerpo.reply_markup.inline_keyboard[0][0].callback_data);
   assert.deepEqual(botones, [`pb:${POST.id}`, 'pf:47']);
+});
+await prueba('imagen: la planta va sola y con sus colores reales; la paleta del día solo tiñe el fondo, en inglés', async () => {
+  const p = promptImagen(null, { nombre_botanico: 'Salvia officinalis', prompt_imagen_en: 'a sprig of grey-green velvety leaves.' }, { paleta: 'azules glaciar y turquesa' });
+  assert.ok(p.startsWith('Botanical watercolor illustration of Salvia officinalis'));
+  assert.match(p, /true-to-life natural colors/);
+  assert.match(p, /background with a very faint glacier blue and turquoise wash/);
+  assert.doesNotMatch(p, /azules|paper texture/);
+  assert.match(p, /No bowls, no food/);
 });
 console.log(`\n${n} pruebas en verde`);
