@@ -45,7 +45,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | Orden del 6-oct 18:30 (`2aa4e2e6`, más plantas en el diccionario) pasa a `en_revision`: 5 fichas listas para que Kristian las revise. La de las 19:05 está `duplicada` (la de 19:11 quedó `hecho`) | `kimiko_drafts` consultada el 8-oct 12:30 |
 | ❓ | Worker con el arreglo de órdenes mudas (PR #30) **sin desplegar**. Desde el 9-oct se despliega solo con Actions (`desplegar-worker.yml`, PR #37) en cuanto existan los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en GitHub | workflow en `main`; secretos sin verificar (la API de secretos no es accesible desde la sesión) |
 | ✅ | Kimiko Cloud (Actions) abre PR y no toca `main` | última ejecución 6-oct 19:11, success |
-| ❓ | **Fusión automática** (`kimiko-fusion.yml`, cada 20 min y al acabar Vigilancia): fusiona PR `claude/*` y `kimiko/*` en verde, con 10 min de margen; lo delicado (migraciones, pagos, `PROMPT.md`/`CLAUDE.md`, el fusionador) y lo que falla lo avisa por Telegram una vez. Sin el secreto `KIMIKO_GH_TOKEN` solo avisa | prueba en seco del 9-oct 13:40 contra los PR reales: #42 y #39 «necesita OK» (migraciones), #3 «fallan pruebas», Dependabot fuera. Falta el secreto y la primera fusión real |
+| ✅ | **Fusión automática** (`kimiko-fusion.yml`, cada 20 min y al acabar Vigilancia): fusiona PR `claude/*` y `kimiko/*` en verde, con 10 min de margen; lo delicado (migraciones, pagos, `PROMPT.md`/`CLAUDE.md`, el fusionador) y lo que falla lo avisa por Telegram una vez. Sin el secreto `KIMIKO_GH_TOKEN` solo avisa | prueba en seco del 9-oct 13:40 contra los PR reales: #42 y #39 «necesita OK» (migraciones), #3 «fallan pruebas», Dependabot fuera. Secreto `KIMIKO_GH_TOKEN` puesto por Kristian el 9-oct 13:50; run 37926411279: «Llave: la de Kristian», avisos en #42 y #39 publicados como Kristian82-40. Falta ver la primera fusión de un PR no delicado |
 
 ## Redes
 | | Qué | Prueba |
@@ -71,7 +71,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | `kimiko/PROMPT.md` partido en NÚCLEO — INMUTABLE y CAPACIDADES — EDITABLE | PR #16 |
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
-0. Crear la llave de Kimiko para fusionar (5 min): GitHub → foto → Settings → Developer settings → Personal access tokens → Fine-grained → Generate. Nombre `kimiko-fusion`, caducidad 1 año, solo el repo `Quantum-Holistic-2`, permisos **Contents**, **Pull requests** y **Workflows** en «Read and write». Copiarla y pegarla en repo → Settings → Secrets and variables → Actions → New secret `KIMIKO_GH_TOKEN`.
+0. ~~Llave de Kimiko para fusionar~~ puesta el 9-oct. (Pasos por si caduca:: GitHub → foto → Settings → Developer settings → Personal access tokens → Fine-grained → Generate. Nombre `kimiko-fusion`, caducidad 1 año, solo el repo `Quantum-Holistic-2`, permisos **Contents**, **Pull requests** y **Workflows** en «Read and write». Copiarla y pegarla en repo → Settings → Secrets and variables → Actions → New secret `KIMIKO_GH_TOKEN`.)
 1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude), decir la **ciudad/país** del pie y de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
 3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
@@ -80,7 +80,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
 
 ## Próximos pasos (en este orden)
-1. ~~Arreglo del reel~~ fusionado (#44). Fusión automática: falta `KIMIKO_GH_TOKEN`. Desplegar el worker en cuanto estén los secretos de Cloudflare en GitHub.
+1. ~~Arreglo del reel~~ fusionado (#44). Fusión automática activa (#45, #46). Desplegar el worker en cuanto estén los secretos de Cloudflare en GitHub.
 2. ~~Láminas de las 5 fichas~~ hechas el 8-oct. Árnica y equinácea: 2 candidatas de cada una generadas el 9-oct (`kimiko/plantas/{arnica,equinacea}-cientifica-1009{a,b}.jpg`), **sin aplicar**: Claude no puede verlas desde la sesión; las elige Kristian.
 3. ~~Pintar `fuentes` y quitar las dosis de las 4 fichas publicadas~~ hecho el 9-oct (#36, #38). Pendiente: categoría «Magicas» en las 4 fichas publicadas (no cuadra con hinojo, árnica…).
 4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
