@@ -8,7 +8,7 @@ import { crearArticulo, markdownAHtml, slugificar, esDuplicada, elegirPilar, CAT
 import { imagenDelPost } from './lib/imagen.js';
 import { ejecutarDia } from './src/runner.js';
 import { atenderTelegram } from './src/webhook.js';
-import { secretoWebhook } from './lib/telegram.js';
+import { secretoWebhook, pieReel } from './lib/telegram.js';
 import { crearDb } from './lib/db.js';
 import { generarJSONGemini } from './lib/gemini.js';
 import { pedirTexto, ESQUEMA } from './lib/blog.js';
@@ -140,10 +140,10 @@ await prueba('anti-duplicados y rotación de pilares', () => {
   assert.equal(esDuplicada('Respiración consciente al amanecer', ['Manzanilla: una infusión de tradición']), false);
   assert.notEqual(elegirPilar(proyecto, '2026-10-05'), elegirPilar(proyecto, '2026-10-06'));
 });
-await prueba('texto: Gemini primero; con Gemini sin cuota usa Workers AI', async () => {
+await prueba('texto: sin llave de Groq pasa a Gemini; con Gemini sin cuota usa Workers AI', async () => {
   const ai = aiFalso({ texto: [articulo({ titulo: 'Desde Workers AI' })] });
   const a = await crearArticulo({ env: { GEMINI_API_KEY: 'k', ...CF }, ai, proyecto, fecha: '2026-10-06', fetchImpl: red([geminiCaido]) });
-  assert.equal(a.titulo, 'Desde Workers AI'); assert.match(a.modelo, /llama/); assert.match(a.errores[0].error, /429/);
+  assert.equal(a.titulo, 'Desde Workers AI'); assert.match(a.modelo, /llama/); assert.equal(a.errores[0].motor, 'groq'); assert.match(a.errores[1].error, /429/);
   const b = await crearArticulo({ env: { GEMINI_API_KEY: 'k' }, ai: aiFalso(), proyecto, fecha: '2026-10-06', fetchImpl: red([gemini(articulo())]) });
   assert.equal(b.modelo, 'gemini-3.8-flash'); assert.ok(b.contenidoHtml.includes(AVISO_BLOG)); assert.equal(b.categoria, 'Herbología');
   assert.ok(b.social.copy.includes(AVISO_FIJO)); assert.deepEqual(b.social.hashtags, ['#herbolaria', '#manzanilla']);
@@ -192,7 +192,7 @@ await prueba('ejecutor: si fallan Gemini, Workers AI y Telegram, el fallo queda 
   const caidoTg = async (url) => { if (String(url).includes('generativelanguage')) return geminiCaido; if (String(url).includes('telegram')) throw new Error('red caída'); return { ok: true, url, headers: cab, status: 301 }; };
   await ejecutarDia({ env: { GEMINI_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1', ...CF }, ai: aiFalso({ texto: [new Error('3036'), new Error('3036')] }), proyectos: [proyecto], fecha: '2026-10-06', db, fetchImpl: caidoTg, opciones: { chequeo: false } });
   const u = db.t.kimiko_updates[0];
-  assert.equal(u.ok, false); assert.match(u.detalle.error, /Sin texto: gemini.*workers-ai/); assert.match(u.detalle.telegram_error, /red caída/);
+  assert.equal(u.ok, false); assert.match(u.detalle.error, /Sin texto: groq.*gemini.*workers-ai/); assert.match(u.detalle.telegram_error, /red caída/);
   assert.ok(u.respuesta_bruta.includes('[gemini]'));
 });
 await prueba('webhook: rechaza sin secreto, ignora otros chats y "Publicar" pone el post en published', async () => {
@@ -298,6 +298,25 @@ await prueba('gemini: una llamada colgada cuenta como fallo pasajero y no se pas
   await assert.rejects(() => generarJSONGemini({ apiKey: 'k', system: 's', user: 'u', schema: ESQUEMA, esperas: [0], fetchImpl: colgado }), /sin respuesta/);
   await assert.rejects(() => generarJSONGemini({ apiKey: 'k', system: 's', user: 'u', schema: ESQUEMA, fetchImpl: colgado, hasta: Date.now() + 1000 }), /sin tiempo/);
 });
+await prueba('reel: el pie lleva texto, hashtags y enlace al post solo si está publicado', () => {
+  const p = pieReel({ titular: 'Hinojo', copy: 'Hoy repasamos el hinojo.', hashtags: ['#hinojo', '#herbologia'], slug: '2026-10-09-hinojo' });
+  assert.match(p, /Reel del día · Hinojo/); assert.match(p, /#hinojo #herbologia/); assert.match(p, /quantum-holistic\.com\/blog\/2026-10-09-hinojo/);
+  assert.match(pieReel({ titular: 'X', copy: 'y' }), /quantum-holistic\.com\/blog\n/); assert.ok(pieReel({ copy: 'z'.repeat(3000) }).length <= 1000);
+});
+await prueba('cadena: Groq va primero y, si responde, no se llama a Gemini (9-oct)', async () => {
+  const llamadas = [];
+  const redG = async (url) => { llamadas.push(String(url)); return { ok: true, status: 200, text: async () => JSON.stringify({ choices: [{ message: { content: JSON.stringify(articulo()) } }] }) }; };
+  const r = await pedirTexto({ env: { GEMINI_API_KEY: 'k', GROQ_API_KEY: 'g' }, ai: aiFalso(), system: 's', user: 'u', fetchImpl: redG });
+  assert.equal(r.modelo, 'openai/gpt-oss-120b'); assert.deepEqual(r.errores, []);
+  assert.ok(!llamadas.some((u) => u.includes('generativelanguage')));
+});
+await prueba('cadena: Groq caído → Gemini (un solo intento) → Workers AI', async () => {
+  const llamadas = [];
+  const redX = async (url) => { const u = String(url); llamadas.push(u); if (u.includes('groq')) return { ok: false, status: 503, text: async () => 'over capacity' }; return geminiCaido; };
+  const r = await pedirTexto({ env: { GEMINI_API_KEY: 'k', GROQ_API_KEY: 'g', CF_ACCOUNT_ID: 'a', CF_AI_TOKEN: 't' }, ai: aiFalso({ texto: [articulo({ titulo: 'WAI' })] }), system: 's', user: 'u', fetchImpl: redX });
+  assert.deepEqual(r.errores.map((e) => e.motor), ['groq', 'gemini']);
+  assert.equal(llamadas.filter((u) => u.includes('generativelanguage')).length, 1);
+});
 await prueba('cadena: Gemini caído y Workers AI sin llaves → escribe Groq', async () => {
   const llamadas = [];
   const red3 = async (url) => {
@@ -307,7 +326,7 @@ await prueba('cadena: Gemini caído y Workers AI sin llaves → escribe Groq', a
   };
   const r = await pedirTexto({ env: { GEMINI_API_KEY: 'k', GROQ_API_KEY: 'g' }, ai: aiFalso(), system: 's', user: 'u', fetchImpl: red3 });
   assert.equal(r.modelo, 'openai/gpt-oss-120b');
-  assert.deepEqual(r.errores.map((e) => e.motor), ['gemini', 'workers-ai']);
+  assert.deepEqual(r.errores, []);
   assert.ok(llamadas.some((u) => u.includes('api.groq.com')));
 });
 const plantas = [

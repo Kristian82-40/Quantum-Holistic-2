@@ -1,0 +1,60 @@
+name: Kimiko · reel del día
+
+# Monta el reel (MP4 9:16, ~16 s) de la pieza del día con Pillow + ffmpeg y lo manda a Telegram vía kimiko-diario.
+# Coste 0 €: Actions es gratis en repo público. Idempotente: si el reel de hoy ya existe, no hace nada.
+# Pases después del post (06:00) y de cada reintento (07:30, 09:30, 12:30, 15:30 UTC).
+
+on:
+  schedule:
+    - cron: '15 6 * * *'
+    - cron: '45 7,9,12,15 * * *'
+  workflow_dispatch:
+    inputs:
+      fecha:
+        description: 'Fecha AAAA-MM-DD (vacío = hoy UTC)'
+        required: false
+      forzar:
+        description: 'Rehacer aunque ya exista (1 = sí)'
+        required: false
+        default: '0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kimiko-reel
+  cancel-in-progress: false
+
+env:
+  KIMIKO_URL: https://vctetjugbvyllwjpxcxh.supabase.co/functions/v1/kimiko-diario
+
+jobs:
+  reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Herramientas (ffmpeg, Pillow) y fuentes de la marca
+        run: |
+          command -v ffmpeg || (sudo apt-get update -q && sudo apt-get install -y -q ffmpeg)
+          pip install --quiet pillow
+          mkdir -p fuentes
+          curl -sSfL -o fuentes/CormorantGaramond.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/CormorantGaramond%5Bwght%5D.ttf'
+          curl -sSfL -o fuentes/DMSans.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/dmsans/DMSans%5Bopsz,wght%5D.ttf'
+      - name: Montar, subir y enviar
+        env:
+          SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FECHA: ${{ inputs.fecha }}
+          FORZAR: ${{ inputs.forzar }}
+          FUENTES: fuentes
+          SALIDA: salida
+        run: python3 -I kimiko/reel/hacer_reel.py
+      - name: Avisar por Telegram si falla
+        if: failure()
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          jq -n --arg u "$URL" '{accion:"avisar-ci", titulo:"🎬 El reel de hoy falló", texto:"El siguiente pase lo vuelve a intentar. Detalle en el enlace.", url:$u}' \
+            | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-

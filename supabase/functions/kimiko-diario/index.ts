@@ -6,7 +6,7 @@ import { ejecutarDia } from '../_kimiko/src/runner.js';
 import { crearDb } from '../_kimiko/lib/db.js';
 import { iaRest } from '../_kimiko/lib/ia-rest.js';
 import { fichaSVG, BUCKET_BLOG } from '../_kimiko/lib/imagen.js';
-import { enviarMensaje, BOTONES_PR } from '../_kimiko/lib/telegram.js';
+import { enviarMensaje, BOTONES_PR, enviarVideo, pieReel } from '../_kimiko/lib/telegram.js';
 import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
 import { auditar, textoAuditoria } from '../_kimiko/lib/auditoria.js';
 import { leerRunbook, tareaActiva } from '../_kimiko/lib/runbook.js';
@@ -46,8 +46,8 @@ Deno.serve(async (req) => {
   if (req.method !== 'POST') return json({ error: 'usa POST' }, 405);
   const porSecreto = !!secreto && (await igualSeguro(req.headers.get('x-kimiko-secreto') ?? '', secreto));
   const p = await req.json().catch(() => ({})) as Record<string, unknown>;
-  // GitHub Actions (vigilancia) solo puede pedir 'avisar-ci', con la llave de servicio que ya tiene como secreto.
-  if (!porSecreto && !(p.accion === 'avisar-ci' && (await esLlaveDeServicio(req)))) return json({ error: 'no autorizado' }, 401);
+  // GitHub Actions solo puede pedir 'avisar-ci' (vigilancia) y 'enviar-reel' (kimiko-reel), con la llave de servicio.
+  if (!porSecreto && !(['avisar-ci', 'enviar-reel'].includes(String(p.accion)) && (await esLlaveDeServicio(req)))) return json({ error: 'no autorizado' }, 401);
   const env = Deno.env.toObject();
 
   // Aviso de GitHub Actions (gitleaks, Lighthouse, Dependabot) a Telegram. Texto recortado y marcado como de CI.
@@ -58,6 +58,17 @@ Deno.serve(async (req) => {
   }
   const db = crearDb({ url: env.SUPABASE_URL, serviceKey: llaveSecreta() });
 
+  // Reel del día: lo monta GitHub Actions (kimiko-reel) y aquí solo se manda a Telegram, una vez.
+  if (p.accion === 'enviar-reel' && typeof p.id === 'string' && /^[0-9a-f-]{36}$/.test(p.id)) {
+    const [c] = await db.seleccionar('kimiko_content', `id=eq.${p.id}&select=id,titular,copy,hashtags,reel_url,reel_enviado_at,blog_post_id`);
+    if (!c?.reel_url) return json({ error: 'sin reel' }, 404);
+    if (c.reel_enviado_at && !p.forzar) return json({ omitido: 'ya enviado' });
+    const [b] = c.blog_post_id ? await db.seleccionar('blog_posts', `id=eq.${c.blog_post_id}&select=slug,published`) : [];
+    const r = await enviarVideo({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, videoUrl: c.reel_url, pie: pieReel({ ...c, slug: b?.published ? b.slug : null }) });
+    if (r.ok) await db.actualizar('kimiko_content', `id=eq.${c.id}`, { reel_enviado_at: new Date().toISOString() });
+    await db.insertar('kimiko_updates', { tipo: 'reel', project_id: 'qh', ok: r.ok, detalle: { id: c.id, url: c.reel_url, telegram: r.ok ? 'enviado' : r.error } }).catch(() => {});
+    return json({ telegram: r.ok ? 'enviado' : r.error }, r.ok ? 200 : 502);
+  }
   if (p.accion === 'probar-ficha') {
     const r = await db.fichaPNG(fichaSVG({ titulo: 'Manzanilla', subtitulo: 'Matricaria chamomilla', pie: 'quantum-holistic.com' }), `pruebas/ficha-${Date.now()}.png`);
     return json({ ruta: r, url: db.urlPublica(BUCKET_BLOG, r) });
