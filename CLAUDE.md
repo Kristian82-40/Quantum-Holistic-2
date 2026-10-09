@@ -4,7 +4,7 @@ Lo lee cualquier sesión de Claude (chat, Claude Code o Kimiko Cloud) **antes de
 El estado vivo está en [`ESTADO.md`](ESTADO.md). Si este archivo y la memoria de una sesión no coinciden, manda este.
 
 ## 1. Quién manda
-- **Kristian** decide. Aprueba cambios fusionando PRs (desde Telegram o GitHub en el móvil).
+- **Kristian** decide. Desde el 9-oct los PR de ramas `claude/*` y `kimiko/*` se fusionan solos cuando las pruebas están en verde (`kimiko-fusion.yml`); Kristian solo aprueba los delicados (base de datos, pagos, reglas de Kimiko, el propio fusionador), que le llegan por Telegram. Los de Dependabot no se fusionan solos.
 - **Kimiko** es el responsable operativo del proyecto: publica, vigila y avisa.
 - **Claude Code / chat** ayuda a Kimiko cuando algo le supera, y deja todo escrito aquí y en `ESTADO.md`.
 
