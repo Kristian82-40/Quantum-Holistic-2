@@ -1,0 +1,46 @@
+name: Kimiko · fusión automática
+
+# Fusiona solos los PR de ramas claude/* y kimiko/* cuando las pruebas están en verde y no tocan nada delicado
+# (base de datos, pagos, reglas de Kimiko, este fusionador). Lo delicado o lo que falla se avisa por Telegram.
+# Coste 0 €. No descarga el código de los PR: solo lee su estado por la API y fusiona con el token de Kristian
+# (secreto KIMIKO_GH_TOKEN), que es quien puede escribir en main y hace que los despliegues de main se lancen.
+
+on:
+  workflow_run:
+    workflows: [Vigilancia]
+    types: [completed]
+  schedule:
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+    inputs:
+      seco:
+        description: 'Solo decir qué haría (1 = sí)'
+        required: false
+        default: '0'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: kimiko-fusion
+  cancel-in-progress: false
+
+jobs:
+  fusionar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, sparse-checkout: kimiko/fusion }
+      - name: Revisar y fusionar
+        env:
+          PAT: ${{ secrets.KIMIKO_GH_TOKEN }}
+          GH_TOKEN_ACTIONS: ${{ github.token }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SECO: ${{ inputs.seco }}
+        run: |
+          # Sin la llave de Kristian solo lee y avisa (GitHub Actions no puede escribir en main).
+          if [ -n "$PAT" ]; then export GH_TOKEN="$PAT" TOKEN_ESCRIBE=1; else export GH_TOKEN="$GH_TOKEN_ACTIONS" TOKEN_ESCRIBE=0; fi
+          python3 -I kimiko/fusion/fusionar.py
