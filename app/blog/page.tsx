@@ -37,7 +37,7 @@ async function getPublishedPosts(): Promise<SupabasePost[]> {
       `${url}/rest/v1/blog_posts?select=id,title,excerpt,slug,category,created_at&status=eq.published&order=created_at.desc`,
       {
         headers: { apikey: key, Authorization: `Bearer ${key}` },
-        next: { revalidate: 300 },
+        cache: 'no-store', // Publicar/Retirar desde Telegram se ve al momento (9-oct)
       }
     );
     if (!res.ok) return [];

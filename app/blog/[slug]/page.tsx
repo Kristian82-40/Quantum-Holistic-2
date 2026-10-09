@@ -31,7 +31,7 @@ async function getSupabasePost(slug: string): Promise<SupabasePost | null> {
   try {
     const res = await fetch(
       `${url}/rest/v1/blog_posts?select=*&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
-      { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 300 } }
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: 'no-store' } // Publicar/Retirar desde Telegram se ve al momento (9-oct)
     );
     if (!res.ok) return null;
     const data = await res.json();

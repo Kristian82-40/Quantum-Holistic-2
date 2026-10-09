@@ -50,14 +50,20 @@ export function conAviso(copy = '') {
 // ── Artículos de blog: además de las promesas de salud, dosis y precauciones ──
 export const AVISO_BLOG = 'Este artículo es divulgativo y se basa en la tradición herbolaria. No sustituye el consejo de un profesional sanitario: consulta con tu médico o farmacéutico antes de usar cualquier planta, sobre todo si estás embarazada, das el pecho, tomas medicación o tienes una enfermedad crónica.';
 
-// Una cantidad con unidad de toma ("500 mg", "2 cucharaditas", "20 gotas") es una dosis: la decide un profesional.
-const DOSIS = /\b\d+(?:[.,]\d+)?\s*(?:-|a)?\s*\d*\s*(mg|miligramos?|mcg|µg|g|gr|gramos?|ml|mililitros?|gotas?|c[áa]psulas?|comprimidos?|tabletas?|cucharad(?:a|ita)s?|tazas?\s+al\s+d[íi]a|veces\s+al\s+d[íi]a)\b/iu;
+// Dosis: la decide un profesional. Unidades de toma ("500 mg", "20 gotas", "2 cápsulas", "3 veces al día") siempre cuentan.
+// Pesos y medidas de cocina ("800 g de calabaza", "2 tazas de caldo") solo cuentan si la frase habla de tomar una planta
+// (infusión, extracto, "al día", "por taza"…): así una receta no se marca como dosis (9-oct).
+const DOSIS_SIEMPRE = /\b\d+(?:[.,]\d+)?\s*(?:(?:-|a)\s*\d+(?:[.,]\d+)?\s*)?(mg|miligramos?|mcg|µg|gotas?|c[áa]psulas?|comprimidos?|tabletas?|veces\s+al\s+d[íi]a|tazas?\s+al\s+d[íi]a)(?![\p{L}])/iu;
+const CANTIDAD = /\b\d+(?:[.,]\d+)?\s*(?:(?:-|a)\s*\d+(?:[.,]\d+)?\s*)?(g|gr|gramos?|kg|ml|mililitros?|cl|l|litros?|cucharad(?:a|ita)s?|tazas?)(?![\p{L}])/iu;
+const CONTEXTO_TOMA = /\b(al|por|cada)\s+d[íi]a\b|\bdiari[oa]s?\b|\bdosis\b|\btom(a|ar|e|en|ad)\b|\bingerir\b|\binfusi[óo]n|\btisana|\bdecocci[óo]n|\bextracto|\btintura|\baceite\s+esencial|\b(hojas?|flores?|ra[íi]z|ra[íi]ces|planta|sumidades)\s+secas?|\b(por|a\s+la|en\s+una)\s+taza\b|\bsuplement|\bpor\s+kilo/iu;
+
+export const esDosis = (frase = '') => DOSIS_SIEMPRE.test(frase) || (CANTIDAD.test(frase) && CONTEXTO_TOMA.test(frase));
 const SECCION_PRECAUCIONES = /^#{2,3}\s*precauciones/imu;
 
 export function revisarArticulo({ titulo = '', extracto = '', contenido = '' }) {
   const { problemas } = revisarClaims(`${titulo}.\n${extracto}.\n${contenido}`);
   for (const frase of contenido.split(/[.!?\n]+/).map((f) => f.trim()).filter(Boolean)) {
-    if (DOSIS.test(frase)) problemas.push({ frase, motivo: 'Indica una dosis concreta' });
+    if (esDosis(frase)) problemas.push({ frase, motivo: 'Indica una dosis concreta' });
   }
   if (!SECCION_PRECAUCIONES.test(contenido)) problemas.push({ frase: '', motivo: 'Falta la sección "## Precauciones y contraindicaciones"' });
   return { ok: problemas.length === 0, problemas };
