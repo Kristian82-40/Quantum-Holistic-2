@@ -21,6 +21,12 @@ interface FichaCientifica {
   contraindicaciones?: string[];
   posologia?: string;
   evidencia?: string;
+  fuentes?: { titulo?: string; url?: string }[];
+}
+
+// Solo enlaces https a fuentes institucionales; cualquier otra cosa se ignora.
+function fuentesValidas(f?: FichaCientifica['fuentes']) {
+  return (Array.isArray(f) ? f : []).filter((x) => typeof x?.url === 'string' && x.url.startsWith('https://') && x.titulo);
 }
 
 interface FichaMistica {
@@ -76,7 +82,7 @@ export async function generateMetadata(
   const latino = plant.nombre_latino ? ` (${plant.nombre_latino})` : '';
   const title = `${plant.nombre_es} — Diccionario Botánico`;
   const description = plant.ficha_verificada
-    ? `Ficha completa de ${plant.nombre_es}${latino}: propiedades, indicaciones, contraindicaciones y tradición ancestral.`
+    ? `Ficha completa de ${plant.nombre_es}${latino}: propiedades, usos tradicionales, contraindicaciones y tradición ancestral.`
     : `${plant.nombre_es}${latino}: tradición y simbolismo. La ficha científica está en revisión y no se publica hasta verificarla.`;
   const canonical = `/diccionario/${plant.slug}`;
   return {
@@ -201,7 +207,7 @@ export default async function PlantPage(
 
                 {fc.indicaciones && fc.indicaciones.length > 0 && (
                   <div className={styles.block}>
-                    <h3 className={styles.blockLabel}>Indicaciones</h3>
+                    <h3 className={styles.blockLabel}>Usos tradicionales</h3>
                     <ul className={styles.list}>
                       {fc.indicaciones.map((ind, i) => <li key={i}>{ind}</li>)}
                     </ul>
@@ -219,7 +225,7 @@ export default async function PlantPage(
 
                 {fc.posologia && (
                   <div className={styles.block}>
-                    <h3 className={styles.blockLabel}>Posología</h3>
+                    <h3 className={styles.blockLabel}>Cómo se usa tradicionalmente</h3>
                     <p className={styles.text}>{fc.posologia}</p>
                   </div>
                 )}
@@ -228,6 +234,19 @@ export default async function PlantPage(
                   <div className={styles.block}>
                     <h3 className={styles.blockLabel}>Evidencia Científica</h3>
                     <p className={styles.text}>{fc.evidencia}</p>
+                  </div>
+                )}
+
+                {fuentesValidas(fc.fuentes).length > 0 && (
+                  <div className={styles.block}>
+                    <h3 className={styles.blockLabel}>Fuentes</h3>
+                    <ul className={styles.list}>
+                      {fuentesValidas(fc.fuentes).map((f, i) => (
+                        <li key={i}>
+                          <a href={f.url} target="_blank" rel="noopener noreferrer">{f.titulo}</a>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </section>
