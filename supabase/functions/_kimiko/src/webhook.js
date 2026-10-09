@@ -1,15 +1,21 @@
 // POST /telegram: el único buzón de Kimiko (un bot, una entrada).
-//  · Botones del borrador diario: Publicar / Corregir / Descartar.
+//  · Botones del borrador diario: Publicar / Corregir / Descartar. Publicar pasa los controles de qh-editorial,
+//    comprueba la URL pública y deja el botón 🗑 Retirar (lib/publicar.js).
+//  · Botones de pieza: pb/rb (post) y pf/rf (ficha de planta), y /pieza <texto> para pedirlos.
 //  · Mensajes de Kristian (texto o foto): órdenes para Kimiko Cloud → kimiko_drafts + repository_dispatch.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
 //  · Comandos /estado, /auditar y /manual (solo lectura; ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
-import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, guardarFoto } from '../lib/telegram.js';
+import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, guardarFoto, BOTONES_PIEZA, ponerTeclado } from '../lib/telegram.js';
+import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha } from '../lib/publicar.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const ENTERO = /^[0-9]{1,9}$/;
+// Botón de pieza → [acción, tipo, formato del id]
+const PIEZA = { pb: ['publicar', 'post', UUID], rb: ['retirar', 'post', UUID], pf: ['publicar', 'ficha', ENTERO], rf: ['retirar', 'ficha', ENTERO] };
 const OK = () => new Response('ok');
 
 export async function igualSeguro(a, b) {
@@ -31,12 +37,53 @@ async function botonBorrador({ env, db, cq, codigo, id, fetchImpl }) {
   const accion = ACCIONES[codigo];
   const [pieza] = await db.seleccionar('kimiko_content', `id=eq.${id}&select=blog_post_id`);
   if (!pieza) throw new Error('pieza no encontrada');
+  // Publicar ya no escribe a ciegas: controles + prueba de la URL, como los botones de pieza.
+  if (codigo === 'pub' && pieza.blog_post_id) {
+    const r = await botonPieza({ env, db, cq, accion: 'publicar', tipo: 'post', id: pieza.blog_post_id, fetchImpl });
+    if (r.ok) await db.actualizar('kimiko_content', `id=eq.${id}`, { estado: 'publicado' });
+    return;
+  }
   if (accion.blog && pieza.blog_post_id) await db.actualizar('blog_posts', `id=eq.${pieza.blog_post_id}`, { ...accion.blog, updated_at: new Date().toISOString() });
   await db.actualizar('kimiko_content', `id=eq.${id}`, { estado: accion.estado });
   await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, accion.texto, fetchImpl);
   if (accion.boton) await cambiarBotones(env.TELEGRAM_BOT_TOKEN, cq.message.chat.id, cq.message.message_id, accion.boton, fetchImpl);
   // Corregir: la respuesta a este mensaje llega como orden para Kimiko Cloud sobre ese post.
   if (codigo === 'cor' && pieza.blog_post_id) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: cq.message.chat.id, texto: `✏️ Responde a este mensaje con lo que quieres cambiar en el post. Kimiko Cloud lo hará en un PR. [post:${pieza.blog_post_id}]`, forzarRespuesta: true, fetchImpl });
+}
+
+// Publicar / Retirar una pieza. Responde enseguida (Telegram espera ~15 s) y el resultado llega como mensaje.
+async function botonPieza({ env, db, cq, accion, tipo, id, fetchImpl }) {
+  const token = env.TELEGRAM_BOT_TOKEN; const chat = cq.message.chat.id; const mid = cq.message.message_id;
+  await responderBoton(token, cq.id, accion === 'publicar' ? '⏳ Reviso, publico y compruebo la web…' : '⏳ Retiro y compruebo la web…', fetchImpl);
+  const r = accion === 'publicar'
+    ? await publicarPieza({ db, tipo, id, fetchImpl })
+    : await retirarPieza({ db, tipo, id, fetchImpl });
+  const nombre = r.titulo ? `«${r.titulo}»` : 'la pieza';
+  if (accion === 'publicar' && r.ok) {
+    await ponerTeclado(token, chat, mid, BOTONES_PIEZA(tipo, id, true), fetchImpl);
+    await enviarMensaje({ token, chatId: chat, texto: `✅ Publicado ${nombre}\n${r.url}`, teclado: BOTONES_PIEZA(tipo, id, true), fetchImpl });
+  } else if (accion === 'publicar') {
+    await enviarMensaje({ token, chatId: chat, texto: [`⛔ No publico ${nombre}. Sigue en borrador.`, ...(r.motivos || []).slice(0, 8).map((m) => `• ${m}`), ...(r.accion ? [`👉 ${r.accion}`] : [])].join('\n'), fetchImpl });
+  } else {
+    await ponerTeclado(token, chat, mid, BOTONES_PIEZA(tipo, id, false), fetchImpl);
+    await enviarMensaje({ token, chatId: chat, texto: r.ok ? `🗑 Retirado ${nombre}: vuelve a borrador y la web ya no lo muestra.` : `⚠️ Retirado ${nombre} en Supabase, sin confirmar en la web.\n👉 ${r.accion || (r.motivos || []).join(', ')}`, teclado: BOTONES_PIEZA(tipo, id, false), fetchImpl });
+  }
+  return r;
+}
+
+// /pieza <texto>: busca un post o una ficha por slug y la manda con su botón (Publicar o Retirar).
+async function pedirPieza({ env, db, msg, fetchImpl }) {
+  const q = String(msg.text).trim().split(/\s+/).slice(1).join('-').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const token = env.TELEGRAM_BOT_TOKEN; const chatId = msg.chat.id;
+  if (q.length < 3) return enviarMensaje({ token, chatId, texto: 'Uso: /pieza <parte del slug>, p. ej. /pieza salvia', fetchImpl });
+  const [posts, plantas] = await Promise.all([
+    db.seleccionar('blog_posts', `slug=ilike.*${q}*&select=id,slug,title,status,published&order=created_at.desc&limit=3`),
+    db.seleccionar('plants', `slug=ilike.*${q}*&select=id,slug,nombre_es,publicada&order=slug&limit=3`),
+  ]);
+  const piezas = [...posts.map((p) => ({ tipo: 'post', id: p.id, titulo: p.title, url: urlPost(p.slug), publicada: estaPublicada('post', p) })),
+    ...plantas.map((p) => ({ tipo: 'ficha', id: p.id, titulo: `Ficha: ${p.nombre_es}`, url: urlFicha(p.slug), publicada: estaPublicada('ficha', p) }))];
+  if (!piezas.length) return enviarMensaje({ token, chatId, texto: `No encuentro ningún post ni ficha con «${q}».`, fetchImpl });
+  for (const p of piezas) await enviarMensaje({ token, chatId, texto: `${p.publicada ? '🟢 Publicada' : '📝 Borrador'} · ${p.titulo}\n${p.url}`, teclado: BOTONES_PIEZA(p.tipo, p.id, p.publicada), fetchImpl });
 }
 
 async function botonPR({ env, db, cq, codigo, id, fetchImpl }) {
@@ -92,10 +139,18 @@ export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
 
   try {
     if (cq) {
+      if (PIEZA[codigo]) {
+        const [accion, tipo, formato] = PIEZA[codigo];
+        if (!formato.test(id || '')) { await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón desconocido', fetchImpl); return OK(); }
+        await botonPieza({ env, db, cq, accion, tipo, id, fetchImpl });
+        return OK();
+      }
       if (!UUID.test(id || '')) { await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón ya usado o desconocido', fetchImpl); return OK(); }
       if (ACCIONES[codigo]) await botonBorrador({ env, db, cq, codigo, id, fetchImpl });
       else if (codigo === 'prm' || codigo === 'prc') await botonPR({ env, db, cq, codigo, id, fetchImpl });
       else await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón desconocido', fetchImpl);
+    } else if (msg && /^\/pieza(@\S+)?(\s|$)/i.test(String(msg.text || ''))) {
+      await pedirPieza({ env, db, msg, fetchImpl });
     } else if (msg && String(msg.text || '').startsWith('/')) {
       await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: await atenderComando({ texto: msg.text, db, fetchImpl }), fetchImpl });
     } else if (msg && (msg.text || msg.caption || msg.photo)) {
