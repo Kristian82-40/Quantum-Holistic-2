@@ -8,6 +8,13 @@ on:
   schedule:
     - cron: '15 6 * * *'
     - cron: '45 7,9,12,15 * * *'
+  # Al cambiar el código del reel en main se monta el de hoy (si aún no existe): sirve de prueba real
+  # y de arranque, porque GitHub tarda en activar los horarios de un workflow nuevo.
+  push:
+    branches: [main]
+    paths:
+      - 'kimiko/reel/**'
+      - '.github/workflows/kimiko-reel.yml'
   workflow_dispatch:
     inputs:
       fecha:

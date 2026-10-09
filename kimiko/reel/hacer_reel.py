@@ -7,7 +7,7 @@ Flujo: kimiko_content del día → post del blog (título, extracto, imagen) →
 
 Variables: SUPABASE_URL, SUPABASE_KEY (llave de servicio), FECHA (AAAA-MM-DD, por defecto hoy UTC),
 FORZAR=1 (rehacer aunque ya exista), SIN_SUBIR=1 (solo generar en ./salida para probar), FUENTES (carpeta con .ttf).
-Nunca imprime la llave. Si no hay pieza del día, sale con 0 y lo dice (el reintento de la tarde lo vuelve a intentar).
+Nunca imprime la llave. Se lanza por horario, al fusionar cambios del reel en main o a mano. Si no hay pieza del día, sale con 0 y lo dice (el reintento de la tarde lo vuelve a intentar).
 """
 import datetime as dt
 import json
