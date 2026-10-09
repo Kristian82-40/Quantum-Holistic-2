@@ -57,6 +57,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | | Qué | Prueba |
 |---|---|---|
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
+| ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas (3 `-grok.jpg` de plantas existentes, 4 plantas nuevas en borrador), 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). Migración `20261009120000` **sin aplicar** en Supabase | informe `kimiko/informes/fotos-grok.md`; `npm run build` OK; EMA → 200 con `curl` (9-oct) |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
 | ✅ | Secreto sin uso `ANTHROPIC_API_KEY` borrado del worker (quedan 7) | `wrangler secret delete`, 8-oct |
 | ✅ | Avisos de seguridad de Supabase: de 1 ERROR + 10 WARN a 0 ERROR + 5 WARN (los que quedan son intencionados o de panel) | PR #17, migración aplicada, `get_advisors` del 8-oct |
