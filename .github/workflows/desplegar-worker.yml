@@ -1,0 +1,52 @@
+name: Kimiko · desplegar worker de Telegram
+
+# Despliega el Cloudflare Worker "kimiko" (webhook de Telegram) desde main, sin necesitar el Mac.
+# Necesita dos secretos de GitHub (los pone Kristian una vez): CLOUDFLARE_API_TOKEN (plantilla "Edit Cloudflare Workers")
+# y CLOUDFLARE_ACCOUNT_ID. Sin ellos el job no falla: avisa de qué falta y termina.
+# Coste 0 €: Actions en repo público y Workers Free.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'kimiko/worker/**'
+      - 'supabase/functions/_kimiko/src/**'
+      - 'supabase/functions/_kimiko/lib/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desplegar-worker
+  cancel-in-progress: false
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Pruebas de Kimiko antes de desplegar
+        run: node supabase/functions/_kimiko/pruebas.mjs
+      - name: Desplegar con wrangler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: kimiko/worker
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::warning::Faltan CLOUDFLARE_API_TOKEN o CLOUDFLARE_ACCOUNT_ID en los secretos del repo: no se despliega."
+            exit 0
+          fi
+          npx --yes wrangler@4 deploy
+      - name: Avisar por Telegram si falla
+        if: failure()
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          jq -n --arg u "$URL" '{accion:"avisar-ci", titulo:"⛔ No se pudo desplegar el worker de Telegram", texto:"El webhook sigue con la versión anterior. Detalle en el enlace.", url:$u}' \
+            | curl -sS -X POST "https://vctetjugbvyllwjpxcxh.supabase.co/functions/v1/kimiko-diario" -H "apikey: $KEY" -H "content-type: application/json" -d @-
