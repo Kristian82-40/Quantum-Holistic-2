@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 8-oct-2026, 17:10 (Madrid) · Claude (chat): #32 fusionado; Kristian puso las llaves de Groq y Workers AI con `kimiko/guia-tareas.sh` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 9-oct-2026, 10:15 (Madrid) · Claude (chat): Groq primero en la cadena, reels diarios, fichas sin dosis, worker desplegable desde Actions (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -12,8 +12,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | Blog: 110 artículos, **solo 23 publicados** (último 6-oct) | `select count(*) … from blog_posts` |
 | ⚠️ | Diccionario: **4 de 52 plantas visibles** (`publicada and ficha_verificada`) | consulta a `plants`, 8-oct 12:30 |
 | ⚠️ | 5 fichas completadas y **sin publicar** (valeriana, jengibre, lavanda, tomillo, salvia): sin dosis, embarazo y medicación, fuentes EMA/NCCIH. **Láminas nuevas de acuarela** generadas con Workers AI el 8-oct (las antiguas eran de otra especie). Falta que Kristian las revise y diga cuáles se publican | `kimiko/sql/imagenes-5-fichas-2026-10-08.sql` aplicado; `kimiko-imagen` → 200 ×9 (8-oct ~17:40); revisión visual de Claude |
-| ⚠️ | La ficha pública no muestra el campo `fuentes` (la página no lo pinta) | `app/diccionario/[slug]/page.tsx` líneas 20–23 |
-| ⚠️ | Las 4 fichas publicadas muestran posología **con dosis** (choca con `qh-editorial`) | consulta a `plants` (`posologia` de hinojo: "2-3 g … 2-3 veces/día") |
+| ✅ | La ficha pinta **Fuentes** (solo https) y las secciones se llaman «Usos tradicionales» y «Cómo se usa tradicionalmente» | PR #36; `quantum-holistic.com/diccionario/hinojo` → 200 con los títulos nuevos (9-oct 09:59) |
+| ✅ | Las 4 fichas publicadas ya **no indican dosis** ni afirmaciones de salud: posología e indicaciones reescritas como uso tradicional; quitada la «evidencia» sin cita comprobable. Kristian revisa los textos como herbolario | `select … ~ '\d'` sobre `posologia` → 0 (9-oct); copia para deshacer en `kimiko/recuperacion/restaurar-posologia-2026-10-09.sql` |
 | ❌ | Blog: **0 de 88 borradores listos**; 25 para retocar y 63 para descartar (pruebas, esbozos, duplicados, temas fuera de línea) | `kimiko/informes/blog-borradores.md` |
 | ✅ | **Dominio `quantum-holistic.com` (y `www.`) es nuestro**: comprado en Vercel el 1-may-2026, caduca el 1-may-2027 con renovación automática (de pago, ~1 vez al año), DNS en Vercel (`ns1/ns2.vercel-dns.com`). `q-h.com` **no** es nuestro (está en venta): no usarlo en textos ni enlaces | Vercel API `list_domains` y `list_project_domains`, 8-oct 17:20 |
 | ❌ | Correo: `hola@quantumholistic.com` (sin guion) no existe y `quantum-holistic.com` **no tiene MX** (no recibe correo). Decidido crear uno serio en `quantum-holistic.com` | Vercel `get_records`: 0 registros MX, 8-oct |
@@ -26,8 +26,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 |---|---|---|
 | ✅ | Cron `kimiko-diario` a las 06:00 UTC | `cron.job` jobid 1 |
 | ✅ | Cron `kimiko-reintento` 07:30, 09:30, 12:30 y 15:30 UTC, solo si no hay pieza del día | `cron.job` jobid 2 (creado 7-oct) |
-| ⚠️ | Post del 8-oct: Gemini 503 ×3 y sin llaves de Workers AI ni Groq → salió en **modo sin IA** (borrador `2026-10-08-arnica-ficha-de-la-planta`, Telegram enviado) | `kimiko_updates` 08:13 UTC, `detalle.modo = sin-ia` |
-| ✅ | Cadena de texto: Gemini (3 intentos, 25 s máx. cada uno) → Workers AI → Groq → ficha sin IA. Un día malo ya no queda en blanco | PR #9 · 33 pruebas + ejecución real anterior |
+| ✅ | **Causa de los posts «sin IA» del 8 y 9-oct**: Gemini gastaba 75 s (3 × 25 s) y a Groq no le llegaba el tiempo. Ahora la cadena es **Groq → Gemini (1 intento) → Workers AI**. Prueba real (slot 2): artículo de salvia escrito por Groq en **12 s** con acuarela flux | `kimiko_updates` 9-oct 07:52 UTC (`modelo_texto = openai/gpt-oss-120b`, `imagen = flux`); `kimiko-diario` v18 = `main` (diff de los 19 archivos) |
+| ✅ | Cadena de texto: Groq → Gemini (1 intento) → Workers AI → ficha sin IA. Un día malo ya no queda en blanco | PR #35 · 41 pruebas |
 | ✅ | Causa del fallo silencioso de las 07:30 del 8-oct encontrada: Gemini se colgó y la función murió a los 150 s sin registro. Ahora todo lleva tiempo límite | logs de la función (`booted` → `shutdown`) |
 | ✅ | `CF_ACCOUNT_ID` y `CF_AI_TOKEN` en los secretos de Edge Functions | `kimiko/guia-tareas.sh` 8-oct ~16:50: Cloudflare aceptó el token (200), huella SHA-256 en Supabase = la escrita, y `kimiko-imagen` `{"accion":"diag"}` → las dos `true` |
 | ✅ | `GROQ_API_KEY` (tercer motor gratis: 1.000 peticiones/día) | `kimiko/guia-tareas.sh` 8-oct ~16:45: Groq aceptó la llave (`/v1/models` → 200) y la huella en Supabase coincide. Falta verla en uso real: chequeo de mañana 06:00 UTC |
@@ -43,13 +43,14 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | El código del worker ya está en el repo (`kimiko/worker` + `_kimiko/src/webhook.js`) y se desplegó desde ahí | versión `21674e03` del 8-oct |
 | ❓ | Comandos `/estado`, `/auditar` y `/manual` | desplegados y con pruebas; falta que Kristian los pruebe desde Telegram |
 | ⚠️ | Orden del 6-oct 18:30 (`2aa4e2e6`, más plantas en el diccionario) pasa a `en_revision`: 5 fichas listas para que Kristian las revise. La de las 19:05 está `duplicada` (la de 19:11 quedó `hecho`) | `kimiko_drafts` consultada el 8-oct 12:30 |
-| ❓ | Worker con el arreglo de órdenes mudas: PR #30 **fusionado** el 8-oct 16:34; **falta desplegar** (`wrangler deploy` en `kimiko/worker`) | `gh pr view 30` → MERGED |
+| ❓ | Worker con el arreglo de órdenes mudas (PR #30) **sin desplegar**. Desde el 9-oct se despliega solo con Actions (`desplegar-worker.yml`, PR #37) en cuanto existan los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en GitHub | workflow en `main`; secretos sin verificar (la API de secretos no es accesible desde la sesión) |
 | ✅ | Kimiko Cloud (Actions) abre PR y no toca `main` | última ejecución 6-oct 19:11, success |
 
 ## Redes
 | | Qué | Prueba |
 |---|---|---|
-| ⚠️ | Kimiko prepara la pieza; Kristian publica a mano (decisión del 5-oct) | `kimiko_content` (1 fila) |
+| ⚠️ | Kimiko prepara la pieza; Kristian publica a mano (decisión del 5-oct) | `kimiko_content` |
+| ❓ | **Reels diarios**: GitHub Actions `kimiko-reel` (06:15, 07:45, 09:45, 12:45, 15:45 UTC) monta un MP4 1080×1920 de 16 s (imagen del post + 4 rótulos + aviso legal), lo sube a `kimiko/reels/qh/<fecha>.mp4` y `kimiko-diario` (`enviar-reel`) lo manda a Telegram con el texto listo. Primer pase real: 9-oct 09:45 UTC | PR #35; reel de prueba renderizado en local (16 s, h264+aac); runbook `reel-diario`. Falta ver la primera ejecución real |
 | ❌ | Instagram automático: faltan `IG_USER_ID` e `IG_ACCESS_TOKEN` | `kimiko_config` |
 
 ## Riesgos
@@ -76,9 +77,9 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
 
 ## Próximos pasos (en este orden)
-1. Desplegar el worker (PR #30 ya en `main`).
-2. ~~Láminas de las 5 fichas~~ hechas el 8-oct. Falta revisar las de árnica y equinácea (publicadas, posible especie equivocada) y regenerarlas igual.
-3. Pintar `fuentes` en `app/diccionario/[slug]/page.tsx` y quitar las dosis de las 4 fichas publicadas.
+1. Confirmar el primer reel real (9-oct 09:45 UTC) y desplegar el worker en cuanto estén los secretos de Cloudflare en GitHub.
+2. ~~Láminas de las 5 fichas~~ hechas el 8-oct. Árnica y equinácea: 2 candidatas de cada una generadas el 9-oct (`kimiko/plantas/{arnica,equinacea}-cientifica-1009{a,b}.jpg`), **sin aplicar**: Claude no puede verlas desde la sesión; las elige Kristian.
+3. ~~Pintar `fuentes` y quitar las dosis de las 4 fichas publicadas~~ hecho el 9-oct (#36, #38). Pendiente: categoría «Magicas» en las 4 fichas publicadas (no cuadra con hinojo, árnica…).
 4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
 5. ~~Normalizar las 84 categorías~~ hecho el 8-oct 17:15.
 6. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.
