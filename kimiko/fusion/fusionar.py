@@ -144,11 +144,14 @@ def main():
     if not TOKEN:
         sys.exit('Falta GH_TOKEN')
     TOKEN_ESCRIBE = os.environ.get('TOKEN_ESCRIBE', '1') == '1'
+    print(f"::notice title=Llave::{'la de Kristian (puede fusionar)' if TOKEN_ESCRIBE else 'la de Actions (solo avisa)'}")
     for pr in gh('GET', '/pulls?state=open&per_page=50'):
         try:
-            print(f"#{pr['number']} {pr['head']['ref']}: {atender(pr)}")
+            r = atender(pr)
+            if r != 'fuera':  # anotación visible en el resumen de la ejecución (y por la API de checks)
+                print(f"::notice title=PR {pr['number']}::{r}")
         except urllib.error.HTTPError as e:
-            print(f"#{pr['number']}: error de GitHub {e.code} {e.read()[:200]!r}")
+            print(f"::error title=PR {pr['number']}::GitHub {e.code} {e.read()[:200]!r}")
 
 
 TOKEN_ESCRIBE = True
