@@ -12,3 +12,7 @@ update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Uso tradicional externo en golpes, contusiones y hematomas", "Uso tradicional externo en molestias musculares"]'::jsonb) where slug = 'arnica';
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Uso tradicional como apoyo en el resfriado común, durante periodos cortos"]'::jsonb) where slug = 'equinacea';
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Uso tradicional en digestiones pesadas, hinchazón y gases"]'::jsonb) where slug = 'hinojo';
+
+-- "Evidencia" sin cita comprobable (sin autores, título ni enlace) y con afirmaciones de salud ("demostró reducción…",
+-- "cólico infantil"): se quita hasta tener fuentes EMA/NCCIH con URL, como en las 5 fichas del 8-oct.
+update plants set ficha_cientifica = ficha_cientifica - 'evidencia' where slug in ('albahaca','arnica','equinacea','hinojo');

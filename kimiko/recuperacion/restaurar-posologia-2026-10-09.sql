@@ -8,3 +8,8 @@ update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Contusiones", "Esguinces", "Dolor muscular", "Hematomas"]'::jsonb) where slug = 'arnica';
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Prevención de resfriados", "Infecciones respiratorias", "Sistema inmune débil", "Inflamación crónica"]'::jsonb) where slug = 'equinacea';
 update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{indicaciones}', '["Hinchazón abdominal", "Cólicos", "Lactancia", "Tos"]'::jsonb) where slug = 'hinojo';
+-- Copia previa de "evidencia" (quitada el 9-oct: estudios sin cita verificable y con afirmaciones de salud).
+update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{evidencia}', to_jsonb('Estudio de 2021 en Journal of Ethnopharmacology confirmó actividad antimicrobiana y reducción de síntomas digestivos.'::text)) where slug = 'albahaca';
+update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{evidencia}', to_jsonb('Ensayo de 2019 en Journal of Pain Research demostró reducción de dolor muscular.'::text)) where slug = 'arnica';
+update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{evidencia}', to_jsonb('Meta-análisis de 2022 confirmó reducción de incidencia y duración de resfriados.'::text)) where slug = 'equinacea';
+update plants set ficha_cientifica = jsonb_set(ficha_cientifica, '{evidencia}', to_jsonb('Estudio de 2020 demostró reducción de síntomas de cólico infantil.'::text)) where slug = 'hinojo';
