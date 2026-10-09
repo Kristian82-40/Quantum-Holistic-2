@@ -24,6 +24,17 @@ export const BOTONES = (id) => ({
   ]],
 });
 
+// Botones de una pieza ya presentada (post o ficha): Publicar si está en borrador, Retirar si está publicada.
+// tipo 'post' → pb/rb:<uuid de blog_posts>; 'ficha' → pf/rf:<id de plants>.
+export const BOTONES_PIEZA = (tipo, id, publicada) => ({
+  inline_keyboard: [[publicada
+    ? { text: '🗑 Retirar', callback_data: `${tipo === 'post' ? 'rb' : 'rf'}:${id}` }
+    : { text: '✅ Publicar', callback_data: `${tipo === 'post' ? 'pb' : 'pf'}:${id}` }]],
+});
+
+export const ponerTeclado = (token, chatId, messageId, teclado, fetchImpl = fetch) =>
+  llamar(token, 'editMessageReplyMarkup', { chat_id: chatId, message_id: messageId, reply_markup: teclado }, fetchImpl);
+
 // Foto por URL (bucket público) con pie y botones. id = kimiko_content.id
 export const enviarBorrador = ({ token, chatId, fotoUrl, pie, id, fetchImpl = fetch }) =>
   llamar(token, 'sendPhoto', { chat_id: chatId, photo: fotoUrl, caption: pie.slice(0, 1000), reply_markup: BOTONES(id) }, fetchImpl);

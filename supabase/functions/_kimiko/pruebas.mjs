@@ -1,6 +1,7 @@
 // Pruebas en seco: sin red, sin llaves, sin gastar nada. Todas deben salir en verde.
 import assert from 'node:assert/strict';
-import { revisarClaims, conAviso, AVISO_FIJO, revisarArticulo, AVISO_BLOG } from './lib/legal.js';
+import { revisarClaims, conAviso, AVISO_FIJO, revisarArticulo, AVISO_BLOG, esDosis } from './lib/legal.js';
+import { revisarPost, revisarFicha, publicarPieza, retirarPieza, comprobarURL } from './lib/publicar.js';
 import { estadoGasto } from './lib/budget.js';
 import { sellar, abrir, vencimientos, avisosCaducidad } from './lib/vault.js';
 import { evaluarCabeceras, vigilarSitio } from './lib/security.js';
@@ -63,6 +64,33 @@ function dbFalsa({ existente = false, fichaFalla = false } = {}) {
     urlPublica: (b, r) => `https://x.supabase.co/storage/v1/object/public/${b}/${r}`,
   };
 }
+
+// Piezas de ejemplo para Publicar/Retirar (9-oct).
+const POST = { id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', slug: '2026-10-09-salvia', title: 'Salvia: tradición culinaria', excerpt: 'La salvia en la cocina y la tradición.', content: cuerpo('Para la crema, asa 800 g de calabaza con salvia.'), status: 'draft', published: false };
+const FICHA = { id: 47, slug: 'salvia', nombre_es: 'Salvia', publicada: false, ficha_verificada: false, ficha_cientifica: { posologia: 'Consulta la forma de uso con un profesional.', contraindicaciones: ['Embarazo y lactancia', 'Epilepsia'], propiedades: ['Uso tradicional en la cocina mediterránea'] } };
+function dbPiezas({ post = POST, ficha = FICHA, repetido = false } = {}) {
+  const t = { cambios: [], kimiko_updates: [] };
+  return {
+    t,
+    insertarSiNuevo: async (tb, f) => f,
+    insertar: async (tb, f) => { (t[tb] ||= []).push(f); return f; },
+    actualizar: async (tabla, filtro, c) => { t.cambios.push({ tabla, filtro, c }); },
+    seleccionar: async (tabla, q) => {
+      if (tabla === 'kimiko_content') return [{ id: 'x', blog_post_id: post.id }];
+      if (q.includes('id=neq.')) return repetido ? [{ id: 'otro' }] : [];
+      if (tabla === 'blog_posts') return q.includes('ilike') || q.includes(`id=eq.${post.id}`) ? [post] : [];
+      if (tabla === 'plants') return q.includes('ilike') || q.includes(`id=eq.${ficha.id}`) ? [ficha] : [];
+      return [];
+    },
+  };
+}
+// La web: 200 con el título si «publicado»; 404 si «retirado». Telegram se apunta en tg.
+const webFalsa = ({ tg = [], web = 'publicado', titulo = 'Salvia: tradición culinaria' } = {}) => async (url, o = {}) => {
+  const u = String(url);
+  if (u.includes('api.telegram.org')) { tg.push({ metodo: u.split('/').pop(), cuerpo: JSON.parse(o.body) }); return { ok: true, json: async () => ({ ok: true, result: {} }) }; }
+  if (u.startsWith('https://quantum-holistic.com/')) return web === 'publicado' ? new Response(`<html><head><title>${titulo} | Quantum Holistic</title></head><body><h1>${titulo}</h1></body></html>`, { status: 200 }) : new Response('no', { status: 404 });
+  throw new Error(`red inesperada: ${u}`);
+};
 
 await prueba('legal: bloquea promesas de curación', () => {
   assert.equal(revisarClaims('El jengibre cura la diabetes.').ok, false);
@@ -195,22 +223,24 @@ await prueba('ejecutor: si fallan Gemini, Workers AI y Telegram, el fallo queda 
   assert.equal(u.ok, false); assert.match(u.detalle.error, /Sin texto: groq.*gemini.*workers-ai/); assert.match(u.detalle.telegram_error, /red caída/);
   assert.ok(u.respuesta_bruta.includes('[gemini]'));
 });
-await prueba('webhook: rechaza sin secreto, ignora otros chats y "Publicar" pone el post en published', async () => {
+await prueba('webhook: rechaza sin secreto, ignora otros chats y "Publicar" pasa controles, publica y comprueba la URL', async () => {
   const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42' };
   const secreto = await secretoWebhook('tok');
   const id = '11111111-2222-3333-4444-555555555555';
   const pet = (chat, s = secreto) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: 7, callback_query: { id: 'c', data: `pub:${id}`, message: { message_id: 3, chat: { id: chat } } } }) });
-  const db = dbFalsa();
-  db.insertarSiNuevo = async (t, f) => f;
-  db.seleccionar = async () => [{ id, blog_post_id: 'post-1', estado: 'listo' }];
-  assert.equal((await atenderTelegram({ request: pet(42, 'malo'), env, db, fetchImpl: red() })).status, 403);
-  await atenderTelegram({ request: pet(99), env, db, fetchImpl: red() });
+  const db = dbPiezas();
+  assert.equal((await atenderTelegram({ request: pet(42, 'malo'), env, db, fetchImpl: webFalsa() })).status, 403);
+  await atenderTelegram({ request: pet(99), env, db, fetchImpl: webFalsa() });
   assert.equal(db.t.cambios.length, 0);
   const tg = [];
-  await atenderTelegram({ request: pet(42), env, db, fetchImpl: red([], tg) });
+  await atenderTelegram({ request: pet(42), env, db, fetchImpl: webFalsa({ tg }) });
   assert.deepEqual(db.t.cambios.find((c) => c.tabla === 'blog_posts').c.status, 'published');
   assert.equal(db.t.cambios.find((c) => c.tabla === 'kimiko_content').c.estado, 'publicado');
   assert.ok(tg.some((x) => x.metodo === 'answerCallbackQuery'));
+  const aviso = tg.find((x) => x.metodo === 'sendMessage');
+  assert.match(aviso.cuerpo.text, /✅ Publicado .*\nhttps:\/\/quantum-holistic\.com\/blog\/2026-10-09-salvia\//);
+  assert.equal(aviso.cuerpo.reply_markup.inline_keyboard[0][0].callback_data, `rb:${POST.id}`);
+  assert.equal(db.t.kimiko_updates.find((u) => u.tipo === 'publicacion').ok, true);
 });
 await prueba('órdenes: un texto de Kristian va a kimiko_drafts y despierta a Kimiko Cloud; otro chat se ignora y queda registrado', async () => {
   const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };
@@ -432,4 +462,60 @@ await prueba('webhook: un comando de Kristian se responde y NO lanza Kimiko Clou
   assert.equal(gh.length, 0); assert.equal(db.t.kimiko_drafts, undefined); assert.match(tg[0].text, /Manual|manual/);
 });
 
+await prueba('dosis: una receta («800 g de calabaza», «2 tazas de caldo») no es dosis; una toma de planta sí', () => {
+  for (const f of ['Asa 800 g de calabaza en el horno', 'Añade 200 ml de leche de coco', 'Usa 2 tazas de caldo y 1 cucharadita de cúrcuma']) assert.equal(esDosis(f), false, f);
+  for (const f of ['Toma 500 mg al día', '1-2 g de flores secas por taza de agua', '20 gotas de tintura', 'Prepara una infusión con 2 g de hojas', 'Tomar 3 veces al día']) assert.equal(esDosis(f), true, f);
+  assert.equal(revisarArticulo({ contenido: cuerpo('Para la crema, asa 800 g de calabaza.') }).ok, true);
+});
+await prueba('publicar: controles de qh-editorial para posts y fichas (peligrosas, dosis, contraindicaciones, aviso, slug único)', () => {
+  assert.deepEqual(revisarPost(POST), []);
+  assert.deepEqual(revisarPost({ ...POST, content: markdownAHtml(POST.content) }), [], 'el contenido guardado es HTML');
+  assert.match(revisarPost({ ...POST, slug: '2026-10-09-tejo-ficha', title: 'El tejo' })[0], /9 plantas peligrosas/);
+  assert.ok(revisarPost({ ...POST, content: POST.content.replace('Consulta con un profesional sanitario.', '') }).some((m) => /consulta con un profesional/.test(m)));
+  assert.ok(revisarPost(POST, { slugRepetido: true }).some((m) => /ya lo usa/.test(m)));
+  assert.ok(revisarPost({ ...POST, content: cuerpo('Toma 500 mg al día.') }).some((m) => /dosis/.test(m)));
+  assert.deepEqual(revisarFicha(FICHA), []);
+  assert.match(revisarFicha({ ...FICHA, slug: 'datura-metel', nombre_es: 'Datura metel' })[0], /9 plantas peligrosas/);
+  assert.ok(revisarFicha({ ...FICHA, ficha_cientifica: { ...FICHA.ficha_cientifica, posologia: 'Infusión de 2 g de hojas secas, 3 veces al día' } }).some((m) => /dosis/.test(m)));
+  assert.ok(revisarFicha({ ...FICHA, ficha_cientifica: { ...FICHA.ficha_cientifica, contraindicaciones: [] } }).some((m) => /contraindicaciones/.test(m)));
+});
+await prueba('publicar: si la URL no da 200 con el título, vuelve a borrador y dice qué hacer', async () => {
+  const db = dbPiezas();
+  const r = await publicarPieza({ db, tipo: 'post', id: POST.id, fetchImpl: webFalsa({ web: 'retirado' }), espera: 0 });
+  assert.equal(r.ok, false);
+  assert.match(r.accion, /Queda en borrador/);
+  const [pub, ret] = db.t.cambios;
+  assert.equal(pub.c.published, true); assert.equal(ret.c.published, false); assert.equal(ret.c.status, 'draft');
+  assert.equal(db.t.kimiko_updates[0].detalle.resultado, 'fallo-url');
+  assert.equal((await comprobarURL('https://quantum-holistic.com/blog/x/', 'Otro título', { fetchImpl: webFalsa(), espera: 0 })).motivo, 'la página no contiene el título');
+});
+await prueba('publicar: una planta peligrosa no se publica aunque se pulse el botón, y Kimiko dice el motivo', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42' };
+  const db = dbPiezas({ ficha: { ...FICHA, id: 9, slug: 'tejo', nombre_es: 'Tejo' } });
+  const tg = [];
+  const req = new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': await secretoWebhook('tok') }, body: JSON.stringify({ update_id: 8, callback_query: { id: 'c', data: 'pf:9', message: { message_id: 4, chat: { id: 42 } } } }) });
+  await atenderTelegram({ request: req, env, db, fetchImpl: webFalsa({ tg }) });
+  assert.equal(db.t.cambios.length, 0);
+  assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /⛔ No publico «Tejo»[\s\S]*9 plantas peligrosas/);
+  assert.equal(db.t.kimiko_updates[0].detalle.resultado, 'bloqueada');
+});
+await prueba('ficha: Publicar pone publicada y ficha_verificada; Retirar apaga publicada, comprueba el 404 y deja el botón Publicar', async () => {
+  const db = dbPiezas();
+  const r = await publicarPieza({ db, tipo: 'ficha', id: 47, fetchImpl: webFalsa({ titulo: 'Salvia' }), espera: 0 });
+  assert.equal(r.ok, true); assert.equal(r.url, 'https://quantum-holistic.com/diccionario/salvia/');
+  assert.deepEqual([db.t.cambios[0].c.publicada, db.t.cambios[0].c.ficha_verificada], [true, true]);
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42' }; const tg = [];
+  const req = new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': await secretoWebhook('tok') }, body: JSON.stringify({ update_id: 9, callback_query: { id: 'c', data: 'rf:47', message: { message_id: 5, chat: { id: 42 } } } }) });
+  await atenderTelegram({ request: req, env, db, fetchImpl: webFalsa({ tg, web: 'retirado' }) });
+  assert.deepEqual(db.t.cambios.at(-1).c.publicada, false);
+  assert.equal(db.t.kimiko_updates.at(-1).tipo, 'retirada'); assert.equal(db.t.kimiko_updates.at(-1).ok, true);
+  assert.equal(tg.find((x) => x.metodo === 'sendMessage').cuerpo.reply_markup.inline_keyboard[0][0].callback_data, 'pf:47');
+});
+await prueba('/pieza salvia manda el post y la ficha con su botón (sin lanzar Kimiko Cloud)', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42' }; const tg = [];
+  const req = new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': await secretoWebhook('tok') }, body: JSON.stringify({ update_id: 10, message: { message_id: 6, text: '/pieza salvia', chat: { id: 42 } } }) });
+  await atenderTelegram({ request: req, env, db: dbPiezas(), fetchImpl: webFalsa({ tg }) });
+  const botones = tg.filter((x) => x.metodo === 'sendMessage').map((x) => x.cuerpo.reply_markup.inline_keyboard[0][0].callback_data);
+  assert.deepEqual(botones, [`pb:${POST.id}`, 'pf:47']);
+});
 console.log(`\n${n} pruebas en verde`);
