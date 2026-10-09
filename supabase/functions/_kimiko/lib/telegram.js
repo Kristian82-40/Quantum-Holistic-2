@@ -28,6 +28,17 @@ export const BOTONES = (id) => ({
 export const enviarBorrador = ({ token, chatId, fotoUrl, pie, id, fetchImpl = fetch }) =>
   llamar(token, 'sendPhoto', { chat_id: chatId, photo: fotoUrl, caption: pie.slice(0, 1000), reply_markup: BOTONES(id) }, fetchImpl);
 
+// Reel del día (MP4 en el bucket público): Telegram lo descarga por URL (máx. 20 MB) y lo muestra con su pie.
+export const enviarVideo = ({ token, chatId, videoUrl, pie, fetchImpl = fetch }) =>
+  llamar(token, 'sendVideo', { chat_id: chatId, video: videoUrl, caption: pie.slice(0, 1000), supports_streaming: true, width: 1080, height: 1920 }, fetchImpl);
+
+// Pie del reel: listo para copiar en Instagram/TikTok (texto, hashtags y enlace al post).
+export function pieReel({ titular, copy, hashtags = [], slug, dominio = 'quantum-holistic.com' }) {
+  const enlace = slug ? `https://${dominio}/blog/${slug}` : `https://${dominio}/blog`;
+  return [`🎬 Reel del día · ${titular ?? ''}`.trim(), '', String(copy ?? '').trim(), '', (hashtags ?? []).join(' '), '', `👉 ${enlace}`, '', 'Guárdalo en el carrete y súbelo a mano (añade la música en la app).']
+    .join('\n').replace(/\n{3,}/g, '\n\n').slice(0, 1000);
+}
+
 export const responderBoton = (token, callbackId, texto, fetchImpl = fetch) =>
   llamar(token, 'answerCallbackQuery', { callback_query_id: callbackId, text: texto.slice(0, 190) }, fetchImpl);
 

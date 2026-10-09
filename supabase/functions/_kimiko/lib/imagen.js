@@ -47,7 +47,7 @@ export async function imagenDelPost({ ai, db, prompt, ficha, ruta, forzarFicha =
     } catch (e) {
       aviso = `flux falló, uso la ficha PNG: ${e.message.slice(0, 160)}`;
     }
-  } else aviso = 'ficha PNG forzada (prueba)';
+  } else aviso = 'ficha PNG: sin tiempo para la acuarela (o prueba forzada)';
   const r = await db.fichaPNG(fichaSVG(ficha), `${ruta}.png`); // si esto también falla, lanza: el post no se crea
   return { ruta: r, url: db.urlPublica(BUCKET_BLOG, r), origen: 'ficha', neuronas: 0, aviso };
 }

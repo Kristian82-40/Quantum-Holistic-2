@@ -106,17 +106,18 @@ export const promptImagen = (proyecto, d, variacion) =>
 
 const normalizarHashtags = (hs = []) => [...new Set(hs.map((h) => `#${String(h).replace(/^#+/, '').replace(/\s+/g, '')}`))].slice(0, 15);
 
-// Cadena de motores gratuitos: Gemini (3 intentos) → Workers AI → Groq. Si fallan todos, el error lleva sinTexto=true
+// Cadena de motores gratuitos (9-oct-2026): Groq (rápido, 1.000/día) → Gemini (1 intento) → Workers AI. Si fallan todos, el error lleva sinTexto=true
 // y quien llama pasa al modo sin IA (ficha de planta con plantilla). `hasta` es la hora límite para pedir texto.
 export async function pedirTexto({ env, ai, system, user, fetchImpl = fetch, hasta = Infinity }) {
   const errores = [];
   const motores = [
-    ['gemini', () => generarJSONGemini({ apiKey: env.GEMINI_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta })],
+    ['groq', () => generarJSONGroq({ apiKey: env.GROQ_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta })],
+    // Gemini va saturado (503) casi cada mañana: un solo intento para no comerse el tiempo de la función.
+    ['gemini', () => generarJSONGemini({ apiKey: env.GEMINI_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta, reintentos: 1 })],
     ['workers-ai', async () => {
       if (!env.CF_ACCOUNT_ID || !env.CF_AI_TOKEN) throw new Error('faltan CF_ACCOUNT_ID o CF_AI_TOKEN');
       return { ...(await generarJSONWorkersAI({ ai, system, user, schema: ESQUEMA, validar: validarRespuesta, maxTokens: 3000, reintentos: 1 })), modelo: MODELO_TEXTO };
     }],
-    ['groq', () => generarJSONGroq({ apiKey: env.GROQ_API_KEY, system, user, schema: ESQUEMA, validar: validarRespuesta, fetchImpl, hasta })],
   ];
   let neuronas = 0;
   for (const [motor, pedir] of motores) {
