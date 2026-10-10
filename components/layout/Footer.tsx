@@ -58,7 +58,7 @@ export default function Footer() {
       </div>
 
       <div className={`container ${styles.bottom}`}>
-        <span>© {new Date().getFullYear()} Quantum Holistic · Bristol, UK</span>
+        <span>© {new Date().getFullYear()} Quantum Holistic · Barcelona, España</span>
         <div className={styles.social}>
           <a href={SITE_CONFIG.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href={`mailto:${SITE_CONFIG.email}`}>Newsletter</a>

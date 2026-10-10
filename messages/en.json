@@ -8,7 +8,7 @@
     "startFree": "Start free"
   },
   "hero": {
-    "badge": "✦ Quantum Integrative Medicine ✦",
+    "badge": "✦ KM0 Nutrition · Herbalism · Wellbeing ✦",
     "line1": "Your body has",
     "line2": "its",
     "line2em": "own",
@@ -40,8 +40,8 @@
       { "num": "03", "title": "Receive your personalized plan", "desc": "Weekly nutrition plan, plants for your area and rituals adapted to your profile, season and real goal." },
       { "num": "04", "title": "Evolve over time", "desc": "The system learns with you. With Quantum Pro, you also speak directly with the specialist every month." }
     ],
-    "line1": "Ancestral science validated by modern evidence",
-    "line2": "Quantum technology applied to integral wellness",
+    "line1": "Herbal tradition explained with cited sources",
+    "line2": "Artificial intelligence at the service of your wellbeing",
     "planCard": "Your plan · This week",
     "samplePlan": [
       { "bg": "sage", "label": "Monday · Detox", "body": "Nettle broth + brown rice with sesame" },

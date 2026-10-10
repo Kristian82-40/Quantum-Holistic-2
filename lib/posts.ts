@@ -100,60 +100,6 @@ export const POSTS: Post[] = [
 <p>Si quieres un plan macrobiótico adaptado a tu situación específica, tu zona geográfica y tus objetivos cognitivos, <a href="/#pricing">activa Quantum Pro</a> y lo construimos contigo.</p>
     `.trim(),
   },
-
-  {
-    slug:        'km0-bristol-guia',
-    cat:         'KM0',
-    title:       'Alimentación km0 en Bristol: dónde comprar, qué hay en temporada y cómo usarlo',
-    excerpt:     'Guía práctica para quienes viven en UK y quieren conectar con la tierra local sin comprar espinacas de Kenia.',
-    date:        'Marzo 2026',
-    readingTime: '7 min',
-    content: `
-<p>Bristol tiene algo que muy pocas ciudades del sur de UK poseen: una cultura de mercados de productores genuinamente arraigada, un cinturón verde accesible y una comunidad de agricultores ecológicos de alta densidad en un radio de 50km. Si vives aquí y sigues comprando en el supermercado convencional, estás ignorando uno de los sistemas alimentarios más ricos de toda Gran Bretaña.</p>
-
-<h2>Por qué Bristol es especial para la alimentación de proximidad</h2>
-
-<p>Somerset y el Vale of Evesham son dos de las zonas agrícolas más fértiles de Europa templada. A menos de una hora de Bristol tienes acceso a:</p>
-<ul>
-<li>Manzanas y peras de cider heritage (más de 500 variedades locales)</li>
-<li>Verduras de raíz de primera calidad (chirivías, colinabos, remolachas)</li>
-<li>Quesos artesanos de leche cruda de pequeñas granjas</li>
-<li>Carnes de pastoreo certificadas de Exmoor y Dartmoor</li>
-<li>Hierbas silvestres del bosque de Dean</li>
-</ul>
-
-<h2>Dónde comprar km0 en Bristol</h2>
-
-<h3>St Nicholas Market (centre)</h3>
-<p>El mercado más antiguo de Bristol. Los miércoles y viernes tienen puestos de productores locales. Busca a Reg el de Somerset Mushrooms (setas cultivadas en paja de cereal local) y a la señora del puesto de piel de limón ecológico.</p>
-
-<h3>Tobacco Factory Farmers' Market (Southville)</h3>
-<p>Domingos de 10:00 a 14:30. Probablemente el mejor mercado de productores de la ciudad. Casi todos los puestos tienen certificación orgánica o practican labranza regenerativa. El puesto de Westcountry Dairy es imprescindible.</p>
-
-<h3>Whiteladies Road y Clifton</h3>
-<p>La zona tiene varias tiendas de barrio con filosofía slow food: Better Food Company (ecológico y local), Clifton Village Deli. No son baratos, pero son fiables en cuanto a origen.</p>
-
-<h3>CSA (Community Supported Agriculture)</h3>
-<p>La opción más km0 posible: Chew Valley Organics y Barley Wood Walled Garden ofrecen cestas semanales de verdura de temporada recogida el día anterior. Puedes elegir entre cesta completa o media cesta. Es la forma más directa de conectar con la agricultura de proximidad.</p>
-
-<h2>Qué hay en temporada mes a mes</h2>
-
-<p><strong>Enero-Febrero:</strong> Coliflor, brócoli morado, puerro, chirivía, coles de Bruselas, manzanas de almacén, peras, setas ostra cultivadas.</p>
-<p><strong>Marzo-Abril:</strong> Espárragos de Worcestershire (los primeros de UK), espinacas, guisantes, rábanos, nabos, ortiga fresca.</p>
-<p><strong>Mayo-Junio:</strong> Fresas de Somerset, habas, guisantes frescos, lechugas, tomates de invernadero local, las primeras cerezas.</p>
-<p><strong>Julio-Agosto:</strong> Plenitud total. Calabacines, judías, pepinos, tomates de campo, arándanos silvestres, moras.</p>
-<p><strong>Septiembre-Octubre:</strong> Manzanas (temporada), calabazas, boniato, maíz, higos, peras.</p>
-<p><strong>Noviembre-Diciembre:</strong> Remolacha, kale, coles, puerros, raíz de apio, castañas de Wye Valley.</p>
-
-<h2>Cómo construir una semana km0 en Bristol</h2>
-
-<p>El domingo en el Tobacco Factory: compras las verduras de la semana, proteína animal si la consumes, huevos de granja y queso artesano. El miércoles en St Nicholas: reposición rápida de lo que necesitas fresco.</p>
-
-<p>Con eso, siguiendo la estacionalidad, construyes una dieta que tiene más variedad nutricional que cualquier cesta de supermercado, más sabor, menos huella de carbono y un impacto directo en la economía local.</p>
-
-<p>Si vives en otra ciudad del UK y quieres una guía km0 personalizada para tu zona, <a href="/#profile">cuéntanos dónde estás</a> y te la preparamos.</p>
-    `.trim(),
-  },
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {

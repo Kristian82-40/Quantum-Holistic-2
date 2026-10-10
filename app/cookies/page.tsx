@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { SITE_CONFIG } from '@/lib/config';
 import styles from '../legal/layout.module.css';
 
 export const metadata: Metadata = {
@@ -96,7 +97,7 @@ export default function CookiesPage() {
 
             <p>
               ¿Tienes preguntas? Escríbenos a{' '}
-              <a href="mailto:hola@quantumholistic.com">hola@quantumholistic.com</a>
+              <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>
             </p>
 
             <Link href="/" className={styles.back}>← Volver al inicio</Link>

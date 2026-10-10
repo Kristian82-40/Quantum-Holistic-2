@@ -4,9 +4,9 @@ export const SITE_CONFIG = {
   tagline:     'Nutrición KM0, Herbología & Bienestar con IA',
   url:         'https://quantum-holistic.com',
   description: 'Planes nutricionales km0 personalizados, herbología y bienestar holístico potenciados por inteligencia artificial.',
-  email:       'hola@quantumholistic.com',
+  email:       'kristiantroncoso@gmail.com', // provisional hasta tener correo en quantum-holistic.com (dominio sin MX)
   social: {
-    instagram: 'https://instagram.com/quantumholistic',
+    instagram: 'https://instagram.com/kris.biozen',
     youtube:   'https://youtube.com/@quantumholistic',
   },
 } as const;
