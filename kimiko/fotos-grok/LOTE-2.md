@@ -26,7 +26,9 @@ para y avisa a Kristian.
 
 Comprobado el 10-oct contra `plants`: **14 ya existen** (ginseng, jengibre, lavanda, llantén, manzanilla, muérdago,
 olivo, salvia, saúco, tomillo, tribulus, tulsi, valeriana, brahmi) y **22 son nuevas**. Vuelve a comprobarlo al empezar
-cada tanda. Los números 1, 4 y 49 no están en la entrada: no los inventes.
+cada tanda. La 1 y la 4 no existen (la numeración de Kristian las salta). En su carpeta hay un archivo sin nombre,
+`JWkug.jpg`, que por la hora de descarga parece la 49: no está en la entrada y no se procesa hasta que Kristian diga
+qué planta es. No inventes ninguna.
 
 ## 3. Por cada foto
 

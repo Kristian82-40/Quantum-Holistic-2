@@ -82,7 +82,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude). ~~Ciudad e Instagram~~ respondido el 10-oct (Barcelona, `kris.biozen`). Dar el OK al PR #50 (Pro sin videollamada).
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
 3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
-3b. Cuando se fusione el PR del lote 2, mandar a Kimiko por Telegram: «Kimiko, haz la tanda 1 del lote 2 de fotos de Grok (kimiko/fotos-grok/LOTE-2.md)». Y cuando estés con el Mac (el disco está allí): mirar en la carpeta «fotos grok q-h.com» qué plantas son la 1, la 4 y la 49.
+3b. Cuando se fusione el PR del lote 2, mandar a Kimiko por Telegram: «Kimiko, haz la tanda 1 del lote 2 de fotos de Grok (kimiko/fotos-grok/LOTE-2.md)». La 1 y la 4 no existen (comprobado con tus capturas de la carpeta, 10-oct). Con el Mac (el disco está allí): abrir `JWkug.jpg`, que no tiene nombre y por la hora de descarga parece la 49, y decir qué planta es o renombrarla «ID 49 – Nombre (Latín)».
 4. **Publicar las 5 fichas de Grok** desde Telegram: `/pieza cola`, `/pieza bardana`, `/pieza calendula`, `/pieza cardo`, `/pieza diente` y pulsar «✅ Publicar» en cada una (Kimiko revisa, publica y comprueba la página). En diente de león, corregir «taraxacína» → «taraxacina».
 5. Revisar las 5 fichas nuevas, ya con láminas nuevas, en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
 
