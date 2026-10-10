@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { SITE_CONFIG } from '@/lib/config';
 import styles from '../legal/layout.module.css';
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default function TerminosPage() {
           <div className={styles.content}>
             <h2>1. Aceptación</h2>
             <p>
-              Al acceder a quantumholistic.com o contratar cualquiera de nuestros servicios, aceptas estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguna parte, te pedimos que no uses el servicio.
+              Al acceder a quantum-holistic.com o contratar cualquiera de nuestros servicios, aceptas estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguna parte, te pedimos que no uses el servicio.
             </p>
 
             <h2>2. El servicio</h2>
@@ -62,7 +63,7 @@ export default function TerminosPage() {
             <h3>Cancelación</h3>
             <p>
               Puedes cancelar tu suscripción en cualquier momento escribiendo a{' '}
-              <a href="mailto:hola@quantumholistic.com">hola@quantumholistic.com</a>. La cancelación tiene efecto al final del período de facturación en curso. No se realizan reembolsos por el período no consumido.
+              <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>. La cancelación tiene efecto al final del período de facturación en curso. No se realizan reembolsos por el período no consumido.
             </p>
             <h3>Derecho de desistimiento</h3>
             <p>
@@ -97,13 +98,13 @@ export default function TerminosPage() {
 
             <h2>9. Ley aplicable</h2>
             <p>
-              Estos términos se rigen por la legislación del Reino Unido. Cualquier disputa se someterá a la jurisdicción de los tribunales de Bristol, UK, salvo que la normativa de protección al consumidor aplicable en tu país de residencia disponga otra cosa.
+              Estos términos se rigen por la legislación española. Si eres consumidor, cualquier disputa se resolverá ante los juzgados y tribunales de tu domicilio, como establece la normativa de protección de los consumidores.
             </p>
 
             <h2>10. Contacto</h2>
             <p>
               Para cualquier consulta sobre estos términos:{' '}
-              <a href="mailto:hola@quantumholistic.com">hola@quantumholistic.com</a>
+              <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>
             </p>
 
             <Link href="/" className={styles.back}>← Volver al inicio</Link>

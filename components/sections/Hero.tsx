@@ -26,7 +26,7 @@ export default function Hero() {
 
       {/* ── Contenido centrado ── */}
       <div className={styles.content}>
-        <p className={styles.badge}>✦ Medicina Integrativa Cuántica ✦</p>
+        <p className={styles.badge}>✦ Nutrición KM0 · Herbología · Bienestar ✦</p>
 
         <h1 className={styles.title}>
           Tu cuerpo tiene<br />

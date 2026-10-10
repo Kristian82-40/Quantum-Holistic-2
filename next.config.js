@@ -12,6 +12,12 @@ const nextConfig = {
       },
     ],
   },
+  // El artículo de Bristol se retiró el 10-oct-2026: los enlaces antiguos van al blog
+  async redirects() {
+    return [
+      { source: '/blog/km0-bristol-guia', destination: '/blog/', permanent: false },
+    ];
+  },
 };
 
 module.exports = nextConfig;

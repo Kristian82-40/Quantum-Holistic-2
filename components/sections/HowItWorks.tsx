@@ -57,8 +57,8 @@ export default function HowItWorks() {
             ))}
           </div>
           <div className={styles.extraLines}>
-            <div className={styles.extraLine}><span>🧬</span><span>Ciencia ancestral validada por la evidencia moderna</span></div>
-            <div className={styles.extraLine}><span>🌐</span><span>Tecnología cuántica aplicada al bienestar integral</span></div>
+            <div className={styles.extraLine}><span>🧬</span><span>Tradición herbolaria explicada con fuentes citadas</span></div>
+            <div className={styles.extraLine}><span>🌐</span><span>Inteligencia artificial al servicio de tu bienestar</span></div>
           </div>
         </div>
 

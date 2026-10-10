@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { SITE_CONFIG } from '@/lib/config';
 import styles from '../legal/layout.module.css';
 
 export const metadata: Metadata = {
@@ -34,8 +35,8 @@ export default function PrivacidadPage() {
           <div className={styles.content}>
             <h2>1. Responsable del tratamiento</h2>
             <p>
-              Quantum Holistic, gestionado por Kristian Troncoso, con sede en Bristol, Reino Unido.
-              Contacto: <a href="mailto:hola@quantumholistic.com">hola@quantumholistic.com</a>
+              Quantum Holistic, gestionado por Kristian Troncoso, con sede en Barcelona, España.
+              Contacto: <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>
             </p>
 
             <h2>2. Datos que recogemos</h2>
@@ -86,7 +87,7 @@ export default function PrivacidadPage() {
             </ul>
             <p>
               Para ejercer cualquiera de estos derechos, escríbenos a{' '}
-              <a href="mailto:hola@quantumholistic.com">hola@quantumholistic.com</a>. Responderemos en un plazo máximo de 30 días.
+              <a href={`mailto:${SITE_CONFIG.email}`}>{SITE_CONFIG.email}</a>. Responderemos en un plazo máximo de 30 días.
             </p>
             <p>
               Si consideras que el tratamiento de tus datos no es correcto, puedes presentar una reclamación ante la{' '}

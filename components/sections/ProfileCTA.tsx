@@ -60,7 +60,7 @@ export default function ProfileCTA() {
     <section className={styles.section}>
       <div className={styles.container}>
         <h2 className={styles.title}>Tu plan personalizado</h2>
-        <p className={styles.subtitle}>Análisis holístico + computación cuántica + IA</p>
+        <p className={styles.subtitle}>Análisis holístico + IA</p>
         <div className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label}>¿Cuál es tu objetivo?</label>
@@ -99,7 +99,7 @@ export default function ProfileCTA() {
           </div>
           {error && <p className={styles.error}>{error}</p>}
           <button className={styles.button} onClick={handleSubmit} disabled={loading}>
-            {loading ? '⚛️ Analizando con IA cuántica...' : '🌿 Generar mi plan'}
+            {loading ? '🌿 Preparando tu plan...' : '🌿 Generar mi plan'}
           </button>
         </div>
         {result && (

@@ -1,6 +1,6 @@
 # Quantum Holistic 2.0
 
-> Plataforma de bienestar holístico con IA · Bristol, UK · 2026
+> Plataforma de bienestar holístico con IA · Barcelona, España · 2026
 
 [![Deploy](https://github.com/Kristian82-40/Quantum-Holistic-2/actions/workflows/nextjs.yml/badge.svg)](https://github.com/Kristian82-40/Quantum-Holistic-2/actions/workflows/nextjs.yml)
 
@@ -98,4 +98,4 @@ quantum-holistic/
 
 ---
 
-Proyecto por **Kristian Troncoso** · Bristol, UK · 2026
+Proyecto por **Kristian Troncoso** · Barcelona, España · 2026

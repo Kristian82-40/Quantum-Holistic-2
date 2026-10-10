@@ -16,11 +16,11 @@ const POSTS = [
     slug:    'energia-cognitiva-macrobiotica',
   },
   {
-    cat:     'KM0',
-    title:   'Alimentación km0 en Bristol: dónde comprar, qué hay en temporada y cómo usarlo',
-    excerpt: 'Guía práctica para quienes viven en UK y quieren conectar con la tierra local sin comprar espinacas de Kenia.',
-    date:    'Marzo 2026',
-    slug:    'km0-bristol-guia',
+    cat:     'Herbología',
+    title:   'Salvia (Salvia officinalis): tradición culinaria y bienestar en otoño',
+    excerpt: 'Una hierba de aroma profundo e historia milenaria para tus recetas de temporada, con sus precauciones.',
+    date:    'Octubre 2026',
+    slug:    '2026-10-09-salvia-salvia-officinalis-tradicion-culinaria-y-bienestar-en-otono',
   },
 ] as const;
 

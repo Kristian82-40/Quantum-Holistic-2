@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { SITE_CONFIG } from '@/lib/config';
 import styles from '../success/page.module.css';
 
 export const metadata: Metadata = {
@@ -22,8 +23,8 @@ export default function CancelPage() {
           <p className={styles.text}>
             No se ha realizado ningún cargo. Si tuviste algún problema o tienes
             preguntas, escríbenos a{' '}
-            <a href="mailto:hola@quantumholistic.com" style={{ color: 'var(--sage)' }}>
-              hola@quantumholistic.com
+            <a href={`mailto:${SITE_CONFIG.email}`} style={{ color: 'var(--sage)' }}>
+              {SITE_CONFIG.email}
             </a>
           </p>
           <a href="/#pricing" className={styles.back}>
