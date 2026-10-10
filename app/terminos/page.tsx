@@ -43,7 +43,7 @@ export default function TerminosPage() {
             </p>
             <ul>
               <li><strong>Plan Freemium:</strong> perfil holístico básico, plan semanal generado por IA, recetas estacionales y acceso al blog. Gratuito, sin tarjeta requerida.</li>
-              <li><strong>Quantum Pro (mensual/anual):</strong> protocolo depurativo mensual, optimización de perfil avanzada, videollamada mensual con especialista, seguimiento adaptativo y guías descargables.</li>
+              <li><strong>Quantum Pro (mensual/anual):</strong> protocolo depurativo mensual, optimización de perfil avanzada, seguimiento adaptativo y guías descargables. La consulta individual con el especialista no está incluida y se reserva aparte.</li>
             </ul>
 
             <h2>3. Naturaleza del servicio — aviso importante</h2>

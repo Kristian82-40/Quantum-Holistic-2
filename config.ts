@@ -51,7 +51,6 @@ export const PLANS = [
     features: [
       { text: 'Protocolo depurativo mes a mes',         highlight: true },
       { text: 'Optimización según tu perfil único',     highlight: true },
-      { text: 'Videollamada mensual 1:1',               highlight: true },
       { text: 'Seguimiento adaptativo con IA',          highlight: false },
       { text: 'Potenciación de habilidades específicas',highlight: false },
       { text: 'Guías PDF descargables',                 highlight: false },
@@ -117,9 +116,9 @@ export const PRO_ITEMS = [
   },
   {
     icon:  '◎',
-    title: 'Videollamada con el especialista',
-    desc:  'Sesión mensual para revisar tu evolución, ajustar el protocolo y resolver lo que ninguna IA puede gestionar sola.',
-    tag:   '1:1 · Humano',
+    title: 'Sesión 1:1 con el especialista',
+    desc:  'Opcional y aparte del plan (65 €): revisamos tu evolución, ajustamos el protocolo y resolvemos lo que ninguna IA puede gestionar sola.',
+    tag:   '1:1 · Aparte',
   },
   {
     icon:  '◇',
