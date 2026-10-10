@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 10-oct-2026, 11:00 (Madrid) · Claude (chat): marca y contacto (#49) y Pro sin videollamada (#50, borrador) · antes, 9-oct 11:50: Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 10-oct-2026, 11:00 (Madrid) · Claude (chat): marca y contacto (#49), Pro sin videollamada (#50, borrador) y fotos de Grok del lote 1 aplicadas en Supabase · antes, 9-oct 11:50: Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -64,7 +64,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | | Qué | Prueba |
 |---|---|---|
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
-| ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas (3 `-grok.jpg` de plantas existentes, 4 plantas nuevas en borrador), 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). Migración `20261009120000` **sin aplicar** en Supabase | informe `kimiko/informes/fotos-grok.md`; `npm run build` OK; EMA → 200 con `curl` (9-oct) |
+| ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas, 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). **Migración aplicada el 10-oct** (`fotos_grok_lote_1`): 4 plantas nuevas en borrador (bardana 54, caléndula 55, cardo mariano 56, diente de león 57) y `grok_id` en aloe, castaño y equinácea. Con la cola de caballo, **5 fichas listas**: pasan `revisarFicha` y sus fotos están en la web. Falta el «✅ Publicar» de Kristian. Hueco: Kimiko Cloud no puede aplicar SQL, así que cada lote se queda en el repo hasta que alguien aplica la migración | `select … from plants where grok_id is not null` (10-oct 10:35): 8 filas, ninguna publicada salvo equinácea; `revisarFicha` local → 5 ✅; `curl` a las 5 fotos → 200; `/diccionario/bardana/` → 404 (borrador); `get_advisors`: 0 ERROR, mismos 5 WARN |
 | ⚠️ | GitHub avisa de **92 vulnerabilidades** en dependencias de `main` (5 críticas, 39 altas) | aviso de GitHub al hacer push, 10-oct |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
 | ✅ | Secreto sin uso `ANTHROPIC_API_KEY` borrado del worker (quedan 7) | `wrangler secret delete`, 8-oct |
@@ -82,7 +82,8 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude). ~~Ciudad e Instagram~~ respondido el 10-oct (Barcelona, `kris.biozen`). Dar el OK al PR #50 (Pro sin videollamada).
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
 3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
-4. Revisar las 5 fichas nuevas, ya con láminas nuevas, en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
+4. **Publicar las 5 fichas de Grok** desde Telegram: `/pieza cola`, `/pieza bardana`, `/pieza calendula`, `/pieza cardo`, `/pieza diente` y pulsar «✅ Publicar» en cada una (Kimiko revisa, publica y comprueba la página). En diente de león, corregir «taraxacína» → «taraxacina».
+5. Revisar las 5 fichas nuevas, ya con láminas nuevas, en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
 
 Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde); `/estado` y `/manual` responden en Telegram (16:39); llaves de Groq y Workers AI (guía, en verde); 5 skills `qh-*` subidas a claude.ai (Claude las ve cargadas en el chat); conectores Expedia, Kiwi.com, lastminute.com y Gamma desconectados (sus herramientas desaparecieron de la sesión de Claude a las 17:07).
 
