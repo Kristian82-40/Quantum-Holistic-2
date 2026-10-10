@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 10-oct-2026, 11:00 (Madrid) · Claude (chat): marca y contacto (#49), Pro sin videollamada (#50, borrador) y fotos de Grok del lote 1 aplicadas en Supabase · antes, 9-oct 11:50: Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 10-oct-2026, 11:15 (Madrid) · Claude (chat): marca y contacto (#49), Pro sin videollamada (#50, borrador), fotos de Grok del lote 1 aplicadas en Supabase, lote 2 preparado para Kimiko e instrucciones antiguas archivadas · antes, 9-oct 11:50: Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -64,7 +64,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | | Qué | Prueba |
 |---|---|---|
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
-| ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas, 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). **Migración aplicada el 10-oct** (`fotos_grok_lote_1`): 4 plantas nuevas en borrador (bardana 54, caléndula 55, cardo mariano 56, diente de león 57) y `grok_id` en aloe, castaño y equinácea. Con la cola de caballo, **5 fichas listas**: pasan `revisarFicha` y sus fotos están en la web. Falta el «✅ Publicar» de Kristian. Hueco: Kimiko Cloud no puede aplicar SQL, así que cada lote se queda en el repo hasta que alguien aplica la migración | `select … from plants where grok_id is not null` (10-oct 10:35): 8 filas, ninguna publicada salvo equinácea; `revisarFicha` local → 5 ✅; `curl` a las 5 fotos → 200; `/diccionario/bardana/` → 404 (borrador); `get_advisors`: 0 ERROR, mismos 5 WARN |
+| ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas, 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). **Migración aplicada el 10-oct** (`fotos_grok_lote_1`): 4 plantas nuevas en borrador (bardana 54, caléndula 55, cardo mariano 56, diente de león 57) y `grok_id` en aloe, castaño y equinácea. Con la cola de caballo, **5 fichas listas**: pasan `revisarFicha` y sus fotos están en la web. Falta el «✅ Publicar» de Kristian. **Lote 2** (IDs 14–50, 36 fotos: 14 de plantas que ya existen y 22 nuevas) preparado en 4 tandas en `kimiko/fotos-grok/LOTE-2.md`: Kimiko inserta los borradores por REST (lo permite `kimiko/PROMPT.md`), así que ya no hace falta aplicar migraciones a mano; sin verificar hasta la tanda 1. Las instrucciones antiguas que emparejaban fotos por número están en `archivo/obsoleto/` | `select … from plants where grok_id is not null` (10-oct 10:35): 8 filas, ninguna publicada salvo equinácea; `revisarFicha` local → 5 ✅; `curl` a las 5 fotos → 200; `/diccionario/bardana/` → 404 (borrador); `get_advisors`: 0 ERROR, mismos 5 WARN; cruce de `indice.csv` con `plants` por nombre latino y slug (10-oct): 14 existen, 22 no |
 | ⚠️ | GitHub avisa de **92 vulnerabilidades** en dependencias de `main` (5 críticas, 39 altas) | aviso de GitHub al hacer push, 10-oct |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
 | ✅ | Secreto sin uso `ANTHROPIC_API_KEY` borrado del worker (quedan 7) | `wrangler secret delete`, 8-oct |
@@ -82,6 +82,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude). ~~Ciudad e Instagram~~ respondido el 10-oct (Barcelona, `kris.biozen`). Dar el OK al PR #50 (Pro sin videollamada).
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
 3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
+3b. Cuando se fusione el PR del lote 2, mandar a Kimiko por Telegram: «Kimiko, haz la tanda 1 del lote 2 de fotos de Grok (kimiko/fotos-grok/LOTE-2.md)». Y cuando estés con el Mac (el disco está allí): mirar en la carpeta «fotos grok q-h.com» qué plantas son la 1, la 4 y la 49.
 4. **Publicar las 5 fichas de Grok** desde Telegram: `/pieza cola`, `/pieza bardana`, `/pieza calendula`, `/pieza cardo`, `/pieza diente` y pulsar «✅ Publicar» en cada una (Kimiko revisa, publica y comprueba la página). En diente de león, corregir «taraxacína» → «taraxacina».
 5. Revisar las 5 fichas nuevas, ya con láminas nuevas, en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
 
