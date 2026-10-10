@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 9-oct-2026, 11:50 (Madrid) · Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 10-oct-2026, 11:00 (Madrid) · Claude (chat): marca y contacto (#49) y Pro sin videollamada (#50, borrador) · antes, 9-oct 11:50: Claude Code: worker desplegado desde Actions; bloque 1 de «✅ Publicar» por Telegram en PR · antes, Claude (chat): Groq primero, reels, fichas sin dosis (#35–#38) · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -19,7 +19,9 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | Las 4 fichas publicadas ya **no indican dosis** ni afirmaciones de salud: posología e indicaciones reescritas como uso tradicional; quitada la «evidencia» sin cita comprobable. Kristian revisa los textos como herbolario | `select … ~ '\d'` sobre `posologia` → 0 (9-oct); copia para deshacer en `kimiko/recuperacion/restaurar-posologia-2026-10-09.sql` |
 | ❌ | Blog: **0 de 88 borradores listos**; 25 para retocar y 63 para descartar (pruebas, esbozos, duplicados, temas fuera de línea) | `kimiko/informes/blog-borradores.md` |
 | ✅ | **Dominio `quantum-holistic.com` (y `www.`) es nuestro**: comprado en Vercel el 1-may-2026, caduca el 1-may-2027 con renovación automática (de pago, ~1 vez al año), DNS en Vercel (`ns1/ns2.vercel-dns.com`). `q-h.com` **no** es nuestro (está en venta): no usarlo en textos ni enlaces | Vercel API `list_domains` y `list_project_domains`, 8-oct 17:20 |
-| ❌ | Correo: `hola@quantumholistic.com` (sin guion) no existe y `quantum-holistic.com` **no tiene MX** (no recibe correo). Decidido crear uno serio en `quantum-holistic.com` | Vercel `get_records`: 0 registros MX, 8-oct |
+| ⚠️ | Correo de contacto de la web → `kristiantroncoso@gmail.com` (provisional, decisión de Kristian el 10-oct) en **PR #49**: pie, Newsletter, «Reservar consulta» de /terapeutas/papu y páginas legales (ahora leen `SITE_CONFIG.email`). Sigue pendiente un correo en `quantum-holistic.com` (**sin MX**): los correos de Stripe (`lib/email.ts`, Resend) salen de `hola@quantumholistic.com` y no se pueden enviar | `next start` local y vista previa de #49 (10-oct): 0 `quantumholistic.com` visibles; Vercel `get_records` 8-oct: 0 MX |
+| ⚠️ | **Bristol fuera** (pie: «Barcelona, España»; privacidad; términos con ley española), **Instagram `kris.biozen`**, portada sin «Medicina Integrativa Cuántica», «computación cuántica» ni «validada por la evidencia», y el artículo de Bristol retirado (la tarjeta de portada pasa a la salvia; `/blog/km0-bristol-guia` → 307 a `/blog/`). En **PR #49**, en producción al fusionarse. Sin verificar que `kris.biozen` sea la cuenta buena | vista previa de #49 (Vercel `web_fetch`, 10-oct): 0 «Bristol», 0 «cuántica»; `next start` local: redirección 307 |
+| ⚠️ | **Quantum Pro (9 €) sin videollamada**; la sesión 1:1 pasa a ofrecerse aparte a 65 € (precio de /terapeutas/papu). **PR #50 en borrador**: espera el OK de Kristian (toca precios; el fusionador no toca borradores) | vista previa de #50 (10-oct): 0 «videollamada» en portada y términos |
 | ✅ | Portada sin cifras sin respaldo ("2.400+ planes", "340+ plantas", "98 %"), sin los 3 testimonios y sin el enlace roto de YouTube | PR #34 fusionado el 8-oct 17:45, vista previa de Vercel en verde |
 | ⚠️ | Captación: **0 leads, 1 perfil** | consultas a `leads` y `profiles` |
 | ⚠️ | Diseño: auditoría hecha con capturas (móvil y escritorio, 5 páginas), 10 problemas y 3 direcciones de acuarela. Sin scroll horizontal ni imágenes rotas | `kimiko/informes/diseno.md` + `kimiko/informes/diseno/`, Playwright 8-oct ~10:40 |
@@ -63,6 +65,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 |---|---|---|
 | ⚠️ | Kimiko Cloud usa `CLAUDE_CODE_OAUTH_TOKEN` (suscripción de Claude). Si la suscripción caduca, las órdenes que cambian la web dejan de funcionar | `.github/workflows/kimiko-cloud.yml` |
 | ⚠️ | **Fotos de Grok, lote 1** (IDs 2–13): 7 aceptadas (3 `-grok.jpg` de plantas existentes, 4 plantas nuevas en borrador), 3 rechazadas (árnica equivocada; boldo y eleuterococo con texto). Migración `20261009120000` **sin aplicar** en Supabase | informe `kimiko/informes/fotos-grok.md`; `npm run build` OK; EMA → 200 con `curl` (9-oct) |
+| ⚠️ | GitHub avisa de **92 vulnerabilidades** en dependencias de `main` (5 críticas, 39 altas) | aviso de GitHub al hacer push, 10-oct |
 | ✅ | Revisor `claude-review` retirado (fallaba por necesitar API de pago) | PR #8 |
 | ✅ | Secreto sin uso `ANTHROPIC_API_KEY` borrado del worker (quedan 7) | `wrangler secret delete`, 8-oct |
 | ✅ | Avisos de seguridad de Supabase: de 1 ERROR + 10 WARN a 0 ERROR + 5 WARN (los que quedan son intencionados o de panel) | PR #17, migración aplicada, `get_advisors` del 8-oct |
@@ -76,7 +79,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 
 ## Lo que solo puede hacer Kristian (todo desde el móvil)
 0. ~~Llave de Kimiko para fusionar~~ puesta el 9-oct. (Pasos por si caduca:: GitHub → foto → Settings → Developer settings → Personal access tokens → Fine-grained → Generate. Nombre `kimiko-fusion`, caducidad 1 año, solo el repo `Quantum-Holistic-2`, permisos **Contents**, **Pull requests** y **Workflows** en «Read and write». Copiarla y pegarla en repo → Settings → Secrets and variables → Actions → New secret `KIMIKO_GH_TOKEN`.)
-1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude), decir la **ciudad/país** del pie y de los textos legales y si la cuenta de Instagram `quantumholistic` es tuya.
+1. Crear el correo de contacto en `quantum-holistic.com` (propuesta: Zoho Mail gratis; los registros DNS los pone Claude). ~~Ciudad e Instagram~~ respondido el 10-oct (Barcelona, `kris.biozen`). Dar el OK al PR #50 (Pro sin videollamada).
 2. Decir si se quitan las cifras y testimonios de la portada, y elegir dirección visual A, B o C (`kimiko/informes/diseno.md`).
 3. ~~Normalizar categorías~~ hecho el 8-oct ("detox" → Nutrición).
 4. Revisar las 5 fichas nuevas, ya con láminas nuevas, en `/admin` (o en `plants`) y si se archivan los 63 borradores descartables (`kimiko/informes/blog-borradores.md`).
@@ -89,4 +92,5 @@ Hecho el 8-oct por la tarde: #29–#32 fusionados (Claude, con Vercel en verde);
 3. ~~Pintar `fuentes` y quitar las dosis de las 4 fichas publicadas~~ hecho el 9-oct (#36, #38). Pendiente: categoría «Magicas» en las 4 fichas publicadas (no cuadra con hinojo, árnica…).
 4. Retocar el borrador de árnica de hoy ("solo uso externo" + enlaces) y los 6 de plantas del informe.
 5. ~~Normalizar las 84 categorías~~ hecho el 8-oct 17:15.
-6. Con las respuestas de Kristian: corregir dominio, correo, ciudad y redes en un PR.
+6. ~~Corregir dominio, correo, ciudad y redes~~ en PR #49 (10-oct).
+7. **Semana 1 (12–18 oct): compra real de principio a fin** (registro → plan → pago → acceso). Antes: Stripe en vivo no está conectado (`CLAUDE.md` §5), así que la prueba empieza por ahí.
