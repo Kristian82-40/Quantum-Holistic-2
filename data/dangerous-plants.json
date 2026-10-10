@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "policy": "NO generar a ciegas. Requieren aprobación visual manual antes de renombrar/publicar.",
+    "policy": "Las 9 plantas peligrosas NUNCA se publican ni protagonizan contenido (CLAUDE.md, qh-editorial). No se generan, renombran ni aprueban imágenes para ellas.",
     "pattern": "{slug}-cientifica.jpg"
   },
   "plants": [
-    { "slug": "beleno-negro",       "nombre_latino": "Hyoscyamus niger",   "familia": "Solanaceae",      "source": "plant-00-beleno-negro-cientifica.jpg", "note": "Archivo SuperGrok existe; aprobar visualmente y renombrar." },
+    { "slug": "beleno-negro",       "nombre_latino": "Hyoscyamus niger",   "familia": "Solanaceae",      "source": "plant-00-beleno-negro-cientifica.jpg", "note": "La imagen candidata era de otra especie (bitácora 26-jul-2026): no usar." },
     { "slug": "hierba-mora",        "nombre_latino": "Solanum nigrum",     "familia": "Solanaceae",      "source": null, "note": "Sin archivo. Generar solo tras aprobación." },
     { "slug": "tejo",               "nombre_latino": "Taxus baccata",      "familia": "Taxaceae",        "source": null, "note": "Sin archivo." },
     { "slug": "aconito",            "nombre_latino": "Aconitum napellus",  "familia": "Ranunculaceae",   "source": null, "note": "Sin archivo." },
