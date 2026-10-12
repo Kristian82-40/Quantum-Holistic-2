@@ -122,6 +122,12 @@ export default async function BlogPostPage(
             <p className={styles.excerpt}>{excerpt}</p>
           </header>
 
+          {/* Imagen del post (Kimiko la guarda en image_url; antes solo se usaba para SEO) */}
+          {supaPost?.image_url?.startsWith('http') && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={supaPost.image_url} alt={title} className={styles.hero} />
+          )}
+
           {/* Divider */}
           <div className={styles.divider} aria-hidden />
 
