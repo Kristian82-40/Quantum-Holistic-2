@@ -49,44 +49,60 @@ export function revisarFicha(planta, { slugRepetido = false } = {}) {
     for (const frase of t.split(/[.!?\n;]+/).map((f) => f.trim()).filter(Boolean)) if (esDosis(frase)) motivos.push(`Indica una dosis concreta: «${frase.slice(0, 80)}»`);
   }
   if (!Array.isArray(fc.contraindicaciones) || fc.contraindicaciones.length === 0) motivos.push('Faltan las contraindicaciones (ficha_cientifica.contraindicaciones)');
+  // 12-oct: sin lámina no se publica (la web ya no usa un archivo de recambio que podía ser otra especie).
+  if (!planta.image_cientifica_url) motivos.push('Falta la lámina (image_cientifica_url): sin foto revisada no se publica');
   if (!planta.slug) motivos.push('No tiene slug');
   if (slugRepetido) motivos.push(`El slug «${planta.slug}» ya lo usa otra planta`);
   return motivos;
 }
 
-// Lee el HTML por trozos y para en cuanto aparece el título (CPU mínima: el worker Free da 10 ms).
-async function contiene(r, buscado, max = 300_000) {
-  if (!r.body?.getReader) return normalizar(await r.text()).includes(buscado);
+// Lee el HTML por trozos y para en cuanto aparecen todos los textos buscados (CPU mínima: el worker Free da 10 ms).
+// Devuelve los que NO aparecieron (vacío = todos están).
+async function faltan(r, buscados, max = 300_000) {
+  const pendientes = new Set(buscados);
+  const mirar = (texto) => { const n = normalizar(texto); for (const b of [...pendientes]) if (n.includes(b)) pendientes.delete(b); };
+  if (!r.body?.getReader) { mirar(await r.text()); return [...pendientes]; }
   const lector = r.body.getReader(); const dec = new TextDecoder();
+  const largo = Math.max(...buscados.map((b) => b.length));
   let cola = ''; let leidos = 0;
   for (;;) {
     const { done, value } = await lector.read();
-    if (done) return false;
+    if (done) return [...pendientes];
     leidos += value.length;
-    // Solo se mira el trozo nuevo más una cola del anterior (por si el título queda partido entre dos trozos).
+    // Solo se mira el trozo nuevo más una cola del anterior (por si un texto queda partido entre dos trozos).
     const ventana = cola + dec.decode(value, { stream: true });
-    if (normalizar(ventana).includes(buscado)) { lector.cancel().catch(() => {}); return true; }
-    cola = ventana.slice(-buscado.length * 6);
-    if (leidos > max) { lector.cancel().catch(() => {}); return false; }
+    mirar(ventana);
+    if (!pendientes.size) { lector.cancel().catch(() => {}); return []; }
+    cola = ventana.slice(-largo * 6);
+    if (leidos > max) { lector.cancel().catch(() => {}); return [...pendientes]; }
   }
 }
 const normalizar = (html) => html.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").toLowerCase();
 
-// Prueba de publicado: la URL pública da 200 y contiene el título. Reintenta unas veces por si la web tarda.
-export async function comprobarURL(url, titulo, { fetchImpl = fetch, intentos = 3, espera = 4000 } = {}) {
-  const buscado = sinTitulo(titulo).toLowerCase();
+// Prueba de publicado: la URL pública da 200 y contiene el título y, si se pide, la imagen (nombre del archivo).
+// Reintenta unas veces por si la web tarda.
+export async function comprobarURL(url, titulo, { fetchImpl = fetch, intentos = 3, espera = 4000, imagen = null } = {}) {
+  const tituloBuscado = sinTitulo(titulo).toLowerCase();
+  const imagenBuscada = imagen ? imagen.toLowerCase() : null;
+  const buscados = [tituloBuscado, ...(imagenBuscada ? [imagenBuscada] : [])];
   let ultimo = '';
   for (let i = 0; i < intentos; i++) {
     if (i) await new Promise((r) => setTimeout(r, espera));
     try {
       const r = await fetchImpl(url, { redirect: 'follow', headers: { 'cache-control': 'no-cache' }, signal: AbortSignal.timeout(15000) });
-      const encontrado = r.status === 200 && (await contiene(r, buscado));
-      if (encontrado) return { ok: true, status: 200 };
-      ultimo = r.status === 200 ? 'la página no contiene el título' : `HTTP ${r.status}`;
+      if (r.status !== 200) { ultimo = `HTTP ${r.status}`; continue; }
+      const sin = await faltan(r, buscados);
+      if (!sin.length) return { ok: true, status: 200 };
+      ultimo = sin.includes(tituloBuscado) ? 'la página no contiene el título' : `la página no muestra la imagen revisada (${imagen})`;
     } catch (e) { ultimo = e.message; }
   }
   return { ok: false, motivo: ultimo };
 }
+
+// Nombre del archivo de una imagen (lo que la web pinta en el src), p. ej. «bardana-grok.jpg».
+export const archivoImagen = (url) => (url ? String(url).split('?')[0].split('/').pop() : null);
+// URL absoluta para Telegram: las rutas locales (/images/…) se sirven desde la web.
+export const urlImagen = (url) => (!url ? null : String(url).startsWith('/') ? `${DOMINIO}${url}` : String(url));
 
 // Tras retirar, la URL ya no debe servir la pieza (404).
 export async function comprobarRetirada(url, { fetchImpl = fetch } = {}) {
@@ -112,11 +128,13 @@ const PIEZAS = {
     publicada: (p) => p.published === true && p.status === 'published',
   },
   ficha: {
-    leer: async (db, id) => (await db.seleccionar('plants', `id=eq.${id}&select=id,slug,nombre_es,ficha_cientifica,publicada,ficha_verificada&limit=1`))[0],
+    leer: async (db, id) => (await db.seleccionar('plants', `id=eq.${id}&select=id,slug,nombre_es,ficha_cientifica,image_cientifica_url,publicada,ficha_verificada&limit=1`))[0],
     repetido: async (db, p) => (await db.seleccionar('plants', `slug=eq.${encodeURIComponent(p.slug)}&id=neq.${p.id}&select=id&limit=1`)).length > 0,
     revisar: revisarFicha,
     titulo: (p) => p.nombre_es,
     url: (p) => urlFicha(p.slug),
+    // La página publicada tiene que enseñar la lámina revisada, no otra.
+    imagen: (p) => archivoImagen(p.image_cientifica_url),
     // La web muestra la planta con publicada y su ficha científica solo con ficha_verificada: publicar = las dos.
     publicar: (db, id) => db.actualizar('plants', `id=eq.${id}`, { publicada: true, ficha_verificada: true, updated_at: ahora() }),
     // Retirar solo apaga publicada (la verificación de Kristian se conserva).
@@ -139,7 +157,7 @@ export async function publicarPieza({ db, tipo, id, fetchImpl = fetch, espera })
   }
   await P.publicar(db, id);
   const url = P.url(pieza);
-  const prueba = await comprobarURL(url, P.titulo(pieza), { fetchImpl, ...(espera !== undefined ? { espera } : {}) });
+  const prueba = await comprobarURL(url, P.titulo(pieza), { fetchImpl, imagen: P.imagen ? P.imagen(pieza) : null, ...(espera !== undefined ? { espera } : {}) });
   if (!prueba.ok) {
     await P.retirar(db, id);
     const accion = `La web no la muestra (${prueba.motivo}). Queda en borrador. Mira el último despliegue en vercel.com (proyecto quantum-holistic-2) y vuelve a pulsar ✅ Publicar`;
