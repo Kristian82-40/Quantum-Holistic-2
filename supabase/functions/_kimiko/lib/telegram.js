@@ -75,6 +75,10 @@ export const enviarMensaje = ({ token, chatId, texto, teclado, forzarRespuesta =
     ...(teclado ? { reply_markup: teclado } : forzarRespuesta ? { reply_markup: { force_reply: true } } : {}),
   }, fetchImpl);
 
+// Foto por URL con pie y teclado (p. ej. /pieza de una ficha: la lámina que saldrá en la web, para revisarla antes de publicar).
+export const enviarFoto = ({ token, chatId, fotoUrl, pie, teclado, fetchImpl = fetch }) =>
+  llamar(token, 'sendPhoto', { chat_id: chatId, photo: fotoUrl, caption: pie.slice(0, 1000), ...(teclado ? { reply_markup: teclado } : {}) }, fetchImpl);
+
 export const BOTONES_PR = (draftId, numero) => ({
   inline_keyboard: [[
     { text: `✅ Fusionar PR #${numero}`, callback_data: `prm:${draftId}` },

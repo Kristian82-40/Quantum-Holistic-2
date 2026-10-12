@@ -7,8 +7,8 @@
 //  · Comandos /estado, /auditar y /manual (solo lectura; ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
-import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, guardarFoto, BOTONES_PIEZA, ponerTeclado } from '../lib/telegram.js';
-import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha } from '../lib/publicar.js';
+import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, ponerTeclado } from '../lib/telegram.js';
+import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha, urlImagen } from '../lib/publicar.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
 
@@ -78,12 +78,24 @@ async function pedirPieza({ env, db, msg, fetchImpl }) {
   if (q.length < 3) return enviarMensaje({ token, chatId, texto: 'Uso: /pieza <parte del slug>, p. ej. /pieza salvia', fetchImpl });
   const [posts, plantas] = await Promise.all([
     db.seleccionar('blog_posts', `slug=ilike.*${q}*&select=id,slug,title,status,published&order=created_at.desc&limit=3`),
-    db.seleccionar('plants', `slug=ilike.*${q}*&select=id,slug,nombre_es,publicada&order=slug&limit=3`),
+    db.seleccionar('plants', `slug=ilike.*${q}*&select=id,slug,nombre_es,image_cientifica_url,publicada&order=slug&limit=3`),
   ]);
   const piezas = [...posts.map((p) => ({ tipo: 'post', id: p.id, titulo: p.title, url: urlPost(p.slug), publicada: estaPublicada('post', p) })),
-    ...plantas.map((p) => ({ tipo: 'ficha', id: p.id, titulo: `Ficha: ${p.nombre_es}`, url: urlFicha(p.slug), publicada: estaPublicada('ficha', p) }))];
+    ...plantas.map((p) => ({ tipo: 'ficha', id: p.id, titulo: `Ficha: ${p.nombre_es}`, url: urlFicha(p.slug), publicada: estaPublicada('ficha', p), foto: urlImagen(p.image_cientifica_url) }))];
   if (!piezas.length) return enviarMensaje({ token, chatId, texto: `No encuentro ningún post ni ficha con «${q}».`, fetchImpl });
-  for (const p of piezas) await enviarMensaje({ token, chatId, texto: `${p.publicada ? '🟢 Publicada' : '📝 Borrador'} · ${p.titulo}\n${p.url}`, teclado: BOTONES_PIEZA(p.tipo, p.id, p.publicada), fetchImpl });
+  for (const p of piezas) {
+    const texto = `${p.publicada ? '🟢 Publicada' : '📝 Borrador'} · ${p.titulo}\n${p.url}`;
+    const teclado = BOTONES_PIEZA(p.tipo, p.id, p.publicada);
+    if (p.tipo === 'ficha') {
+      // 12-oct: la ficha llega con la lámina que enseñará la web, para revisarla ANTES de pulsar Publicar.
+      if (!p.foto) { await enviarMensaje({ token, chatId, texto: `${texto}\n⚠️ No tiene lámina: no se puede publicar hasta que tenga una revisada.`, teclado, fetchImpl }); continue; }
+      const f = await enviarFoto({ token, chatId, fotoUrl: p.foto, pie: `${texto}\n🖼 Esta es la imagen que saldrá en la web. ¿Es la planta correcta? Si no, no publiques.`, teclado, fetchImpl });
+      if (f.ok) continue;
+      await enviarMensaje({ token, chatId, texto: `${texto}\n⚠️ No pude enviarte la lámina (${f.error}). Ábrela antes de publicar: ${p.foto}`, teclado, fetchImpl });
+      continue;
+    }
+    await enviarMensaje({ token, chatId, texto, teclado, fetchImpl });
+  }
 }
 
 async function botonPR({ env, db, cq, codigo, id, fetchImpl }) {
