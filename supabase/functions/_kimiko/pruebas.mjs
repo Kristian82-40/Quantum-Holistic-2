@@ -691,6 +691,15 @@ await prueba('cierre de órdenes: lee, cierra con filtro de estado y deja regist
   const r2 = await cerrarOrden({ url: 'https://s', llave: 'k', id: ID_ORDEN, jobStatus: 'failure', fetchImpl: f('hecho') });
   assert.equal(r2.cerrada, false); assert.equal(llamadas.filter((x) => x.metodo !== 'GET').length, 0);
 });
+await prueba('cierre de órdenes: si Kimiko la cierra entre la lectura y el PATCH, no se da por cerrada ni deja registro', async () => {
+  const metodos = [];
+  const f = async (url, o = {}) => {
+    metodos.push(o.method ?? 'GET');
+    return { ok: true, status: 200, json: async () => (o.method === 'PATCH' ? [] : [{ id: ID_ORDEN, status: 'en_curso' }]) };
+  };
+  const r = await cerrarOrden({ url: 'https://s', llave: 'k', id: ID_ORDEN, jobStatus: 'success', fetchImpl: f });
+  assert.equal(r.cerrada, false); assert.deepEqual(metodos, ['GET', 'PATCH']);
+});
 
 // ── Kimiko interno: triaje de órdenes con motores gratuitos (13-oct) ──
 const groqFalso = (contenido, urls = []) => async (url, o = {}) => {
