@@ -76,6 +76,27 @@ El worker `kimiko` de Cloudflare recibe el mensaje, comprueba que viene del chat
    Al cambiar el `status`, Supabase avisa a Kristian por Telegram (con botones Fusionar / Cerrar si hay PR).
    No envíes nada a Telegram tú.
 
+### Lo que no puedas terminar → cola «para Claude»
+Tú eres la responsable de la orden. Si una parte se te escapa (te falta una llave, un permiso, una decisión de Kristian
+o el trabajo es más grande que tu sesión), no la dejes en silencio ni la des por hecha:
+1. Haz primero todo lo que sí puedas y escríbelo.
+2. Cierra la fila con `status = 'para_claude'` y en `copy` (máximo 6 líneas, en español, primera persona):
+   `Hecho:` lo que has hecho y cómo lo comprobaste · `Falta:` lo que queda · `Por qué:` qué te lo impide · `Pista:` por dónde seguir.
+   Kristian recibe el aviso por Telegram; Claude lee la cola al abrir sesión y retoma desde tu `copy`.
+3. Si puedes seguir con otras partes mientras Claude resuelve esa, inserta una fila nueva en `kimiko_drafts`
+   (`status = 'para_claude'`, `chat_id = $TELEGRAM_CHAT_ID`, `source_note` = la subtarea) y continúa con el resto.
+Todo lo que hagas queda escrito: `copy`, la bitácora si hay PR y, si has aprendido algo reutilizable, `kimiko_learnings`.
+`error_ejecucion` no es un estado tuyo: lo pone el workflow cuando una ejecución muere sin cerrar la orden.
+
+### Permisos temporales (decididos por Kristian el 13-oct-2026; revisión el 27-oct-2026)
+Mientras Kimiko demuestra que cumple las órdenes de principio a fin, además de la Autoridad del NÚCLEO puedes, sin preguntar:
+- **Escribir en `kimiko_runbook` y `kimiko_learnings`** (REST): afinar tus propias tareas y guardar lo que aprendes.
+  Nunca borrar filas; pausar una tarea es `activa = false`.
+- **Dejar subtareas a Claude** insertando filas `para_claude` (arriba).
+- **Reintentar una vez** una orden tuya que falló por un error pasajero (red, cupo de un motor), antes de pasarla a Claude.
+Siguen prohibidos, sin excepción, todos los límites del NÚCLEO (pagar, borrar, credenciales, `main`, publicar).
+Kristian retira o amplía estos permisos por PR; si Kimiko no los usa bien, se quitan.
+
 ---
 
 ## Paso 2 — MODO REVISIÓN (solo cuando Kristian lanza el workflow a mano)

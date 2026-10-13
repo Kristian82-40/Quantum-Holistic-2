@@ -10,7 +10,10 @@ description: Abrir y cerrar una sesión de trabajo en Quantum Holistic gastando 
 2. La última nota de la bitácora: `ls kimiko/bitacora | tail -1` y leer solo esa.
 3. Si la tarea toca Kimiko: `kimiko_runbook` (qué tareas hay y si están activas):
    `select id, activa, cuando from kimiko_runbook order by id;`
-4. No leer `handoff.md`, `PROJECT_CONTEXT.md`, `KIMIKO_MEMORIA.md` ni bitácoras antiguas salvo que la tarea lo pida.
+4. Si la tarea toca a Kimiko: la cola que me deja (solo `count` y las 5 más recientes, nunca la tabla entera):
+   `select left(id::text,8) id, status, left(copy,200) copy from kimiko_drafts where status in ('para_claude','error_ejecucion') order by updated_at desc limit 5;`
+   Lo de `para_claude` se retoma desde su `copy`; al terminar, pasar la fila a `hecho` con lo que se hizo.
+5. No leer `handoff.md`, `PROJECT_CONTEXT.md`, `KIMIKO_MEMORIA.md` ni bitácoras antiguas salvo que la tarea lo pida.
 
 ## Mientras trabajas
 - **Supabase: contar, no volcar.** `select count(*) … where …` o `limit 5` con columnas concretas.
