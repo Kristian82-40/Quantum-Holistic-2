@@ -20,6 +20,7 @@ import { auditar, textoAuditoria } from './lib/auditoria.js';
 import { tareaActiva, textoManual } from './lib/runbook.js';
 import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import config from './config/projects.json' with { type: 'json' };
+import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
 
 let n = 0;
 const prueba = async (nombre, fn) => { await fn(); n++; console.log(`✓ ${nombre}`); };
@@ -661,4 +662,32 @@ await prueba('/pieza salvia manda el post y la ficha con su botón (sin lanzar K
   const botones = tg.filter((x) => ['sendMessage', 'sendPhoto'].includes(x.metodo)).map((x) => x.cuerpo.reply_markup.inline_keyboard[0][0].callback_data);
   assert.deepEqual(botones, [`pb:${POST.id}`, 'pf:47']);
 });
+const ID_ORDEN = '920d85e4-0000-4000-8000-000000000001';
+await prueba('cierre de órdenes: una orden abierta que falló pasa a error_ejecucion con motivo y sin pisar nada más', async () => {
+  const c = decidirCierre({ id: ID_ORDEN, orden: { status: 'pendiente' }, jobStatus: 'failure' });
+  assert.equal(c.status, 'error_ejecucion'); assert.match(c.copy, /falló.*NO está hecha/s);
+  assert.equal(decidirCierre({ id: ID_ORDEN, orden: { status: 'en_curso' }, jobStatus: 'success' }).status, 'error_ejecucion');
+  assert.match(motivoCierre('success'), /sin cerrar/); assert.match(motivoCierre('cancelled'), /canceló/);
+});
+await prueba('cierre de órdenes: no toca órdenes ya cerradas, ni ids raros, ni órdenes que no existen', async () => {
+  for (const status of ['hecho', 'pr_abierto', 'bloqueado', 'para_claude', 'error_ejecucion']) assert.equal(decidirCierre({ id: ID_ORDEN, orden: { status }, jobStatus: 'failure' }), null);
+  assert.equal(decidirCierre({ id: "x'; drop table kimiko_drafts;--", orden: { status: 'pendiente' }, jobStatus: 'failure' }), null);
+  assert.equal(decidirCierre({ id: ID_ORDEN, orden: undefined, jobStatus: 'failure' }), null);
+});
+await prueba('cierre de órdenes: lee, cierra con filtro de estado y deja registro; si ya estaba cerrada no escribe', async () => {
+  const llamadas = [];
+  const f = (estado) => async (url, o = {}) => {
+    llamadas.push({ url: String(url), metodo: o.method ?? 'GET', cuerpo: o.body ? JSON.parse(o.body) : null });
+    return { ok: true, status: 200, json: async () => [{ id: ID_ORDEN, status: estado }] };
+  };
+  const r = await cerrarOrden({ url: 'https://s', llave: 'k', id: ID_ORDEN, jobStatus: 'failure', fetchImpl: f('pendiente') });
+  assert.equal(r.cerrada, true);
+  const patch = llamadas.find((x) => x.metodo === 'PATCH');
+  assert.match(patch.url, /status=in\.\(pendiente,en_curso\)/); assert.equal(patch.cuerpo.status, 'error_ejecucion');
+  assert.equal(llamadas.find((x) => x.metodo === 'POST').cuerpo.detalle.job, 'failure');
+  llamadas.length = 0;
+  const r2 = await cerrarOrden({ url: 'https://s', llave: 'k', id: ID_ORDEN, jobStatus: 'failure', fetchImpl: f('hecho') });
+  assert.equal(r2.cerrada, false); assert.equal(llamadas.filter((x) => x.metodo !== 'GET').length, 0);
+});
+
 console.log(`\n${n} pruebas en verde`);

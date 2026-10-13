@@ -56,3 +56,14 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}   # para comprobar que la orden es de Kristian
           GH_TOKEN: ${{ github.token }}                        # gh pr create
           KIMIKO_DRAFT_ID: ${{ github.event.client_payload.draft_id }}
+
+      # Si Kimiko falló, se canceló o terminó sin cerrar la orden, la orden pasa a error_ejecucion y Kristian recibe
+      # el aviso por Telegram (antes se quedaba en «pendiente» sin decir nada: 13-oct, 5 fallos seguidos).
+      - name: Cerrar la orden si Kimiko no lo hizo
+        if: always() && github.event.client_payload.draft_id != ''
+        run: node kimiko/cierre/cerrar-orden.mjs
+        env:
+          SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          KIMIKO_DRAFT_ID: ${{ github.event.client_payload.draft_id }}
+          JOB_STATUS: ${{ job.status }}
