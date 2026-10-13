@@ -3,11 +3,14 @@
 //    comprueba la URL pública y deja el botón 🗑 Retirar (lib/publicar.js).
 //  · Botones de pieza: pb/rb (post) y pf/rf (ficha de planta), y /pieza <texto> para pedirlos.
 //  · Mensajes de Kristian (texto o foto): órdenes para Kimiko Cloud → kimiko_drafts + repository_dispatch.
+//  · Notas de voz (13-oct): la Edge Function kimiko-voz las pasa a texto; Kimiko enseña lo entendido y espera ✅ (vok) o ✖ (vno).
+//    Lo que no sabe leer (sticker, vídeo, documento sin texto…) ya no se ignora en silencio: lo dice.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
 //  · Comandos /estado, /auditar y /manual (solo lectura; ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
-import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, ponerTeclado } from '../lib/telegram.js';
+import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, BOTONES_VOZ, ponerTeclado } from '../lib/telegram.js';
+import { pedirTranscripcion, MAX_SEGUNDOS } from '../lib/voz.js';
 import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha, urlImagen } from '../lib/publicar.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
@@ -116,17 +119,60 @@ async function orden({ env, db, update, msg, fetchImpl }) {
   const fileId = msg.photo ? msg.photo[msg.photo.length - 1].file_id : null;
   const imagen = fileId ? await guardarFoto({ token: env.TELEGRAM_BOT_TOKEN, fileId, ruta: `ordenes/${update.update_id}.jpg`, subirStream: db.subirStream, fetchImpl }) : null;
   const fila = await db.insertar('kimiko_drafts', { status: 'pendiente', chat_id: msg.chat.id, update_id: update.update_id, source_note: nota || null, tg_file_id: fileId, imagen_ruta: imagen, tg_message_id: msg.message_id });
+  await lanzarOrden({ env, db, id: fila.id, chatId: msg.chat.id, fetchImpl });
+  return fila.id;
+}
+
+// Despierta a Kimiko Cloud con una orden ya guardada en kimiko_drafts (texto, foto o voz confirmada).
+async function lanzarOrden({ env, db, id, chatId, fetchImpl }) {
   try {
-    await despertarKimikoCloud(env.GH_TOKEN, fila.id, fetchImpl);
+    await despertarKimikoCloud(env.GH_TOKEN, id, fetchImpl);
   } catch (e) {
     // Antes la orden se quedaba en 'pendiente' sin avisar (pasó el 6-oct). Ahora queda marcada y Kristian lo sabe.
     const motivo = String(e?.message ?? e).slice(0, 200);
-    await db.actualizar('kimiko_drafts', `id=eq.${fila.id}`, { status: 'error_lanzar', updated_at: new Date().toISOString() });
-    await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: `⚠️ Orden guardada, pero no pude despertar a Kimiko Cloud: ${motivo}\nReenvíala cuando esté arreglado.`, fetchImpl });
-    return fila.id;
+    await db.actualizar('kimiko_drafts', `id=eq.${id}`, { status: 'error_lanzar', updated_at: new Date().toISOString() });
+    await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId, texto: `⚠️ Orden guardada, pero no pude despertar a Kimiko Cloud: ${motivo}\nReenvíala cuando esté arreglado.`, fetchImpl });
+    return false;
   }
-  await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: 'Recibido 🌿 Kimiko Cloud se pone con ello. Si hay cambios en la web te llegará un PR para aprobar aquí.', fetchImpl });
+  await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId, texto: 'Recibido 🌿 Kimiko Cloud se pone con ello. Si hay cambios en la web te llegará un PR para aprobar aquí.', fetchImpl });
+  return true;
+}
+
+// Nota de voz (o audio) de Kristian. El 12-oct un audio se perdió sin aviso: el worker solo leía texto y fotos.
+// Ahora se transcribe y Kimiko enseña lo entendido; solo con ✅ se lanza Kimiko Cloud (un audio mal oído no debe acabar en un PR).
+async function notaDeVoz({ env, db, update, msg, detalle, fetchImpl }) {
+  const token = env.TELEGRAM_BOT_TOKEN; const chatId = msg.chat.id;
+  const audio = msg.voice || msg.audio;
+  if ((audio.duration || 0) > MAX_SEGUNDOS) {
+    return enviarMensaje({ token, chatId, texto: `🎙️ El audio pasa de ${MAX_SEGUNDOS / 60} minutos. Pártelo en notas más cortas y te las paso a texto.`, fetchImpl });
+  }
+  let t;
+  try {
+    t = await pedirTranscripcion({ supabaseUrl: env.SUPABASE_URL, llave: env.SUPABASE_SERVICE_ROLE_KEY, fileId: audio.file_id, fetchImpl });
+  } catch (e) {
+    const motivo = String(e?.message ?? e).slice(0, 160);
+    await db.actualizar('kimiko_updates', `update_id=eq.${update.update_id}`, { ok: false, detalle: { ...detalle, error: motivo } }).catch(() => {});
+    return enviarMensaje({ token, chatId, texto: `🎙️ No he podido pasar el audio a texto (${motivo}). ¿Me lo escribes?`, fetchImpl });
+  }
+  let nota = [msg.caption, t.texto].filter(Boolean).join('\n\n');
+  const post = msg.reply_to_message?.text?.match(/\[post:([0-9a-f-]{36})\]/i);
+  if (post && UUID.test(post[1])) nota = `Modifica el post de blog con id ${post[1]} (tabla blog_posts): ${nota}`;
+  const fila = await db.insertar('kimiko_drafts', { status: 'voz_por_confirmar', chat_id: chatId, update_id: update.update_id, source_note: nota, tg_file_id: audio.file_id, tg_message_id: msg.message_id });
+  await db.actualizar('kimiko_updates', `update_id=eq.${update.update_id}`, { detalle: { ...detalle, texto: t.texto.slice(0, 200), motor: t.motor ?? null, ms: t.ms ?? null } }).catch(() => {});
+  await enviarMensaje({ token, chatId, texto: `🎙️ He entendido:\n«${t.texto}»\n\n¿Se lo paso a Kimiko Cloud?`, teclado: BOTONES_VOZ(fila.id), fetchImpl });
   return fila.id;
+}
+
+// ✅ / ✖ de una nota de voz transcrita. Solo vale una vez: después la orden ya no está 'voz_por_confirmar'.
+async function botonVoz({ env, db, cq, codigo, id, fetchImpl }) {
+  const token = env.TELEGRAM_BOT_TOKEN; const chat = cq.message.chat.id; const mid = cq.message.message_id;
+  const [o] = await db.seleccionar('kimiko_drafts', `id=eq.${id}&select=id,status`);
+  if (o?.status !== 'voz_por_confirmar') { await responderBoton(token, cq.id, o ? `Ya estaba ${o.status}` : 'No encuentro esa orden', fetchImpl); return; }
+  const si = codigo === 'vok';
+  await db.actualizar('kimiko_drafts', `id=eq.${id}`, { status: si ? 'pendiente' : 'descartado', updated_at: new Date().toISOString() });
+  await responderBoton(token, cq.id, si ? '✅ Se la paso a Kimiko Cloud' : '✖ Descartada: no se hace nada', fetchImpl);
+  await cambiarBotones(token, chat, mid, si ? '✅ Enviada a Kimiko Cloud' : '✖ Descartada', fetchImpl);
+  if (si) await lanzarOrden({ env, db, id, chatId: chat, fetchImpl });
 }
 
 export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
@@ -143,6 +189,7 @@ export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
   const [codigo, id] = String(cq?.data || '').split(':');
   const detalle = {
     chat_ok: autorizado, datos: cq?.data ?? null, texto: (msg?.text || msg?.caption)?.slice(0, 200) ?? null, foto: !!msg?.photo,
+    ...(msg?.voice || msg?.audio ? { voz: true, segundos: (msg.voice || msg.audio).duration ?? null } : {}),
     ...(autorizado ? {} : { ignorado: 'remitente no autorizado', chat, de: cq?.from?.username ?? msg?.from?.username ?? null }),
   };
   // Se registra TODO antes de actuar (también lo ignorado). Si ya existía, es un reintento de Telegram: no se repite.
@@ -160,13 +207,18 @@ export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
       if (!UUID.test(id || '')) { await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón ya usado o desconocido', fetchImpl); return OK(); }
       if (ACCIONES[codigo]) await botonBorrador({ env, db, cq, codigo, id, fetchImpl });
       else if (codigo === 'prm' || codigo === 'prc') await botonPR({ env, db, cq, codigo, id, fetchImpl });
+      else if (codigo === 'vok' || codigo === 'vno') await botonVoz({ env, db, cq, codigo, id, fetchImpl });
       else await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, 'Botón desconocido', fetchImpl);
     } else if (msg && /^\/pieza(@\S+)?(\s|$)/i.test(String(msg.text || ''))) {
       await pedirPieza({ env, db, msg, fetchImpl });
     } else if (msg && String(msg.text || '').startsWith('/')) {
       await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: await atenderComando({ texto: msg.text, db, fetchImpl }), fetchImpl });
+    } else if (msg && (msg.voice || msg.audio)) {
+      await notaDeVoz({ env, db, update, msg, detalle, fetchImpl });
     } else if (msg && (msg.text || msg.caption || msg.photo)) {
       await orden({ env, db, update, msg, fetchImpl });
+    } else if (msg) {
+      await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: '🤖 Este tipo de mensaje todavía no lo sé leer. Mándame texto, una foto o una nota de voz.', fetchImpl });
     }
   } catch (e) {
     if (cq) await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, `❌ ${e.message}`.slice(0, 190), fetchImpl);
