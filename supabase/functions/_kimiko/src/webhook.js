@@ -137,8 +137,25 @@ async function orden({ env, db, update, msg, fetchImpl }) {
   return fila.id;
 }
 
+// Kimiko interno (13-oct): antes de gastar la suscripción de Claude, la Edge Function kimiko-orden (motores gratuitos) decide si
+// responde ella una charla corta ('responder'), la pasa a Claude sin ejecutarla ('para_claude') o la deja a Kimiko Cloud ('cloud').
+// Cualquier fallo o duda → 'cloud': el comportamiento de siempre.
+async function triarOrden({ env, id, fetchImpl }) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return 'cloud';
+  try {
+    const r = await fetchImpl(`${env.SUPABASE_URL}/functions/v1/kimiko-orden`, {
+      method: 'POST', headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, 'content-type': 'application/json' },
+      body: JSON.stringify({ id }), signal: AbortSignal.timeout(12000),
+    });
+    if (!r.ok) return 'cloud';
+    const d = await r.json().catch(() => ({}));
+    return ['responder', 'para_claude'].includes(d?.ruta) ? d.ruta : 'cloud';
+  } catch { return 'cloud'; }
+}
+
 // Despierta a Kimiko Cloud con una orden ya guardada en kimiko_drafts (texto, foto o voz confirmada).
 async function lanzarOrden({ env, db, id, chatId, fetchImpl }) {
+  if (await triarOrden({ env, id, fetchImpl }) !== 'cloud') return true; // ya respondió o la dejó a Claude, y avisó a Kristian
   try {
     await despertarKimikoCloud(env.GH_TOKEN, id, fetchImpl);
   } catch (e) {

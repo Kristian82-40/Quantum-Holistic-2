@@ -24,7 +24,7 @@ En caso de duda, "accion". "resumen": una frase de qué pide, sin copiar datos p
 const SECRETO = /\b(?:sk-[A-Za-z0-9_-]{16,}|sb_(?:secret|publishable)_[A-Za-z0-9_-]{8,}|gh[pous]_[A-Za-z0-9]{20,}|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}|AKIA[0-9A-Z]{12,})/;
 const TARJETA = /(?:\d[ -]?){13,19}/;
 const CAMBIAR_REGLAS = /\binstrucci[oó]n(?:es)? de sistema\b|\b(?:ignora|olvida|salta|desactiva)\b.{0,30}\b(?:instrucciones|reglas|l[ií]mites|filtro)\b|\bmodo (?:desarrollador|dios|sin restricciones)\b|\bnuevo n[uú]cleo\b/i;
-const DINERO = /\b(?:paga|pagar|cobra|cobrar|contrata|contratar|compra|comprar|suscr[ií]be|suscribirte|reembols[oa]r?)\b.{0,40}\b(?:\d|€|euros?|plan|licencia|dominio|api|servicio)/i;
+const DINERO = /\b(?:paga|pagar|cobra|cobrar|contrata|contratar|compra|comprar|suscr[ií]be|suscribirte|reembols[oa]r?)\b.{0,40}(?:\d+\s?(?:€|euros?|\$|usd)|€\s?\d|\b(?:plan|licencia|dominio|api|servicio)\b)/i;
 
 export function reglasDuras(texto = '') {
   if (SECRETO.test(texto)) return { ruta: 'para_claude', motivo: 'La orden contiene algo que parece una llave o un token. No la he leído con ninguna IA ni la he copiado a ningún registro.' };
