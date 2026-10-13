@@ -43,7 +43,7 @@ Cada skill es una forma de trabajar ligada a una herramienta real. Si la herrami
 | **Diff-Only** | Cambiar solo las líneas necesarias y enseñar solo el diff | edición por bloques + PR | activa |
 
 Skills propias de Claude (8-oct-2026), en `.claude/skills/` (Claude Code las carga solo; para el chat, subir el `.zip`). Solo sirven a Claude, no a Kimiko:
-`qh-sesion` (tokens e integridad; sustituye a `flow-state`), `qh-cambio-seguro` (plan → rama → prueba → PR), `qh-diseno` (tokens de marca y móvil primero), `qh-seguridad` (checklist antes de cada PR) y `qh-editorial` (salud + SEO de cada post).
+`qh-sesion` (tokens e integridad; sustituye a `flow-state`), `qh-cambio-seguro` (plan → rama → prueba → PR), `qh-diseno` (tokens de marca y móvil primero), `qh-seguridad` (checklist antes de cada PR), `qh-editorial` (salud + SEO de cada post) y `qh-kimiko-despliegue` (13-oct: desplegar y probar Edge Functions de Kimiko, PR por API y cierre de sesión).
 
 ## 5. Conectores
 - Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions). Telegram, a través de Kimiko.
