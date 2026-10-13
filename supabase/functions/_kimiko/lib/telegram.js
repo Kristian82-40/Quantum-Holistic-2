@@ -86,6 +86,14 @@ export const BOTONES_PR = (draftId, numero) => ({
   ]],
 });
 
+// Nota de voz ya transcrita: Kristian confirma lo entendido antes de que llegue a Kimiko Cloud (13-oct).
+export const BOTONES_VOZ = (draftId) => ({
+  inline_keyboard: [[
+    { text: '✅ Sí, hazlo', callback_data: `vok:${draftId}` },
+    { text: '✖ No era eso', callback_data: `vno:${draftId}` },
+  ]],
+});
+
 // Foto de una orden: se descarga de Telegram y se sube en streaming (sin pasar por memoria: CPU mínima en Workers Free).
 export async function guardarFoto({ token, fileId, subirStream, ruta, fetchImpl = fetch }) {
   const f = await llamar(token, 'getFile', { file_id: fileId }, fetchImpl);

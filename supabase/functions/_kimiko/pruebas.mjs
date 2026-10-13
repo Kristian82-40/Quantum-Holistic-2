@@ -9,6 +9,7 @@ import { crearArticulo, markdownAHtml, slugificar, esDuplicada, elegirPilar, CAT
 import { imagenDelPost } from './lib/imagen.js';
 import { ejecutarDia } from './src/runner.js';
 import { atenderTelegram } from './src/webhook.js';
+import { transcribir, nombreAudio, bajarAudio, bajarAudioPrueba, pedirTranscripcion } from './lib/voz.js';
 import { secretoWebhook, pieReel } from './lib/telegram.js';
 import { crearDb } from './lib/db.js';
 import { generarJSONGemini } from './lib/gemini.js';
@@ -269,6 +270,103 @@ await prueba('órdenes: un texto de Kristian va a kimiko_drafts y despierta a Ki
   assert.equal(db.t.cambios.at(-1).tabla, 'kimiko_drafts'); assert.equal(db.t.cambios.at(-1).c.status, 'error_lanzar');
   assert.ok(llamadas.some((l) => l.url.endsWith('/sendMessage') && /no pude despertar a Kimiko Cloud: GitHub POST \/dispatches 401/.test(l.cuerpo.text)));
   assert.ok(!llamadas.some((l) => l.url.endsWith('/sendMessage') && /Recibido/.test(l.cuerpo.text)));
+});
+// ── Notas de voz (13-oct) ──
+// Base de datos falsa que sí guarda los cambios en las filas (para seguir el estado de una orden de voz).
+function dbOrdenes() {
+  const t = { kimiko_drafts: [], kimiko_updates: [], cambios: [] }; let k = 0;
+  return {
+    t,
+    insertarSiNuevo: async (tb, f) => f,
+    insertar: async (tb, f) => { const fila = { id: `aaaaaaaa-0000-4000-8000-${String(++k).padStart(12, '0')}`, ...f }; (t[tb] ||= []).push(fila); return fila; },
+    actualizar: async (tb, filtro, c) => { t.cambios.push({ tabla: tb, filtro, c }); for (const f of t[tb] || []) if (filtro.includes(`id=eq.${f.id}`)) Object.assign(f, c); },
+    seleccionar: async (tb, q) => (t[tb] || []).filter((f) => q.includes(`id=eq.${f.id}`)),
+  };
+}
+await prueba('voz: la nota se transcribe, Kimiko enseña lo entendido y solo lanza Kimiko Cloud tras ✅ (una vez)', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh', SUPABASE_URL: 'https://sb.example', SUPABASE_SERVICE_ROLE_KEY: 'srv' };
+  const s = await secretoWebhook('tok');
+  const llamadas = [];
+  const red4 = async (url, o = {}) => {
+    const u = String(url); llamadas.push({ url: u, cuerpo: o.body ? JSON.parse(o.body) : null, apikey: o.headers?.apikey });
+    if (u === 'https://sb.example/functions/v1/kimiko-voz') return { ok: true, status: 200, json: async () => ({ ok: true, texto: 'Prepara un post sobre el romero', motor: 'groq/whisper-large-v3-turbo', ms: 900 }) };
+    return { ok: true, status: 204, json: async () => ({ ok: true, result: {} }), text: async () => '' };
+  };
+  const nota = (uid, extra = {}) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, message: { message_id: 5, chat: { id: 42 }, voice: { file_id: 'AwACAgQAAxkBAAIBnota', duration: 7 }, ...extra } }) });
+  const boton = (uid, data) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, callback_query: { id: 'c', data, message: { message_id: 6, chat: { id: 42 } } } }) });
+  const db = dbOrdenes();
+  await atenderTelegram({ request: nota(20), env, db, fetchImpl: red4 });
+  const pide = llamadas.find((l) => l.url.endsWith('/kimiko-voz'));
+  assert.deepEqual(pide.cuerpo, { file_id: 'AwACAgQAAxkBAAIBnota' }); assert.equal(pide.apikey, 'srv');
+  const orden = db.t.kimiko_drafts[0];
+  assert.equal(orden.status, 'voz_por_confirmar'); assert.equal(orden.source_note, 'Prepara un post sobre el romero');
+  assert.ok(!llamadas.some((l) => l.url.endsWith('/dispatches')), 'sin ✅ no se lanza nada');
+  const msg = llamadas.find((l) => l.url.endsWith('/sendMessage'));
+  assert.match(msg.cuerpo.text, /He entendido:\n«Prepara un post sobre el romero»/);
+  assert.deepEqual(msg.cuerpo.reply_markup.inline_keyboard[0].map((b) => b.callback_data), [`vok:${orden.id}`, `vno:${orden.id}`]);
+  assert.equal(db.t.cambios.find((c) => c.tabla === 'kimiko_updates').c.detalle.texto, 'Prepara un post sobre el romero');
+  llamadas.length = 0;
+  await atenderTelegram({ request: boton(21, `vok:${orden.id}`), env, db, fetchImpl: red4 });
+  assert.equal(orden.status, 'pendiente');
+  const d = llamadas.find((l) => l.url.endsWith('/dispatches'));
+  assert.equal(d.cuerpo.event_type, 'kimiko-orden'); assert.equal(d.cuerpo.client_payload.draft_id, orden.id);
+  assert.ok(llamadas.some((l) => l.url.endsWith('/sendMessage') && /Recibido/.test(l.cuerpo.text)));
+  llamadas.length = 0;
+  await atenderTelegram({ request: boton(22, `vok:${orden.id}`), env, db, fetchImpl: red4 });
+  assert.ok(!llamadas.some((l) => l.url.endsWith('/dispatches')), 'un segundo toque no lanza otra vez');
+  await atenderTelegram({ request: nota(23, { reply_to_message: { text: '… [post:11111111-2222-3333-4444-555555555555]' } }), env, db, fetchImpl: red4 });
+  const otra = db.t.kimiko_drafts[1];
+  assert.match(otra.source_note, /^Modifica el post de blog con id 11111111-2222-3333-4444-555555555555 .*: Prepara un post/);
+  llamadas.length = 0;
+  await atenderTelegram({ request: boton(24, `vno:${otra.id}`), env, db, fetchImpl: red4 });
+  assert.equal(otra.status, 'descartado'); assert.ok(!llamadas.some((l) => l.url.endsWith('/dispatches')));
+});
+await prueba('voz: si no se puede transcribir lo dice; un audio larguísimo o un sticker tampoco se pierden en silencio', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh', SUPABASE_URL: 'https://sb.example', SUPABASE_SERVICE_ROLE_KEY: 'srv' };
+  const s = await secretoWebhook('tok');
+  const llamadas = [];
+  const red5 = async (url, o = {}) => {
+    const u = String(url); llamadas.push({ url: u, cuerpo: o.body ? JSON.parse(o.body) : null });
+    if (u.endsWith('/kimiko-voz')) return { ok: false, status: 502, json: async () => ({ ok: false, errores: ['groq: 429', 'workers-ai: 500'] }) };
+    return { ok: true, status: 200, json: async () => ({ ok: true, result: {} }), text: async () => '' };
+  };
+  const pet = (uid, message) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, message: { message_id: 5, chat: { id: 42 }, ...message } }) });
+  const db = dbOrdenes();
+  await atenderTelegram({ request: pet(40, { voice: { file_id: 'AwACAgQAAxkBAAIBnota', duration: 7 } }), env, db, fetchImpl: red5 });
+  assert.ok(llamadas.some((l) => l.url.endsWith('/sendMessage') && /No he podido pasar el audio a texto \(groq: 429 · workers-ai: 500\)/.test(l.cuerpo.text)));
+  assert.equal(db.t.kimiko_drafts.length, 0); assert.equal(db.t.cambios.at(-1).c.ok, false);
+  llamadas.length = 0;
+  await atenderTelegram({ request: pet(41, { voice: { file_id: 'AwACAgQAAxkBAAIBnota', duration: 900 } }), env, db, fetchImpl: red5 });
+  assert.ok(!llamadas.some((l) => l.url.endsWith('/kimiko-voz'))); assert.match(llamadas[0].cuerpo.text, /pasa de 10 minutos/);
+  llamadas.length = 0;
+  await atenderTelegram({ request: pet(42, { sticker: { file_id: 'x' } }), env, db, fetchImpl: red5 });
+  assert.match(llamadas[0].cuerpo.text, /todavía no lo sé leer/); assert.ok(!llamadas.some((l) => l.url.endsWith('/dispatches')));
+});
+await prueba('voz: transcribir prueba Groq y, si falla, Workers AI; .oga sale como .ogg; solo audios de prueba del repo', async () => {
+  assert.equal(nombreAudio('voice/file_12.oga'), 'nota.ogg'); assert.equal(nombreAudio('music/file_3.m4a'), 'nota.m4a'); assert.equal(nombreAudio('x/y'), 'nota.ogg');
+  const pedidos = [];
+  const redV = (groqOk) => async (url, o = {}) => {
+    const u = String(url); pedidos.push({ u, o });
+    if (u.includes('api.groq.com')) return groqOk ? new Response(JSON.stringify({ text: ' Hola Kimiko ' }), { status: 200 }) : new Response(JSON.stringify({ error: { message: 'rate limit' } }), { status: 429 });
+    if (u.includes('api.cloudflare.com')) return new Response(JSON.stringify({ success: true, result: { text: 'Hola Kimiko' } }), { status: 200 });
+    if (u.includes('/getFile')) return new Response(JSON.stringify({ ok: true, result: { file_path: 'voice/file_12.oga', file_size: 3 } }));
+    if (u.includes('api.telegram.org/file/') || u.startsWith('https://raw.githubusercontent.com/')) return new Response(new Uint8Array([1, 2, 3]));
+    throw new Error(`red inesperada: ${u}`);
+  };
+  const env = { GROQ_API_KEY: 'g', CF_ACCOUNT_ID: 'a', CF_AI_TOKEN: 'b' };
+  const a = await transcribir({ datos: new Uint8Array([1, 2, 3]), nombre: 'nota.ogg', env, fetchImpl: redV(true) });
+  assert.deepEqual([a.ok, a.texto, a.motor], [true, 'Hola Kimiko', 'groq/whisper-large-v3-turbo']);
+  const fd = pedidos[0].o.body; assert.equal(fd.get('model'), 'whisper-large-v3-turbo'); assert.equal(fd.get('language'), 'es'); assert.equal(fd.get('file').name, 'nota.ogg'); assert.match(fd.get('prompt'), /^Kimiko, Quantum Holistic/);
+  pedidos.length = 0;
+  const b = await transcribir({ datos: new Uint8Array([1, 2, 3]), env, fetchImpl: redV(false) });
+  assert.equal(b.motor, 'workers-ai/whisper-large-v3-turbo'); assert.equal(JSON.parse(pedidos[1].o.body).audio, 'AQID');
+  const c = await transcribir({ datos: new Uint8Array([1]), env: {}, fetchImpl: redV(true) });
+  assert.equal(c.ok, false); assert.match(c.errores.join(' · '), /falta GROQ_API_KEY · workers-ai: faltan/);
+  const t = await bajarAudio({ token: 'tok', fileId: 'f', fetchImpl: redV(true) });
+  assert.deepEqual([t.nombre, [...t.datos]], ['nota.ogg', [1, 2, 3]]);
+  assert.equal((await bajarAudioPrueba({ url: 'https://raw.githubusercontent.com/Kristian82-40/Quantum-Holistic-2/main/kimiko/pruebas/voz-prueba.ogg', fetchImpl: redV(true) })).nombre, 'nota.ogg');
+  await assert.rejects(bajarAudioPrueba({ url: 'https://evil.example/x.ogg', fetchImpl: redV(true) }), /fuera del repo/);
+  await assert.rejects(pedirTranscripcion({ supabaseUrl: '', llave: '', fileId: 'f' }), /faltan SUPABASE_URL/);
 });
 await prueba('órdenes: "Fusionar PR" fusiona por la API de GitHub y no repite si ya estaba fusionado', async () => {
   const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };
