@@ -499,6 +499,27 @@ await prueba('publicar: una planta peligrosa no se publica aunque se pulse el bo
   assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /⛔ No publico «Tejo»[\s\S]*9 plantas peligrosas/);
   assert.equal(db.t.kimiko_updates[0].detalle.resultado, 'bloqueada');
 });
+await prueba('reel: publicar un post lanza el reel al momento (kimiko-reel con su fecha); si ya existe, o es una ficha, no', async () => {
+  const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };
+  const s = await secretoWebhook('tok');
+  const boton = (uid, data) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, callback_query: { id: 'c', data, message: { message_id: 4, chat: { id: 42 } } } }) });
+  const conGitHub = (gh, web) => async (url, o = {}) => (String(url).includes('api.github.com') ? (gh.push({ url: String(url), cuerpo: JSON.parse(o.body), auth: o.headers?.authorization }), { ok: true, status: 204, text: async () => '' }) : web(url, o));
+  const conPieza = (pieza) => { const db = dbPiezas(); const base = db.seleccionar; db.seleccionar = async (t, q) => (t === 'kimiko_content' ? [{ id: 'x', blog_post_id: POST.id, ...pieza }] : base(t, q)); return db; };
+  let gh = []; let tg = [];
+  await atenderTelegram({ request: boton(30, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: null }), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
+  assert.equal(gh.length, 1); assert.ok(gh[0].url.endsWith('/dispatches')); assert.equal(gh[0].auth, 'Bearer gh');
+  assert.deepEqual(gh[0].cuerpo, { event_type: 'kimiko-reel', client_payload: { fecha: '2026-10-13' } });
+  assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado .*\nhttps:\/\/quantum-holistic\.com\/blog\/2026-10-09-salvia\/\n🎬 El reel llega en unos minutos\./);
+  gh = []; tg = [];
+  await atenderTelegram({ request: boton(31, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: 'https://x/reel.mp4' }), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
+  assert.equal(gh.length, 0, 'el reel ya existe');
+  await atenderTelegram({ request: boton(32, 'pf:47'), env, db: conPieza({ fecha: '2026-10-13' }), fetchImpl: conGitHub(gh, webFalsa({ tg, titulo: 'Salvia' })) });
+  assert.equal(gh.length, 0, 'una ficha no tiene reel');
+  // Sin llave de GitHub se publica igual y se avisa de que el reel irá en el pase programado.
+  tg = [];
+  await atenderTelegram({ request: boton(33, `pb:${POST.id}`), env: { ...env, GH_TOKEN: undefined }, db: conPieza({ fecha: '2026-10-13' }), fetchImpl: webFalsa({ tg }) });
+  assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado[\s\S]*🎬 El reel saldrá en el próximo pase \(no pude lanzarlo ahora: falta GH_TOKEN/);
+});
 await prueba('ficha: Publicar pone publicada y ficha_verificada; Retirar apaga publicada, comprueba el 404 y deja el botón Publicar', async () => {
   const db = dbPiezas();
   const r = await publicarPieza({ db, tipo: 'ficha', id: 47, fetchImpl: webFalsa({ titulo: 'Salvia' }), espera: 0 });

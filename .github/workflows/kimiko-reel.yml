@@ -24,6 +24,10 @@ on:
         description: 'Rehacer aunque ya exista (1 = sí)'
         required: false
         default: '0'
+  # 13-oct: los horarios de GitHub se saltan pases (12-oct: 2 de 5). El worker lo lanza al pulsar ✅ Publicar en un post;
+  # los horarios quedan de respaldo. client_payload.fecha = fecha de la pieza (AAAA-MM-DD; la valida hacer_reel.py).
+  repository_dispatch:
+    types: [kimiko-reel]
 
 permissions:
   contents: read
@@ -53,7 +57,7 @@ jobs:
         env:
           SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
           SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          FECHA: ${{ inputs.fecha }}
+          FECHA: ${{ inputs.fecha || github.event.client_payload.fecha }}
           FORZAR: ${{ inputs.forzar }}
           FUENTES: fuentes
           SALIDA: salida

@@ -168,6 +168,8 @@ def montar(dir_, salida):
 
 def main():
     fecha = os.environ.get('FECHA') or dt.datetime.utcnow().strftime('%Y-%m-%d')
+    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', fecha):  # llega del worker (repository_dispatch) y va a una URL
+        sys.exit(f'FECHA no válida: {fecha[:20]!r}')
     if not KEY and not os.environ.get('PIEZA_JSON'):
         sys.exit('Falta SUPABASE_KEY')
     if os.environ.get('PIEZA_JSON'):  # prueba local sin red: {"pieza": {...}, "post": {...}, "imagen": "ruta.jpg"}
