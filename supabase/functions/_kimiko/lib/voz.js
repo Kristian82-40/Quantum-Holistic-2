@@ -6,6 +6,8 @@ const GROQ = 'https://api.groq.com/openai/v1/audio/transcriptions';
 const MODELO = 'whisper-large-v3-turbo';
 const EXT_OK = ['flac', 'mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'ogg', 'wav', 'webm'];
 const MAX_BYTES = 20 * 1024 * 1024; // lo máximo que deja bajar la API de bots de Telegram
+// Pista de vocabulario para Whisper: sin ella, «Kimiko» salía «Quimico» (prueba real del 13-oct).
+const PISTA = 'Kimiko, Quantum Holistic, Kristian, Kimiko Cloud, post, reel, ficha, plantas medicinales, Telegram.';
 export const MAX_SEGUNDOS = 600; // 10 min por nota
 // Audios de prueba (sin Telegram): solo los de este repo público, nunca una URL cualquiera.
 export const AUDIO_PRUEBA = 'https://raw.githubusercontent.com/Kristian82-40/Quantum-Holistic-2/';
@@ -52,7 +54,7 @@ export async function transcribir({ datos, nombre = 'nota.ogg', env = {}, idioma
     try {
       const fd = new FormData();
       fd.append('file', new Blob([datos]), nombre);
-      fd.append('model', MODELO); fd.append('language', idioma); fd.append('response_format', 'json'); fd.append('temperature', '0');
+      fd.append('model', MODELO); fd.append('language', idioma); fd.append('response_format', 'json'); fd.append('temperature', '0'); fd.append('prompt', PISTA);
       const r = await fetchImpl(GROQ, { method: 'POST', headers: { authorization: `Bearer ${env.GROQ_API_KEY}` }, body: fd, signal: AbortSignal.timeout(30_000) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(`${r.status} ${d?.error?.message ?? ''}`.trim());
@@ -65,7 +67,7 @@ export async function transcribir({ datos, nombre = 'nota.ogg', env = {}, idioma
     try {
       const r = await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/ai/run/@cf/openai/${MODELO}`, {
         method: 'POST', headers: { authorization: `Bearer ${env.CF_AI_TOKEN}`, 'content-type': 'application/json' },
-        body: JSON.stringify({ audio: aBase64(datos), language: idioma }), signal: AbortSignal.timeout(45_000),
+        body: JSON.stringify({ audio: aBase64(datos), language: idioma, initial_prompt: PISTA }), signal: AbortSignal.timeout(45_000),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok || d.success === false) throw new Error(`${r.status} ${d?.errors?.[0]?.message ?? ''}`.trim());

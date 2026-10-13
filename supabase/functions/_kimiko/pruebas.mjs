@@ -356,7 +356,7 @@ await prueba('voz: transcribir prueba Groq y, si falla, Workers AI; .oga sale co
   const env = { GROQ_API_KEY: 'g', CF_ACCOUNT_ID: 'a', CF_AI_TOKEN: 'b' };
   const a = await transcribir({ datos: new Uint8Array([1, 2, 3]), nombre: 'nota.ogg', env, fetchImpl: redV(true) });
   assert.deepEqual([a.ok, a.texto, a.motor], [true, 'Hola Kimiko', 'groq/whisper-large-v3-turbo']);
-  const fd = pedidos[0].o.body; assert.equal(fd.get('model'), 'whisper-large-v3-turbo'); assert.equal(fd.get('language'), 'es'); assert.equal(fd.get('file').name, 'nota.ogg');
+  const fd = pedidos[0].o.body; assert.equal(fd.get('model'), 'whisper-large-v3-turbo'); assert.equal(fd.get('language'), 'es'); assert.equal(fd.get('file').name, 'nota.ogg'); assert.match(fd.get('prompt'), /^Kimiko, Quantum Holistic/);
   pedidos.length = 0;
   const b = await transcribir({ datos: new Uint8Array([1, 2, 3]), env, fetchImpl: redV(false) });
   assert.equal(b.motor, 'workers-ai/whisper-large-v3-turbo'); assert.equal(JSON.parse(pedidos[1].o.body).audio, 'AQID');
