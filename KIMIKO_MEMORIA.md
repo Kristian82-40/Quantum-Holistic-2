@@ -790,3 +790,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 - Sospecha del ciclo 18:03 resuelta: el fallback ISR **sí funciona**. En vivo `/producto/ritual-descanso/` ya sirve "Avísame cuando esté listo" y ningún enlace a Gumroad. El `HIT` de ~52 min era la versión vieja antes de regenerarse. No hacía falta tocar `page.tsx`.
 - `/api/leads` (lo único que recoge la lista de espera mientras Gumroad está caído) tenía dos fallos silenciosos: upsert sin `on_conflict=email` (un email repetido chocaba con `leads_email_key` → 409) y devolvía `ok:true` aunque Supabase fallara. Arreglado: `?on_conflict=email` + 502 si no hay `res.ok`. Build/lint/tsc limpios.
 - Gumroad `kristian320` sigue 404 (tarea #1 de Kristian).
+
+### Orden 2026-10-13 (Telegram, cola)
+- Borrador del saúco + propuesta de pipeline multired. **Cicatriz → check:** el filtro `revisarArticulo` espera markdown y los posts son HTML; mirar antes de fiarse del «ok». Ver `kimiko/bitacora/2026-10-13-1500.md`.
