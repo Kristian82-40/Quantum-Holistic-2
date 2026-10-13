@@ -15,7 +15,7 @@ Complementa `qh-cambio-seguro` (plan → rama → prueba → PR) y `qh-sesion` (
 - Proyecto `vctetjugbvyllwjpxcxh`. Archivos con nombre `functions/<fn>/index.ts` y `functions/_kimiko/lib/*.js` (mismo contenido exacto que el repo; leer cada archivo con Read, no de memoria).
 - Seguir el grafo de imports y subir todos los archivos que se importen.
 - `verify_jwt:false` solo si la función ya valida su propio secreto o la llave de servicio. Si no, `true`.
-- Lo desplegado = lo del repo: el mismo código va en el PR (regla 7).
+- Lo desplegado = lo del repo: el mismo código va en el PR (regla 7). Comprobarlo: `supabase functions download <fn> --project-ref vctetjugbvyllwjpxcxh` en una carpeta temporal y `diff` contra `supabase/functions/` (o `get_edge_function` si no hay CLI).
 
 ## 3. Probar con la red real
 - Insertar filas de prueba en `kimiko_drafts` copiando `chat_id` de una orden reciente; texto que empiece por «PRUEBA».
@@ -26,9 +26,9 @@ Complementa `qh-cambio-seguro` (plan → rama → prueba → PR) y `qh-sesion` (
 
 ## 4. Pruebas y PR
 - `node supabase/functions/_kimiko/pruebas.mjs` debe quedar en verde antes de subir.
-- `gh pr create` falla por GraphQL: usar `gh api repos/Kristian82-40/Quantum-Holistic-2/pulls --input pr.json` (JSON con title, head, base, body) con el JSON en el scratchpad.
+- Si `gh pr create` falla por GraphQL (pasa en las sesiones en la nube; en el Mac funciona): usar `gh api repos/Kristian82-40/Quantum-Holistic-2/pulls --input pr.json` (JSON con title, head, base, body) con el JSON en el scratchpad.
 - Los logs de Actions no se leen por el proxy: usar la API de jobs/steps y las annotations.
-- PR apilado: decir en el cuerpo cuál debe fusionarse antes. Lo delicado (base de datos, pagos, reglas de Kimiko, worker) necesita el OK de Kristian por Telegram.
+- PR apilado: decir en el cuerpo cuál debe fusionarse antes. Lo delicado (base de datos, pagos, reglas de Kimiko, worker) necesita el OK de Kristian por Telegram. El fusionador solo reconoce como delicado migraciones, pagos, `PROMPT.md`/`CLAUDE.md` y el propio fusionador: un PR que cambie `supabase/functions/`, `kimiko/worker` o un workflow se abre **en borrador** (`--draft`) para que no se fusione solo.
 - Commits y PR con las líneas de atribución que indique la sesión.
 
 ## 5. Hook de push («commits sin subir y no hay rama remota»)
@@ -38,7 +38,7 @@ Complementa `qh-cambio-seguro` (plan → rama → prueba → PR) y `qh-sesion` (
 
 ## 6. Cerrar la sesión
 - `ESTADO.md`: editar solo las filas que cambiaron, cada una con su prueba; lo no comprobado, «sin verificar»; actualizar «Última revisión».
-- Las tareas de Kristian van a la cola de `claude/tareas-kristian.md` y se hacen de forma interactiva por terminal, para que las claves vayan directas a Supabase Secrets sin pasar por el chat.
+- Las tareas de Kristian van a «Lo que solo puede hacer Kristian» de `ESTADO.md` (punto «Cola de Kristian») y se hacen de forma interactiva por terminal, para que las claves vayan directas a Supabase Secrets sin pasar por el chat.
 - Informar en español, corto y legible desde el móvil.
 
 ## Nunca
