@@ -37,6 +37,7 @@ DELICADO = [
     (r'(?i)(stripe|checkout|precio|pricing|pago)', 'toca pagos o precios'),
     (r'^(kimiko/PROMPT\.md|CLAUDE\.md)$', 'cambia las reglas de Kimiko'),
     (r'^(kimiko/fusion/|\.github/workflows/kimiko-fusion\.yml$)', 'cambia el propio fusionador'),
+    (r'^(supabase/functions/|kimiko/worker/|\.github/workflows/)', 'cambia el código que corre Kimiko (funciones, worker de Telegram o workflows)'),
 ]
 
 
