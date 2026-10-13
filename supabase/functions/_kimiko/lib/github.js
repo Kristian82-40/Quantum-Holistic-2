@@ -14,5 +14,7 @@ async function gh(token, metodo, ruta, cuerpo, fetchImpl = fetch) {
 }
 
 export const despertarKimikoCloud = (token, draftId, fetchImpl) => gh(token, 'POST', '/dispatches', { event_type: 'kimiko-orden', client_payload: { draft_id: draftId } }, fetchImpl);
+// Reel al publicar un post (13-oct): mismo permiso que kimiko-orden; lo escucha kimiko-reel.yml (repository_dispatch).
+export const pedirReel = (token, fecha, fetchImpl) => gh(token, 'POST', '/dispatches', { event_type: 'kimiko-reel', client_payload: fecha ? { fecha } : {} }, fetchImpl);
 export const fusionarPR = (token, numero, fetchImpl) => gh(token, 'PUT', `/pulls/${numero}/merge`, { merge_method: 'squash' }, fetchImpl);
 export const cerrarPR = (token, numero, fetchImpl) => gh(token, 'PATCH', `/pulls/${numero}`, { state: 'closed' }, fetchImpl);

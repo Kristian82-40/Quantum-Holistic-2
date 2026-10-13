@@ -9,7 +9,7 @@
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
 import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, ponerTeclado } from '../lib/telegram.js';
 import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha, urlImagen } from '../lib/publicar.js';
-import { despertarKimikoCloud, fusionarPR, cerrarPR } from '../lib/github.js';
+import { despertarKimikoCloud, fusionarPR, cerrarPR, pedirReel } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -60,8 +60,9 @@ async function botonPieza({ env, db, cq, accion, tipo, id, fetchImpl }) {
     : await retirarPieza({ db, tipo, id, fetchImpl });
   const nombre = r.titulo ? `«${r.titulo}»` : 'la pieza';
   if (accion === 'publicar' && r.ok) {
+    const reel = tipo === 'post' ? await lanzarReel({ env, db, id, fetchImpl }) : '';
     await ponerTeclado(token, chat, mid, BOTONES_PIEZA(tipo, id, true), fetchImpl);
-    await enviarMensaje({ token, chatId: chat, texto: `✅ Publicado ${nombre}\n${r.url}`, teclado: BOTONES_PIEZA(tipo, id, true), fetchImpl });
+    await enviarMensaje({ token, chatId: chat, texto: `✅ Publicado ${nombre}\n${r.url}${reel}`, teclado: BOTONES_PIEZA(tipo, id, true), fetchImpl });
   } else if (accion === 'publicar') {
     await enviarMensaje({ token, chatId: chat, texto: [`⛔ No publico ${nombre}. Sigue en borrador.`, ...(r.motivos || []).slice(0, 8).map((m) => `• ${m}`), ...(r.accion ? [`👉 ${r.accion}`] : [])].join('\n'), fetchImpl });
   } else {
@@ -69,6 +70,19 @@ async function botonPieza({ env, db, cq, accion, tipo, id, fetchImpl }) {
     await enviarMensaje({ token, chatId: chat, texto: r.ok ? `🗑 Retirado ${nombre}: vuelve a borrador y la web ya no lo muestra.` : `⚠️ Retirado ${nombre} en Supabase, sin confirmar en la web.\n👉 ${r.accion || (r.motivos || []).join(', ')}`, teclado: BOTONES_PIEZA(tipo, id, false), fetchImpl });
   }
   return r;
+}
+
+// 13-oct: el reel ya no espera a los horarios de GitHub (se saltan pases): sale al publicar el post que lleva pieza de redes.
+// Si no se puede lanzar, se dice y queda el pase programado de respaldo. Nunca tumba la publicación.
+async function lanzarReel({ env, db, id, fetchImpl }) {
+  try {
+    const [c] = await db.seleccionar('kimiko_content', `blog_post_id=eq.${id}&select=fecha,reel_url&order=created_at.desc&limit=1`);
+    if (!c || c.reel_url) return '';
+    await pedirReel(env.GH_TOKEN, /^\d{4}-\d{2}-\d{2}$/.test(String(c.fecha || '')) ? c.fecha : null, fetchImpl);
+    return '\n🎬 El reel llega en unos minutos.';
+  } catch (e) {
+    return `\n🎬 El reel saldrá en el próximo pase (no pude lanzarlo ahora: ${String(e?.message ?? e).slice(0, 80)}).`;
+  }
 }
 
 // /pieza <texto>: busca un post o una ficha por slug y la manda con su botón (Publicar o Retirar).
