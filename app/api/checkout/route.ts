@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, STRIPE_PRICE_IDS } from '@/app/lib/stripe';
+import { getSupabaseServerClient } from '@/lib/supabase-server';
 
 const CRYPTO_PRICES_EUR = { monthly: 9, annual: 90 } as const;
 
@@ -45,8 +46,9 @@ export async function POST(req: NextRequest) {
       userId?: string;
     };
 
-    const { priceId, billingCycle, locale, paymentMethod, userId } = body;
-    const cycle  = billingCycle ?? 'monthly';
+    // `priceId` de la petición se ignora: solo se cobran los precios Pro configurados en Vercel.
+    const { billingCycle, locale, paymentMethod, userId } = body;
+    const cycle  = billingCycle === 'annual' ? 'annual' : 'monthly';   // cualquier otro valor → mensual
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001';
 
     // ─── Rama Crypto (BTCPay Server) ──────────────────────────
@@ -61,8 +63,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ─── Rama Card (Stripe) ───────────────────────────────────
-    const resolvedPriceId = priceId
-      ?? (cycle === 'annual' ? STRIPE_PRICE_IDS.proAnnual : STRIPE_PRICE_IDS.proMonthly);
+    const resolvedPriceId = cycle === 'annual' ? STRIPE_PRICE_IDS.proAnnual : STRIPE_PRICE_IDS.proMonthly;
 
     if (!resolvedPriceId || resolvedPriceId.startsWith('price_REEMPLAZA')) {
       return NextResponse.json(
@@ -73,6 +74,16 @@ export async function POST(req: NextRequest) {
 
     const stripeLocale = locale === 'en' ? 'en' : 'es';
 
+    // Con sesión iniciada, el pago va al email de la cuenta: el webhook busca el perfil por ese email.
+    // Sin sesión (o si falla la lectura), Stripe pide el email en su formulario.
+    let customerEmail: string | undefined;
+    try {
+      const { data: { user } } = await getSupabaseServerClient().auth.getUser();
+      customerEmail = user?.email ?? undefined;
+    } catch {
+      customerEmail = undefined;
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -82,6 +93,9 @@ export async function POST(req: NextRequest) {
       locale: stripeLocale as 'en' | 'es',
       billing_address_collection: 'auto',
       allow_promotion_codes: true,
+      ...(customerEmail ? { customer_email: customerEmail } : {}),
+      // El webhook (checkout.session.completed) lee billingCycle de aquí, no de subscription_data.
+      metadata: { plan: 'quantum_pro', billingCycle: cycle },
       subscription_data: {
         metadata: {
           plan: 'quantum_pro',
