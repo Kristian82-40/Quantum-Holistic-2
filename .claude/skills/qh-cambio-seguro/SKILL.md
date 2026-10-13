@@ -39,7 +39,7 @@ Nunca commits en `main`: está protegida y solo se actualiza fusionando PR.
 Si la prueba no se puede hacer desde aquí, se escribe **"sin verificar"** y por qué.
 
 ## 5. PR
-`gh pr create --base main` con: qué cambia, causa (si es un arreglo), **cómo se probó con resultados reales**,
+`gh pr create --base main` (si falla, ver `qh-kimiko-despliegue` §4) con: qué cambia, causa (si es un arreglo), **cómo se probó con resultados reales**,
 y "Para Kristian" (máx. 3 acciones, desde el móvil). Un PR por bloque. No fusionar tus propios PR.
 Si algo ya se desplegó desde la rama (Edge Function, migración), dilo en el PR: lo desplegado = lo del repo.
 
