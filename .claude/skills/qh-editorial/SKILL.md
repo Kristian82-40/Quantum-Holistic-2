@@ -19,6 +19,8 @@ description: Reglas de calidad para publicaciones de Quantum Holistic (blog, fic
 - Todo contenido nuevo nace **borrador** (`status = 'draft'`, `published = false`). Publica Kristian.
 - El filtro automático es `revisarArticulo` / `revisarClaims` (`_kimiko/lib/legal.js`): si cambias estas reglas,
   cambia también el filtro y su prueba.
+- `revisarArticulo` espera markdown (`## Precauciones`). Un post ya guardado en `blog_posts.content` es HTML:
+  revísalo con `revisarPost` (`_kimiko/lib/publicar.js`), que lo pasa a texto antes, igual que el botón «✅ Publicar».
 
 ## 2. SEO básico de cada post
 | Elemento | Regla | Dónde |
