@@ -103,8 +103,9 @@ Deno.serve(async (req) => {
     if (p.origen === 'cron' && !tareaActiva(await leerRunbook(db), 'auditoria-semanal')) return json({ omitido: 'auditoria-semanal en pausa' });
     try {
       const a = await auditar({ db });
-      await db.insertar('kimiko_updates', { tipo: 'auditoria', project_id: 'qh', ok: a.ok, detalle: { fecha, origen: String(p.origen || 'manual'), hallazgos: a.hallazgos } }).catch(() => {});
+      // Primero Telegram y después el registro, para que quede escrito si el aviso del domingo llegó (14-oct).
       const tg = await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoAuditoria(a, fecha) });
+      await db.insertar('kimiko_updates', { tipo: 'auditoria', project_id: 'qh', ok: a.ok, detalle: { fecha, origen: String(p.origen || 'manual'), hallazgos: a.hallazgos, telegram: tg.ok ? 'enviado' : tg.error } }).catch(() => {});
       return json({ ...a, telegram: tg.ok ? 'enviado' : tg.error });
     } catch (e) {
       await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `❌ Auditoría ${fecha}: ${(e as Error).message}` });

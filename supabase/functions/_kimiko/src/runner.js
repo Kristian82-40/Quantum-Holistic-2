@@ -7,6 +7,7 @@ import { avisosCaducidad } from '../lib/vault.js';
 import { elegirPlanta, articuloSinIA } from '../lib/sin-ia.js';
 import { chequeoDiario, textoChequeo } from '../lib/chequeo.js';
 import { leerRunbook, tareaActiva, siFalla } from '../lib/runbook.js';
+import { autopublicarActiva, autopublicar, textoAutopublicar } from '../lib/autopublicar.js';
 
 // La Edge Function vive como mucho 150 s (plan Free). El texto tiene hasta LIMITE_TEXTO_MS; después, sin IA.
 // Pasado LIMITE_IMAGEN_MS ya no se pide flux (hasta 40 s): se usa la ficha PNG, que tarda ~2 s.
@@ -28,7 +29,7 @@ const pieBorrador = (art, post, origenImagen) => [
 ].join('\n');
 
 // Un proyecto: artículo de blog (borrador) + pieza de redes. Lanza si falla; el registro lo hace quien llama.
-async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0 }) {
+async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0, runbook, espera }) {
   if (forzarError) throw new Error('Error provocado a propósito (prueba de avisos)');
   const valido = validarProyecto(proyecto);
   if (!valido.ok) throw new Error(`proyecto incompleto: falta ${valido.faltan.join(', ')}`);
@@ -84,6 +85,12 @@ async function blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError
 
   const tg = await enviarBorrador({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, fotoUrl: img.url, pie: pieBorrador(art, post, img.origen), id: contenido.id, fetchImpl });
   reg.detalle.telegram_borrador = tg.ok ? 'enviado' : tg.error;
+  if (autopublicarActiva(runbook)) {
+    const r = await autopublicar({ db, postId: post.id, slug, titulo: art.titulo, art, img, fetchImpl, espera });
+    reg.detalle.autopublicar = r.ok ? 'publicado' : r.motivos;
+    await avisar({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: textoAutopublicar({ ...r, slug, titulo: art.titulo }), fetchImpl });
+    if (r.ok) return `${proyecto.id}: publicado solo "${art.titulo}" (${art.categoria})`;
+  }
   return `${proyecto.id}: borrador "${art.titulo}" (${art.categoria})${art.problemas.length ? ` · ${art.problemas.length} aviso(s)` : ''}${tg.ok ? '' : ` · ❌ Telegram: ${tg.error}`}`;
 }
 
@@ -111,7 +118,7 @@ export async function ejecutarDia({ env, ai, proyectos, fecha, db, fetchImpl = f
     const reg = { tipo: 'blog', project_id: proyecto.id, ok: false, detalle: { fecha, slot, origen, neuronas: 0 }, respuesta_bruta: null };
     const inicio = Date.now();
     try {
-      resumen.push(`✅ ${await blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0 })}`);
+      resumen.push(`✅ ${await blogDelProyecto({ env, ai, db, proyecto, fecha, slot, forzarError, forzarFicha, fetchImpl, reg, t0, runbook, espera: opciones.espera })}`);
       reg.ok = true;
     } catch (e) {
       reg.detalle.error = e.message;
