@@ -16,3 +16,17 @@ tokens y las dependencias.
 ## Pendientes de decisión de Kristian
 1. ¿Copiamos la skill `schema` (179 líneas) a `.claude/skills/` y añadimos `Article` JSON-LD a `app/blog/[slug]`? Coste 0 €.
 2. Instagram: cuando haya cuenta Business y llaves, instalar `luminarylane/instagram-mcp-server` **en el chat** en modo lectura (métricas), fijado a un commit.
+
+## Proveedores de IA gratuitos (14-oct-2026)
+Solo anotación: **la cadena del blog no se toca** hasta que Kristian decida si Gemini se queda (su plan gratuito usa los datos para entrenar y no vale para usuarios del EEE).
+
+| Proveedor | Secreto en Supabase | Dónde se usa hoy | Estado |
+|---|---|---|---|
+| Groq (1.000 pet/día) | `GROQ_API_KEY` ✅ | 1.º del blog; 1.º de órdenes (`kimiko-orden`) y voz (Whisper) | funciona: post del 14-oct, `modelo_texto` Groq; órdenes `motor: groq` |
+| Gemini (capa gratuita) | `GEMINI_API_KEY` ✅ | 2.º del blog (1 intento); **nunca** en órdenes privadas | configurado; pendiente de la decisión de Kristian |
+| Workers AI de Cloudflare (10.000 neuronas/día) | `CF_ACCOUNT_ID` + `CF_AI_TOKEN` ✅ | 3.º del blog, 2.º de órdenes, imágenes flux | funciona: acuarela flux del 14-oct |
+| NVIDIA NIM (NVIDIA Developer Program) | `NVIDIA_API_KEY` ❌ | previsto 3.º de órdenes (`CADENAS.privado`) | falta la llave |
+| Mistral (La Plateforme, plan gratuito) | `MISTRAL_API_KEY` ❌ | previsto solo para lo público (`CADENAS.publico`) | falta la llave |
+| OpenRouter (modelos `:free`) | `OPENROUTER_API_KEY` ❌ | previsto solo para lo público | falta la llave |
+
+Prueba: `supabase secrets list` (14-oct, solo nombres) y `CADENAS` en `supabase/functions/_kimiko/lib/motores.js`. Las llaves que faltan las crea Kristian y se guardan en Supabase Secrets por terminal, sin pasar por el chat.
