@@ -18,6 +18,7 @@ import { articuloSinIA, elegirPlanta } from './lib/sin-ia.js';
 import { chequeoDiario, textoChequeo } from './lib/chequeo.js';
 import { auditar, textoAuditoria } from './lib/auditoria.js';
 import { tareaActiva, textoManual } from './lib/runbook.js';
+import { autopublicarActiva, autopublicar, motivosPrevios, textoAutopublicar } from './lib/autopublicar.js';
 import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import config from './config/projects.json' with { type: 'json' };
 import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
@@ -777,6 +778,49 @@ await prueba('worker: si kimiko-orden responde o la pasa a Claude no se despiert
   for (const ruta of ['responder', 'para_claude']) { const r = await enviarOrden(ruta); assert.equal(r.despertada, false, ruta); assert.equal(r.recibido, false, ruta); }
   for (const ruta of ['cloud', '500', 'error']) { const r = await enviarOrden(ruta); assert.equal(r.despertada, true, ruta); assert.equal(r.recibido, true, ruta); }
   const f = await enviarOrden('cloud'); const t = f.llamadas.find((l) => l.url.includes('kimiko-orden')); assert.ok(t.cuerpo.id);
+});
+
+// Publicación automática (14-oct): apagada salvo fila 'autopublicar' con activa=true.
+await prueba('autopublicar: apagada por defecto (sin runbook, sin fila o con activa=false)', () => {
+  assert.equal(autopublicarActiva(null), false);
+  assert.equal(autopublicarActiva([]), false);
+  assert.equal(autopublicarActiva([{ id: 'autopublicar', activa: false }]), false);
+  assert.equal(autopublicarActiva([{ id: 'post-diario', activa: true }]), false);
+  assert.equal(autopublicarActiva([{ id: 'autopublicar', activa: true }]), true);
+});
+await prueba('autopublicar: avisos legales, ficha PNG o aviso de imagen la dejan en borrador sin tocar la web', async () => {
+  const flux = { url: 'https://x/a.jpg', origen: 'flux', aviso: null };
+  assert.deepEqual(motivosPrevios({ art: { problemas: [] }, img: flux }), []);
+  assert.match(motivosPrevios({ art: { problemas: [{}] }, img: flux })[0], /filtro legal/);
+  assert.match(motivosPrevios({ art: { problemas: [] }, img: { url: 'https://x/a.png', origen: 'ficha', aviso: 'ficha PNG' } })[0], /ficha PNG/);
+  assert.match(motivosPrevios({ art: { problemas: [] }, img: null })[0], /imagen/);
+  const db = dbPiezas();
+  const r = await autopublicar({ db, postId: POST.id, slug: POST.slug, titulo: POST.title, art: { problemas: [{}] }, img: flux, fetchImpl: () => { throw new Error('no debe llamar a la red'); } });
+  assert.equal(r.ok, false); assert.equal(db.t.cambios.length, 0);
+  assert.equal(db.t.kimiko_updates[0].detalle.origen, 'auto'); assert.equal(db.t.kimiko_updates[0].detalle.resultado, 'bloqueada');
+  assert.match(textoAutopublicar(r), /🟡[\s\S]*se queda en borrador[\s\S]*\/pieza/);
+});
+await prueba('autopublicar: con todo en verde publica y comprueba la URL; si la web no la muestra, vuelve a borrador', async () => {
+  const flux = { url: 'https://x/a.jpg', origen: 'flux', aviso: null };
+  const db = dbPiezas();
+  const r = await autopublicar({ db, postId: POST.id, slug: POST.slug, titulo: POST.title, art: { problemas: [] }, img: flux, fetchImpl: webFalsa(), espera: 0 });
+  assert.equal(r.ok, true); assert.equal(db.t.cambios[0].c.status, 'published');
+  assert.match(textoAutopublicar(r), /🟢 Publicado solo/);
+  const db2 = dbPiezas();
+  const r2 = await autopublicar({ db: db2, postId: POST.id, slug: POST.slug, titulo: POST.title, art: { problemas: [] }, img: flux, fetchImpl: webFalsa({ web: 'retirado' }), espera: 0 });
+  assert.equal(r2.ok, false); assert.equal(db2.t.cambios[1].c.status, 'draft');
+});
+await prueba('autopublicar: en el ejecutor, solo con la fila activa; si falla, borrador + aviso 🟡 por Telegram', async () => {
+  const conRunbook = (activa) => { const db = dbFalsa(); const sel = db.seleccionar; db.seleccionar = async (tb, q) => (tb === 'kimiko_runbook' ? [{ id: 'autopublicar', activa }] : sel(tb, q)); return db; };
+  for (const activa of [false, true]) {
+    const db = conRunbook(activa); const tg = [];
+    const r = await ejecutarDia({ env: { GEMINI_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1' }, ai: aiFalso(), proyectos: [proyecto], fecha: '2026-10-06', db, fetchImpl: red([gemini(articulo())], tg), opciones: { chequeo: false, espera: 0 } });
+    assert.equal(db.t.blog_posts[0].status, 'draft');
+    assert.ok(r.resumen[0].startsWith('✅ qh: borrador'));
+    const aviso = tg.find((x) => x.metodo === 'sendMessage' && /publicación automática/.test(x.cuerpo.text || ''));
+    assert.equal(!!aviso, activa, `aviso 🟡 solo con activa=${activa}`);
+    assert.equal(db.t.cambios.filter((c) => c.c?.status === 'published').length, 0);
+  }
 });
 
 console.log(`\n${n} pruebas en verde`);
