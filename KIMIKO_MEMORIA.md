@@ -793,3 +793,6 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 
 ### Orden 2026-10-13 (Telegram, cola)
 - Borrador del saúco + propuesta de pipeline multired. **Cicatriz → check:** el filtro `revisarArticulo` espera markdown y los posts son HTML; mirar antes de fiarse del «ok». Ver `kimiko/bitacora/2026-10-13-1500.md`.
+
+### Cierre 2026-10-14 (Claude Code, sesión interactiva)
+- Sospecha del 13-oct sobre `revisarArticulo` y el HTML: **falsa alarma en los flujos reales.** `crearArticulo` revisa el markdown antes de convertirlo y `revisarPost` (Publicar/autopublicar) pasa el HTML a texto con `aTexto`; ya hay prueba (`pruebas.mjs:574`). El saúco real (`blog_posts`, 14-oct) → `revisarPost` = `[]`; 67 pruebas en verde. Solo falla llamar a `revisarArticulo` a mano con HTML: **check → para un post guardado, usar `revisarPost`** (añadido a `qh-editorial`).
