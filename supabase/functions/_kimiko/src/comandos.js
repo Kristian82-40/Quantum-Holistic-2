@@ -1,9 +1,10 @@
-// Comandos de Telegram (B7): /estado, /auditar y /manual. Solo lectura y sin IA; los atiende el worker.
+// Comandos de Telegram (B7): /estado, /auditar, /manual y /hoy. Solo lectura y sin IA; los atiende el worker.
 import { auditar, textoAuditoria } from '../lib/auditoria.js';
 import { leerRunbook, textoManual } from '../lib/runbook.js';
+import { leerHoy, textoHoy } from '../lib/tareas.js';
 
 export const URL_ESTADO = 'https://raw.githubusercontent.com/Kristian82-40/Quantum-Holistic-2/main/ESTADO.md';
-export const AYUDA = '🌿 Comandos de Kimiko\n/estado — resumen de ESTADO.md y del último chequeo\n/auditar — auditoría de integridad ahora\n/manual — tareas del manual\nCualquier otro mensaje es una orden para Kimiko Cloud.';
+export const AYUDA = '🌿 Comandos de Kimiko\n/estado — resumen de ESTADO.md y del último chequeo\n/auditar — auditoría de integridad ahora\n/manual — tareas del manual\n/hoy — tu lista de tareas de hoy\nCualquier otro mensaje es una orden para Kimiko Cloud.';
 
 // Resumen de ESTADO.md: fecha de revisión, recuento por icono y las filas rotas (❌).
 export function resumirEstado(md = '') {
@@ -36,6 +37,7 @@ export async function atenderComando({ texto, db, fetchImpl = fetch, hoy = new D
   const cmd = String(texto).trim().split(/\s+/)[0].toLowerCase().replace(/@.*$/, '');
   if (cmd === '/estado') return estado({ db, fetchImpl, hoy });
   if (cmd === '/manual') return textoManual(await leerRunbook(db));
+  if (cmd === '/hoy') return textoHoy(await leerHoy(db));
   if (cmd === '/auditar') {
     let a;
     try { a = await auditar({ db }); } catch (e) { return `❌ No pude auditar: ${e.message}`; }
