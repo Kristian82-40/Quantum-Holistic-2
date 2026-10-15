@@ -19,6 +19,7 @@ import { chequeoDiario, textoChequeo } from './lib/chequeo.js';
 import { auditar, textoAuditoria } from './lib/auditoria.js';
 import { tareaActiva, textoManual } from './lib/runbook.js';
 import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
+import { textoHoy } from './lib/tareas.js';
 import config from './config/projects.json' with { type: 'json' };
 import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
 import { decidirRuta, reglasDuras, respuestaSegura } from './lib/orden-interna.js';
@@ -553,6 +554,19 @@ await prueba('comandos: /manual, /auditar (y su registro) y ayuda para lo descon
   assert.match(await atenderComando({ texto: '/auditar@KimikoBot', db }), /todo limpio/); assert.equal(filas[0].detalle.origen, 'telegram');
   assert.equal(await atenderComando({ texto: '/start', db }), AYUDA);
   assert.match(await atenderComando({ texto: '/auditar', db: { ...db, rpc: async () => { throw new Error('caída'); } } }), /No pude auditar: caída/);
+});
+await prueba('comandos: /hoy lista las tareas de Kristian (5 como máximo, lo del Mac al final) y avisa si no lee la cola', async () => {
+  const t = (id, o = {}) => ({ id, titulo: `Tarea ${id}`, canal: 'movil', minutos: 3, etiquetas: [], url: null, fecha_limite: null, orden: null, ...o });
+  const filas = [t('F0-11', { canal: 'mac' }), t('F0-06', { orden: 2, url: 'https://claude.ai/projects' }), t('F1-01', { fecha_limite: '2026-10-20', etiquetas: ['pago'] }), t('F1-02'), t('F1-03'), t('F1-04'), t('F1-05')];
+  let consulta = '';
+  const db = { seleccionar: async (tabla, q) => { consulta = `${tabla}?${q}`; return filas; } };
+  const txt = await atenderComando({ texto: '/hoy', db });
+  assert.match(consulta, /kimiko_tareas\?responsable=eq\.kristian&estado=in\.\(pendiente,en_curso,esperando_ok\)/);
+  const ids = [...txt.matchAll(/^\d\. (\S+)/gm)].map((m) => m[1]);
+  assert.deepEqual(ids, ['F1-01', 'F0-06', 'F1-02', 'F1-03', 'F1-04']); assert.match(txt, /\(\+2 más\)/); assert.match(txt, /OK: pago/); assert.match(txt, /https:\/\/claude\.ai\/projects/);
+  assert.match(textoHoy([]), /No tienes tareas abiertas/);
+  assert.match(await atenderComando({ texto: '/hoy', db: { seleccionar: async () => { throw new Error('caída'); } } }), /No pude leer la cola/);
+  assert.match(AYUDA, /\/hoy/);
 });
 await prueba('webhook: un comando de Kristian se responde y NO lanza Kimiko Cloud', async () => {
   const env = { TELEGRAM_BOT_TOKEN: 'tok', TELEGRAM_CHAT_ID: '42', GH_TOKEN: 'gh' };

@@ -6,7 +6,7 @@
 //  · Notas de voz (13-oct): la Edge Function kimiko-voz las pasa a texto; Kimiko enseña lo entendido y espera ✅ (vok) o ✖ (vno).
 //    Lo que no sabe leer (sticker, vídeo, documento sin texto…) ya no se ignora en silencio: lo dice.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
-//  · Comandos /estado, /auditar y /manual (solo lectura; ver comandos.js).
+//  · Comandos /estado, /auditar, /manual y /hoy (solo lectura; ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
 import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, BOTONES_VOZ, ponerTeclado } from '../lib/telegram.js';
