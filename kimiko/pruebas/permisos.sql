@@ -23,4 +23,10 @@ union all
 select 'anon', 'profiles', c.column_name, false, true
 from information_schema.columns c
 where c.table_schema = 'public' and c.table_name = 'profiles'
-  and has_column_privilege('anon', 'public.profiles', c.column_name, 'UPDATE');
+  and has_column_privilege('anon', 'public.profiles', c.column_name, 'UPDATE')
+union all
+-- anon y authenticated no insertan, borran ni vacían profiles (las altas las hace handle_new_user)
+select r.rol, 'profiles', '(' || lower(r.priv) || ')', false, true
+from (values ('anon'), ('authenticated')) a(rol)
+cross join lateral (values (a.rol, 'INSERT'), (a.rol, 'DELETE'), (a.rol, 'TRUNCATE')) r(rol, priv)
+where has_table_privilege(r.rol, 'public.profiles', r.priv);
