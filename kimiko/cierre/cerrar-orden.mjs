@@ -34,9 +34,11 @@ export async function cerrarOrden({ url, llave, id, jobStatus, fetchImpl = fetch
   if (!cambio) return { cerrada: false, motivo: orden ? `ya estaba ${orden.status}` : 'no existe' };
   // El filtro de estado evita pisar a Kimiko si cerró la orden justo ahora. El cambio de estado dispara el aviso a Telegram.
   const p = await fetchImpl(`${url}/rest/v1/kimiko_drafts?id=eq.${id}&status=in.(${ABIERTAS.join(',')})`, {
-    method: 'PATCH', headers: { ...h, prefer: 'return=minimal' }, body: JSON.stringify(cambio),
+    method: 'PATCH', headers: { ...h, prefer: 'return=representation' }, body: JSON.stringify(cambio),
   });
   if (!p.ok) throw new Error(`no pude cerrar la orden (HTTP ${p.status})`);
+  // Sin filas cambiadas, Kimiko la cerró entre la lectura y el PATCH: no hay nada que registrar.
+  if (!(await p.json()).length) return { cerrada: false, motivo: 'Kimiko la cerró a la vez' };
   await fetchImpl(`${url}/rest/v1/kimiko_updates`, {
     method: 'POST', headers: { ...h, prefer: 'return=minimal' },
     body: JSON.stringify({ tipo: 'orden', project_id: 'qh', ok: false, detalle: { id, estado: cambio.status, motivo: motivoCierre(jobStatus), job: jobStatus } }),

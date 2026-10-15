@@ -11,8 +11,10 @@ on:
     types: [kimiko-orden]
   workflow_dispatch:
 
+# Un grupo por orden. Con un grupo único, GitHub solo guarda una ejecución en espera: si llegaban tres órdenes seguidas,
+# la tercera cancelaba la segunda antes de empezar y esa orden se quedaba en «pendiente» sin aviso (ni el paso de cierre corría).
 concurrency:
-  group: kimiko
+  group: kimiko-${{ github.event.client_payload.draft_id || github.run_id }}
   cancel-in-progress: false
 
 permissions:
