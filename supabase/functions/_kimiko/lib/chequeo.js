@@ -1,4 +1,4 @@
-// Chequeo diario ANTES del post (B3): llaves, cupo, web y crons. Sin IA: solo llamadas que no gastan cupo de generación.
+// Chequeo diario ANTES del post (B3): llaves, cupo, web, crons y permisos de la base (F0-03). Sin IA: solo llamadas que no gastan cupo de generación.
 // Devuelve { ok, fallos: [{ que, accion }], datos }. Cada fallo trae la acción exacta para Kristian (desde el móvil).
 export const RUTAS_WEB = ['/', '/blog', '/diccionario', '/terapeutas', '/login'];
 export const CUPO_NEURONAS = 10000;
@@ -66,21 +66,28 @@ async function crons(db, ahora) {
   return { crons: filas, fallos };
 }
 
+// kimiko_prueba_permisos(): función SQL (solo service_role, F0-03). Cada fila es un permiso distinto del esperado.
+async function permisos(db) {
+  const filas = await db.rpc('kimiko_prueba_permisos');
+  return { permisos_rotos: filas.length, fallos: filas.slice(0, 5).map((f) => ({ que: `Permiso inesperado: ${f.rol} en ${f.tabla} ${f.columna}`, accion: 'No toques nada: pide a Claude Code que lo revise (kimiko/pruebas/permisos.sql muestra la lista entera)' })) };
+}
+
 export async function chequeoDiario({ env, db, sitio, fecha, fetchImpl = fetch, ahora = Date.now() }) {
   const partes = await Promise.all([
     llaves(env, fetchImpl),
     cupo(db, fecha).catch((e) => ({ fallos: [{ que: `No pude leer el cupo: ${e.message}`, accion: 'Ninguna: se reintenta mañana' }] })),
     web(sitio, fetchImpl),
     crons(db, ahora).catch((e) => ({ fallos: [{ que: `No pude leer los crons: ${e.message}`, accion: 'Pide a Claude Code que revise la función kimiko_estado_crons' }] })),
+    permisos(db).catch((e) => ({ fallos: [{ que: `No pude comprobar los permisos: ${e.message}`, accion: 'Pide a Claude Code que revise la función kimiko_prueba_permisos' }] })),
   ]);
   const fallos = partes.flatMap((p) => p.fallos);
-  const [k, c, w, cr] = partes;
-  const datos = { motores: k.motores, neuronas_hoy: c.neuronas, rutas: w.rutas?.map((r) => `${r.ruta} ${r.status}`), crons: cr.crons };
+  const [k, c, w, cr, pe] = partes;
+  const datos = { motores: k.motores, neuronas_hoy: c.neuronas, rutas: w.rutas?.map((r) => `${r.ruta} ${r.status}`), crons: cr.crons, permisos_rotos: pe.permisos_rotos };
   // Hay texto si al menos un motor contesta; si no, hoy saldrá la ficha sin IA.
   if (k.motores && !Object.values(k.motores).some(Boolean)) fallos.unshift({ que: 'Ningún motor de IA responde: hoy el post saldrá en modo sin IA (ficha de planta)', accion: 'Revisa las llaves de abajo' });
   return { ok: fallos.length === 0, fallos, datos };
 }
 
 export const textoChequeo = (c, fecha) => (c.ok
-  ? `🩺 Chequeo ${fecha}: todo en orden (llaves, cupo, web y crons)`
+  ? `🩺 Chequeo ${fecha}: todo en orden (llaves, cupo, web, crons y permisos)`
   : [`🩺 Chequeo ${fecha}: ${c.fallos.length} cosa(s) que mirar`, ...c.fallos.map((f) => `• ${f.que}\n  → ${f.accion}`)].join('\n'));

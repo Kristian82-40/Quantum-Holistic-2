@@ -491,7 +491,7 @@ const redChequeo = ({ web = 200, llave = 200 } = {}) => async (url) => {
   if (u.includes('quantum-holistic.com')) return { status: u.endsWith('/blog') ? web : 200 };
   return { status: llave };
 };
-const dbChequeo = (crons) => ({ seleccionar: async () => [{ detalle: { neuronas: 300 } }], rpc: async () => crons });
+const dbChequeo = (crons, permisos = []) => ({ seleccionar: async () => [{ detalle: { neuronas: 300 } }], rpc: async (n) => (n === 'kimiko_estado_crons' ? crons : permisos) });
 const cronsOk = [{ jobname: 'kimiko-diario', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T06:00:00Z' }, { jobname: 'kimiko-reintento', active: true, ultimo_estado: 'succeeded', ultima_ejecucion: '2026-10-08T07:30:00Z' }, { jobname: 'kimiko-auditoria', active: true, ultimo_estado: null, ultima_ejecucion: null }];
 const envCompleto = { GEMINI_API_KEY: 'k', GROQ_API_KEY: 'g', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1', ...CF };
 await prueba('chequeo: todo en orden', async () => {
@@ -505,12 +505,18 @@ await prueba('chequeo: llaves que faltan, web caída y cron apagado, cada uno co
   assert.match(que, /CF_ACCOUNT_ID/); assert.match(que, /GROQ_API_KEY/); assert.match(que, /\/blog responde 500/); assert.match(que, /kimiko-diario está desactivado/);
   assert.ok(c.fallos.every((f) => f.accion.length > 10));
 });
+await prueba('chequeo: un permiso inesperado en la base sale como fallo con su acción (F0-03)', async () => {
+  const rotos = [{ rol: 'anon', tabla: 'leads', columna: '(insert)', esperado: false, obtenido: true }];
+  const c = await chequeoDiario({ env: envCompleto, db: dbChequeo(cronsOk, rotos), sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo(), ahora: Date.parse('2026-10-08T08:00:00Z') });
+  assert.equal(c.ok, false); assert.equal(c.datos.permisos_rotos, 1);
+  assert.match(c.fallos[0].que, /Permiso inesperado: anon en leads \(insert\)/); assert.match(c.fallos[0].accion, /Claude Code/);
+});
 await prueba('chequeo: llave rechazada y ningún motor vivo avisa del modo sin IA', async () => {
   const c = await chequeoDiario({ env: envCompleto, db: dbChequeo(cronsOk), sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo({ llave: 401 }), ahora: Date.parse('2026-10-08T08:00:00Z') });
   assert.match(c.fallos[0].que, /modo sin IA/); assert.match(c.fallos.map((f) => f.que).join(), /Gemini rechaza/);
 });
 await prueba('ejecutor: a las 06:00 el chequeo va antes del post y avisa por Telegram si algo falla', async () => {
-  const db = dbFalsa(); db.rpc = async () => cronsOk; const tg = [];
+  const db = dbFalsa(); db.rpc = async (n) => (n === 'kimiko_estado_crons' ? cronsOk : []); const tg = [];
   const base = red([gemini(articulo())], tg);
   const conChequeo = async (url, o) => (String(url).includes('/models?') ? { status: 200 } : String(url).startsWith('https://quantum-holistic.com') ? { status: 200 } : base(url, o));
   await ejecutarDia({ env: { GEMINI_API_KEY: 'k', TELEGRAM_BOT_TOKEN: 't', TELEGRAM_CHAT_ID: '1' }, ai: aiFalso(), proyectos: [proyecto], fecha: '2026-10-06', db, fetchImpl: conChequeo });
