@@ -1,0 +1,5 @@
+# F0-15 · 16-oct-2026 · Huellas de las copias en este directorio (comprobar con: cd kimiko/plan && shasum -a 256 -c HUELLAS.sha256).
+# hoja-de-ruta-empresa.md: copia que Kristian reescribió a mano desde el Project; no hay huella del Project con la que compararla.
+# code-encargo-orquestar-hoja-de-ruta.md: el archivo que Kristian pasó a Code el 15-oct, sin cambios.
+02568a00eb050bfa43ecf18e5b4334bfe130f76b748c4c6e659188807d0ecaf6  hoja-de-ruta-empresa.md
+24a0f6885faa16f318467a8b5bc03915e2ffbb26f15f3999cc031c3fa28b9fde  code-encargo-orquestar-hoja-de-ruta.md

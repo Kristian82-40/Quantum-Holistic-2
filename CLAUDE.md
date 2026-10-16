@@ -2,6 +2,7 @@
 
 Lo lee cualquier sesión de Claude (chat, Claude Code o Kimiko Cloud) **antes de tocar nada**.
 El estado vivo está en [`ESTADO.md`](ESTADO.md). Si este archivo y la memoria de una sesión no coinciden, manda este.
+La hoja de ruta y el encargo vigentes están en [`kimiko/plan/`](kimiko/plan/) (copias del Project del 16-oct; huellas en `HUELLAS.sha256`): mandan sobre el adjunto del Project.
 
 ## 1. Quién manda
 - **Kristian** decide. Desde el 9-oct los PR de ramas `claude/*` y `kimiko/*` se fusionan solos cuando las pruebas están en verde (`kimiko-fusion.yml`); Kristian solo aprueba los delicados (base de datos, pagos, reglas de Kimiko, el propio fusionador), que le llegan por Telegram. Los de Dependabot no se fusionan solos.
