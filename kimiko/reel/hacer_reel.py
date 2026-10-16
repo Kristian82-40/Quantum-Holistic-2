@@ -176,6 +176,11 @@ def main():
         prueba = json.loads(Path(os.environ['PIEZA_JSON']).read_text())
         pieza, post, img = prueba['pieza'], prueba['post'], Path(prueba['imagen']).read_bytes()
     else:
+        # Freno de Kimiko (F0-08): en pausa no se monta ni se envía nada.
+        freno = pedir('GET', '/rest/v1/kimiko_autonomia?id=eq.1&select=pausado')
+        if not freno or freno[0].get('pausado'):
+            print('Kimiko está en pausa (kimiko_autonomia): no monto el reel.')
+            return
         piezas = pedir('GET', f'/rest/v1/kimiko_content?fecha=eq.{fecha}&estado=neq.descartado&order=created_at.desc&limit=1'
                        '&select=id,project_id,titular,copy,hashtags,blog_post_id,reel_url')
         if not piezas:

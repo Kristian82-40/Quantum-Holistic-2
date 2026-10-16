@@ -6,7 +6,7 @@
 //  · Notas de voz (13-oct): la Edge Function kimiko-voz las pasa a texto; Kimiko enseña lo entendido y espera ✅ (vok) o ✖ (vno).
 //    Lo que no sabe leer (sticker, vídeo, documento sin texto…) ya no se ignora en silencio: lo dice.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
-//  · Comandos /estado, /auditar, /manual y /hoy (solo lectura; ver comandos.js).
+//  · Comandos /estado, /auditar, /manual, /hoy, /pausa y /reanudar (ver comandos.js).
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
 import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, BOTONES_VOZ, ponerTeclado } from '../lib/telegram.js';
@@ -14,6 +14,7 @@ import { pedirTranscripcion, MAX_SEGUNDOS } from '../lib/voz.js';
 import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha, urlImagen } from '../lib/publicar.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR, pedirReel } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
+import { leerFreno } from '../lib/freno.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const ENTERO = /^[0-9]{1,9}$/;
@@ -81,6 +82,7 @@ async function lanzarReel({ env, db, id, fetchImpl }) {
   try {
     const [c] = await db.seleccionar('kimiko_content', `blog_post_id=eq.${id}&select=fecha,reel_url&order=created_at.desc&limit=1`);
     if (!c || c.reel_url) return '';
+    if ((await leerFreno(db)).pausado) return '\n⏸ Reel en pausa (freno de Kimiko): /reanudar para volver.';
     await pedirReel(env.GH_TOKEN, /^\d{4}-\d{2}-\d{2}$/.test(String(c.fecha || '')) ? c.fecha : null, fetchImpl);
     return '\n🎬 El reel llega en unos minutos.';
   } catch (e) {

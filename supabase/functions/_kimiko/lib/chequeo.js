@@ -1,5 +1,7 @@
 // Chequeo diario ANTES del post (B3): llaves, cupo, web, crons y permisos de la base (F0-03). Sin IA: solo llamadas que no gastan cupo de generación.
 // Devuelve { ok, fallos: [{ que, accion }], datos }. Cada fallo trae la acción exacta para Kristian (desde el móvil).
+import { avisosCuota } from './freno.js';
+
 export const RUTAS_WEB = ['/', '/blog', '/diccionario', '/terapeutas', '/login'];
 export const CUPO_NEURONAS = 10000;
 const SECRETOS = 'Supabase → Edge Functions → Secrets';
@@ -42,7 +44,10 @@ async function llaves(env, fetchImpl) {
 async function cupo(db, fecha) {
   const filas = await db.seleccionar('kimiko_updates', `tipo=eq.blog&created_at=gte.${fecha}T00:00:00Z&select=detalle`);
   const neuronas = filas.reduce((s, f) => s + Number(f.detalle?.neuronas || 0), 0);
-  return { neuronas, fallos: neuronas >= CUPO_NEURONAS * 0.9 ? [{ que: `Workers AI: ${neuronas} de ${CUPO_NEURONAS} neuronas gastadas hoy`, accion: 'Nada que hacer: el cupo vuelve a las 00:00 UTC. Hoy tiran Gemini y Groq.' }] : [] };
+  // Cuotas de kimiko_gasto_limites (F0-08); si la tabla no responde, al menos la de Workers AI.
+  const limites = (await db.seleccionar('kimiko_gasto_limites', 'select=servicio,cuota,unidad,aviso_pct,uso,accion').catch(() => null))
+    ?? [{ servicio: 'workers_ai', cuota: CUPO_NEURONAS, unidad: 'neuronas/día', aviso_pct: 80, accion: 'Nada que hacer: el cupo vuelve a las 00:00 UTC. Hoy tiran Gemini y Groq.' }];
+  return { neuronas, fallos: avisosCuota(limites, { workers_ai: neuronas }) };
 }
 
 async function web(sitio, fetchImpl) {

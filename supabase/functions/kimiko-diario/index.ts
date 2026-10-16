@@ -10,6 +10,7 @@ import { enviarMensaje, BOTONES_PR, enviarVideo, pieReel } from '../_kimiko/lib/
 import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
 import { auditar, textoAuditoria } from '../_kimiko/lib/auditoria.js';
 import { leerRunbook, tareaActiva } from '../_kimiko/lib/runbook.js';
+import { leerFreno } from '../_kimiko/lib/freno.js';
 import config from '../_kimiko/config/projects.json' with { type: 'json' };
 
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d, null, 2), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -57,6 +58,16 @@ Deno.serve(async (req) => {
     return json({ telegram: r.ok ? 'enviado' : r.error }, r.ok ? 200 : 502);
   }
   const db = crearDb({ url: env.SUPABASE_URL, serviceKey: llaveSecreta() });
+  // Freno (F0-08): en pausa no sale nada automático (post, reintentos, reel, auditoría del cron) y no se escribe nada.
+  // Los avisos, el chequeo suelto, el diagnóstico y /auditar siguen. Si el freno no se lee, se avisa a las 06:00.
+  const sigueEnPausa = ['avisar-orden', 'diag', 'chequeo', 'probar-ficha'].includes(String(p.accion)) || (p.accion === 'auditoria' && p.origen !== 'cron');
+  if (!sigueEnPausa) {
+    const freno = await leerFreno(db);
+    if (freno.pausado) {
+      if (freno.ilegible && p.origen === 'cron') await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `⛔ Kimiko no trabaja hoy: ${freno.motivo}.\n→ Pide a Claude Code que revise la tabla kimiko_autonomia.` });
+      return json({ pausado: true, motivo: freno.motivo ?? null });
+    }
+  }
 
   // Reel del día: lo monta GitHub Actions (kimiko-reel) y aquí solo se manda a Telegram, una vez.
   if (p.accion === 'enviar-reel' && typeof p.id === 'string' && /^[0-9a-f-]{36}$/.test(p.id)) {

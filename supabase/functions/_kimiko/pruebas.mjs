@@ -20,6 +20,7 @@ import { auditar, textoAuditoria } from './lib/auditoria.js';
 import { tareaActiva, textoManual } from './lib/runbook.js';
 import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import { textoHoy } from './lib/tareas.js';
+import { leerFreno, avisosCuota, textoFreno } from './lib/freno.js';
 import config from './config/projects.json' with { type: 'json' };
 import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
 import { decidirRuta, reglasDuras, respuestaSegura } from './lib/orden-interna.js';
@@ -515,6 +516,38 @@ await prueba('chequeo: llave rechazada y ningún motor vivo avisa del modo sin I
   const c = await chequeoDiario({ env: envCompleto, db: dbChequeo(cronsOk), sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo({ llave: 401 }), ahora: Date.parse('2026-10-08T08:00:00Z') });
   assert.match(c.fallos[0].que, /modo sin IA/); assert.match(c.fallos.map((f) => f.que).join(), /Gemini rechaza/);
 });
+// ── F0-08: freno y cuotas ──
+const LIMITES = [{ servicio: 'workers_ai', cuota: 10000, unidad: 'neuronas/día', aviso_pct: 80, uso: null, accion: 'Nada que hacer: el cupo vuelve a las 00:00 UTC.' },
+  { servicio: 'gemini', cuota: 100, unidad: 'peticiones/día', aviso_pct: 80, uso: 85, accion: 'Mañana vuelve el cupo; hoy tira Groq.' }];
+await prueba('freno: una cuota simulada al 85 % avisa con la acción exacta; por debajo del aviso, nada', async () => {
+  const db = { ...dbChequeo(cronsOk), seleccionar: async (t) => (t === 'kimiko_gasto_limites' ? LIMITES : [{ detalle: { neuronas: 300 } }]) };
+  const c = await chequeoDiario({ env: envCompleto, db, sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo(), ahora: Date.parse('2026-10-08T08:00:00Z') });
+  assert.equal(c.fallos.length, 1, JSON.stringify(c.fallos));
+  assert.equal(c.fallos[0].que, 'gemini: 85 de 100 peticiones/día (85 %)'); assert.equal(c.fallos[0].accion, 'Mañana vuelve el cupo; hoy tira Groq.');
+  assert.match(textoChequeo(c, '2026-10-08'), /→ Mañana vuelve el cupo/);
+  assert.equal(avisosCuota(LIMITES, { workers_ai: 7999 }).length, 1); assert.equal(avisosCuota(LIMITES, { workers_ai: 8000 }).length, 2);
+});
+await prueba('freno: si kimiko_gasto_limites no responde, sigue vigilando Workers AI', async () => {
+  const db = { ...dbChequeo(cronsOk), seleccionar: async (t) => { if (t === 'kimiko_gasto_limites') throw new Error('Supabase 404'); return [{ detalle: { neuronas: 9000 } }]; } };
+  const c = await chequeoDiario({ env: envCompleto, db, sitio: 'https://quantum-holistic.com', fecha: '2026-10-08', fetchImpl: redChequeo(), ahora: Date.parse('2026-10-08T08:00:00Z') });
+  assert.match(c.fallos.map((f) => f.que).join(), /workers_ai: 9000 de 10000/);
+});
+await prueba('freno: /pausa y /reanudar cambian kimiko_autonomia y responden con el estado; /estado lo enseña', async () => {
+  const fila = { nivel: 'N2', pausado: false, motivo: null, actualizado_at: '2026-10-17T09:00:00Z' }; const cambios = [];
+  const db = { seleccionar: async (t) => (t === 'kimiko_autonomia' ? [fila] : []), actualizar: async (t, f, c) => { cambios.push({ t, f, c }); Object.assign(fila, c); } };
+  assert.match(await atenderComando({ texto: '/pausa revisar el post de hoy', db }), /⏸ Kimiko en pausa .*: revisar el post de hoy/);
+  assert.deepEqual([cambios[0].t, cambios[0].f, cambios[0].c.pausado, cambios[0].c.motivo], ['kimiko_autonomia', 'id=eq.1', true, 'revisar el post de hoy']);
+  assert.match(await atenderComando({ texto: '/estado', db, fetchImpl: async () => ({ ok: false, status: 503 }) }), /^⏸ Kimiko en pausa/);
+  assert.match(await atenderComando({ texto: '/pausa', db }), /pausa desde Telegram/);
+  assert.match(await atenderComando({ texto: '/reanudar@KimikoBot', db }), /▶️ Kimiko en marcha \(nivel N2\)/); assert.equal(fila.motivo, null);
+  assert.match(AYUDA, /\/pausa/);
+  assert.match(await atenderComando({ texto: '/pausa', db: { ...db, actualizar: async () => { throw new Error('Supabase 500'); } } }), /No pude cambiar el freno: Supabase 500/);
+});
+await prueba('freno: si no se puede leer, cuenta como pausa (y lo dice)', async () => {
+  const f = await leerFreno({ seleccionar: async () => { throw new Error('Supabase 404: relation does not exist'); } });
+  assert.equal(f.pausado, true); assert.equal(f.ilegible, true); assert.match(textoFreno(f), /⛔ Freno: no pude leer kimiko_autonomia/);
+  assert.equal((await leerFreno({ seleccionar: async () => [] })).pausado, true);
+});
 await prueba('ejecutor: a las 06:00 el chequeo va antes del post y avisa por Telegram si algo falla', async () => {
   const db = dbFalsa(); db.rpc = async (n) => (n === 'kimiko_estado_crons' ? cronsOk : []); const tg = [];
   const base = red([gemini(articulo())], tg);
@@ -625,12 +658,15 @@ await prueba('reel: publicar un post lanza el reel al momento (kimiko-reel con s
   const s = await secretoWebhook('tok');
   const boton = (uid, data) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, callback_query: { id: 'c', data, message: { message_id: 4, chat: { id: 42 } } } }) });
   const conGitHub = (gh, web) => async (url, o = {}) => (String(url).includes('api.github.com') ? (gh.push({ url: String(url), cuerpo: JSON.parse(o.body), auth: o.headers?.authorization }), { ok: true, status: 204, text: async () => '' }) : web(url, o));
-  const conPieza = (pieza) => { const db = dbPiezas(); const base = db.seleccionar; db.seleccionar = async (t, q) => (t === 'kimiko_content' ? [{ id: 'x', blog_post_id: POST.id, ...pieza }] : base(t, q)); return db; };
+  const conPieza = (pieza, pausado = false) => { const db = dbPiezas(); const base = db.seleccionar; db.seleccionar = async (t, q) => (t === 'kimiko_content' ? [{ id: 'x', blog_post_id: POST.id, ...pieza }] : t === 'kimiko_autonomia' ? [{ nivel: 'N2', pausado }] : base(t, q)); return db; };
   let gh = []; let tg = [];
   await atenderTelegram({ request: boton(30, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: null }), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
   assert.equal(gh.length, 1); assert.ok(gh[0].url.endsWith('/dispatches')); assert.equal(gh[0].auth, 'Bearer gh');
   assert.deepEqual(gh[0].cuerpo, { event_type: 'kimiko-reel', client_payload: { fecha: '2026-10-13' } });
   assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado .*\nhttps:\/\/quantum-holistic\.com\/blog\/2026-10-09-salvia\/\n🎬 El reel llega en unos minutos\./);
+  gh = []; tg = [];
+  await atenderTelegram({ request: boton(32, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: null }, true), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
+  assert.equal(gh.length, 0); assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado[\s\S]*⏸ Reel en pausa/);
   gh = []; tg = [];
   await atenderTelegram({ request: boton(31, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: 'https://x/reel.mp4' }), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
   assert.equal(gh.length, 0, 'el reel ya existe');
