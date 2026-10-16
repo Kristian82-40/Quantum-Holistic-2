@@ -73,6 +73,18 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ✅ | **Diario del 16-oct**: post de la menta escrito por Groq a las 06:00 UTC, publicado por Kristian con «✅ Publicar» a las 09:52 y reel a las 09:53; primer post con `kimiko-diario` v19 | `kimiko_updates` 16-oct (`blog` con `modelo_texto = openai/gpt-oss-120b`, `publicacion`, `reel`); `/blog/2026-10-16-respira-con-menta-…` → 200 (14:30) |
 | ⚠️ | **Fotos de Grok, lote 2, tanda 1** (#79, Kimiko): 6 fotos y 4 fichas (ganoderma, ginkgo, gordolobo, hamamelis). **Ginkgo y ganoderma publicadas** por Kristian (11:37 y 11:40 UTC); gordolobo y hamamelis siguen en borrador. Las 4 fotos son de la especie correcta, sin números en la posología y con contraindicaciones y fuentes. Sin verificar: las fotos de ginseng y lavanda (no tienen ficha nueva) y la revisión de herbolario de los textos | revisión visual de Claude de las 4 fotos; consulta a `plants` (ids 58–61); `/diccionario/ginkgo` y `/diccionario/ganoderma` → 200 (14:30) |
 
+## Puerta G0 · base estable (revisada el 16-oct 18:40, fecha de la puerta: 20-oct)
+| | Criterio de la hoja (§3) | Prueba |
+|---|---|---|
+| ✅ | Nadie cambia su rol, plan ni verificación; anon solo lee las plantas visibles (F0-01, F0-02) | `kimiko_prueba_permisos()` → 0 filas; anon lee 11 plantas. **Desviación:** la hoja pedía una vista `terapeutas_publicos`; se hizo con permisos por columna (anon solo lee id, nombre, foto, bio, especialidades, rol y verificado, y solo de terapeutas verificados). PR #82 sin fusionar |
+| ⚠️ | Prueba de permisos diaria en la base y en CI (F0-03) | función v2 + chequeo (`permisos_rotos: 0`) + job `permisos` en verde (runs 38908111812 y 38928610205). Falta el chequeo real del 17-oct 06:00 y fusionar #83 |
+| ⚠️ | `kimiko-diario` desplegado = `main` (F0-04) | **Hoy no:** está desplegado desde la rama del #83 (lleva el chequeo de permisos). Vuelve a ser = `main` al fusionar #82 y #83 |
+| ⚠️ | Cola `kimiko_tareas` viva y `/hoy` responde en Telegram (F0-07, F0-13) | cola: 97 filas, 0 títulos en blanco. `/hoy` **nunca se ha usado**: 0 filas de `/hoy` en `kimiko_updates`. F0-13 es de Kristian |
+| ⚠️ | `DECISIONES.md`, instrucciones del Project completas y Notion marcado como histórico (F0-05, F0-06, F0-14) | `DECISIONES.md` ✅ (#74). F0-06 sin verificar: Code no tiene herramienta para leer el Project. F0-14: Kristian dijo «de momento no» (16-oct) |
+| ❌ | Freno de gasto y parada de Kimiko probados (F0-08) | PR #84 (otra sesión de Code), migración sin aplicar: espera el OK `db`+`prod` de Kristian |
+| ⚠️ | Ejecutor v2 corre el módulo de prueba y deja recibo (F0-09) | `run.sh` probado en el Mac (15-oct). **Falta** la matriz Ubuntu + macOS (bash 3.2) en `vigilancia.yml` que pide la hoja: no existe |
+| ⚠️ | #66, #67 y #68 resueltos; precio anual corregido; D1–D6 contestadas (F0-10, F0-11, F0-12) | #66, #67 y #68 fusionados; D1–D7 contestadas el 15-oct en `DECISIONES.md`. **El anual sigue cobrando 89 €**: sesión de prueba creada desde `/api/checkout/` → `amount_total` 8900 (16-oct 18:35). F0-11 es de Kristian (panel de Vercel, 3 min). Sin verificar: dos órdenes reales seguidas (#66) |
+
 ## Revisión del encargo del 13-oct (Claude Code, 19:00)
 Encargo: [`kimiko/encargo-code-revision-13oct.md`](kimiko/encargo-code-revision-13oct.md). Detalle en `kimiko/bitacora/2026-10-13-1900.md`.
 | | Punto | Prueba |
