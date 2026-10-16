@@ -796,3 +796,7 @@ Diario de aprendizaje de Kimiko (Claude Code). Leer al inicio de cada sesión, a
 
 ### Cierre 2026-10-14 (Claude Code, sesión interactiva)
 - Sospecha del 13-oct sobre `revisarArticulo` y el HTML: **falsa alarma en los flujos reales.** `crearArticulo` revisa el markdown antes de convertirlo y `revisarPost` (Publicar/autopublicar) pasa el HTML a texto con `aTexto`; ya hay prueba (`pruebas.mjs:574`). El saúco real (`blog_posts`, 14-oct) → `revisarPost` = `[]`; 67 pruebas en verde. Solo falla llamar a `revisarArticulo` a mano con HTML: **check → para un post guardado, usar `revisarPost`** (añadido a `qh-editorial`).
+
+## 2026-10-16 — orden 1ec79daf (tanda 1 del lote 2)
+- Cicatriz: una orden que mezcla «haz la tanda» con «publica» se cumple solo en lo primero; publicar es de Kristian (NÚCLEO). Decirlo en `copy`.
+- Check: antes de insertar una planta, buscar por slug, `grok_id` y nombre latino a la vez (`or=`), y pedir el máximo `id` justo antes de cada inserción.
