@@ -11,6 +11,10 @@ export async function leerFreno(db) {
   }
 }
 
+// En pausa el worker solo atiende /estado y /reanudar: órdenes, notas de voz, botones y el resto de comandos no hacen nada.
+export const SIGUE_EN_PAUSA = /^\/(estado|reanudar)(@\S+)?(\s|$)/i;
+export const textoEnPausa = (f) => `${textoFreno(f)}\nEn pausa solo atiendo /estado y /reanudar. Lo que mandes ahora no se guarda ni se lanza: reenvíalo después.`;
+
 export async function cambiarPausa(db, pausado, motivo = null) {
   await db.actualizar('kimiko_autonomia', 'id=eq.1', { pausado, motivo, actualizado_at: new Date().toISOString() });
   return leerFreno(db);
@@ -19,6 +23,24 @@ export async function cambiarPausa(db, pausado, motivo = null) {
 export const textoFreno = (f) => (f.ilegible ? `⛔ Freno: ${f.motivo}. Lo automático queda parado hasta arreglarlo.`
   : f.pausado ? `⏸ Kimiko en pausa desde ${String(f.actualizado_at ?? '').slice(0, 16).replace('T', ' ')} UTC${f.motivo ? `: ${f.motivo}` : ''}. /reanudar para volver.`
     : `▶️ Kimiko en marcha (nivel ${f.nivel}). /pausa <motivo> para pararla.`);
+
+// Tope de gasto (F0-08): si el gasto del mes de un servicio (gasto_mes_eur) pasa de su tope_mensual_eur, Kimiko se pausa sola.
+// gasto_mes_eur no se mide solo: lo apunta Kristian o Claude. Vacío cuenta como 0 €.
+export const topesSuperados = (limites) => limites.filter((l) => Number(l.gasto_mes_eur ?? 0) > Number(l.tope_mensual_eur ?? 0));
+
+// Devuelve el motivo de la pausa, o null si no hay que parar. Si los topes no se pueden leer, también para.
+export async function aplicarTope(db) {
+  let motivo;
+  try {
+    const sup = topesSuperados(await db.seleccionar('kimiko_gasto_limites', 'select=servicio,tope_mensual_eur,gasto_mes_eur'));
+    if (!sup.length) return null;
+    motivo = `tope de gasto superado: ${sup.map((l) => `${l.servicio} ${l.gasto_mes_eur} € de ${l.tope_mensual_eur} €`).join(', ')}`;
+  } catch (e) {
+    motivo = `no pude leer los topes de gasto (${String(e.message).slice(0, 120)})`;
+  }
+  await cambiarPausa(db, true, motivo).catch(() => {});
+  return motivo;
+}
 
 // Un aviso por servicio que llegue a su aviso_pct. usos: { servicio: uso medido } (manda sobre la columna uso).
 export function avisosCuota(limites, usos = {}) {

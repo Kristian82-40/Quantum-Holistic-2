@@ -10,7 +10,7 @@ import { enviarMensaje, BOTONES_PR, enviarVideo, pieReel } from '../_kimiko/lib/
 import { chequeoDiario, textoChequeo } from '../_kimiko/lib/chequeo.js';
 import { auditar, textoAuditoria } from '../_kimiko/lib/auditoria.js';
 import { leerRunbook, tareaActiva } from '../_kimiko/lib/runbook.js';
-import { leerFreno } from '../_kimiko/lib/freno.js';
+import { leerFreno, aplicarTope } from '../_kimiko/lib/freno.js';
 import config from '../_kimiko/config/projects.json' with { type: 'json' };
 
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d, null, 2), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -63,9 +63,12 @@ Deno.serve(async (req) => {
   const sigueEnPausa = ['avisar-orden', 'diag', 'chequeo', 'probar-ficha'].includes(String(p.accion)) || (p.accion === 'auditoria' && p.origen !== 'cron');
   if (!sigueEnPausa) {
     const freno = await leerFreno(db);
-    if (freno.pausado) {
-      if (freno.ilegible && p.origen === 'cron') await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `⛔ Kimiko no trabaja hoy: ${freno.motivo}.\n→ Pide a Claude Code que revise la tabla kimiko_autonomia.` });
-      return json({ pausado: true, motivo: freno.motivo ?? null });
+    // Tope de gasto: en los pases programados, si un servicio pasa de su tope_mensual_eur, Kimiko se pausa sola y avisa.
+    const tope = !freno.pausado && ['cron', 'reintento'].includes(String(p.origen)) ? await aplicarTope(db) : null;
+    if (freno.pausado || tope) {
+      if (tope) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `⛔ Kimiko se ha puesto en pausa: ${tope}.\n→ Revisa el gasto en kimiko_gasto_limites. /reanudar cuando esté bajo el tope (si no, mañana vuelve a parar).` });
+      else if (freno.ilegible && p.origen === 'cron') await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: env.TELEGRAM_CHAT_ID, texto: `⛔ Kimiko no trabaja hoy: ${freno.motivo}.\n→ Pide a Claude Code que revise la tabla kimiko_autonomia.` });
+      return json({ pausado: true, motivo: tope ?? freno.motivo ?? null });
     }
   }
 

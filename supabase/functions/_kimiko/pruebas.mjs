@@ -20,7 +20,7 @@ import { auditar, textoAuditoria } from './lib/auditoria.js';
 import { tareaActiva, textoManual } from './lib/runbook.js';
 import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import { textoHoy } from './lib/tareas.js';
-import { leerFreno, avisosCuota, textoFreno } from './lib/freno.js';
+import { leerFreno, avisosCuota, textoFreno, topesSuperados, aplicarTope } from './lib/freno.js';
 import config from './config/projects.json' with { type: 'json' };
 import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
 import { decidirRuta, reglasDuras, respuestaSegura } from './lib/orden-interna.js';
@@ -56,13 +56,14 @@ const red = (respuestasGemini = [], telegram = []) => async (url, o = {}) => {
   if (u.startsWith('http://')) return { status: 301, headers: new Headers({ location: 'https://quantum-holistic.com' }) };
   return { ok: true, url: u, headers: cab };
 };
+const EN_MARCHA = { nivel: 'N2', pausado: false }; // freno (F0-08) suelto en las bases falsas
 function dbFalsa({ existente = false, fichaFalla = false } = {}) {
   const t = { blog_posts: [], kimiko_content: [], kimiko_updates: [], kimiko_spend: [], kimiko_security_checks: [], subidas: [], fichas: [], cambios: [] };
   let id = 0;
   return {
     t,
     gastoMes: async () => ({ usd: 0, ejecuciones: 1, fallidas: 0 }),
-    seleccionar: async (tabla, q) => (tabla === 'kimiko_content' && q.includes('fecha=eq') && existente ? [{ id: 'x' }] : tabla === 'kimiko_learnings' ? [{ regla: 'Nunca uses la palabra milagro' }] : []),
+    seleccionar: async (tabla, q) => (tabla === 'kimiko_content' && q.includes('fecha=eq') && existente ? [{ id: 'x' }] : tabla === 'kimiko_learnings' ? [{ regla: 'Nunca uses la palabra milagro' }] : tabla === 'kimiko_autonomia' ? [EN_MARCHA] : []),
     insertar: async (tabla, f) => { const fila = { id: `id-${++id}`, update_id: -id, ...f }; t[tabla].push(fila); return fila; },
     actualizar: async (tabla, filtro, c) => { t.cambios.push({ tabla, filtro, c }); },
     subir: async (b, ruta) => { t.subidas.push(`${b}/${ruta}`); return ruta; },
@@ -82,6 +83,7 @@ function dbPiezas({ post = POST, ficha = FICHA, repetido = false } = {}) {
     insertar: async (tb, f) => { (t[tb] ||= []).push(f); return f; },
     actualizar: async (tabla, filtro, c) => { t.cambios.push({ tabla, filtro, c }); },
     seleccionar: async (tabla, q) => {
+      if (tabla === 'kimiko_autonomia') return [EN_MARCHA];
       if (tabla === 'kimiko_content') return [{ id: 'x', blog_post_id: post.id }];
       if (q.includes('id=neq.')) return repetido ? [{ id: 'otro' }] : [];
       if (tabla === 'blog_posts') return q.includes('ilike') || q.includes(`id=eq.${post.id}`) ? [post] : [];
@@ -285,7 +287,7 @@ function dbOrdenes() {
     insertarSiNuevo: async (tb, f) => f,
     insertar: async (tb, f) => { const fila = { id: `aaaaaaaa-0000-4000-8000-${String(++k).padStart(12, '0')}`, ...f }; (t[tb] ||= []).push(fila); return fila; },
     actualizar: async (tb, filtro, c) => { t.cambios.push({ tabla: tb, filtro, c }); for (const f of t[tb] || []) if (filtro.includes(`id=eq.${f.id}`)) Object.assign(f, c); },
-    seleccionar: async (tb, q) => (t[tb] || []).filter((f) => q.includes(`id=eq.${f.id}`)),
+    seleccionar: async (tb, q) => (tb === 'kimiko_autonomia' ? [EN_MARCHA] : (t[tb] || []).filter((f) => q.includes(`id=eq.${f.id}`))),
   };
 }
 await prueba('voz: la nota se transcribe, Kimiko enseña lo entendido y solo lanza Kimiko Cloud tras ✅ (una vez)', async () => {
@@ -665,8 +667,11 @@ await prueba('reel: publicar un post lanza el reel al momento (kimiko-reel con s
   assert.deepEqual(gh[0].cuerpo, { event_type: 'kimiko-reel', client_payload: { fecha: '2026-10-13' } });
   assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado .*\nhttps:\/\/quantum-holistic\.com\/blog\/2026-10-09-salvia\/\n🎬 El reel llega en unos minutos\./);
   gh = []; tg = [];
-  await atenderTelegram({ request: boton(32, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: null }, true), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
-  assert.equal(gh.length, 0); assert.match(tg.find((x) => x.metodo === 'sendMessage').cuerpo.text, /✅ Publicado[\s\S]*⏸ Reel en pausa/);
+  // F0-08: en pausa, ✅ Publicar ya no publica (ni lanza el reel): el worker solo contesta que está en pausa.
+  const enPausa = conPieza({ fecha: '2026-10-13', reel_url: null }, true);
+  await atenderTelegram({ request: boton(32, `pb:${POST.id}`), env, db: enPausa, fetchImpl: conGitHub(gh, webFalsa({ tg })) });
+  assert.equal(gh.length, 0); assert.ok(!enPausa.t.cambios.some((c) => c.tabla === 'blog_posts'));
+  assert.match(tg.find((x) => x.metodo === 'answerCallbackQuery').cuerpo.text, /⏸ Kimiko en pausa/);
   gh = []; tg = [];
   await atenderTelegram({ request: boton(31, `pb:${POST.id}`), env, db: conPieza({ fecha: '2026-10-13', reel_url: 'https://x/reel.mp4' }), fetchImpl: conGitHub(gh, webFalsa({ tg })) });
   assert.equal(gh.length, 0, 'el reel ya existe');
@@ -725,7 +730,7 @@ await prueba('cierre de órdenes: una orden abierta que falló pasa a error_ejec
   const c = decidirCierre({ id: ID_ORDEN, orden: { status: 'pendiente' }, jobStatus: 'failure' });
   assert.equal(c.status, 'error_ejecucion'); assert.match(c.copy, /falló.*NO está hecha/s);
   assert.equal(decidirCierre({ id: ID_ORDEN, orden: { status: 'en_curso' }, jobStatus: 'success' }).status, 'error_ejecucion');
-  assert.match(motivoCierre('success'), /sin cerrar/); assert.match(motivoCierre('cancelled'), /canceló/);
+  assert.match(motivoCierre('pausa'), /en pausa/); assert.match(motivoCierre('success'), /sin cerrar/); assert.match(motivoCierre('cancelled'), /canceló/);
 });
 await prueba('cierre de órdenes: no toca órdenes ya cerradas, ni ids raros, ni órdenes que no existen', async () => {
   for (const status of ['hecho', 'pr_abierto', 'bloqueado', 'para_claude', 'error_ejecucion']) assert.equal(decidirCierre({ id: ID_ORDEN, orden: { status }, jobStatus: 'failure' }), null);
@@ -842,6 +847,54 @@ await prueba('worker: si kimiko-orden responde o la pasa a Claude no se despiert
   for (const ruta of ['responder', 'para_claude']) { const r = await enviarOrden(ruta); assert.equal(r.despertada, false, ruta); assert.equal(r.recibido, false, ruta); }
   for (const ruta of ['cloud', '500', 'error']) { const r = await enviarOrden(ruta); assert.equal(r.despertada, true, ruta); assert.equal(r.recibido, true, ruta); }
   const f = await enviarOrden('cloud'); const t = f.llamadas.find((l) => l.url.includes('kimiko-orden')); assert.ok(t.cuerpo.id);
+  // F0-08: si kimiko-orden dice que Kimiko está en pausa, no se despierta a Kimiko Cloud y se avisa.
+  const pa = await enviarOrden('pausado'); assert.equal(pa.despertada, false); assert.equal(pa.recibido, false);
+  assert.ok(pa.llamadas.some((l) => l.url.endsWith('/sendMessage') && /⏸ Kimiko en pausa: la orden queda guardada sin lanzar/.test(l.cuerpo.text)));
+});
+
+// ── F0-08: con Kimiko en pausa el worker solo atiende /estado y /reanudar ──
+await prueba('freno: en pausa, órdenes, voz, botones y comandos no hacen nada; /estado y /reanudar sí; freno ilegible = pausa', async () => {
+  const s = await secretoWebhook('tok'); const fila = { nivel: 'N2', pausado: true, motivo: 'prueba', actualizado_at: '2026-10-17T09:00:00Z' };
+  const env = { ...envOrden };
+  const pet = (uid, cuerpo) => new Request('https://k/telegram', { method: 'POST', headers: { 'x-telegram-bot-api-secret-token': s }, body: JSON.stringify({ update_id: uid, ...cuerpo }) });
+  const msg = (extra) => ({ message: { message_id: 5, chat: { id: 42 }, from: { id: 42 }, ...extra } });
+  const lanzar = async (cuerpo, { ilegible = false } = {}) => {
+    const llamadas = []; const cambios = [];
+    const red = async (url, o = {}) => { llamadas.push({ url: String(url), cuerpo: o.body ? JSON.parse(o.body) : null }); return { ok: true, status: 200, json: async () => ({ ok: true, result: {} }), text: async () => '' }; };
+    const db = {
+      insertarSiNuevo: async (t, f) => f, insertar: async (t, f) => { cambios.push({ t, f }); return { id: 'aaaaaaaa-0000-4000-8000-000000000001', ...f }; },
+      actualizar: async (t, filtro, c) => { cambios.push({ t, c }); if (t === 'kimiko_autonomia') Object.assign(fila, c); },
+      seleccionar: async (t) => { if (t === 'kimiko_autonomia') { if (ilegible) throw new Error('Supabase 503'); return [fila]; } return []; },
+    };
+    await atenderTelegram({ request: pet(50, cuerpo), env, db, fetchImpl: red });
+    const fuera = llamadas.filter((l) => !l.url.includes('api.telegram.org'));
+    const textos = llamadas.filter((l) => l.url.endsWith('/sendMessage') || l.url.endsWith('/answerCallbackQuery')).map((l) => l.cuerpo.text);
+    return { fuera, textos, cambios };
+  };
+  for (const [que, cuerpo] of [['texto', msg({ text: 'Revisa el SEO' })], ['foto', msg({ photo: [{ file_id: 'f' }] })], ['voz', msg({ voice: { file_id: 'v', duration: 3 } })],
+    ['/hoy', msg({ text: '/hoy' })], ['/pieza', msg({ text: '/pieza salvia' })], ['/pausa', msg({ text: '/pausa otra vez' })],
+    ['publicar', { callback_query: { id: 'c', data: `pb:${POST.id}`, message: { message_id: 3, chat: { id: 42 } } } }],
+    ['fusionar PR', { callback_query: { id: 'c', data: 'prm:aaaaaaaa-0000-4000-8000-000000000001', message: { message_id: 3, chat: { id: 42 } } } }]]) {
+    const r = await lanzar(cuerpo);
+    assert.equal(r.fuera.length, 0, `${que}: no debe llamar a GitHub, kimiko-orden ni kimiko-voz`);
+    assert.deepEqual(r.cambios.map((c) => c.t), ['kimiko_updates'], `${que}: solo se apunta en kimiko_updates`); assert.equal(r.cambios[0].c.detalle.en_pausa, true);
+    assert.match(r.textos[0], /pausa/, que);
+  }
+  assert.match((await lanzar(msg({ text: 'Revisa el SEO' }))).textos[0], /solo atiendo \/estado y \/reanudar/);
+  const il = await lanzar(msg({ text: 'Revisa el SEO' }), { ilegible: true }); assert.equal(il.fuera.length, 0); assert.match(il.textos[0], /⛔ Freno: no pude leer/);
+  const e = await lanzar(msg({ text: '/estado' })); assert.match(e.textos[0], /^⏸ Kimiko en pausa/);
+  const re = await lanzar(msg({ text: '/reanudar@KimikoBot' })); assert.match(re.textos[0], /▶️ Kimiko en marcha/); assert.equal(fila.pausado, false);
+  // Ya en marcha, la misma orden sí se guarda y se lanza.
+  const ok = await lanzar(msg({ text: 'Revisa el SEO' })); assert.ok(ok.cambios.some((c) => c.t === 'kimiko_drafts')); assert.ok(ok.fuera.some((l) => l.url.includes('kimiko-orden')));
+});
+await prueba('freno: el tope de gasto pausa a Kimiko si gasto_mes_eur pasa de tope_mensual_eur; si no se lee, también', async () => {
+  assert.equal(topesSuperados([{ servicio: 'a', tope_mensual_eur: 0, gasto_mes_eur: null }, { servicio: 'b', tope_mensual_eur: 0, gasto_mes_eur: 0 }, { servicio: 'c', tope_mensual_eur: 5, gasto_mes_eur: 5 }]).length, 0);
+  assert.deepEqual(topesSuperados([{ servicio: 'a', tope_mensual_eur: 0, gasto_mes_eur: 0.01 }, { servicio: 'c', tope_mensual_eur: 5, gasto_mes_eur: 5.5 }]).map((l) => l.servicio), ['a', 'c']);
+  const cambios = []; const db = (limites) => ({ seleccionar: async (t) => (t === 'kimiko_gasto_limites' ? (limites instanceof Error ? Promise.reject(limites) : limites) : [{ nivel: 'N2', pausado: true }]), actualizar: async (t, f, c) => cambios.push({ t, c }) });
+  assert.equal(await aplicarTope(db([{ servicio: 'workers_ai', tope_mensual_eur: 0, gasto_mes_eur: null }])), null); assert.equal(cambios.length, 0);
+  assert.equal(await aplicarTope(db([{ servicio: 'gemini', tope_mensual_eur: 0, gasto_mes_eur: 1.2 }])), 'tope de gasto superado: gemini 1.2 € de 0 €');
+  assert.deepEqual([cambios[0].t, cambios[0].c.pausado, cambios[0].c.motivo], ['kimiko_autonomia', true, 'tope de gasto superado: gemini 1.2 € de 0 €']);
+  assert.match(await aplicarTope(db(new Error('Supabase 404'))), /no pude leer los topes de gasto \(Supabase 404\)/); assert.equal(cambios[1].c.pausado, true);
 });
 
 console.log(`\n${n} pruebas en verde`);

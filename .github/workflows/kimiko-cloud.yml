@@ -30,6 +30,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Freno (F0-08): con Kimiko en pausa, o si el freno no se puede leer, no se ejecuta la orden ni se abre PR.
+      # Falla a propósito: el paso de cierre marca la orden error_ejecucion y avisa por Telegram.
+      - name: Freno de Kimiko
+        id: freno
+        env:
+          SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
+          LLAVE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          r=$(curl -fsS --max-time 15 "$SUPABASE_URL/rest/v1/kimiko_autonomia?id=eq.1&select=pausado" -H "apikey: $LLAVE" -H "authorization: Bearer $LLAVE") || r=''
+          if [ "$r" != '[{"pausado":false}]' ]; then echo "::error::Kimiko en pausa o freno ilegible: no ejecuto la orden."; exit 1; fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -69,3 +80,4 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           KIMIKO_DRAFT_ID: ${{ github.event.client_payload.draft_id }}
           JOB_STATUS: ${{ job.status }}
+          EN_PAUSA: ${{ steps.freno.outcome == 'failure' }}

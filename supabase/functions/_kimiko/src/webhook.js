@@ -7,6 +7,7 @@
 //    Lo que no sabe leer (sticker, vídeo, documento sin texto…) ya no se ignora en silencio: lo dice.
 //  · Botones de PR de Kimiko Cloud: Fusionar / Cerrar (Kimiko Cloud nunca toca main por su cuenta).
 //  · Comandos /estado, /auditar, /manual, /hoy, /pausa y /reanudar (ver comandos.js).
+//  · Freno (F0-08): con Kimiko en pausa solo responden /estado y /reanudar; lo demás se contesta sin hacer nada.
 // Solo obedece al TELEGRAM_CHAT_ID; cualquier otro remitente se ignora y queda en kimiko_updates (ok=false).
 // Responde siempre 200 a Telegram (si no, reintenta). Pocas subpeticiones: el plan Free da 10 ms de CPU.
 import { secretoWebhook, responderBoton, cambiarBotones, enviarMensaje, enviarFoto, guardarFoto, BOTONES_PIEZA, BOTONES_VOZ, ponerTeclado } from '../lib/telegram.js';
@@ -14,7 +15,7 @@ import { pedirTranscripcion, MAX_SEGUNDOS } from '../lib/voz.js';
 import { publicarPieza, retirarPieza, estaPublicada, urlPost, urlFicha, urlImagen } from '../lib/publicar.js';
 import { despertarKimikoCloud, fusionarPR, cerrarPR, pedirReel } from '../lib/github.js';
 import { atenderComando } from './comandos.js';
-import { leerFreno } from '../lib/freno.js';
+import { leerFreno, SIGUE_EN_PAUSA, textoEnPausa } from '../lib/freno.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const ENTERO = /^[0-9]{1,9}$/;
@@ -151,13 +152,18 @@ async function triarOrden({ env, id, fetchImpl }) {
     });
     if (!r.ok) return 'cloud';
     const d = await r.json().catch(() => ({}));
-    return ['responder', 'para_claude'].includes(d?.ruta) ? d.ruta : 'cloud';
+    return ['responder', 'para_claude', 'pausado'].includes(d?.ruta) ? d.ruta : 'cloud';
   } catch { return 'cloud'; }
 }
 
 // Despierta a Kimiko Cloud con una orden ya guardada en kimiko_drafts (texto, foto o voz confirmada).
 async function lanzarOrden({ env, db, id, chatId, fetchImpl }) {
-  if (await triarOrden({ env, id, fetchImpl }) !== 'cloud') return true; // ya respondió o la dejó a Claude, y avisó a Kristian
+  const ruta = await triarOrden({ env, id, fetchImpl });
+  if (ruta === 'pausado') {
+    await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId, texto: '⏸ Kimiko en pausa: la orden queda guardada sin lanzar. Reenvíala después de /reanudar.', fetchImpl });
+    return false;
+  }
+  if (ruta !== 'cloud') return true; // ya respondió o la dejó a Claude, y avisó a Kristian
   try {
     await despertarKimikoCloud(env.GH_TOKEN, id, fetchImpl);
   } catch (e) {
@@ -228,6 +234,17 @@ export async function atenderTelegram({ request, env, db, fetchImpl = fetch }) {
   // Se registra TODO antes de actuar (también lo ignorado). Si ya existía, es un reintento de Telegram: no se repite.
   const fila = await db.insertarSiNuevo('kimiko_updates', { update_id: update.update_id, tipo: 'telegram', project_id: 'qh', ok: autorizado, detalle }, 'update_id');
   if (!fila || !autorizado) return OK();
+
+  // Freno (F0-08): en pausa (o si el freno no se lee) solo /estado y /reanudar. Nada se guarda, se publica ni se lanza.
+  if (!SIGUE_EN_PAUSA.test(String(msg?.text || ''))) {
+    const freno = await leerFreno(db);
+    if (freno.pausado) {
+      if (cq) await responderBoton(env.TELEGRAM_BOT_TOKEN, cq.id, '⏸ Kimiko en pausa: /reanudar para volver', fetchImpl);
+      else if (msg) await enviarMensaje({ token: env.TELEGRAM_BOT_TOKEN, chatId: msg.chat.id, texto: textoEnPausa(freno), fetchImpl });
+      await db.actualizar('kimiko_updates', `update_id=eq.${update.update_id}`, { detalle: { ...detalle, en_pausa: true } }).catch(() => {});
+      return OK();
+    }
+  }
 
   try {
     if (cq) {

@@ -1,5 +1,6 @@
 -- F0-08: freno de Kimiko. kimiko_autonomia (una sola fila) dice si lo automático está en pausa; /pausa y /reanudar la cambian.
--- kimiko_gasto_limites: cuota gratuita de cada servicio; el chequeo de las 06:00 avisa al llegar a aviso_pct.
+-- kimiko_gasto_limites: cuota gratuita de cada servicio; el chequeo de las 06:00 avisa al llegar a aviso_pct
+-- y el pase programado pausa a Kimiko si gasto_mes_eur pasa de tope_mensual_eur.
 -- Sin políticas: solo service_role (la Edge Function y el worker).
 create table if not exists public.kimiko_autonomia (
   id int primary key default 1 check (id = 1),          -- una sola fila
@@ -18,6 +19,7 @@ create table if not exists public.kimiko_gasto_limites (
   aviso_pct int not null default 80 check (aviso_pct between 1 and 100),
   tope_mensual_eur numeric not null default 0 check (tope_mensual_eur >= 0), -- 0 €: regla 4 de CLAUDE.md
   uso numeric,                                           -- último uso medido a mano; workers_ai se mide solo (kimiko_updates)
+  gasto_mes_eur numeric check (gasto_mes_eur >= 0),      -- gasto del mes, apuntado a mano; si pasa de tope_mensual_eur, Kimiko se pausa sola
   accion text not null,                                  -- qué hacer al llegar al aviso, para el móvil
   actualizado_at timestamptz not null default now()
 );

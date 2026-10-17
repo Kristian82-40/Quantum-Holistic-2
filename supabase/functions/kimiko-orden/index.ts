@@ -7,6 +7,7 @@
 import { decidirRuta } from '../_kimiko/lib/orden-interna.js';
 import { enviarMensaje } from '../_kimiko/lib/telegram.js';
 import { crearDb } from '../_kimiko/lib/db.js';
+import { leerFreno } from '../_kimiko/lib/freno.js';
 
 const json = (d: unknown, status = 200) => new Response(JSON.stringify(d), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -45,6 +46,8 @@ Deno.serve(async (req) => {
   if (typeof p.id !== 'string' || !UUID.test(p.id)) return json({ ruta: 'cloud', motivo: 'sin id válido' }, 400);
   const env = Deno.env.toObject();
   const db = crearDb({ url: env.SUPABASE_URL, serviceKey: llaveSecreta() });
+  // Freno (F0-08): en pausa (o si el freno no se lee) no se tría ni se lanza nada; el worker no despierta a Kimiko Cloud.
+  if ((await leerFreno(db)).pausado) return json({ ruta: 'pausado' });
   try {
     const [o] = await db.seleccionar('kimiko_drafts', `id=eq.${p.id}&select=id,status,chat_id,source_note`);
     if (!o || o.status !== 'pendiente') return json({ ruta: 'cloud', motivo: 'la orden no está pendiente' });

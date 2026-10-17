@@ -69,7 +69,7 @@ export const ponerWebhook = async (token, url, fetchImpl = fetch) =>
 export const infoWebhook = (token, fetchImpl = fetch) => llamar(token, 'getWebhookInfo', {}, fetchImpl);
 
 // Mensaje con teclado opcional (avisos de Kimiko Cloud con botones de PR, o petición de respuesta).
-export const enviarMensaje = ({ token, chatId, texto, teclado, forzarRespuesta = false, fetchImpl = fetch }) =>
+export const enviarMensaje = ({ token, chatId, texto, teclado = /** @type {any} */ (undefined), forzarRespuesta = false, fetchImpl = fetch }) =>
   llamar(token, 'sendMessage', {
     chat_id: chatId, text: texto.slice(0, 3900), disable_web_page_preview: true,
     ...(teclado ? { reply_markup: teclado } : forzarRespuesta ? { reply_markup: { force_reply: true } } : {}),
