@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PLANS } from '@/lib/config';
 import Button from '@/components/ui/Button';
 import styles from './Pricing.module.css';
@@ -9,15 +9,23 @@ export default function Pricing() {
   const [annual, setAnnual] = useState(false);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
+  // Si vuelve de Stripe con «atrás», el navegador restaura la página tal cual: reactivar los botones.
+  useEffect(() => {
+    const reactivar = (e: PageTransitionEvent) => { if (e.persisted) setLoadingId(null); };
+    window.addEventListener('pageshow', reactivar);
+    return () => window.removeEventListener('pageshow', reactivar);
+  }, []);
+
+  // Pro → tarjeta (Stripe). Crypto → BTCPay. El plan gratuito es un enlace a /registro.
   async function handleCheckout(planId: string) {
-    if (planId !== 'plan_crypto') return;
+    const paymentMethod = planId === 'plan_crypto' ? 'crypto' : 'card';
     try {
       setLoadingId(planId);
       const res = await fetch('/api/checkout', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
-          paymentMethod: 'crypto',
+          paymentMethod,
           billingCycle:  annual ? 'annual' : 'monthly',
         }),
       });
@@ -25,7 +33,7 @@ export default function Pricing() {
       if (!res.ok || !data.url) throw new Error(data.error || 'Checkout falló');
       window.location.href = data.url;
     } catch (err) {
-      console.error('[checkout/crypto]', err);
+      console.error(`[checkout/${paymentMethod}]`, err);
       alert(err instanceof Error ? err.message : 'Error iniciando pago');
       setLoadingId(null);
     }
@@ -98,16 +106,16 @@ export default function Pricing() {
                 })}
               </ul>
 
-              {plan.featured ? (
-                <Button variant="gold" fullWidth>
+              {plan.id === 'freemium' ? (
+                <Button as="a" href="/registro" variant="outline" fullWidth>
                   {plan.cta}
                 </Button>
               ) : (
                 <Button
-                  variant="outline"
+                  variant={plan.featured ? 'gold' : 'outline'}
                   fullWidth
                   onClick={() => handleCheckout(plan.id)}
-                  disabled={loadingId === plan.id}
+                  disabled={loadingId !== null}
                 >
                   {loadingId === plan.id ? 'Procesando…' : plan.cta}
                 </Button>
