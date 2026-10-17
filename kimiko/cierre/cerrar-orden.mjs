@@ -8,6 +8,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const ABIERTAS = ['pendiente', 'en_curso'];
 
 export function motivoCierre(jobStatus) {
+  if (jobStatus === 'pausa') return 'Kimiko estaba en pausa (freno) y no ejecutó la orden.';
   if (jobStatus === 'success') return 'Kimiko Cloud terminó sin cerrar la orden (no dejó estado ni resumen).';
   if (jobStatus === 'cancelled') return 'Kimiko Cloud se canceló antes de terminar.';
   return 'Kimiko Cloud falló antes de terminar (puede ser el límite de la suscripción de Claude o un error de la ejecución).';
@@ -49,7 +50,7 @@ export async function cerrarOrden({ url, llave, id, jobStatus, fetchImpl = fetch
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, KIMIKO_DRAFT_ID, JOB_STATUS } = process.env;
   try {
-    const r = await cerrarOrden({ url: SUPABASE_URL, llave: SUPABASE_SERVICE_ROLE_KEY, id: KIMIKO_DRAFT_ID, jobStatus: JOB_STATUS });
+    const r = await cerrarOrden({ url: SUPABASE_URL, llave: SUPABASE_SERVICE_ROLE_KEY, id: KIMIKO_DRAFT_ID, jobStatus: process.env.EN_PAUSA === 'true' ? 'pausa' : JOB_STATUS });
     console.log(r.cerrada ? `Orden marcada error_ejecucion: ${r.motivo}` : `Nada que cerrar: ${r.motivo}`);
   } catch (e) {
     console.log(`No se pudo cerrar la orden: ${e.message}`);
