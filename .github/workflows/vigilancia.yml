@@ -154,3 +154,21 @@ jobs:
           echo "$prs"
           jq -n --arg t "$prs" --arg u "${{ github.server_url }}/${{ github.repository }}/pulls?q=is%3Apr+is%3Aopen+author%3Aapp%2Fdependabot" '{accion:"avisar-ci", titulo:"📦 Dependabot: PR pendientes de revisar", texto:$t, url:$u}' \
             | curl -sS -X POST "$KIMIKO_URL" -H "apikey: $KEY" -H "content-type: application/json" -d @-
+
+  ejecutor:
+    # F0-09: el ejecutor de tareas (kimiko/tareas/run.sh) y su módulo de prueba `hola`, sin base ni llaves
+    # (un `supabase` falso), en Linux (bash 5) y en macOS (/bin/bash 3.2, el del Mac de Kristian).
+    if: github.event_name != 'schedule'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        if: runner.os == 'Linux'
+        run: shellcheck -S warning kimiko/tareas/run.sh kimiko/tareas/modulos/*.sh kimiko/tareas/pruebas/*.sh
+      - name: Prueba del módulo hola
+        run: /bin/bash kimiko/tareas/pruebas/hola.sh
