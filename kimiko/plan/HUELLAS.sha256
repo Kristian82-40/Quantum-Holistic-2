@@ -1,7 +1,10 @@
 # F0-15 · 17-oct-2026 · Huellas de las copias en este directorio (comprobar con: cd kimiko/plan && shasum -a 256 -c HUELLAS.sha256).
 # hoja-de-ruta-empresa.md:
 #   original (Descargas, la que Kristian reescribió a mano desde el Project): 02568a00eb050bfa43ecf18e5b4334bfe130f76b748c4c6e659188807d0ecaf6
-#   copia corregida (kimiko/plan/, I-01 a I-05 marcados como cerrados el 17-oct): la línea de abajo
-# code-encargo-orquestar-hoja-de-ruta.md: el archivo que Kristian pasó a Code el 15-oct, sin cambios.
-da19104cbf0af239af516a0a3c9ba80178940ce7586e2db8e406d1cca3acc94d  hoja-de-ruta-empresa.md
-24a0f6885faa16f318467a8b5bc03915e2ffbb26f15f3999cc031c3fa28b9fde  code-encargo-orquestar-hoja-de-ruta.md
+#   primera corrección (I-01 a I-05 cerrados, 17-oct), ya sustituida:          da19104cbf0af239af516a0a3c9ba80178940ce7586e2db8e406d1cca3acc94d
+#   copia corregida actual (kimiko/plan/, además F0-02 y «sí F0-01» al día): la línea de abajo
+# code-encargo-orquestar-hoja-de-ruta.md:
+#   original (el archivo que Kristian pasó a Code el 15-oct):                  24a0f6885faa16f318467a8b5bc03915e2ffbb26f15f3999cc031c3fa28b9fde
+#   recortado, ya no es idéntico al original (I-01 a I-05 sin detalle de cómo se explotaban): la línea de abajo
+f439b7d81451bdd160c2d29a334dcea0a0602e73fc31383f9c6ed2fd33400491  hoja-de-ruta-empresa.md
+c573b120c79fd147e226b3a3c8617141f4312270a045cfc315edc73e23717fe9  code-encargo-orquestar-hoja-de-ruta.md

@@ -30,7 +30,7 @@ Contenido: 0 Resumen · 1 Punto de partida · 2 Definición de hecho · 3 Fases 
 
 **Lo que necesito de ti ahora**, por este orden:
 
-1. «sí F0-01»: cerrar el agujero de `profiles` (1 min; es un cambio en la base de datos y necesita tu OK).
+1. ~~«sí F0-01»: cerrar el agujero de `profiles`~~ Hecho: F0-01 aplicado y comprobado el 17-oct.
 2. Contestar D1–D6 (10 min, sección 6): una letra por decisión o «defecto». Los valores por defecto están pensados para no gastar ni cobrar nada sin tu «sí».
 3. Pegar las instrucciones del Project (3 min, Anexo A) y corregir el precio anual en Vercel (3 min).
 
@@ -256,7 +256,7 @@ Tu tiempo en la fase: 32 min (≈ 0,5 h).
 **Pruebas y OK**
 
 - **F0-01** — *Tu OK: cambio en la base de datos.* Prueba: `has_column_privilege('authenticated','public.profiles','role','UPDATE')` da false para `role`, `plan`, `plan_expires_at`, `stripe_customer_id`, `verified`, `email` e `id`; en una transacción con `set local role authenticated`, actualizar `dosha` pasa y actualizar `role` falla con permission denied; `rollback` al final.
-- **F0-02** — *Tu OK: cambio en la base de datos.* Prueba: `anon` lee 9 plantas (no 57) y ninguna fila de `profiles`; una vista `terapeutas_publicos` expone solo nombre, foto, bio y especialidades; en `chat_usage` ni `anon` ni `authenticated` escriben directamente; la matriz de las 30 tablas queda en `kimiko/pruebas/permisos.sql`; `get_advisors` sin avisos nuevos.
+- **F0-02** — *Tu OK: cambio en la base de datos.* Hecho de verdad: Cerrado (F0-01/F0-02, comprobado 17-oct). `anon` lee 9 plantas (no 57). La ficha pública de terapeutas se cerró limitando las columnas de `profiles` que `anon` puede leer (nombre, foto, bio, especialidades, id, rol y verificado; sin correo ni id de Stripe); no existe la vista `terapeutas_publicos`. En `chat_usage` ni `anon` ni `authenticated` escriben directamente; la matriz de las 30 tablas queda en `kimiko/pruebas/permisos.sql`.
 - **F0-03** — *Tu OK: función en la base y workflow (delicado).* Prueba: `select * from kimiko_prueba_permisos()` devuelve 0 filas en producción y devuelve la fila de `role` en una transacción de prueba que reabre el permiso; el chequeo diario la llama y avisa a Telegram si hay filas; `vigilancia` levanta Supabase local con las migraciones, corre `kimiko/pruebas/permisos.sql` y falla en una rama que reabre el permiso de `role`. Si las migraciones no reconstruyen la base, queda anotado y se usa un volcado de esquema versionado.
 - **F0-04** — *Tu OK: despliegue en producción.* Prueba: `supabase functions download kimiko-diario` y `diff` con `main`: 0 diferencias; la acción `chequeo` responde 200; el post de las 06:00 UTC siguiente se escribe con el filtro legal nuevo (fila en `kimiko_updates`).
 - **F0-05** — Prueba: Archivo en `main` con D1 a D6 pendientes, la tabla de precedencia y la escalera N0 a N4; `qh-sesion` lo lista en el primer paso de lectura.

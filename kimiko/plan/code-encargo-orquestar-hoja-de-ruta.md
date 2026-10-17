@@ -130,10 +130,10 @@ Para cada uno: lee los comentarios del PR (la prueba exacta está escrita ahí),
 
 Con OK `db`, mismo patrón que en la sección 8 (primero la base, después el PR con la misma migración y texto genérico). Alcance:
 
-- `terapeutas`: la política «Public read verified terapeutas» expone la fila entera. Sustitúyela por una vista `terapeutas_publicos` solo con nombre, foto, biografía y especialidades; quita la lectura directa de `profiles` a `anon`.
-- `plants`: `plants_public_read` tiene `qual = true` (48 de 57 son borradores legibles). Déjala en `publicada and ficha_verificada`. **Antes**, busca con `grep` qué rutas leen `plants` con la llave pública o con la sesión de un usuario (`/diccionario`, `/diccionario/[slug]`, `/admin`) y comprueba que siguen funcionando; los borradores los leen Kimiko y `/admin` con la llave de servicio o con una función `es_admin()` `security definer`.
-- `chat_usage`: las dos políticas ALL permiten saltarse el límite de 5 mensajes y tocar contadores ajenos. Pasa la escritura a la ruta del servidor (llave de servicio) y quita DML directo a `anon` y `authenticated`.
-- Resto de tablas: `revoke insert, update, delete on all tables in schema public from anon, authenticated` y concede de vuelta **solo** lo que el navegador necesita (haz el inventario con `grep` de `.insert(`, `.update(`, `.delete(` y `.upsert(` sobre el cliente público). **Ojo:** la revocación general también quita el `grant update (dosha, updated_at)` de `profiles` que puso F0-01; repónlo en la misma migración. Ajusta los privilegios por defecto del rol con el que se crean las tablas (`alter default privileges in schema public revoke all on tables from anon, authenticated`) y comprueba con `pg_default_acl` que las tablas nuevas nacen cerradas.
+- `terapeutas` (I-02): la ficha pública de terapeutas verificados mostraba datos privados. Cerrado (F0-01/F0-02, comprobado 17-oct), limitando las columnas que `anon` puede leer (sin correo ni Stripe).
+- `plants` (I-03): las plantas en borrador se podían leer por la API. Cerrado (F0-01/F0-02, comprobado 17-oct).
+- `chat_usage` (I-04): el límite de 5 mensajes se podía saltar. Cerrado (F0-01/F0-02, comprobado 17-oct).
+- Resto de tablas (I-05): aceptaban escrituras de `anon` y `authenticated` y solo RLS las frenaba. Cerrado (F0-01/F0-02, comprobado 17-oct).
 - Guarda la matriz esperada de las 30 tablas en `kimiko/pruebas/permisos.sql` y comprueba `get_advisors` (sin avisos nuevos). Prueba de humo posterior: `/`, `/blog`, `/diccionario`, `/diccionario/hinojo`, `/login`, `/cuenta` (con sesión de prueba) y `/api/chat/usage` → sin errores.
 
 ### Paso 7. F0-07: la cola `kimiko_tareas` y `/hoy` (tras F0-02)
@@ -366,7 +366,7 @@ Prueba: <qué comprobaré y con qué>
 
 ## 8. F0-01 en detalle: cerrar la escalada de privilegios en `profiles`
 
-**Hallazgo (14-oct, comprobado dos veces).** Un usuario registrado puede actualizar, sobre su propia fila de `profiles`, las columnas `role`, `plan`, `plan_expires_at`, `stripe_customer_id`, `verified`, `email` e `id`: la política «Users update own profile» solo comprueba `auth.uid() = id`, no hay disparadores y el CHECK de `role` admite `admin`. `middleware.ts`, `lib/require-admin.ts` y `app/api/admin/*` confían en `profiles.role`; el chat confía en `plan`. La app solo escribe `dosha` (y `updated_at`) con la sesión del usuario (`app/cuenta/page.tsx:61` y `app/api/perfil/dosha/route.ts:21`); el aviso de Stripe y el de BTCPay escriben con la llave de servicio, que no se ve afectada.
+**Hallazgo (14-oct).** Un usuario registrado podía cambiar su propio rol, plan o verificación en `profiles` (I-01). Cerrado (F0-01/F0-02, comprobado 17-oct).
 
 1. **Recomprobar** (paso 1). Mira también si hay un disparador de alta y si su función es `security definer`: si no lo es, **no revoques `insert`** (deja solo `update`).
 2. **Pedir el OK** (7.5): «sí F0-01». Sin él no se toca la base.
