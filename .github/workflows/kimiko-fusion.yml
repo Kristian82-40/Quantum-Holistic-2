@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { sparse-checkout: kimiko/fusion }   # en horario y tras Vigilancia es siempre main
       - name: Revisar y fusionar
         env:
