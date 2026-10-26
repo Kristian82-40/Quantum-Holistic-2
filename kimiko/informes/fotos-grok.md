@@ -42,3 +42,23 @@ Fichas de las 4 plantas nuevas: sin dosis, con contraindicaciones y `revisarFich
 `publicada = false`, `ficha_verificada = false`. Insertadas por REST el 16-oct; el registro está en `kimiko/fotos-grok/lote-2/tanda-1.sql`.
 Hamamelis lleva «solo uso externo». Ganoderma, ginkgo y gordolobo: la ficha avisa de anticoagulantes (los dos primeros) y de colar los pelillos (gordolobo).
 Fotos copiadas sin Exif ni XMP (se han quitado los segmentos APP1, APP13 y COM del JPEG).
+
+## Lote 2, tanda 2 — IDs 24–33 (26-oct-2026, encargo v2, opción A)
+
+Con el ✅ de Kristian (26-oct). Las fotos van a Storage (`kimiko/plantas/grok/`) con `kimiko/fotos-grok/subir-lamina.py`, **solo en fichas que ya existen y están en borrador**. Sin fichas nuevas: las plantas sin ficha se saltan hasta que Kristian decida.
+Recibo: cada foto mirada a ojo antes de subirla; qué planta se ve y por qué.
+
+| grok_id | Planta | Resultado | Qué se ve y por qué |
+|---|---|---|---|
+| 24 | Llantén (Plantago major), `llantan` id 24 | **Subida** (26-oct, prueba) | Especie correcta y sin texto (revisión de la prueba con 1) |
+| 25 | Malva (Malva sylvestris) | Saltada | Sin ficha en `plants` |
+| 26 | Manzanilla (Matricaria chamomilla), `manzanilla` id 51 | **Subida** | Hoja: muy dividida en lacinias filiformes. Flor: cabezuelas con lígulas blancas y receptáculo amarillo cónico (típico de *M. chamomilla*). Sin texto. `image_cientifica_url` antes `/images/plants/manzanilla-cientifica.jpg`, `grok_id` antes `null` |
+| 27 | Melisa (Melissa officinalis) | Saltada | Sin ficha en `plants` |
+| 28 | Menta (Mentha spicata) | Saltada | Sin ficha en `plants` |
+| 29 | Muérdago (Viscum album), `muerdago` id 17 | **No subida** | Hoja: opuesta, coriácea y ovalada. Fruto: bayas blancas translúcidas. La especie es correcta, pero **lleva el rótulo «VISCUM ALBUM.»** dentro de la imagen. Que la mire Kristian |
+| 30 | Olivo (Olea europaea), `olivo` id 7 | **No subida (duda)** | Hoja (lanceolada) y fruto (drupas verdes y una negra) de olivo, pero **la flor está mal**: 5–6 pétalos, muchos estambres y una rosada; la del olivo tiene 4 pétalos blancos y 2 estambres. Que la mire Kristian |
+| 31 | Pasiflora (Passiflora incarnata) | Saltada | Sin ficha en `plants` |
+| 32 | Pensamiento (Viola tricolor) | Saltada | Sin ficha en `plants` |
+| 33 | Pino silvestre (Pinus sylvestris) | Saltada | Sin ficha en `plants` |
+
+Comprobación de la 26: URL pública → 200 `image/jpeg`, sin Exif; la ficha sigue en borrador (`publicada = false`).
