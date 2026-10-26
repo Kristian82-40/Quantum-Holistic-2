@@ -55,8 +55,8 @@ Recibo: cada foto mirada a ojo antes de subirla; qué planta se ve y por qué.
 | 26 | Manzanilla (Matricaria chamomilla), `manzanilla` id 51 | **Subida** | Hoja: muy dividida en lacinias filiformes. Flor: cabezuelas con lígulas blancas y receptáculo amarillo cónico (típico de *M. chamomilla*). Sin texto. `image_cientifica_url` antes `/images/plants/manzanilla-cientifica.jpg`, `grok_id` antes `null` |
 | 27 | Melisa (Melissa officinalis) | Saltada | Sin ficha en `plants` |
 | 28 | Menta (Mentha spicata) | Saltada | Sin ficha en `plants` |
-| 29 | Muérdago (Viscum album), `muerdago` id 17 | **No subida** (26-oct 11:10: aprobada la sustitución de Kristian, pero no está en Storage; falta que elija archivo) | Hoja: opuesta, coriácea y ovalada. Fruto: bayas blancas translúcidas. La especie es correcta, pero **lleva el rótulo «VISCUM ALBUM.»** dentro de la imagen. Que la mire Kristian |
-| 30 | Olivo (Olea europaea), `olivo` id 7 | **Subida** (26-oct, con el OK de Kristian pese a la flor; antes `/images/plants/olivo-cientifica.jpg`) | Hoja (lanceolada) y fruto (drupas verdes y una negra) de olivo, pero **la flor está mal**: 5–6 pétalos, muchos estambres y una rosada; la del olivo tiene 4 pétalos blancos y 2 estambres. Que la mire Kristian |
+| 29 | Muérdago (Viscum album), `muerdago` id 17 | **Subida** (26-oct 11:30): la sustitución de Kristian `ID 29 - Muerdago.jpg` (WebP pasado a JPEG), no la del rótulo. **Flor por corregir**: no se publica hasta nueva orden. Antes `/images/plants/muerdago-cientifica.jpg` | Hoja: opuesta, coriácea y ovalada. Fruto: bayas blancas translúcidas. La especie es correcta, pero **lleva el rótulo «VISCUM ALBUM.»** dentro de la imagen. Que la mire Kristian |
+| 30 | Olivo (Olea europaea), `olivo` id 7 | **Subida** (26-oct, con el OK de Kristian). **Flor por corregir**: no se publica hasta nueva orden. Antes `/images/plants/olivo-cientifica.jpg` | Hoja (lanceolada) y fruto (drupas verdes y una negra) de olivo, pero **la flor está mal**: 5–6 pétalos, muchos estambres y una rosada; la del olivo tiene 4 pétalos blancos y 2 estambres. Que la mire Kristian |
 | 31 | Pasiflora (Passiflora incarnata) | Saltada | Sin ficha en `plants` |
 | 32 | Pensamiento (Viola tricolor) | Saltada | Sin ficha en `plants` |
 | 33 | Pino silvestre (Pinus sylvestris) | Saltada | Sin ficha en `plants` |
@@ -72,12 +72,22 @@ Mismo método que la tanda 2. Solo fichas que existen y están en borrador.
 | 34 | Rabo de gato | No tocada | Lo decide Kristian |
 | 35 | Regaliz | Saltada | Sin ficha en `plants` |
 | 36 | Romero | Saltada | Sin ficha en `plants` |
-| 37 | Salvia (Salvia officinalis), `salvia` id 10 | **Retenida** | Hoja: gris verdosa, rugosa, ovada-lanceolada. Flor: bilabiada azul violeta en verticilos. Sin texto. Correcta, pero la ficha lleva la acuarela del 8-oct que Kristian está revisando |
+| 37 | Salvia (Salvia officinalis), `salvia` id 10 | **Subida** (26-oct 11:30, decisión de Kristian: en lugar de la acuarela) | Hoja: gris verdosa, rugosa, ovada-lanceolada. Flor: bilabiada azul violeta en verticilos. Sin texto. Antes la acuarela `kimiko/plantas/salvia-cientifica-muzpau56.jpg` |
 | 38 | Saúco (Sambucus nigra), `sauco` id 16 | **Subida** | Hoja: compuesta imparipinnada, folíolos aserrados. Flor: cimas de flores blanco crema. Fruto: bayas negras. Sin texto. Antes `/images/plants/sauco-cientifica.jpg` |
 | 39 | Tila | Saltada | Sin ficha en `plants` |
-| 40 | Tomillo (Thymus vulgaris), `tomillo` id 12 | **No subida** | Especie plausible (hoja lineal gris, flor lila), pero **lleva los rótulos «Styge» y «Drsyn»** |
-| 41 | Tribulus (Tribulus terrestris), `tribulus` id 50 | **No subida (duda)** | Hoja pinnada y flor amarilla de 5 pétalos bien, pero **el fruto es una bola llena de pinchos**; el de *T. terrestris* son 5 mericarpos en estrella con 2–4 espinas cada uno |
+| 40 | Tomillo (Thymus vulgaris), `tomillo` id 12 | **No subida** | Especie plausible (hoja lineal gris, flor lila), pero **lleva los garabatos «Styge» y «Drsyn»**. Kristian: se queda la acuarela del 8-oct |
+| 41 | Tribulus (Tribulus terrestris), `tribulus` id 50 | **Rechazada** (Kristian, 26-oct) | Hoja pinnada y flor amarilla de 5 pétalos bien, pero **el fruto es una bola llena de pinchos**; el de *T. terrestris* son 5 mericarpos en estrella con 2–4 espinas cada uno |
 | 42 | Tulsi (Ocimum tenuiflorum), `tulsi` id 41 | **Subida** | Hoja: ovada, aserrada, morada (tulsi Krishna). Flor: racimos finos con verticilos de flores pequeñas rosadas. Sin texto. Antes `/images/plants/tulsi-cientifica.jpg` |
 | 43 | Uña de gato | Saltada | Sin ficha en `plants` |
 
 Comprobación: URL pública de 38 y 42 → 200 `image/jpeg`; `/diccionario/sauco/` y `/diccionario/tulsi/` → 404 (borrador).
+
+## Revisión a petición de Kristian (26-oct 11:30)
+
+Regla de texto (Kristian): vale un rótulo bien escrito; se rechazan los garabatos sin sentido. Nada de esto se ha subido.
+
+| grok_id | Planta | Qué se ve | Propuesta |
+|---|---|---|---|
+| 23 | Lavanda (Lavandula angustifolia), `lavanda` id 11 | Hoja: lineal, estrecha, gris verdosa, en mata. Flor: espigas en verticilos de flores bilabiadas violeta sobre pedúnculos largos y sin hojas. Sin texto. Es *L. angustifolia* (no tiene el penacho de brácteas de *L. stoechas*) | Válida; mejor que la acuarela del 8-oct (que lleva una firma garabateada). Lo decide Kristian |
+| 44 | Valeriana (Valeriana officinalis), `valeriana` id 14 | Flor: cimas en corimbo de flores diminutas blanco rosado, bien. Raíz: haz de raicillas, bien. **Hoja dudosa:** pinnada, pero con folíolos anchos, ovados y muy dentados; los de *V. officinalis* son estrechos y lanceolados. Sin texto | Duda: no subir sin el OK de Kristian |
+| 22 | Jengibre (Zingiber officinale), `jengibre` id 37 | Rizoma y hojas lanceoladas, bien. **Inflorescencia mal:** una gran espiga con brácteas rojas y amarillas, propia de heliconia o de jengibre antorcha; la del jengibre es una espiga verde en forma de piña sobre un tallo aparte. Sin texto | Rechazo (igual que en la tanda 1) |

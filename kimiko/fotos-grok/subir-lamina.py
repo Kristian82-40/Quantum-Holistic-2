@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Sube una foto de Grok a Storage (kimiko/plantas/grok/) y la enlaza en su ficha, solo si es borrador.
 
-Uso: python3 kimiko/fotos-grok/subir-lamina.py <grok_id> <plants.id> <slug>
+Uso: python3 kimiko/fotos-grok/subir-lamina.py <grok_id> <plants.id> <slug> [archivo]
+[archivo]: otra imagen (JPEG o WebP) en lugar de entrada/grok-<grok_id>.jpg; se guarda como JPEG.
 La llave se lee de .env.local (SUPABASE_SERVICE_ROLE_KEY); nunca se imprime.
 No sobrescribe archivos de Storage ni toca fichas publicadas. Imprime el valor anterior para poder revertir.
 """
@@ -32,9 +33,9 @@ def pedir(metodo, url, llave, cuerpo=None, cabeceras=None):
         return e.code, e.read()
 
 
-def main(grok_id, planta_id, slug):
+def main(grok_id, planta_id, slug, archivo=None):
     base, llave = env()
-    origen = os.path.join(RAIZ, 'kimiko', 'fotos-grok', 'entrada', f'grok-{grok_id}.jpg')
+    origen = archivo or os.path.join(RAIZ, 'kimiko', 'fotos-grok', 'entrada', f'grok-{grok_id}.jpg')
     destino = f'plantas/grok/grok-{grok_id}-{slug}.jpg'
     publica = f'{base}/storage/v1/object/public/kimiko/{destino}'
 
@@ -76,6 +77,6 @@ def main(grok_id, planta_id, slug):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    if len(sys.argv) not in (4, 5):
         sys.exit(__doc__)
-    main(int(sys.argv[1]), int(sys.argv[2]), sys.argv[3])
+    main(int(sys.argv[1]), int(sys.argv[2]), sys.argv[3], *sys.argv[4:])
