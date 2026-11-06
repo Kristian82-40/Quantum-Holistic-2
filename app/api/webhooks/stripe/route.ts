@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       const sub = event.data.object as Stripe.Subscription;
       const customerId = String(sub.customer);
       await updateProfileByCustomerId(customerId, {
-        plan: 'free',
+        plan: 'freemium',   // 'free' no existe: profiles_plan_check solo admite freemium, pro y plan_crypto
         plan_expires_at: null,
       });
       notifyN8n('subscription.deleted', { subscriptionId: sub.id, customerId });
