@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Freno (F0-08): con Kimiko en pausa, o si el freno no se puede leer, no se ejecuta la orden ni se abre PR.
       # Falla a propósito: el paso de cierre marca la orden error_ejecucion y avisa por Telegram.
