@@ -17,6 +17,8 @@ tokens y las dependencias.
 1. ¿Copiamos la skill `schema` (179 líneas) a `.claude/skills/` y añadimos `Article` JSON-LD a `app/blog/[slug]`? Coste 0 €.
 2. Instagram: cuando haya cuenta Business y llaves, instalar `luminarylane/instagram-mcp-server` **en el chat** en modo lectura (métricas), fijado a un commit.
 
+- **Firecrawl** (órdenes `737e8837` y `a48c941e`, 14-oct): Kristian quiere integrarlo para que Claude pruebe y mejore las skills leyendo webs. No está instalado. Necesita una llave de firecrawl.dev (tiene plan gratuito con cupo; por encima, de pago) y decidir dónde se usa (sesiones de Code o Kimiko Cloud). Si se integra: la llave va a GitHub Secrets o a la sesión, nunca al repo; y antes, leer el código del plugin (regla de terceros de `CLAUDE.md` §5). Anotado el 6-nov.
+
 ## Proveedores de IA gratuitos (14-oct-2026)
 Solo anotación: **la cadena del blog no se toca** hasta que Kristian decida si Gemini se queda (su plan gratuito usa los datos para entrenar y no vale para usuarios del EEE).
 

@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 6-nov-2026, 16:15 (Madrid) · Claude (Code): encargo del 6-nov (precio anual 79 € verificado, posts recalculados, estado en vivo). Historial de revisiones: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 6-nov-2026, 18:30 (Madrid) · Claude (Code): encargo del 6-nov y «Resumen para Code, 6-nov noche» (34 de 34 posts pasan los controles, freno #82–#84 a main, cola de Kimiko atendida). Historial de revisiones: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -9,7 +9,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 |---|---|---|
 | ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
 | ✅ | Rutas `/`, `/blog`, `/diccionario`, `/terapeutas`, `/login` responden 200 | Chequeo de `kimiko-diario` del 8-oct 08:13 UTC (`kimiko_updates` tipo `chequeo`) |
-| ⚠️ | **22 de los 34 posts publicados no pasarían los controles de «✅ Publicar»** (6-nov): a los 22 les falta la sección de precauciones y a 16 además el aviso «consulta con un profesional»; **5 con promesas de salud** (aromaterapia, aceite de oliva, tres doshas, mindfulness, plantas para la ansiedad). Lista en [`kimiko/informes/posts-salud-2026-11-06.md`](kimiko/informes/posts-salud-2026-11-06.md). **No se ha retirado ni editado nada**: lo decide Kristian (F1-16/F1-17: copia antes, sin borrados) | `revisarPost` (`_kimiko/lib/publicar.js`) sobre los 34 `published` leídos por la API pública, 6-nov ~15:00 |
+| ✅ | **Los 34 posts publicados pasan los controles de «✅ Publicar»** (6-nov; antes fallaban 22). 5 con promesas de salud reescritas (aromaterapia, aceite de oliva, tres doshas, mindfulness, plantas para la ansiedad); en aromaterapia, además, «Árbol de Jade (Milagrosa)» era un error: pasa a árbol del té. A los 22 se les añadió «## Precauciones y contraindicaciones» adaptada al tema y el aviso de consultar con un profesional, en tandas de 5. Ninguno borrado ni despublicado. Copia previa de los 34 en `blog_posts_backup_20261106` (sin acceso público). Detalle en [`kimiko/informes/posts-salud-2026-11-06.md`](kimiko/informes/posts-salud-2026-11-06.md) | `revisarPost` en vivo (API pública) tras cada tanda: 22 → 12 → 7 → 2 → **0 fallan, 0 promesas** (6-nov); `/blog/silicio-…/` muestra «Precauciones y contraindicaciones» |
 | ✅ | Una ficha nueva de `plants` nace en borrador (`publicada` default `false`; antes `true` y salía sola en /diccionario) | migración `20261009140000` aplicada; `information_schema.columns` → `false` |
 | ⚠️ | Blog: 142 artículos, **34 publicados**, 92 `draft` y 16 `rejected`. Último publicado: 28-oct; `kimiko-diario` sigue escribiendo cada día (último, 6-nov 06:00 UTC) | `select status, count(*) from blog_posts` y `kimiko_updates` tipo `blog`, 6-nov |
 | ⚠️ | Diccionario: **9 de 57 plantas visibles** (`publicada and ficha_verificada`) | consulta a `plants`, 13-oct 11:25 |
@@ -82,7 +82,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | `kimiko-diario` desplegado = `main` (F0-04) | **Hoy no:** está desplegado desde la rama del #83 (lleva el chequeo de permisos). Vuelve a ser = `main` al fusionar #82 y #83 |
 | ⚠️ | Cola `kimiko_tareas` viva y `/hoy` responde en Telegram (F0-07, F0-13) | cola: 97 filas, 0 títulos en blanco. `/hoy` **nunca se ha usado**: 0 filas de `/hoy` en `kimiko_updates`. F0-13 es de Kristian |
 | ⚠️ | `DECISIONES.md`, instrucciones del Project completas y Notion marcado como histórico (F0-05, F0-06, F0-14) | `DECISIONES.md` ✅ (#74). F0-06 sin verificar: Code no tiene herramienta para leer el Project. F0-14: Kristian dijo «de momento no» (16-oct) |
-| ⚠️ | Freno de gasto y parada de Kimiko probados (F0-08) | **Choque:** la migración `20261017090000` **ya está aplicada** (`kimiko_autonomia` existe, `schema_migrations`, 6-nov) pero el **PR #84 sigue abierto sin fusionar**: lo desplegado ≠ repo. Sin verificar quién la aplicó ni si `/pausa` funciona. Lo decide Kristian |
+| ✅ | Freno de gasto y parada de Kimiko probados (F0-08) | Probado de punta a punta el 17-oct con Kristian delante (recibos en el PR #84). La migración la aplicó esa sesión: no había choque, `ESTADO.md` estaba atrasado. **6-nov:** las 4 migraciones de #82–#84 son idénticas a las de la base (md5 de `schema_migrations.statements` = md5 del archivo) y la cadena entra en `main` con el PR #95; 72 pruebas de Kimiko en verde. `kimiko-diario` v21 y `kimiko-orden` v4 desplegadas desde esa rama (17-oct) |
 | ⚠️ | Ejecutor v2 corre el módulo de prueba y deja recibo (F0-09) | `run.sh` probado en el Mac (15-oct). **Falta** la matriz Ubuntu + macOS (bash 3.2) en `vigilancia.yml` que pide la hoja: no existe |
 | ⚠️ | #66, #67 y #68 resueltos; precio anual corregido (✅ 6-nov, 79 €); D1–D6 contestadas (F0-10, F0-11, F0-12) | #66, #67 y #68 fusionados; D1–D7 contestadas el 15-oct en `DECISIONES.md`. **El anual sigue cobrando 89 €**: sesión de prueba creada desde `/api/checkout/` → `amount_total` 8900 (16-oct 18:35). F0-11 es de Kristian (panel de Vercel, 3 min). Sin verificar: dos órdenes reales seguidas (#66) |
 
@@ -107,7 +107,9 @@ Encargo en Docs («Encargo para Code - 6 nov 2026»).
 |---|---|---|
 | ✅ | 1. Redesplegar producción y comprobar el anual | Redespliegue de `5f293dc` (Vercel, READY 6-nov); sesión de checkout anual en modo prueba → 79,00 € por año (= `amount_total` 7900) |
 | ✅ | 2. Estado real | Filas de arriba al día. PRs abiertos: #84 (freno, ver choque), #87 (F0-09), #89 y #90 (borradores, fotos a Storage) y 4 de Dependabot (#24, #92, #93, #94). **#91 está fusionado** (27-oct); la ficha de brahmi sigue en borrador (`publicada` false). Plantas: 11 de 61 visibles. Crons `kimiko-diario`, `kimiko-reintento` y `kimiko-auditoria` activos. Cola de Kimiko: 3 `para_claude` (14-oct) y 3 `error_ejecucion` (14, 24 y 31-oct) sin atender. `kimiko_tareas`: 88 abiertas | GitHub API, `cron.job`, `plants`, `kimiko_drafts`, `kimiko_tareas` (6-nov) |
-| ⚠️ | 3. Posts de salud | 22 de 34 fallan; 5 con promesas (fila del blog arriba). Nada retirado |
+| ✅ | 3. Posts de salud | Hecho: 34 de 34 pasan (fila del blog arriba) |
+| ✅ | 5. Freno #84 | Cadena #82 → #83 → #84 traída a `main` en el PR #95 (ver fila F0-08) |
+| ⚠️ | 6. Cola de Kimiko (7 filas, no 6) | `f273ee22` (#68/#64) → `hecho`: ya fusionados y desplegados. `737e8837` y `a48c941e` (Firecrawl) → `hecho`: anotado en `kimiko/PETICIONES.md`, necesita llave y decisión. Saúco `6cf30e69`, eucalipto `c0cae1f6` y «jengibre» `beb25aa1` (el post es en realidad el del **boldo**) → `en_revision`: imagen rehecha con `kimiko-imagen` (Workers AI, 0 €) y puesta en el post, que sigue en borrador; el texto era correcto. Copia de las imágenes anteriores en `blog_posts_imagen_backup_20261106`. `6aa348c9` sigue `bloqueado`: la orden llegó cortada («…: Para») | `kimiko_drafts` y `blog_posts.image_url` consultados tras el cambio (6-nov); revisión a ojo de las 3 imágenes (Claude) |
 | ❓ | 4. F2-12 (5 fichas sin publicar) y F2-16 (limpieza de borradores) | Siguen abiertas; esperan a Kristian |
 
 ## Encargo del 14-oct (Claude Code, 08:35)

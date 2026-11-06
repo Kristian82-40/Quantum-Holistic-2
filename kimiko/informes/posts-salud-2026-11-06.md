@@ -14,7 +14,7 @@ Leyenda: P = falta «## Precauciones y contraindicaciones» · A = falta el avis
 | `mindfulness-basado-en-evidencia-cientifica-1780096804` | P A | Promesa de salud ("tratamiento") sobre "depresión": «*   **Impacto en la Salud Mental:** El mindfulness ha mostrado eficacia en el tr» |
 | `plantas-medicinales-ansiedad-valeriana-pasiflora-melisa-557009` | P A | Promesa de salud ("tratar") sobre "insomnio": «**Valeriana (Valeriana officinalis): El Calmante Clásico** La valeriana, una pla»<br>Promesa de salud ("aliviar") sobre "ansiedad": «Tradicionalmente, se utiliza para preparar infusiones que ayudan a conciliar el »<br>Promesa de salud ("tratamiento") sobre "ansiedad": «La herbolaria europea la ha empleado para el tratamiento de la ansiedad y el ins»<br>Promesa de salud ("aliviar") sobre "ansiedad": «En la herbolaria europea, se utiliza para aliviar la ansiedad, el estrés y la ir» |
 
-Ojo: en aromaterapia, «milagrosa» es el nombre de una planta (falso positivo probable); la frase de la lavanda sí cuenta.
+**Actualización 6-nov noche:** corregidos los 22 (frases reescritas en los 5 y sección de precauciones con aviso en todos). En aromaterapia no era un falso positivo: «Árbol de Jade (Milagrosa) … eficaz para tratar las infecciones cutáneas» era una promesa y una planta equivocada; pasa a árbol del té. `revisarPost` en vivo: 0 de 34 fallan. Copia previa en `blog_posts_backup_20261106`.
 
 ## Solo les falta estructura (17)
 
