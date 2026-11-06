@@ -1,10 +1,12 @@
-// Comandos de Telegram (B7): /estado, /auditar, /manual y /hoy. Solo lectura y sin IA; los atiende el worker.
+// Comandos de Telegram (B7): /estado, /auditar, /manual y /hoy (solo lectura) y /pausa y /reanudar (F0-08, el freno).
+// Sin IA; los atiende el worker.
 import { auditar, textoAuditoria } from '../lib/auditoria.js';
 import { leerRunbook, textoManual } from '../lib/runbook.js';
 import { leerHoy, textoHoy } from '../lib/tareas.js';
+import { leerFreno, cambiarPausa, textoFreno } from '../lib/freno.js';
 
 export const URL_ESTADO = 'https://raw.githubusercontent.com/Kristian82-40/Quantum-Holistic-2/main/ESTADO.md';
-export const AYUDA = '🌿 Comandos de Kimiko\n/estado — resumen de ESTADO.md y del último chequeo\n/auditar — auditoría de integridad ahora\n/manual — tareas del manual\n/hoy — tu lista de tareas de hoy\nCualquier otro mensaje es una orden para Kimiko Cloud.';
+export const AYUDA = '🌿 Comandos de Kimiko\n/estado — resumen de ESTADO.md y del último chequeo\n/auditar — auditoría de integridad ahora\n/manual — tareas del manual\n/hoy — tu lista de tareas de hoy\n/pausa <motivo> — parar todo lo automático\n/reanudar — volver a ponerlo en marcha\nCualquier otro mensaje es una orden para Kimiko Cloud.';
 
 // Resumen de ESTADO.md: fecha de revisión, recuento por icono y las filas rotas (❌).
 export function resumirEstado(md = '') {
@@ -17,7 +19,7 @@ export function resumirEstado(md = '') {
 }
 
 async function estado({ db, fetchImpl, hoy }) {
-  const partes = [];
+  const partes = [textoFreno(await leerFreno(db))];
   try {
     const r = await fetchImpl(URL_ESTADO, { signal: AbortSignal.timeout(8000) });
     partes.push(r.ok ? resumirEstado(await r.text()) : `📋 No pude leer ESTADO.md (${r.status})`);
@@ -38,6 +40,10 @@ export async function atenderComando({ texto, db, fetchImpl = fetch, hoy = new D
   if (cmd === '/estado') return estado({ db, fetchImpl, hoy });
   if (cmd === '/manual') return textoManual(await leerRunbook(db));
   if (cmd === '/hoy') return textoHoy(await leerHoy(db));
+  if (cmd === '/pausa' || cmd === '/reanudar') {
+    const motivo = String(texto).trim().split(/\s+/).slice(1).join(' ').slice(0, 200) || null;
+    try { return textoFreno(await cambiarPausa(db, cmd === '/pausa', cmd === '/pausa' ? motivo ?? 'pausa desde Telegram' : null)); } catch (e) { return `❌ No pude cambiar el freno: ${e.message}`; }
+  }
   if (cmd === '/auditar') {
     let a;
     try { a = await auditar({ db }); } catch (e) { return `❌ No pude auditar: ${e.message}`; }
