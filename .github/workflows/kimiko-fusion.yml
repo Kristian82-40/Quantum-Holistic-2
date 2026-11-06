@@ -34,7 +34,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { sparse-checkout: kimiko/fusion }   # en horario y tras Vigilancia es siempre main
+      # Freno (F0-08): con Kimiko en pausa, o si el freno no se puede leer, no se fusiona nada.
+      - name: Freno de Kimiko
+        id: freno
+        env:
+          SUPABASE_URL: https://vctetjugbvyllwjpxcxh.supabase.co
+          LLAVE: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          r=$(curl -fsS --max-time 15 "$SUPABASE_URL/rest/v1/kimiko_autonomia?id=eq.1&select=pausado" -H "apikey: $LLAVE" -H "authorization: Bearer $LLAVE") || r=''
+          if [ "$r" = '[{"pausado":false}]' ]; then echo "sigue=1" >> "$GITHUB_OUTPUT"; else echo "::notice::Kimiko en pausa o freno ilegible: no fusiono nada."; fi
       - name: Revisar y fusionar
+        if: steps.freno.outputs.sigue == '1'
         env:
           PAT: ${{ secrets.KIMIKO_GH_TOKEN }}
           GH_TOKEN_ACTIONS: ${{ github.token }}
