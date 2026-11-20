@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM = 'Quantum Holistic <hola@quantumholistic.com>';
+const FROM = 'Quantum Holistic <hola@quantum-holistic.com>';
 
 function getResend(): Resend {
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY no configurada');
