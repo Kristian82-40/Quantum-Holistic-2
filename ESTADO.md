@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 20-nov-2026 (Madrid) · Claude (Code): **correo del dominio en marcha** (F1-07 y F1-08 verificadas). Kristian ejecutó `bash kimiko/tareas/run.sh F1-07` en el Mac (plan B: ImprovMX → Gmail + Resend); PR #96 listo para fusionar. Historial de revisiones: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 20-nov-2026, tarde (Madrid) · Claude (Code): **F0-11 verificada** (el anual cobra 79 €). Imágenes con SiliconFlow en estudio: Kolors no está en la versión internacional (tareas F1-21/F1-22 en la cola). Antes, el mismo día: correo del dominio (F1-07/F1-08) y PR #96. Historial de revisiones: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
@@ -85,7 +85,7 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 | ⚠️ | `DECISIONES.md`, instrucciones del Project completas y Notion marcado como histórico (F0-05, F0-06, F0-14) | `DECISIONES.md` ✅ (#74). F0-06 sin verificar: Code no tiene herramienta para leer el Project. F0-14: Kristian dijo «de momento no» (16-oct) |
 | ✅ | Freno de gasto y parada de Kimiko probados (F0-08) | Probado de punta a punta el 17-oct con Kristian delante (recibos en el PR #84). La migración la aplicó esa sesión: no había choque, `ESTADO.md` estaba atrasado. **6-nov:** las 4 migraciones de #82–#84 son idénticas a las de la base (md5 de `schema_migrations.statements` = md5 del archivo) y la cadena entra en `main` con el PR #95; 72 pruebas de Kimiko en verde. `kimiko-diario` v21 y `kimiko-orden` v4 desplegadas desde esa rama (17-oct) |
 | ⚠️ | Ejecutor v2 corre el módulo de prueba y deja recibo (F0-09) | `run.sh` probado en el Mac (15-oct). **Falta** la matriz Ubuntu + macOS (bash 3.2) en `vigilancia.yml` que pide la hoja: no existe |
-| ⚠️ | #66, #67 y #68 resueltos; precio anual corregido (✅ 6-nov, 79 €); D1–D6 contestadas (F0-10, F0-11, F0-12) | #66, #67 y #68 fusionados; D1–D7 contestadas el 15-oct en `DECISIONES.md`. **El anual sigue cobrando 89 €**: sesión de prueba creada desde `/api/checkout/` → `amount_total` 8900 (16-oct 18:35). F0-11 es de Kristian (panel de Vercel, 3 min). Sin verificar: dos órdenes reales seguidas (#66) |
+| ⚠️ | #66, #67 y #68 resueltos; precio anual corregido (✅ 6-nov, 79 €); D1–D6 contestadas (F0-10, F0-11, F0-12) | #66, #67 y #68 fusionados; D1–D7 contestadas el 15-oct en `DECISIONES.md`. **F0-11 verificada el 20-nov:** `POST https://quantum-holistic.com/api/checkout/` anual → sesión `cs_test_b0g2Kww0…` con `price_1TMpvp…` «Quantum Pro Anual», `unit_amount` 7900 EUR/año, `amount_total` 7900 (Stripe API, sandbox). El 89 € del 16-oct quedó atrás con el cambio del 6-nov. Sin verificar: dos órdenes reales seguidas (#66) |
 
 ## Revisión del encargo del 13-oct (Claude Code, 19:00)
 Encargo: [`kimiko/encargo-code-revision-13oct.md`](kimiko/encargo-code-revision-13oct.md). Detalle en `kimiko/bitacora/2026-10-13-1900.md`.
