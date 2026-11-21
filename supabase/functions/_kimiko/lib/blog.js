@@ -3,7 +3,7 @@
 import { generarJSONGemini } from './gemini.js';
 import { generarJSON as generarJSONWorkersAI, MODELO_TEXTO } from './ia.js';
 import { generarJSONGroq } from './groq.js';
-import { revisarArticulo, conAvisoBlog, revisarClaims, conAviso } from './legal.js';
+import { revisarArticulo, asegurarPrecauciones, conAvisoBlog, revisarClaims, conAviso } from './legal.js';
 
 // Lista limpia y fija de categorías nuevas. Las filas antiguas (con variantes) no se tocan en esta fase.
 export const CATEGORIAS = ['Herbología', 'Nutrición', 'Ayurveda', 'Bienestar Holístico', 'Sabiduría'];
@@ -146,7 +146,7 @@ export async function crearArticulo({ env, ai, proyecto, fecha, slot = 1, recien
   let r = await pedirTexto({ env, ai, system, user, fetchImpl, hasta });
   const brutos = [r.bruto];
   let neuronas = r.neuronas || 0;
-  const evaluar = (d) => ({ legal: revisarArticulo({ titulo: d.titulo, extracto: d.extracto, contenido: d.contenido_markdown }), social: revisarClaims(`${d.social_titular}. ${d.social_copy}`), duplicada: esDuplicada(d.titulo, recientes) });
+  const evaluar = (d) => { d.contenido_markdown = asegurarPrecauciones(d.contenido_markdown); return { legal: revisarArticulo({ titulo: d.titulo, extracto: d.extracto, contenido: d.contenido_markdown }), social: revisarClaims(`${d.social_titular}. ${d.social_copy}`), duplicada: esDuplicada(d.titulo, recientes) }; };
   let ev = evaluar(r.datos);
   // Una corrección como mucho: cada vuelta gasta cuota gratuita y el borrador lo revisa Kristian igualmente.
   // Sin margen de tiempo no se corrige: mejor un borrador con avisos que ninguno.
