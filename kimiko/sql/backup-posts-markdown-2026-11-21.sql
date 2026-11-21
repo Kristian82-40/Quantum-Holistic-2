@@ -19,4 +19,4 @@ revoke all on public.blog_posts_markdown_backup_20261121 from anon, authenticate
 
 -- 21-nov: convertido SOLO «Dieta Mediterránea y Longevidad» (3d897192…) con markdownAHtml (_kimiko/lib/blog.js),
 -- con guarda `and md5(content) = '5cc778a5cb42356a6c315ccaf002ad31'` (el md5 de la copia). Resultado: md5 22ab062d….
--- Los otros 21 siguen en markdown hasta el sí de Kristian.
+-- Los otros 21: convertidos el 21-nov en 4 lotes con kimiko/sql/convertir-posts-markdown-2026-11-21.sql.
