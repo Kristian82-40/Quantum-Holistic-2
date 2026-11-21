@@ -16,3 +16,7 @@ revoke all on public.blog_posts_markdown_backup_20261121 from anon, authenticate
 -- update public.blog_posts b set content = k.content, updated_at = k.updated_at
 --   from public.blog_posts_markdown_backup_20261121 k
 --   where k.id = b.id and b.id = '<id>';
+
+-- 21-nov: convertido SOLO «Dieta Mediterránea y Longevidad» (3d897192…) con markdownAHtml (_kimiko/lib/blog.js),
+-- con guarda `and md5(content) = '5cc778a5cb42356a6c315ccaf002ad31'` (el md5 de la copia). Resultado: md5 22ab062d….
+-- Los otros 21 siguen en markdown hasta el sí de Kristian.
