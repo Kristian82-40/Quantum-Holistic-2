@@ -1,5 +1,5 @@
 ---
-estado: borrador (sin insertar en Supabase; espera el sí de Kristian)
+estado: borrador insertado en blog_posts como draft (21-nov, id a87b7eb0…), sin publicar
 title: "Infusiones para dormir: 6 plantas de la tradición"
 slug: 2026-11-21-infusiones-para-dormir-plantas-tradicionales
 excerpt: "Manzanilla, melisa, tila, lavanda, pasiflora y valeriana: qué dice la tradición de cada una para la noche y qué precauciones conviene conocer."
