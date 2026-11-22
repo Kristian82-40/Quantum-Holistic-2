@@ -9,6 +9,7 @@ node_modules/
 .env*.local
 
 # Archivos locales de configuración y herramientas
+.claude/settings.local.json
 
 # Datos de contenido sin procesar
 app/fichas-50.json
