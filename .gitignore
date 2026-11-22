@@ -33,3 +33,6 @@ assets/ritual-descanso.pdf
 # Logs locales de scripts (QA nocturna, agentes)
 logs/
 kimiko/worker/.wrangler/
+
+# Recibos locales de tareas de Kimiko (pueden llevar datos de la máquina): nunca al repo
+kimiko/tareas/recibos/
