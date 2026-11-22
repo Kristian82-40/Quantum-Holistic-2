@@ -9,7 +9,8 @@
  * Checks:
  * 1. Build: vercel deployment status
  * 2-4. Rutas: GET /diccionario, /producto/ritual-descanso, /regalo/primera-noche (no 5xx)
- * 5-6. Integridad Supabase: 52 plantas, 9 sin imagen (peligrosas), imágenes resolables
+ * 5-6. Integridad Supabase: hay plantas publicadas; ninguna de las 9 peligrosas publicada
+ *      ni con página en la web (404)
  * 7-9. Assets: Brand Bible, PDFs en assets/
  * 10. middleware.ts en raíz del repo (no en app/) + redirect 307 en /admin sin sesión
  * 11. canonical y og:url en producción == quantum-holistic.com (con guion)
@@ -44,6 +45,8 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_P
 // Usar SIEMPRE el dominio custom (sin protección) para checks de rutas reales.
 const PRODUCTION_URL = 'https://quantum-holistic.com';
 const NOTION_TOKEN = process.env.NOTION_API_KEY;
+// Mismas 9 que lib/plantas-peligrosas.ts y supabase/functions/_kimiko/lib/publicar.js.
+const PLANTAS_PELIGROSAS = ['aconito', 'datura', 'datura-metel', 'amanita-muscaria', 'cannabis', 'cornezuelo-centeno', 'beleno-negro', 'tejo', 'hierba-mora'];
 // Parent = "📓 Bitácora Quantum Holistic" (índice). Cada corrida crea una página hija nueva —
 // una bitácora por sesión, nunca se sobrescribe ni se acumula en una sola página.
 const NOTION_BITACORA_PARENT = '34137a0e-7b45-812e-9b1b-f866f38fd44e';
@@ -118,6 +121,14 @@ async function checkRoutes() {
     const passed = res.ok && res.status !== 500;
     logCheck(`GET ${route}`, passed, `status ${res.status}`);
   }
+
+  // Las 9 peligrosas no deben tener página en el diccionario público (la web responde 404).
+  const visibles = [];
+  for (const slug of PLANTAS_PELIGROSAS) {
+    const res = await fetch_safe(`${PRODUCTION_URL}/diccionario/${slug}`);
+    if (res.status !== 404) visibles.push(`${slug} (${res.status})`);
+  }
+  logCheck('Peligrosas sin página en la web', visibles.length === 0, visibles.length ? `responden: ${visibles.join(', ')}` : `las ${PLANTAS_PELIGROSAS.length} dan 404`);
 }
 
 async function checkSupabase() {
@@ -128,9 +139,10 @@ async function checkSupabase() {
   }
 
   try {
-    // Count plants — PostgREST tiene deshabilitadas las funciones agregado (count());
-    // el conteo exacto se pide via header Prefer + Content-Range de la respuesta.
-    const countRes = await fetch(`${SUPABASE_URL}/rest/v1/plants?select=id&limit=1`, {
+    // Plantas publicadas: sin número fijo (el diccionario crece). Se filtra por publicada=true
+    // para que el resultado sea el mismo con la llave anon (RLS) o con la service role.
+    // PostgREST tiene deshabilitado count(): el total sale del header Content-Range.
+    const countRes = await fetch(`${SUPABASE_URL}/rest/v1/plants?publicada=eq.true&select=id&limit=1`, {
       signal: AbortSignal.timeout(5000),
       headers: {
         'apikey': SUPABASE_KEY,
@@ -140,17 +152,17 @@ async function checkSupabase() {
     });
 
     if (!countRes.ok) {
-      logCheck('Plant count', false, `status ${countRes.status}`);
-      return;
+      logCheck('Plantas publicadas', false, `status ${countRes.status}`);
+    } else {
+      const contentRange = countRes.headers.get('content-range') || '';
+      const count = parseInt(contentRange.split('/')[1], 10) || 0;
+      logCheck('Plantas publicadas', count > 0, `${count} publicadas`);
     }
 
-    const contentRange = countRes.headers.get('content-range') || '';
-    const count = parseInt(contentRange.split('/')[1], 10) || 0;
-    logCheck('Plant count', count === 52, `${count}/52`);
-
-    // Check dangerous plants have placeholder
-    const dangerousRes = await fetch_safe(
-      `${SUPABASE_URL}/rest/v1/plants?image_cientifica_url=is.null&select=slug`,
+    // Las 9 peligrosas nunca se publican (kimiko/PROMPT.md, lib/plantas-peligrosas.ts).
+    // Falla si alguna aparece como publicada en Supabase.
+    const publicadas = await fetch_safe(
+      `${SUPABASE_URL}/rest/v1/plants?slug=in.(${PLANTAS_PELIGROSAS.join(',')})&publicada=eq.true&select=slug`,
       {
         headers: {
           'apikey': SUPABASE_KEY,
@@ -159,10 +171,11 @@ async function checkSupabase() {
       }
     );
 
-    if (dangerousRes.ok && dangerousRes.data.length === 9) {
-      logCheck('Dangerous plants (placeholder)', true, `${dangerousRes.data.length}/9 sin imagen`);
+    if (!publicadas.ok || !Array.isArray(publicadas.data)) {
+      logCheck('Peligrosas sin publicar (Supabase)', false, `status ${publicadas.status}`);
     } else {
-      logCheck('Dangerous plants (placeholder)', false, `${dangerousRes.data?.length ?? 'n/a'}/9 sin imagen`);
+      const slugs = publicadas.data.map((p) => p.slug);
+      logCheck('Peligrosas sin publicar (Supabase)', slugs.length === 0, slugs.length ? `publicadas: ${slugs.join(', ')}` : `ninguna de las ${PLANTAS_PELIGROSAS.length}`);
     }
   } catch (err) {
     logCheck('Supabase check', false, err.message);
