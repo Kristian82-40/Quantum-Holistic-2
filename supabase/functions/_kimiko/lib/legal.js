@@ -69,6 +69,20 @@ export function revisarArticulo({ titulo = '', extracto = '', contenido = '' }) 
   return { ok: problemas.length === 0, problemas };
 }
 
+// Red de seguridad (21-nov-2026): si el modelo se salta la sección obligatoria, se añade una genérica sin dosis
+// ni promesas, en vez de bloquear la pieza. Si el modelo sí la escribió, no se toca.
+export const PRECAUCIONES_GENERICAS = [
+  '## Precauciones y contraindicaciones',
+  '- En embarazo y lactancia, consulta siempre antes con un profesional sanitario.',
+  '- Si tomas medicación, pregunta antes: algunas plantas pueden interactuar con ella.',
+  '- Si tienes alergia a alguna planta de la misma familia botánica, evítala o consulta antes.',
+  '- Esta información es divulgativa y de tradición: no sustituye el consejo de un profesional sanitario.',
+].join('\n');
+
+export function asegurarPrecauciones(contenido = '') {
+  return SECCION_PRECAUCIONES.test(contenido) ? contenido : `${contenido.trim()}\n\n${PRECAUCIONES_GENERICAS}`;
+}
+
 export function conAvisoBlog(contenido = '') {
   return contenido.includes(AVISO_BLOG) ? contenido : `${contenido.trim()}\n\n*${AVISO_BLOG}*`;
 }
