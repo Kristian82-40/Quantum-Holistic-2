@@ -29,6 +29,9 @@ SECO = os.environ.get('SECO') == '1'
 ESPERA_MIN = int(os.environ.get('ESPERA_MIN', '10'))
 
 RAMAS = ('claude/', 'kimiko/')
+# Las ramas del encargo v2 (claude/v2-*) no se fusionan solas: pueden tocar
+# múltiples archivos sensibles a la vez y necesitan una revisión de Kristian.
+RAMAS_OK_MANUAL = ('claude/v2-',)
 PRUEBAS_OBLIGATORIAS = {'pruebas-kimiko', 'gitleaks'}
 MALAS = {'failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure', 'stale'}
 # Lo que nunca se fusiona solo: (patrón de ruta, motivo para Kristian).
@@ -106,6 +109,9 @@ def atender(pr):
         return 'fuera'
     if any(l['name'] == 'no-fusionar' for l in pr.get('labels', [])):
         return 'no-fusionar'
+    if any(rama.startswith(r) for r in RAMAS_OK_MANUAL):
+        avisar_una_vez(pr, 'v2', f'🔐 PR #{n} necesita tu OK (encargo v2)', f"«{pr['title']}»\nLas ramas claude/v2-* no se fusionan solas: revísalo y pulsa «Merge» cuando estés listo.")
+        return 'necesita OK (v2)'
     fecha = gh('GET', f'/commits/{sha}')['commit']['committer']['date']
     edad = (dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(fecha.replace('Z', '+00:00'))).total_seconds() / 60
     if edad < ESPERA_MIN:
