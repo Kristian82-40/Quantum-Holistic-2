@@ -2,7 +2,7 @@ import styles from './HowItWorks.module.css';
 
 const STEPS = [
   { num: '01', title: 'Crea tu perfil holístico',    desc: '10 preguntas sobre tu cuerpo, hábitos, entorno y objetivos. En 5 minutos, tu mapa de bienestar personalizado.' },
-  { num: '02', title: 'La IA analiza y conecta',      desc: 'Ciencia nutricional + herbología local + tus datos. El sistema construye un protocolo que ningún otro usuario tiene.' },
+  { num: '02', title: 'Encuentra tu equilibrio con plantas locales', desc: 'Herbología verificada, nutrición de temporada y tu perfil. Recomendaciones basadas en lo que crece cerca de ti y en tus objetivos reales.' },
   { num: '03', title: 'Recibe tu plan personalizado', desc: 'Plan nutricional semanal, plantas para tu zona y rituales adaptados a tu perfil, tu estación y tu objetivo real.' },
   { num: '04', title: 'Evoluciona con el tiempo',     desc: 'El sistema aprende contigo. Y cuando lo necesites, puedes reservar una sesión 1:1 con el especialista.' },
 ] as const;
@@ -11,7 +11,6 @@ const SAMPLE_PLAN = [
   { bg: 'sage', label: 'Lunes · Depuración',  body: 'Caldo de ortiga + arroz integral con sésamo' },
   { bg: 'gold', label: 'Planta recomendada',  body: 'Romero local · Digestión y claridad mental' },
   { bg: 'sage', label: 'Ritual matinal',      body: 'Agua tibia + limón + jengibre fresco rallado' },
-  { bg: 'pro',  label: 'Quantum Pro · Protocolo',body: 'Ciclo de depuración · semana 2 de 4' },
 ] as const;
 
 function Alambique() {
