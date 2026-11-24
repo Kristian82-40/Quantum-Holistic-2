@@ -95,3 +95,4 @@ Necesitan OK explícito de Kristian: `db` (cambios en la base de datos), `pago`,
 
 - 14-oct-2026: hoja de ruta v1 propuesta.
 - 15-oct-2026: Kristian responde D1 a D6 = A (con las salvedades de D1 y D5), aprueba D7 y F0-01, y aprueba de palabra las propuestas P1 (documento «modo sin Claude»), P2 (tope bajo de uso en el panel de Vercel, con su OK al ponerlo) y P3 (módulos del ejecutor).
+- 24-nov-2026: **backlog v1.1** — encargo de portal v2 y fábrica de agentes. Se añaden tareas con prefijo `V2-F1-xx` al backlog único (`kimiko_tareas`). Nueva infraestructura: `.claude/agents/` con 4 definiciones de agente (construir, mantener, gente, auditor) y `LIBRO_FALLOS.md`. Las tareas v1 pendientes se mantienen sin tocar. Semilla en `kimiko/tareas/semilla-v2-f1-2026-11-24.sql` (aplica Kristian con OK).
