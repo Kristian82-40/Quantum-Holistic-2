@@ -73,7 +73,7 @@ export default function PrivacidadPage() {
 
             <h2>6. Conservación de datos</h2>
             <p>
-              Conservamos tus datos mientras tu cuenta esté activa o mientras sean necesarios para prestarte el servicio. Los datos de perfil se eliminan en los 30 días siguientes a la baja de tu cuenta. Los datos de facturación se conservan 6 años (art. 30 del Código de Comercio), plazo que cubre los 4 años de prescripción tributaria (art. 66 de la Ley 58/2003). El email que nos dejes se conserva hasta que pidas su supresión y, como máximo, 24 meses sin actividad.
+              Conservamos tus datos mientras tu cuenta esté activa o mientras sean necesarios para prestarte el servicio. Puedes pedir en cualquier momento que eliminemos tu perfil o tu email escribiendo a nuestro correo de contacto. Los datos de facturación se conservan 6 años (art. 30 del Código de Comercio), plazo que cubre los 4 años de prescripción tributaria (art. 66 de la Ley 58/2003).
             </p>
 
             <h2>7. Tus derechos (RGPD)</h2>
