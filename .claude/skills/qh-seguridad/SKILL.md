@@ -43,7 +43,45 @@ description: Lista de comprobación de seguridad de Quantum Holistic antes de ca
   y su prueba en `pruebas.mjs`.
 - Kimiko no puede pagar, borrar datos, crear credenciales ni tocar `main` (`kimiko/PROMPT.md`, NÚCLEO).
 
+## 6. Texto prohibido en la web (honestidad de producto)
+Antes de cualquier PR que toque componentes, páginas o contenido estático, ejecutar
+**desde la raíz del repo** (no desde un subdirectorio) con todas las extensiones:
+
+```bash
+grep -rn \
+  --include="*.ts" --include="*.tsx" \
+  --include="*.js" --include="*.mjs" \
+  --include="*.json" \
+  --exclude-dir=node_modules \
+  --exclude-dir=.next \
+  --exclude-dir=.git \
+  --exclude="package-lock.json" \
+  -iE "meses gratis|inteligencia artificial|videollamada|papu-pro|\bIA\b|artificial intelligence|plan(es)? personalizado(s)?|personalizado|personalized|UK GDPR|ICO\b|n8n\b" \
+  . 2>/dev/null | sort
+```
+
+**Reglas:**
+- Entregar la salida completa del grep, sin filtrar. La clasificación (interno / user-facing) va en el análisis debajo, nunca sustituye a la salida.
+- Cadenas que deben estar limpias en texto de usuario: `meses gratis`, `inteligencia artificial`, `videollamada`, `artificial intelligence`, `personalizado` / `personalized` en promesas user-facing, `UK GDPR` / `ICO`, `papu-pro` fuera de variables de entorno.
+- `n8n` aceptable solo en comentarios internos de código.
+- `IA` aceptable en código de Kimiko (Edge Functions en `supabase/`) como término técnico interno.
+
+Hits aceptables conocidos (25-nov-2026):
+- `app/api/chat/route.ts:6`: `papu-pro:latest` como default de `OLLAMA_MODEL` (env var, no texto de usuario).
+- `app/api/chat/route.ts:14,166,179`: comentarios sobre n8n como servicio local de fallback.
+- `supabase/functions/_kimiko/`: múltiples referencias a `IA` como término técnico interno de los motores.
+- `app/terapeutas/papu/page.tsx:43,51`, `app/terapeuta/page.tsx:113`: "protocolos personalizados" en servicios reales del terapeuta (decisión pendiente de Kristian).
+- `app/terminos/page.tsx:77`: "contenido personalizado" en texto legal, no es promesa de feature.
+
+Si aparece algo fuera de esta lista, listarlo en el PR con justificación o arreglarlo antes de fusionar.
+
+**Verificar borrado antes de marcar "hecho":** tras borrar un archivo:
+- `ls <ruta>` → debe fallar con "no such file".
+- `grep -rn "import.*<nombre>" app/ components/ lib/ --include="*.ts" --include="*.tsx"` → 0 resultados.
+- Para directorios: `grep -rn "app/messages\|@/messages/app" --include="*.ts" --include="*.tsx"` → 0 resultados.
+
 ## Plantilla para el PR
 ```
 Seguridad: secretos en diff ✅ · advisors (seg/rend) ✅ sin nuevos · RLS ✅ · npm audit ✅ · gitleaks ✅
+Texto prohibido: grep desde raíz con .ts/.tsx/.js/.mjs/.json ✅ salida completa adjunta · borrados verificados ✅
 ```

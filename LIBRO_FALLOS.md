@@ -39,3 +39,29 @@ Formato de cada entrada:
 > Nunca desplegar código que llame a rutas locales (`/Volumes/`, `localhost`, `127.0.0.1`) desde funciones de servidor en producción. `gitleaks` no detecta esto; añadir un grep de `/Volumes/` y `localhost` en `vigilancia.yml` como check de CI.
 
 ---
+
+## F-003 · Informe de tarea incorrecto — archivos eliminados sin verificar · 25-nov-2026
+
+**Qué falló:** La sesión anterior reportó que `Testimonials.tsx` y `ProfileCTA.tsx` habían sido borrados, pero sus archivos `.module.css` seguían en el repo. Se marcó la tarea como hecha sin comprobarlo con `ls` ni `git status`.
+
+**Causa:** La sesión asumió que "borrar el .tsx" era sinónimo de "limpiar el componente". No ejecutó ninguna comprobación tras el borrado.
+
+**Arreglo:** Commit `415b19d` en PR #109 — borrados `Testimonials.module.css` y `ProfileCTA.module.css`.
+
+**Regla / receta:**
+> Tras cualquier `rm`, confirmar con `ls <ruta>` que el archivo ya no existe. Incluir esta comprobación antes de marcar la tarea como completada. Ver también §6 de `qh-seguridad`.
+
+---
+
+## F-004 · CTA a ruta inexistente en contenido estático · 25-nov-2026
+
+**Qué falló:** `lib/posts.ts` (contenido del blog) tenía un CTA a `/#profile` — el formulario holístico que nunca se construyó — y prometía "te diseñamos un protocolo personalizado". La auditoría inicial solo cubrió `app/` y `components/`, no `lib/`.
+
+**Causa:** Los archivos `lib/` con contenido estático (posts) no se incluyeron en el grep de auditoría.
+
+**Arreglo:** Commit `415b19d` en PR #109 — CTA cambiado a `/chat`.
+
+**Regla / receta:**
+> El grep de texto prohibido debe incluir siempre `lib/` además de `app/` y `components/`. Ver `qh-seguridad §6` para el comando completo.
+
+---
