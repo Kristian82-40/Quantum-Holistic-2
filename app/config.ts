@@ -44,7 +44,7 @@ export const PLANS = [
     price:    9,
     priceAnnual: 79,
     period:   '/ mes',
-    note:     'o €79/año — 2 meses gratis',
+    note:     '',
     featured: true,
     features: [
       { text: 'Protocolo depurativo mes a mes',         highlight: true },
