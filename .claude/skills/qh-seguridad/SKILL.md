@@ -43,7 +43,37 @@ description: Lista de comprobación de seguridad de Quantum Holistic antes de ca
   y su prueba en `pruebas.mjs`.
 - Kimiko no puede pagar, borrar datos, crear credenciales ni tocar `main` (`kimiko/PROMPT.md`, NÚCLEO).
 
+## 6. Texto prohibido en la web (honestidad de producto)
+Antes de cualquier PR que toque componentes, páginas o contenido estático, ejecutar:
+
+```bash
+grep -rn \
+  "meses gratis\|inteligencia artificial\|videollamada\|papu-pro\|n8n\b\|\bIA\b\|UK GDPR\|ICO\b" \
+  app/ components/ lib/ \
+  --include="*.ts" --include="*.tsx" --include="*.json" \
+  | grep -v node_modules | grep -v ".next"
+```
+
+Cadenas que deben salir limpias en archivos de usuario:
+- `meses gratis` — ninguna (el toggle anual no existe en la UI).
+- `inteligencia artificial` — ninguna en texto de cara al usuario.
+- `videollamada` — solo si existe como feature real.
+- `papu-pro` — solo en variables de entorno/modelo, nunca en texto de usuario.
+- `n8n` — solo en comentarios internos de código, nunca en privacidad ni emails.
+- `UK GDPR` / `ICO` — la empresa es española → RGPD y AEPD.
+
+Hits aceptables (backend / no usuario):
+- `app/api/chat/route.ts`: referencias a n8n como fallback de modelo (env-var gated, comentado).
+- `lib/claude.ts`: nombre de modelo `papu-pro:latest` como default de env var.
+
+Si aparece algo nuevo, listarlo en el PR con la justificación o arreglarlo en el mismo PR.
+
+**Verificar borrado antes de marcar "hecho":** tras `rm <archivo>`:
+- `ls <ruta>` → debe fallar con "no such file".
+- `grep -rn "import.*<nombre>"` → no debe encontrar importaciones.
+
 ## Plantilla para el PR
 ```
 Seguridad: secretos en diff ✅ · advisors (seg/rend) ✅ sin nuevos · RLS ✅ · npm audit ✅ · gitleaks ✅
+Texto prohibido: grep limpio (app/ components/ lib/) ✅ · borrados verificados ✅
 ```

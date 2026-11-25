@@ -46,7 +46,33 @@ Cada skill es una forma de trabajar ligada a una herramienta real. Si la herrami
 Skills propias de Claude (8-oct-2026), en `.claude/skills/` (Claude Code las carga solo; para el chat, subir el `.zip`). Solo sirven a Claude, no a Kimiko:
 `qh-sesion` (tokens e integridad; sustituye a `flow-state`), `qh-cambio-seguro` (plan → rama → prueba → PR), `qh-diseno` (tokens de marca y móvil primero), `qh-seguridad` (checklist antes de cada PR), `qh-editorial` (salud + SEO de cada post) y `qh-kimiko-despliegue` (13-oct: desplegar y probar Edge Functions de Kimiko, PR por API y cierre de sesión).
 
-## 5. Conectores
+## 5. Método operativo (sesiones de edición)
+Aplica siempre que la tarea sea editar archivos de la web o hacer limpieza:
+
+1. **Skills primero:** cargar `qh-sesion`, `qh-cambio-seguro` y `qh-seguridad` al inicio.
+2. **Ahorra tokens:** `grep -n` para localizar la línea antes de abrir el archivo; `git diff --stat` antes del commit; lecturas parciales en archivos > 300 líneas; delega búsquedas amplias a un subagente.
+3. **Evidencia antes y después de cada punto:** grep que muestra el problema → edición → grep que confirma que desapareció.
+4. **Nada es "hecho" sin comprobación en el repo:**
+   - Borrar un archivo: `ls <ruta>` tras el `rm` confirma que ya no existe.
+   - Verificar imports antes de borrar: `grep -rn "<nombre>" app/ components/ lib/` cubre todos los directorios.
+5. **Grep final antes del commit** (incluye `lib/`, no solo `app/` y `components/`):
+   ```
+   grep -rn "meses gratis|inteligencia artificial|videollamada|papu-pro|n8n" \
+     app/ components/ lib/ --include="*.ts" --include="*.tsx" --include="*.json"
+   ```
+6. **Un commit por tarea**, con mensaje claro que liste los puntos resueltos.
+7. **Fallos:** anotar en `LIBRO_FALLOS.md` la causa y la comprobación que lo evita.
+
+## 6. Compact Instructions
+Al compactar el contexto, conserva siempre:
+- Rama activa y número de PR; si tiene etiqueta `no-fusionar`.
+- Restricciones de la tarea: no fusionar, no SQL, no main, no producción sin ✅.
+- Archivos editados en la sesión y qué cambió en cada uno (una línea por archivo).
+- Puntos pendientes de ✅ de Kristian (propuestas de texto, plazos legales, etc.).
+- Riesgos abiertos o hallazgos que no se pudieron arreglar en esta sesión.
+Descarta: logs de build, greps intermedios, razonamientos y explicaciones que ya llevaron a una decisión tomada.
+
+## 7. Conectores
 - Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions). Telegram, a través de Kimiko.
 - Disponibles pero sin probar en este proyecto: Gmail, Google Drive, Google Calendar, Notion.
 - No conectados: n8n, Instagram Graph API (faltan llaves de cuenta Business), Stripe en vivo.
