@@ -41,7 +41,7 @@ function hasSubmittedEmail(): boolean {
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: '¡Hola! Soy papu-pro, tu asistente holístico. ¿En qué te puedo ayudar hoy?' },
+    { role: 'assistant', text: '¡Hola! Soy el asistente de Quantum Holistic. Consulta sobre plantas, nutrición y bienestar. ¿En qué te puedo ayudar hoy?' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -130,7 +130,7 @@ export default function ChatPage() {
                   Guarda tus consultas sin límite
                 </p>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px', fontWeight: 300, lineHeight: 1.6 }}>
-                  Déjanos tu email y te enviamos una guía de plantas para tu dosha + acceso anticipado a Quantum Pro.
+                  Déjanos tu email y te enviamos una guía de plantas para tu dosha + novedades de Quantum Pro.
                 </p>
                 <form onSubmit={submitLead} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <input
@@ -158,7 +158,7 @@ export default function ChatPage() {
       <div style={s.header}>
         <a href="/" style={s.back}>← Inicio</a>
         <div>
-          <p style={s.headerTitle}>papu-pro</p>
+          <p style={s.headerTitle}>Asistente Quantum</p>
           <p style={s.headerSub}>Asistente holístico · Quantum Holistic</p>
         </div>
         <div style={{ ...s.dot, background: loading ? 'var(--gold)' : '#4caf50' }} />
@@ -196,7 +196,7 @@ export default function ChatPage() {
             Has usado tus {FREE_LIMIT} mensajes gratuitos de hoy
           </p>
           <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px', fontWeight: 300, lineHeight: 1.6 }}>
-            Vuelve mañana · o hazte Pro para conversaciones ilimitadas, planes personalizados y acceso prioritario.
+            Vuelve mañana · o únete a la lista de espera de Quantum Pro.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/#pricing" style={{ padding: '12px 28px', background: 'var(--sage)', color: '#fff', textDecoration: 'none', fontSize: '13px', letterSpacing: '0.1em', fontFamily: 'var(--font-serif)' }}>

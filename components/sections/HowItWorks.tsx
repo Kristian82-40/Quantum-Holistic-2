@@ -1,10 +1,10 @@
 import styles from './HowItWorks.module.css';
 
 const STEPS = [
-  { num: '01', title: 'Crea tu perfil holístico',    desc: '10 preguntas sobre tu cuerpo, hábitos, entorno y objetivos. En 5 minutos, tu mapa de bienestar personalizado.' },
-  { num: '02', title: 'Encuentra tu equilibrio con plantas locales', desc: 'Herbología verificada, nutrición de temporada y tu perfil. Recomendaciones basadas en lo que crece cerca de ti y en tus objetivos reales.' },
-  { num: '03', title: 'Recibe tu plan personalizado', desc: 'Plan nutricional semanal, plantas para tu zona y rituales adaptados a tu perfil, tu estación y tu objetivo real.' },
-  { num: '04', title: 'Evoluciona con el tiempo',     desc: 'El sistema aprende contigo. Y cuando lo necesites, puedes reservar una sesión 1:1 con el especialista.' },
+  { num: '01', title: 'Explora el diccionario',           desc: 'Consulta las plantas, sus usos tradicionales y sus precauciones. Sin registrarte.' },
+  { num: '02', title: 'Encuentra tu equilibrio natural',  desc: 'Plantas, tradición y nutrición de temporada.' },
+  { num: '03', title: 'Busca y descubre',                 desc: 'Escribe lo que te interesa en el chat holístico: una planta, un síntoma o una época del año. Respuestas del diccionario y el blog.' },
+  { num: '04', title: 'Habla con el especialista',        desc: 'Cuando lo necesites, reserva una sesión 1:1 con Kristian (65 €, disponible en /terapeutas/papu).' },
 ] as const;
 
 const SAMPLE_PLAN = [
@@ -57,14 +57,14 @@ export default function HowItWorks() {
           </div>
           <div className={styles.extraLines}>
             <div className={styles.extraLine}><span>🧬</span><span>Tradición herbolaria explicada con fuentes citadas</span></div>
-            <div className={styles.extraLine}><span>🌐</span><span>Inteligencia artificial al servicio de tu bienestar</span></div>
+            <div className={styles.extraLine}><span>🌿</span><span>Herbología local al servicio de tu bienestar</span></div>
           </div>
         </div>
 
         <div className={styles.visual}>
           <div className={styles.alambiqueWrap} aria-hidden><Alambique /></div>
           <div className={`${styles.planCard} reveal`}>
-            <p className={styles.planTag}>Tu plan · Esta semana</p>
+            <p className={styles.planTag}>Ejemplo · Esta semana</p>
             {SAMPLE_PLAN.map((row) => (
               <div key={row.label} className={`${styles.planRow} ${styles[`row_${row.bg}`]}`}>
                 <strong>{row.label}</strong>

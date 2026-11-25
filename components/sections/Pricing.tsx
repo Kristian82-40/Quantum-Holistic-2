@@ -99,7 +99,7 @@ export default function Pricing() {
               </ul>
 
               {plan.featured ? (
-                <Button variant="gold" fullWidth>
+                <Button variant="gold" fullWidth disabled={plan.cta === 'Próximamente'}>
                   {plan.cta}
                 </Button>
               ) : (
@@ -107,7 +107,7 @@ export default function Pricing() {
                   variant="outline"
                   fullWidth
                   onClick={() => handleCheckout(plan.id)}
-                  disabled={loadingId === plan.id}
+                  disabled={loadingId === plan.id || plan.cta === 'Próximamente'}
                 >
                   {loadingId === plan.id ? 'Procesando…' : plan.cta}
                 </Button>

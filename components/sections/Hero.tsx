@@ -35,13 +35,12 @@ export default function Hero() {
         </h1>
 
         <p className={styles.desc}>
-          Planes nutricionales km0, herbología y bienestar personalizado,
-          potenciados por inteligencia artificial y arraigados en la
-          sabiduría de la tierra.
+          Herbología, nutrición de kilómetro cero y bienestar holístico
+          arraigados en la sabiduría de la tierra.
         </p>
 
         <div className={styles.actions}>
-          <Button as="a" href="/#pricing">Descubrir mi perfil</Button>
+          <Button as="a" href="/#pricing">Ver los planes</Button>
           <a href="#how" className={styles.textLink}>
             Ver cómo funciona <span className={styles.arrow}>→</span>
           </a>

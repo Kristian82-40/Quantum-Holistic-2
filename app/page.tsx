@@ -15,7 +15,7 @@ import RomeroPopup from '@/components/ui/RomeroPopup';
 import QuoteRail from '@/components/ui/QuoteRail';
 
 export const metadata: Metadata = {
-  title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar con IA',
+  title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar',
 };
 
 export default function HomePage() {

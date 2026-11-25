@@ -74,7 +74,9 @@ export default async function DiccionarioPage() {
               {plants.length} plantas con su tradición y simbolismo.{' '}
               {verificadas === 0
                 ? 'Las fichas científicas están en revisión y no se publican hasta verificarlas una a una.'
-                : `${verificadas} de ${plants.length} tienen ya la ficha científica verificada; el resto está en revisión.`}
+                : verificadas === plants.length
+                  ? `Las ${plants.length} fichas científicas están verificadas.`
+                  : `${verificadas} de ${plants.length} tienen ya la ficha científica verificada; el resto está en revisión.`}
             </p>
           </div>
 
