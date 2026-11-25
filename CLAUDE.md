@@ -1,80 +1,47 @@
 # CLAUDE.md — reglas fijas de Quantum Holistic
 
-Lo lee cualquier sesión de Claude (chat, Claude Code o Kimiko Cloud) **antes de tocar nada**.
-El estado vivo está en [`ESTADO.md`](ESTADO.md). Si este archivo y la memoria de una sesión no coinciden, manda este.
-La hoja de ruta y el encargo vigentes están en [`kimiko/plan/`](kimiko/plan/) (copias del Project del 16-oct; huellas en `HUELLAS.sha256`): mandan sobre el adjunto del Project.
+Estado vivo → `ESTADO.md` · Encargo → `kimiko/plan/` · Fallos → `LIBRO_FALLOS.md`
+Contradicción con otra memoria → manda este archivo.
 
-## 1. Quién manda
-- **Kristian** decide. Desde el 9-oct los PR de ramas `claude/*` y `kimiko/*` se fusionan solos cuando las pruebas están en verde (`kimiko-fusion.yml`); Kristian solo aprueba los delicados (base de datos, pagos, reglas de Kimiko, el propio fusionador), que le llegan por Telegram. Los de Dependabot no se fusionan solos.
-- **Kimiko** es el responsable operativo del proyecto: publica, vigila y avisa.
-- **Claude Code / chat** ayuda a Kimiko cuando algo le supera, y deja todo escrito aquí y en `ESTADO.md`.
+## 1. Quién decide
+Kristian decide. PRs de `claude/*` y `kimiko/*` se fusionan solos cuando las pruebas están en verde
+(`kimiko-fusion.yml`; verificar: `gh workflow view kimiko-fusion.yml`).
+Kristian aprueba DB, pagos, reglas de Kimiko y el fusionador. Llega por Telegram.
 
-## 2. Arquitectura congelada (aprobada el 7-oct-2026)
-No se cambia de plataforma sin un "sí" explícito de Kristian en el chat.
+## 2. Arquitectura congelada (aprobada 7-oct-2026)
+Sin cambios de plataforma sin "sí" explícito de Kristian.
 
-| Pieza | Dónde vive | Código |
+| Pieza | Plataforma | Código |
 |---|---|---|
-| Web **quantum-holistic.com** (el nombre «q-h.com» es solo un apodo: ese dominio no es nuestro) | Vercel, proyecto `quantum-holistic-2`, rama `main`. Dominio comprado en Vercel (1-may-2026, renovación automática), DNS en Vercel | este repo (Next.js 14) |
-| Base de datos y memoria | Supabase `vctetjugbvyllwjpxcxh` | tablas `kimiko_*`, `blog_posts`, `plants` |
-| Trabajo diario (blog + redes + vigilancia) | Supabase Edge Function `kimiko-diario`, lanzada por `pg_cron` | `supabase/functions/kimiko-diario` + `_kimiko/` |
-| Imágenes | Edge Functions `kimiko-imagen` (Workers AI flux) y `kimiko-ficha` (SVG→PNG) | `supabase/functions/` |
-| Entrada de Telegram y comandos `/estado`, `/auditar`, `/manual` | Cloudflare Worker `kimiko` (solo webhook) | `kimiko/worker` + `supabase/functions/_kimiko/src` |
-| Órdenes que tocan la web | GitHub Actions `Kimiko Cloud` → rama + PR | `.github/workflows/kimiko-cloud.yml`, `kimiko/PROMPT.md` |
+| Web quantum-holistic.com | Vercel · rama `main` · proyecto `quantum-holistic-2` | Next.js 14, este repo |
+| Base de datos | Supabase `vctetjugbvyllwjpxcxh` | tablas `kimiko_*`, `blog_posts`, `plants` |
+| Trabajo diario Kimiko | Edge Function `kimiko-diario` vía `pg_cron` | `supabase/functions/kimiko-diario` |
+| Imágenes | Edge Functions `kimiko-imagen`, `kimiko-ficha` | `supabase/functions/` |
+| Telegram + comandos | Cloudflare Worker `kimiko` | `kimiko/worker` |
+| Órdenes a la web | GitHub Actions `Kimiko Cloud` | `.github/workflows/kimiko-cloud.yml` |
 
 ## 3. Reglas de trabajo
-1. **Nada es "hecho" sin prueba.** Cada línea de `ESTADO.md` lleva cómo se comprobó (consulta, URL, log). Si no se ha comprobado, se escribe "sin verificar".
-2. **Comprobar antes de proponer.** Antes de dar un arreglo, mirar el código o la configuración desplegada, no la memoria.
-3. **Lo que Kristian puede hacer desde el móvil.** Nunca darle tareas que exijan el Mac sin avisar de que las exigen.
-4. **Coste 0 €.** Solo capas gratuitas (Gemini free, Workers AI 10.000 neuronas/día, Supabase Free, Vercel Hobby, Actions en repo público). Cualquier gasto se propone con importe y se espera el sí.
-5. **Cambios pequeños y en PR.** `main` solo por PR. Editar solo las líneas necesarias.
-6. **El repo es público.** Nunca secretos en el código, en los logs ni en los PR. Los secretos van a Supabase Secrets, Cloudflare o GitHub Secrets.
-7. **Lo desplegado = lo del repo.** Si se despliega algo, el mismo código entra en el repo en el mismo PR.
-8. **Contenido de salud.** Sin promesas de curar, sin dosis, con contraindicaciones y aviso de consultar con un profesional. Todo contenido nuevo nace como borrador.
-9. **Cerrar cada sesión** actualizando `ESTADO.md` (qué cambió y con qué prueba) y, si hubo trabajo largo, una nota en `kimiko/bitacora/`.
+1. **Nada es "hecho" sin prueba.** `ESTADO.md`: cada línea lleva su comprobación. Sin prueba → «sin verificar».
+2. **Comprobar antes de proponer.** Leer código o config desplegada, no la memoria.
+3. **Desde el móvil.** Avisar cuando la tarea exija el Mac.
+4. **Coste 0 €.** Solo capas gratuitas. Proponer importe antes de gastar.
+5. **Cambios en PR.** `main` solo por PR. Editar solo las líneas necesarias.
+6. **Repo público.** Secretos: Supabase Secrets / Cloudflare / GitHub Secrets. Nunca en el código.
+7. **Lo desplegado = lo del repo.** Mismo código, mismo PR.
+8. **Contenido de salud.** Sin promesas de curar, sin dosis. Con contraindicaciones y aviso médico.
+9. **Cerrar sesión.** Actualizar `ESTADO.md`. Bitácora en `kimiko/bitacora/` si el trabajo fue largo.
 
-## 4. Skills (7-oct-2026)
-Cada skill es una forma de trabajar ligada a una herramienta real. Si la herramienta no está, se dice "pendiente", no se finge.
+## 4. Candados automáticos (`.claude/settings.json` + `.claude/hooks/`)
+- **PreToolUse/Bash**: bloquea `gh pr merge`, push a `main`, quitar `no-fusionar`, deploys a producción, SQL de escritura en bash.
+- **PreToolUse/MCP Supabase**: bloquea `execute_sql` con escritura y `apply_migration`.
+- **Stop**: si hay TypeScript sin confirmar, corre typecheck y pruebas antes de cerrar.
+Verificar: `jq '.hooks' .claude/settings.json`
 
-| Skill | Qué significa aquí | Herramienta real | Estado |
-|---|---|---|---|
-| **UI UX to Max!** | Diseño y conversión de q-h.com: capturas reales, 2–3 propuestas, cambios en PR con vista previa de Vercel | skill `frontend-design` + Vercel Preview | activa |
-| **Claude Mem** | No perder el hilo: decisiones en `ESTADO.md`, diario en `KIMIKO_MEMORIA.md` y `kimiko/bitacora/`, memoria del proyecto en claude.ai | estos archivos + Supabase `kimiko_learnings` | activa |
-| **n8n MCP** | Flujos omnicanal (Telegram, leads, alertas) | n8n no está instalado ni conectado; hoy lo hacen `pg_cron` + Edge Functions + el worker de Telegram | pendiente: necesita servidor propio (coste) y decisión de Kristian |
-| **Light Tag** | Etiquetas estructuradas para plantas, leads y servicios en Supabase | columnas `tags` en Supabase vía migración | pendiente de diseñar el esquema |
-| **Diff-Only** | Cambiar solo las líneas necesarias y enseñar solo el diff | edición por bloques + PR | activa |
+## 5. Skills (`.claude/skills/` — Claude Code las carga solo)
+`qh-sesion` · `qh-cambio-seguro` · `qh-seguridad` · `qh-editorial` · `qh-diseno` · `qh-kimiko-despliegue` · `qh-chat-seguridad`
+Verificar: `ls .claude/skills/`
 
-Skills propias de Claude (8-oct-2026), en `.claude/skills/` (Claude Code las carga solo; para el chat, subir el `.zip`). Solo sirven a Claude, no a Kimiko:
-`qh-sesion` (tokens e integridad; sustituye a `flow-state`), `qh-cambio-seguro` (plan → rama → prueba → PR), `qh-diseno` (tokens de marca y móvil primero), `qh-seguridad` (checklist antes de cada PR), `qh-editorial` (salud + SEO de cada post) y `qh-kimiko-despliegue` (13-oct: desplegar y probar Edge Functions de Kimiko, PR por API y cierre de sesión).
-
-## 5. Método operativo (sesiones de edición)
-Aplica siempre que la tarea sea editar archivos de la web o hacer limpieza:
-
-1. **Skills primero:** cargar `qh-sesion`, `qh-cambio-seguro` y `qh-seguridad` al inicio.
-2. **Ahorra tokens:** `grep -n` para localizar la línea antes de abrir el archivo; `git diff --stat` antes del commit; lecturas parciales en archivos > 300 líneas; delega búsquedas amplias a un subagente.
-3. **Evidencia antes y después de cada punto:** grep que muestra el problema → edición → grep que confirma que desapareció.
-4. **Nada es "hecho" sin comprobación en el repo:**
-   - Borrar un archivo: `ls <ruta>` tras el `rm` confirma que ya no existe.
-   - Verificar imports antes de borrar: `grep -rn "<nombre>" app/ components/ lib/` cubre todos los directorios.
-5. **Grep final antes del commit** (incluye `lib/`, no solo `app/` y `components/`):
-   ```
-   grep -rn "meses gratis|inteligencia artificial|videollamada|papu-pro|n8n" \
-     app/ components/ lib/ --include="*.ts" --include="*.tsx" --include="*.json"
-   ```
-6. **Un commit por tarea**, con mensaje claro que liste los puntos resueltos.
-7. **Fallos:** anotar en `LIBRO_FALLOS.md` la causa y la comprobación que lo evita.
-
-## 6. Compact Instructions
-Al compactar el contexto, conserva siempre:
-- Rama activa y número de PR; si tiene etiqueta `no-fusionar`.
-- Restricciones de la tarea: no fusionar, no SQL, no main, no producción sin ✅.
-- Archivos editados en la sesión y qué cambió en cada uno (una línea por archivo).
-- Puntos pendientes de ✅ de Kristian (propuestas de texto, plazos legales, etc.).
-- Riesgos abiertos o hallazgos que no se pudieron arreglar en esta sesión.
-Descarta: logs de build, greps intermedios, razonamientos y explicaciones que ya llevaron a una decisión tomada.
-
-## 7. Conectores
-- Activos y probados (7-oct): Supabase, Vercel, Cloudflare (lectura), GitHub (repo y Actions). Telegram, a través de Kimiko.
-- Disponibles pero sin probar en este proyecto: Gmail, Google Drive, Google Calendar, Notion.
-- No conectados: n8n, Instagram Graph API (faltan llaves de cuenta Business), Stripe en vivo.
-- Plantillas o skills de GitHub de terceros: leer el código antes de instalarlas; ninguna que envíe tokens a servidores ajenos.
-- Revisor automático de PRs con IA: retirado el 7-oct (necesitaba API de pago). La revisión la hace la sesión que abre el PR.
+## 6. Conectores (sin verificar — comprobar con la herramienta)
+- Probados en este proyecto: Supabase, Vercel, GitHub, Cloudflare (lectura), Telegram (vía Kimiko).
+- Disponibles sin probar aquí: Gmail, Google Drive, Google Calendar, Notion.
+- No conectados: n8n (sin servidor), Instagram Graph API (sin llaves Business), Stripe en vivo.
