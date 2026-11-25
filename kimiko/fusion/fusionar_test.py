@@ -75,61 +75,130 @@ class _Mocks:
         f.avisar = self._orig_avisar
 
 
-class TestV2Bloqueo(unittest.TestCase):
-    """Los PRs de ramas claude/v2-* nunca se fusionan solos."""
+# ── Tests del bloqueo manual de claude/* ────────────────────────────────────
 
-    def test_v2_devuelve_necesita_ok(self):
+class TestClaudeBloqueoManual(unittest.TestCase):
+    """Ninguna rama claude/* se fusiona sola (F-007)."""
+
+    def test_claude_v2_devuelve_necesita_ok(self):
         with _Mocks():
             r = f.atender(_pr(109, 'claude/v2-f1-paso-0'))
-        self.assertEqual(r, 'necesita OK (v2)')
+        self.assertEqual(r, 'necesita OK')
 
-    def test_v2_step_2_devuelve_necesita_ok(self):
+    def test_claude_v2_step2_devuelve_necesita_ok(self):
         with _Mocks():
             r = f.atender(_pr(110, 'claude/v2-f1-step-2-propuesta'))
-        self.assertEqual(r, 'necesita OK (v2)')
+        self.assertEqual(r, 'necesita OK')
 
-    def test_v2_avisa_a_kristian(self):
-        with _Mocks() as m:
-            f.atender(_pr(109, 'claude/v2-f1-paso-0'))
-        self.assertTrue(m.avisados, 'Se esperaba al menos un aviso para PR v2')
-        titulo = m.avisados[0][0]
-        self.assertIn('OK', titulo)
-
-    def test_v2_no_avisa_dos_veces_mismo_sha(self):
-        """ya_avisado devuelve True la segunda vez: no debe haber segundo aviso."""
-        with _Mocks() as m:
-            f.atender(_pr(109, 'claude/v2-f1-paso-0'))
-            f.atender(_pr(109, 'claude/v2-f1-paso-0'))
-        # En SECO=1 y sin POST, ya_avisado siempre devuelve False (no hay
-        # comentarios guardados), así que se avisa cada vez. Lo importante es
-        # que atender devuelva 'necesita OK (v2)' en ambos casos.
-        self.assertEqual(len([a for a in m.avisados if 'OK' in a[0]]), 2)
-
-
-class TestRamasNormales(unittest.TestCase):
-    """Las ramas claude/ y kimiko/ sin el prefijo v2- no se ven afectadas."""
-
-    def test_rama_claude_normal(self):
+    def test_claude_arreglo_bug_devuelve_necesita_ok(self):
+        """Antes se fusionaba solo; ahora debe requerir OK (F-007)."""
         with _Mocks():
             r = f.atender(_pr(100, 'claude/arreglo-bug'))
-        self.assertNotEqual(r, 'necesita OK (v2)',
-                            f'Una rama claude/ normal no debe requerir OK v2; resultado: {r!r}')
+        self.assertEqual(r, 'necesita OK',
+                         f'claude/arreglo-bug debe requerir OK manual; resultado: {r!r}')
 
-    def test_rama_kimiko_normal(self):
+    def test_claude_avisa_a_kristian(self):
+        with _Mocks() as m:
+            f.atender(_pr(109, 'claude/v2-f1-paso-0'))
+        self.assertTrue(m.avisados, 'Se esperaba al menos un aviso')
+        self.assertIn('OK', m.avisados[0][0])
+
+    def test_no_fusionar_sigue_bloqueando(self):
         with _Mocks():
-            r = f.atender(_pr(101, 'kimiko/foto-planta'))
-        self.assertNotEqual(r, 'necesita OK (v2)',
-                            f'Una rama kimiko/ no debe requerir OK v2; resultado: {r!r}')
+            r = f.atender(_pr(103, 'claude/v2-f1-paso-0', labels=['no-fusionar']))
+        self.assertEqual(r, 'no-fusionar')
 
     def test_draft_siempre_fuera(self):
         with _Mocks():
             r = f.atender(_pr(102, 'claude/v2-f1-paso-0', draft=True))
         self.assertEqual(r, 'fuera')
 
-    def test_no_fusionar_label(self):
+
+# ── Escenario del PR #114 ────────────────────────────────────────────────────
+
+class TestPR114Escenario(unittest.TestCase):
+    """Reproduce el fallo F-007: claude/chat-seguridad se fusionó sin ✅ de Kristian."""
+
+    def test_chat_seguridad_requiere_ok(self):
+        """claude/chat-seguridad debe requerir OK ahora, no auto-fusionarse."""
         with _Mocks():
-            r = f.atender(_pr(103, 'claude/v2-f1-paso-0', labels=['no-fusionar']))
+            r = f.atender(_pr(114, 'claude/chat-seguridad'))
+        self.assertEqual(r, 'necesita OK',
+                         f'claude/chat-seguridad debía requerir OK manual; resultado: {r!r}')
+
+    def test_chat_seguridad_con_no_fusionar_queda_bloqueado(self):
+        with _Mocks():
+            r = f.atender(_pr(114, 'claude/chat-seguridad', labels=['no-fusionar']))
         self.assertEqual(r, 'no-fusionar')
+
+    def test_cualquier_claude_requiere_ok(self):
+        """Ninguna variante de claude/* se fusiona sola."""
+        for rama in ('claude/chat-seguridad', 'claude/arreglo-bug', 'claude/nueva-feature',
+                     'claude/protocolo-code', 'claude/v2-fusion-manual'):
+            with self.subTest(rama=rama):
+                with _Mocks():
+                    r = f.atender(_pr(999, rama))
+                self.assertEqual(r, 'necesita OK',
+                                 f'{rama} debe requerir OK; resultado: {r!r}')
+
+
+# ── Tests de kimiko/* (siguen auto-fusionándose si no son DELICADO) ──────────
+
+class TestRamasKimiko(unittest.TestCase):
+    """Las ramas kimiko/* pueden fusionarse solas si no tocan nada delicado."""
+
+    def test_kimiko_normal_no_requiere_ok_manual(self):
+        """Un PR de kimiko/ que no toca nada delicado no debe requerir OK."""
+        with _Mocks():
+            r = f.atender(_pr(101, 'kimiko/foto-planta'))
+        self.assertNotEqual(r, 'necesita OK',
+                            f'kimiko/ no debería requerir OK manual; resultado: {r!r}')
+
+    def test_draft_siempre_fuera(self):
+        with _Mocks():
+            r = f.atender(_pr(102, 'kimiko/rama-draft', draft=True))
+        self.assertEqual(r, 'fuera')
+
+
+# ── Tests de nuevos patrones DELICADO ───────────────────────────────────────
+
+class TestDelicadoNuevosPatrones(unittest.TestCase):
+    """Los nuevos patrones en DELICADO bloquean app/api/, lib/chat, privacidad y términos."""
+
+    def test_app_api_es_delicado(self):
+        motivos = f._clasificar_delicados(['app/api/chat/route.ts'])
+        self.assertTrue(any('API' in m for m in motivos),
+                        f'app/api/chat/route.ts debe ser delicado; motivos: {motivos}')
+
+    def test_app_api_leads_es_delicado(self):
+        motivos = f._clasificar_delicados(['app/api/leads/route.ts'])
+        self.assertTrue(any('API' in m for m in motivos),
+                        f'app/api/leads/route.ts debe ser delicado; motivos: {motivos}')
+
+    def test_app_privacidad_es_delicado(self):
+        motivos = f._clasificar_delicados(['app/privacidad/page.tsx'])
+        self.assertTrue(any('privacidad' in m.lower() for m in motivos),
+                        f'app/privacidad debe ser delicado; motivos: {motivos}')
+
+    def test_app_terminos_es_delicado(self):
+        motivos = f._clasificar_delicados(['app/terminos/page.tsx'])
+        self.assertTrue(any('terminos' in m.lower() or 'servicio' in m.lower() for m in motivos),
+                        f'app/terminos debe ser delicado; motivos: {motivos}')
+
+    def test_lib_chat_es_delicado(self):
+        motivos = f._clasificar_delicados(['lib/chat.ts'])
+        self.assertTrue(any('chat' in m.lower() for m in motivos),
+                        f'lib/chat.ts debe ser delicado; motivos: {motivos}')
+
+    def test_archivo_sin_riesgo_no_es_delicado(self):
+        motivos = f._clasificar_delicados(['app/blog/page.tsx'])
+        self.assertEqual(motivos, [],
+                         f'app/blog/page.tsx no debe ser delicado; motivos: {motivos}')
+
+    def test_supabase_migrations_sigue_siendo_delicado(self):
+        motivos = f._clasificar_delicados(['supabase/migrations/001_init.sql'])
+        self.assertTrue(any('base de datos' in m for m in motivos),
+                        f'supabase/migrations debe ser delicado; motivos: {motivos}')
 
 
 if __name__ == '__main__':

@@ -39,8 +39,10 @@ Nunca commits en `main`: está protegida y solo se actualiza fusionando PR.
 Si la prueba no se puede hacer desde aquí, se escribe **"sin verificar"** y por qué.
 
 ## 5. PR
-`gh pr create --base main` (si falla, ver `qh-kimiko-despliegue` §4) con: qué cambia, causa (si es un arreglo), **cómo se probó con resultados reales**,
-y "Para Kristian" (máx. 3 acciones, desde el móvil). Un PR por bloque. No fusionar tus propios PR.
+`gh pr create --base main --label no-fusionar` (si falla, ver `qh-kimiko-despliegue` §4).
+**La etiqueta `no-fusionar` es OBLIGATORIA en todo PR de sesión de Claude** (F-007): sin ella `kimiko-fusion` puede fusionarlo solo si las pruebas están en verde.
+Incluir en el cuerpo: qué cambia, causa (si es un arreglo), **cómo se probó con resultados reales**, y "Para Kristian" (máx. 3 acciones, desde el móvil). Un PR por bloque. No fusionar tus propios PR.
+Verificar después: `gh pr view <número> --json labels | jq '.[].name'` → debe incluir `no-fusionar`.
 Si algo ya se desplegó desde la rama (Edge Function, migración), dilo en el PR: lo desplegado = lo del repo.
 
 ## 6. ESTADO.md

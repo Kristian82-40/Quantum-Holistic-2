@@ -29,18 +29,23 @@ SECO = os.environ.get('SECO') == '1'
 ESPERA_MIN = int(os.environ.get('ESPERA_MIN', '10'))
 
 RAMAS = ('claude/', 'kimiko/')
-# Las ramas del encargo v2 (claude/v2-*) no se fusionan solas: pueden tocar
-# múltiples archivos sensibles a la vez y necesitan una revisión de Kristian.
-RAMAS_OK_MANUAL = ('claude/v2-',)
+# Ninguna rama claude/* se fusiona sola: siempre pide OK a Kristian (F-007).
+# kimiko/* sí puede auto-fusionarse salvo que toque algo DELICADO.
+RAMAS_OK_MANUAL = ('claude/',)
 PRUEBAS_OBLIGATORIAS = {'pruebas-kimiko', 'gitleaks'}
 MALAS = {'failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure', 'stale'}
 # Lo que nunca se fusiona solo: (patrón de ruta, motivo para Kristian).
+# Se aplica a todas las ramas que no estén en RAMAS_OK_MANUAL (en la práctica, kimiko/*).
 DELICADO = [
     (r'^supabase/migrations/', 'cambia la base de datos'),
     (r'(?i)(stripe|checkout|precio|pricing|pago)', 'toca pagos o precios'),
     (r'^(kimiko/PROMPT\.md|CLAUDE\.md)$', 'cambia las reglas de Kimiko'),
     (r'^(kimiko/fusion/|\.github/workflows/kimiko-fusion\.yml$)', 'cambia el propio fusionador'),
     (r'^(supabase/functions/|kimiko/worker/|\.github/workflows/)', 'cambia el código que corre Kimiko (funciones, worker de Telegram o workflows)'),
+    (r'^app/api/', 'toca rutas de API del servidor'),
+    (r'^lib/chat', 'toca utilidades del chat'),
+    (r'^app/privacidad', 'toca la política de privacidad'),
+    (r'^app/terminos', 'toca los términos del servicio'),
 ]
 
 
@@ -98,9 +103,14 @@ def estado_pruebas(sha):
     return 'ok' if PRUEBAS_OBLIGATORIAS <= ok else 'espera'
 
 
+def _clasificar_delicados(archivos):
+    """Dado un listado de rutas, devuelve los motivos DELICADO que aplican (testeable sin HTTP)."""
+    return sorted({motivo for a in archivos for patron, motivo in DELICADO if re.search(patron, a)})
+
+
 def motivos_delicados(numero):
     archivos = [f['filename'] for f in gh('GET', f'/pulls/{numero}/files?per_page=100')]
-    return sorted({motivo for a in archivos for patron, motivo in DELICADO if re.search(patron, a)})
+    return _clasificar_delicados(archivos)
 
 
 def atender(pr):
@@ -110,8 +120,8 @@ def atender(pr):
     if any(l['name'] == 'no-fusionar' for l in pr.get('labels', [])):
         return 'no-fusionar'
     if any(rama.startswith(r) for r in RAMAS_OK_MANUAL):
-        avisar_una_vez(pr, 'v2', f'🔐 PR #{n} necesita tu OK (encargo v2)', f"«{pr['title']}»\nLas ramas claude/v2-* no se fusionan solas: revísalo y pulsa «Merge» cuando estés listo.")
-        return 'necesita OK (v2)'
+        avisar_una_vez(pr, 'manual', f'🔐 PR #{n} necesita tu OK', f"«{pr['title']}»\nLas ramas claude/* no se fusionan solas. Revísalo y pulsa «Merge» cuando estés listo.")
+        return 'necesita OK'
     fecha = gh('GET', f'/commits/{sha}')['commit']['committer']['date']
     edad = (dt.datetime.now(dt.timezone.utc) - dt.datetime.fromisoformat(fecha.replace('Z', '+00:00'))).total_seconds() / 60
     if edad < ESPERA_MIN:
