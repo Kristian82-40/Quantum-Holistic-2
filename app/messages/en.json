@@ -117,9 +117,9 @@
     "title": "Your access is <em>active</em>",
     "desc": "We've received your subscription. You'll get a confirmation email shortly at the address you used for payment.",
     "next": "What's next?",
-    "step1": "Complete your holistic profile",
-    "step2": "You'll receive your first personalized plan within 24h",
-    "step3": "Access the papu-pro chat from your dashboard",
+    "step1": "Explore the medicinal plants dictionary",
+    "step2": "We'll confirm your activation by email",
+    "step3": "Access the chat from the website",
     "cta": "Go to home",
     "support": "Any issues? Write to us at"
   },

@@ -16,10 +16,10 @@ export async function sendWelcomeEmail(
   await resend.emails.send({
     from: FROM,
     to,
-    subject: '¡Bienvenida a Quantum Holistic Pro! 🌿',
+    subject: 'Tu suscripción Quantum Pro ya está activa',
     html: `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
-        <h1 style="color:#2d6a4f;font-size:24px;margin-bottom:8px">¡Bienvenida a Quantum Holistic Pro!</h1>
+        <h1 style="color:#2d6a4f;font-size:24px;margin-bottom:8px">Tu suscripción Quantum Pro ya está activa</h1>
         <p style="color:#444;font-size:16px;line-height:1.6">
           Tu suscripción <strong>${plan}</strong> ya está activa.
         </p>

@@ -54,7 +54,7 @@ export const POSTS: Post[] = [
 
 <p>No se trata de hacer un protocolo extremo de 3 días con zumos. Eso agota el sistema más que depurarlo. La clave es la constancia suave: una infusión de ortiga por la mañana, diente de león en la ensalada, hinojo como acompañamiento de la cena. Dos semanas así hacen más que cualquier detox agresivo.</p>
 
-<p>Si quieres un protocolo personalizado basado en tu zona de residencia y estación actual, <a href="/#profile">genera tu perfil holístico</a> y te diseñamos uno adaptado a lo que tienes disponible a menos de 50km de donde vives.</p>
+<p>Si quieres explorar más sobre plantas depurativas disponibles en tu zona, consulta con el asistente del <a href="/chat">chat holístico</a>.</p>
     `.trim(),
   },
 
