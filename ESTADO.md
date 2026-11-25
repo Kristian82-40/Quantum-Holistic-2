@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 24-nov-2026 tarde (Madrid) · Claude (Code): **encargo v2 iniciado** — infraestructura de agentes (PR #108), Step 0 quitar promesas inexistentes (PR #109 ⏳ pendiente ✅ de Kristian), propuesta de diseño (PR #110 ⏳ esperando elección A/B/C). Anteriores: 24-nov mañana: autostart sin Papu Ext; 24-nov AM: agentes migrados. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 25-nov-2026 (Madrid) · Claude (Code): **PR #115 fusionado** (F-007: claude/* siempre pide OK; DELICADO ampliado; 18/18 pruebas en verde en main). Bitácora excepción en PR #116 (no-fusionar, pendiente de Kristian). Anteriores: 24-nov tarde: encargo v2 — PR #108 infraestructura agentes, PR #109 ⏳ pendiente ✅ Kristian, PR #110 ⏳ esperando elección A/B/C. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
