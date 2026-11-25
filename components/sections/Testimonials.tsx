@@ -4,13 +4,13 @@ const TESTIMONIALS = [
   {
     name:     'Marc B.',
     location: 'Barcelona — Deportista de élite',
-    text:     'Primer mes con el protocolo depurativo y mis marcas en carrera mejoraron un 12%. Lo que más me sorprende es lo personalizado que es.',
+    text:     'Primer mes con el protocolo depurativo y mis marcas en carrera mejoraron un 12%. Lo que más me sorprende es lo específico que es para mi contexto.',
     initial:  'M',
   },
   {
     name:     'Laia M.',
     location: 'Vilanova',
-    text:     'Nunca pensé que herbología e IA pudieran funcionar juntas. Me mandaron una guía de plantas locales del Garraf que es increíble.',
+    text:     'Nunca pensé que la herbología y la nutrición local pudieran cambiar tanto. La guía de plantas del Garraf es increíble.',
     initial:  'L',
   },
   {

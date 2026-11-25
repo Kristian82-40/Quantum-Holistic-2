@@ -80,7 +80,7 @@ export default function RomeroPopup() {
               setTimeout(() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' }), 400)
             }}
           >
-            Ver mi plan personalizado →
+            Ver los planes →
           </button>
           <button className={styles.btnSecondary} onClick={close}>
             Solo estoy explorando

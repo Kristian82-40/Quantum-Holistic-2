@@ -59,8 +59,8 @@ export default function ProfileCTA() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Tu plan personalizado</h2>
-        <p className={styles.subtitle}>Análisis holístico + IA</p>
+        <h2 className={styles.title}>Consulta rápida</h2>
+        <p className={styles.subtitle}>Nutrición km0 · Herbología</p>
         <div className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label}>¿Cuál es tu objetivo?</label>
