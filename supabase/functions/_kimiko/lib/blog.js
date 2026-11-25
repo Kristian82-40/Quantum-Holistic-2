@@ -39,18 +39,30 @@ export function validarProyecto(p = {}) {
 export const slugificar = (t) => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
   .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70).replace(/-+$/, '');
 
-// La web pinta `content` como HTML (con \n → <br/>). Markdown mínimo → HTML escapado y en una sola línea.
+// La web pinta `content` como HTML (con \n → <br/>). Markdown mínimo → HTML escapado y en una sola línea:
+// títulos, párrafos, listas (- * • y numeradas), citas "> …" y separadores "---". Enlaces todavía no.
+// Gemelo de pg_temp.md_a_html (kimiko/sql/convertir-posts-markdown-2026-11-21.sql): si cambias uno, cambia el
+// otro y regenera pruebas-paridad-md.json (la prueba de paridad compara los dos sobre los mismos textos).
 const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const enLinea = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
 export function markdownAHtml(md = '') {
-  const out = []; let lista = null; let parrafo = [];
+  const out = []; let lista = null; let tipo = null; let parrafo = [];
   const cerrarP = () => { if (parrafo.length) { out.push(`<p>${enLinea(parrafo.join(' '))}</p>`); parrafo = []; } };
-  const cerrarL = () => { if (lista) { out.push(`<ul>${lista.map((i) => `<li>${enLinea(i)}</li>`).join('')}</ul>`); lista = null; } };
+  const cerrarL = () => { if (lista) { out.push(`<${tipo}>${lista.map((i) => `<li>${enLinea(i)}</li>`).join('')}</${tipo}>`); lista = null; tipo = null; } };
   for (const bruta of md.split('\n')) {
     const l = bruta.trim();
     const h = l.match(/^(#{1,4})\s+(.*)$/);
-    const li = l.match(/^[-*•]\s+(.*)$/);
-    if (!l) { cerrarP(); cerrarL(); } else if (h) { cerrarP(); cerrarL(); const n = Math.max(2, h[1].length); out.push(`<h${n}>${enLinea(h[2])}</h${n}>`); } else if (li) { cerrarP(); (lista ||= []).push(li[1]); } else { cerrarL(); parrafo.push(l); }
+    const ol = l.match(/^\d+[.)]\s+(.*)$/);
+    const ul = l.match(/^[-*•]\s+(.*)$/);
+    if (!l) { cerrarP(); cerrarL(); }
+    else if (h) { cerrarP(); cerrarL(); const n = Math.max(2, h[1].length); out.push(`<h${n}>${enLinea(h[2])}</h${n}>`); }
+    else if (/^(-{3,}|\*{3,}|_{3,})$/.test(l)) { cerrarP(); cerrarL(); out.push('<hr/>'); }
+    else if (l.startsWith('>')) { cerrarP(); cerrarL(); out.push(`<blockquote><p>${enLinea(l.match(/^>\s?(.*)$/)[1])}</p></blockquote>`); }
+    else if (ol || ul) {
+      cerrarP(); const t = ol ? 'ol' : 'ul';
+      if (tipo && tipo !== t) cerrarL();
+      tipo = t; (lista ||= []).push((ol || ul)[1]);
+    } else { cerrarL(); parrafo.push(l); }
   }
   cerrarP(); cerrarL();
   return out.join('');

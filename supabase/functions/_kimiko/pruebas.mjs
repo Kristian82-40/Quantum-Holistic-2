@@ -22,6 +22,8 @@ import { atenderComando, resumirEstado, AYUDA } from './src/comandos.js';
 import { textoHoy } from './lib/tareas.js';
 import { leerFreno, avisosCuota, textoFreno, topesSuperados, aplicarTope } from './lib/freno.js';
 import config from './config/projects.json' with { type: 'json' };
+import paridadMd from './pruebas-paridad-md.json' with { type: 'json' };
+import { createHash } from 'node:crypto';
 import { decidirCierre, cerrarOrden, motivoCierre } from '../../../kimiko/cierre/cerrar-orden.mjs';
 import { decidirRuta, reglasDuras, respuestaSegura } from './lib/orden-interna.js';
 import { generarJSONMotores, motoresConLlave } from './lib/motores.js';
@@ -170,6 +172,14 @@ await prueba('blog: markdown → HTML escapado en una sola línea, slug limpio, 
   assert.equal(slugificar('Manzanilla: ¡Flor de Tradición!'), 'manzanilla-flor-de-tradicion');
   assert.deepEqual(CATEGORIAS, ['Herbología', 'Nutrición', 'Ayurveda', 'Bienestar Holístico', 'Sabiduría']);
   assert.match(validarRespuesta({ ...articulo(), contenido_markdown: 'corto' }), /corto/);
+});
+await prueba('blog: listas numeradas, citas y separadores; JS = SQL (pg_temp.md_a_html) en los mismos textos, Vipassana incluido', () => {
+  assert.equal(markdownAHtml('1. a\n2) b\n- c\n\n> **Ojo**\n---'), '<ol><li>a</li><li>b</li></ol><ul><li>c</li></ul><blockquote><p><strong>Ojo</strong></p></blockquote><hr/>');
+  assert.ok(paridadMd.casos.some((c) => c.nombre === 'vipassana'));
+  for (const c of paridadMd.casos) {
+    assert.equal(createHash('md5').update(c.html_sql).digest('hex'), c.md5_html_sql, `${c.nombre}: el HTML guardado no es el que dio el SQL`);
+    assert.equal(markdownAHtml(c.md), c.html_sql, `${c.nombre}: JS y SQL no coinciden`);
+  }
 });
 await prueba('anti-duplicados y rotación de pilares', () => {
   assert.equal(esDuplicada('Manzanilla: infusión de tradición', ['Manzanilla: una infusión de tradición']), true);
