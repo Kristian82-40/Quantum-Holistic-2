@@ -79,7 +79,7 @@ export default async function BlogPage() {
             </h1>
             <p className={styles.subtitle}>
               Artículos sobre nutrición km0, herbología y bienestar holístico —
-              escritos por especialistas, basados en evidencia y adaptados a la vida real.
+              sobre nutrición km0, herbología y bienestar, escritos con fuentes citadas.
             </p>
           </div>
 

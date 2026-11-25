@@ -1,11 +1,14 @@
+import Link from 'next/link';
 import styles from './HowItWorks.module.css';
 
-const STEPS = [
+type Step = { num: string; title: string; desc: React.ReactNode };
+
+const STEPS: Step[] = [
   { num: '01', title: 'Explora el diccionario',           desc: 'Consulta las plantas, sus usos tradicionales y sus precauciones. Sin registrarte.' },
   { num: '02', title: 'Encuentra tu equilibrio natural',  desc: 'Plantas, tradición y nutrición de temporada.' },
-  { num: '03', title: 'Busca y descubre',                 desc: 'Escribe lo que te interesa en el chat holístico: una planta, un síntoma o una época del año. Respuestas del diccionario y el blog.' },
-  { num: '04', title: 'Habla con el especialista',        desc: 'Cuando lo necesites, reserva una sesión 1:1 con Kristian (65 €, disponible en /terapeutas/papu).' },
-] as const;
+  { num: '03', title: 'Busca y descubre',                 desc: 'Escribe lo que te interesa en el chat holístico: una planta o una época del año. Respuestas del diccionario y el blog.' },
+  { num: '04', title: 'Habla con el especialista',        desc: <>Cuando lo necesites, reserva una sesión 1:1 con Kristian (65 €) en <Link href="/terapeutas/papu">/terapeutas/papu</Link>.</> },
+];
 
 const SAMPLE_PLAN = [
   { bg: 'sage', label: 'Lunes · Depuración',  body: 'Caldo de ortiga + arroz integral con sésamo' },

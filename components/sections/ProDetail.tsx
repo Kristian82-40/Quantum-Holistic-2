@@ -5,9 +5,9 @@ export default function ProDetail() {
   return (
     <section className={`section ${styles.pro}`} id="pro-detail">
       <div className="container">
-        <p className={styles.label}>Quantum Pro — Lo que incluye</p>
+        <p className={styles.label}>Quantum Pro — Próximamente</p>
         <h2 className={styles.title}>
-          Bienestar sin <em>humo</em>.<br />Resultados reales.
+          Estamos construyendo<br /><em>algo nuevo</em>.
         </h2>
       </div>
 

@@ -21,8 +21,7 @@ export async function sendWelcomeEmail(
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
         <h1 style="color:#2d6a4f;font-size:24px;margin-bottom:8px">¡Bienvenida a Quantum Holistic Pro!</h1>
         <p style="color:#444;font-size:16px;line-height:1.6">
-          Tu suscripción <strong>${plan}</strong> ya está activa. Ahora tienes acceso ilimitado
-          al chat con nuestra IA holística y a todas las herramientas de bienestar.
+          Tu suscripción <strong>${plan}</strong> ya está activa.
         </p>
         <a href="https://quantum-holistic.com/chat"
            style="display:inline-block;margin-top:24px;padding:12px 28px;background:#2d6a4f;
@@ -54,7 +53,7 @@ export async function sendPaymentFailedEmail(
           (referencia: <code>${invoiceId}</code>).
         </p>
         <p style="color:#444;font-size:16px;line-height:1.6">
-          Por favor actualiza tu método de pago para seguir disfrutando de acceso ilimitado.
+          Por favor actualiza tu método de pago para seguir disfrutando del servicio.
         </p>
         <a href="https://quantum-holistic.com/perfil"
            style="display:inline-block;margin-top:24px;padding:12px 28px;background:#c0392b;
