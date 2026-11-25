@@ -27,6 +27,19 @@ Formato de cada entrada:
 
 ---
 
+## F-006 · Chat responde a consultas de riesgo sin advertencia · 25-nov-2026
+
+**Qué falló:** `localFallbackReply` respondía a "Estoy embarazada, ¿puedo tomar salvia?" con un artículo recomendado y sin ninguna advertencia de seguridad. La función solo añadía `slice(0,2)` de contraindicaciones al final de la respuesta, insuficiente cuando el contexto implica riesgo real. En producción, `localFallbackReply` es el único camino que corre (n8n y Ollama no son accesibles desde Vercel serverless).
+
+**Causa:** La ruta del chat no tenía ninguna capa de detección de contexto de riesgo antes de la búsqueda de contenido. El diseño asumía que un modelo IA daría advertencias, pero en producción nunca llega a ningún modelo.
+
+**Arreglo:** PR `claude/chat-seguridad` — `tieneContextoRiesgo()` corre ANTES de cualquier IA o búsqueda. Detecta embarazo, lactancia, niños, medicación (anticoagulantes, sedantes, ansiolíticos, antidepresivos, antiepilépticos), enfermedad/cirugía. Respuesta fija: "No tomes ninguna planta sin consultar antes con tu médico o farmacéutico." + contraindicaciones completas de la ficha si la hay. Sin artículos, sin sugerir otras plantas. Las contraindicaciones en respuestas normales pasan de `slice(0,2)` a todas.
+
+**Regla / receta:**
+> Cualquier cambio en `app/api/chat/route.ts` debe pasar `scripts/prueba-chat-seguridad.mjs` antes de fusionarse. El script verifica los 6 casos de la skill `qh-chat-seguridad` y falla con exit 1 si alguno no pasa. Ver también: en producción Vercel, `localFallbackReply` es el único código que ejecuta el chat; testear solo en local contra Ollama no es suficiente.
+
+---
+
 ## F-002 · Dependencia de disco externo en producción · 24-nov-2026
 
 **Qué falló:** `app/api/profile/route.ts` ejecutaba `python3 /Volumes/PapuExt/agent/quantum_health.py` — una ruta de disco externo del Mac de desarrollo. En producción (Vercel) este path nunca existió. El error era silencioso: `analyzeQuantum` capturaba la excepción y devolvía `null`, así que el formulario "funcionaba" sin el análisis cuántico, pero la función de texto también fallaba porque `generateHealthPlan` de `lib/claude.ts` dependía de n8n en localhost.
