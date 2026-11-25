@@ -11,11 +11,38 @@ Tono: cálido, experto, breve. Responde siempre en español.
 Límite: no des diagnósticos médicos. Para condiciones graves, recomienda consulta médica.
 Si el usuario tiene interés en planes personalizados, menciona brevemente los planes Freemium y Quantum Pro.`;
 
-// --- Fallback sin IA: n8n y Ollama son servicios locales de Kristian, no
-// alcanzables desde las funciones serverless de Vercel. Cuando ambos fallan
-// (siempre, en producción, hasta que se expongan públicamente), en vez de un
-// mensaje de error muerto, se busca una respuesta útil en el propio
-// contenido verificado del sitio (diccionario + blog).
+// ── SEGURIDAD: detección de contextos de riesgo ─────────────────────────────
+//
+// Estos patrones se aplican sobre el texto normalizado (sin tildes, minúsculas).
+// La cobertura es intencionalmente amplia: mejor un falso positivo (mensaje de
+// precaución) que omitir una advertencia en un caso real.
+
+const RIESGO_REGEXPS: RegExp[] = [
+  /embaraz/,                                           // embarazo, embarazada
+  /gestant|gestaci/,                                   // gestante, gestación
+  /lactanc|amamant/,                                   // lactancia, amamantando
+  /\bbebe\b|\brecien.?nacido/,                         // bebé, recién nacido
+  /\bnin[oa]\b|\binfant|\bpediatri|\bhij[oa]\b/,       // niño, niña, hijo, hija
+  /anticoagulant|warfarin|acenocumarol|heparin/,       // anticoagulantes
+  /sedant|ansioliti|diazepam|lorazepam|alprazolam/,    // sedantes / ansiolíticos
+  /antidepresiv|fluoxetin|sertralina|paroxetin|venlafaxin/, // antidepresivos
+  /antiepilepti|carbamacepin|valproat/,                // antiepilépticos
+  /quimioterapia|\bquimio\b/,                          // quimioterapia
+  /operaci.n|cirug.a|operar|\boperado\b/,              // cirugía / operación
+  /insuficiencia.{0,15}hepat|hepatiti|cirrosi/,        // hepatopatía
+  /insuficiencia.{0,15}renal|dialisi/,                 // nefropatía
+  /hipertiroid|hipotiroid/,                            // tiroides
+  /\bepileps/,                                         // epilepsia
+  /tomo.{1,25}(pastilla|medicamento|farmaco|tratamiento)/, // "tomo medicamentos"
+];
+
+/** Devuelve true si el mensaje contiene un contexto de riesgo conocido. */
+function tieneContextoRiesgo(mensaje: string): boolean {
+  const norm = normalize(mensaje);
+  return RIESGO_REGEXPS.some((r) => r.test(norm));
+}
+
+// ── Tipos ────────────────────────────────────────────────────────────────────
 
 interface PlantRow {
   slug: string;
@@ -34,6 +61,8 @@ interface PostRow {
   title: string;
   excerpt: string | null;
 }
+
+// ── Utilidades de texto ──────────────────────────────────────────────────────
 
 function normalize(text: string): string {
   return text
@@ -56,6 +85,8 @@ function significantWords(text: string): string[] {
     .split(/\s+/)
     .filter((w) => w.length >= 4 && !STOPWORDS.has(w));
 }
+
+// ── Acceso a datos ───────────────────────────────────────────────────────────
 
 async function fetchPlants(): Promise<PlantRow[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -95,6 +126,40 @@ function scoreOverlap(words: string[], haystack: string): number {
   return words.reduce((acc, w) => acc + (norm.includes(w) ? 1 : 0), 0);
 }
 
+// ── Respuesta de seguridad ───────────────────────────────────────────────────
+
+/**
+ * Genera la respuesta para contextos de riesgo (embarazo, medicación, etc.).
+ * Primera frase fija. Si hay una planta identificable con ficha verificada,
+ * incluye TODAS sus contraindicaciones. Sin artículos ni sugerencias de otras plantas.
+ */
+async function respuestaSeguridadRiesgo(mensaje: string): Promise<string> {
+  const PRIMERA_FRASE = 'No tomes ninguna planta sin consultar antes con tu médico o farmacéutico.';
+  const CIERRE = 'Para cualquier duda sobre tu situación, habla con tu médico, farmacéutico o visita /terapeutas/papu.';
+
+  const words = significantWords(mensaje);
+  if (words.length === 0) return `${PRIMERA_FRASE} ${CIERRE}`;
+
+  const plants = await fetchPlants();
+  let bestPlant: PlantRow | null = null;
+  let bestScore = 0;
+  for (const p of plants) {
+    // Solo buscar por nombre, no por indicaciones (evitar sugerir plantas)
+    const hay = [p.nombre_es, p.nombre_latino || ''].join(' ');
+    const s = scoreOverlap(words, hay);
+    if (s > bestScore) { bestScore = s; bestPlant = p; }
+  }
+
+  if (bestPlant && bestScore >= 1 && bestPlant.ficha_cientifica?.contraindicaciones?.length) {
+    const contras = bestPlant.ficha_cientifica.contraindicaciones.join('; ');
+    return `${PRIMERA_FRASE} La ficha verificada de ${bestPlant.nombre_es} recoge estas contraindicaciones: ${contras}. ${CIERRE}`;
+  }
+
+  return `${PRIMERA_FRASE} ${CIERRE}`;
+}
+
+// ── Fallback local (sin IA disponible) ───────────────────────────────────────
+
 async function localFallbackReply(message: string): Promise<string> {
   const words = significantWords(message);
   if (words.length === 0) {
@@ -133,7 +198,8 @@ async function localFallbackReply(message: string): Promise<string> {
 
   if (bestPlant && bestPlantScore >= 1) {
     const indicaciones = bestPlant.ficha_cientifica?.indicaciones?.slice(0, 3).join(', ');
-    const contraindicaciones = bestPlant.ficha_cientifica?.contraindicaciones?.slice(0, 2).join(', ');
+    // Mostrar TODAS las contraindicaciones (antes: slice(0,2))
+    const contraindicaciones = bestPlant.ficha_cientifica?.contraindicaciones?.join('; ');
     let reply = `${bestPlant.nombre_es}${bestPlant.nombre_latino ? ` (${bestPlant.nombre_latino})` : ''} puede interesarte.`;
     if (indicaciones) reply += ` Se usa tradicionalmente para: ${indicaciones}.`;
     if (contraindicaciones) reply += ` Precaución: ${contraindicaciones}.`;
@@ -150,6 +216,8 @@ async function localFallbackReply(message: string): Promise<string> {
   return 'No tengo una respuesta puntual para eso ahora mismo, pero puedes explorar el diccionario de plantas en /diccionario o el blog en /blog. Para condiciones de salud concretas, consulta con un profesional médico.';
 }
 
+// ── Handler principal ────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
   let userMessage: string | undefined;
   try {
@@ -161,6 +229,13 @@ export async function POST(req: NextRequest) {
 
     if (!message || typeof message !== 'string' || message.length > 1000) {
       return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 });
+    }
+
+    // ── Seguridad: contextos de riesgo — ANTES de cualquier IA o búsqueda ──
+    // Embarazo, lactancia, niños, medicación, enfermedad, cirugía.
+    if (tieneContextoRiesgo(message)) {
+      const reply = await respuestaSeguridadRiesgo(message);
+      return NextResponse.json({ reply });
     }
 
     // Intentar via n8n primero
