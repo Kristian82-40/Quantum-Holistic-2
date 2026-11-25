@@ -42,8 +42,8 @@ export default function PrivacidadPage() {
             <h2>2. Datos que recogemos</h2>
             <p>Recogemos únicamente los datos necesarios para prestarte el servicio:</p>
             <ul>
-              <li><strong>Correo electrónico:</strong> facilitado al registrarte, al dejar tu email en el chat o al suscribirte a Quantum Pro. Lo usamos para confirmaciones y comunicaciones del servicio.</li>
-              <li><strong>Tipo de dosha (opcional):</strong> indicado voluntariamente en el formulario de captura del chat. No es obligatorio y no se comparte con terceros.</li>
+              <li><strong>Correo electrónico:</strong> facilitado al registrarte, al dejarlo en el chat, al rellenar un formulario de regalo o descarga, o al suscribirte a Quantum Pro. Lo usamos para confirmaciones y comunicaciones del servicio.</li>
+              <li><strong>Dosha (opcional):</strong> indicado voluntariamente en tu perfil de cuenta (/cuenta). No es obligatorio y no se comparte con terceros.</li>
               <li><strong>Datos de pago:</strong> gestionados íntegramente por Stripe. No almacenamos datos de tarjeta. Stripe puede recoger datos adicionales según su propia política.</li>
               <li><strong>Datos técnicos:</strong> dirección IP, tipo de navegador y páginas visitadas, recogidos automáticamente para el funcionamiento del servicio.</li>
             </ul>
@@ -57,8 +57,7 @@ export default function PrivacidadPage() {
 
             <h2>4. Cómo usamos tus datos</h2>
             <ul>
-              <li>Gestionar tu acceso y las comunicaciones del servicio.</li>
-              <li>Gestionar tu suscripción y comunicaciones relacionadas con el servicio.</li>
+              <li>Gestionar tu suscripción, tu acceso y las comunicaciones del servicio.</li>
               <li>Mejorar la calidad del servicio mediante análisis agregados y anónimos.</li>
               <li>Cumplir con obligaciones legales y fiscales.</li>
             </ul>
@@ -74,7 +73,7 @@ export default function PrivacidadPage() {
 
             <h2>6. Conservación de datos</h2>
             <p>
-              Conservamos tus datos mientras tu cuenta esté activa o mientras sea necesario para prestarte el servicio. Los datos de perfil se eliminan dentro de los 30 días siguientes a la cancelación de tu cuenta. Los datos de facturación se conservan durante el período legalmente requerido (7 años en UK).
+              Conservamos tus datos mientras tu cuenta esté activa o mientras sean necesarios para prestarte el servicio. Los datos de perfil se eliminan en los 30 días siguientes a la baja de tu cuenta. Los datos de facturación se conservan 6 años (art. 30 del Código de Comercio), plazo que cubre los 4 años de prescripción tributaria (art. 66 de la Ley 58/2003). El email que nos dejes se conserva hasta que pidas su supresión y, como máximo, 24 meses sin actividad.
             </p>
 
             <h2>7. Tus derechos (RGPD)</h2>
