@@ -7,6 +7,9 @@ Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ s
 ## Web quantum-holistic.com
 | | Qué | Prueba |
 |---|---|---|
+| ⏳ | **PR #108** (infraestructura agentes v2): `.claude/agents/`, `LIBRO_FALLOS.md`, semilla V2-F1 → se fusiona solo cuando CI esté verde | rama `claude/v2-setup-infraestructura` |
+| ⏳ | **PR #109** (Step 0 — quitar promesas inexistentes): quitado ProfileCTA («Generar mi plan»), paso «La IA analiza», Quantum Pro protocolos → esperando ✅ de Kristian + CI verde | rama `claude/v2-f1-paso-0`; sin verificar en producción |
+| ⏳ | **PR #110** (Step 2 — propuesta diseño): esquema portada, mapa 7 áreas, 3 direcciones (A/B/C) → **PARAR, esperando elección de Kristian** | rama `claude/v2-f1-step-2-propuesta` |
 | ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
 | ✅ | Rutas `/`, `/blog`, `/diccionario`, `/terapeutas`, `/login` responden 200 | Chequeo de `kimiko-diario` del 8-oct 08:13 UTC (`kimiko_updates` tipo `chequeo`) |
 | ✅ | **Los 34 posts publicados pasan los controles de «✅ Publicar»** (6-nov; antes fallaban 22). 5 con promesas de salud reescritas (aromaterapia, aceite de oliva, tres doshas, mindfulness, plantas para la ansiedad); en aromaterapia, además, «Árbol de Jade (Milagrosa)» era un error: pasa a árbol del té. A los 22 se les añadió «## Precauciones y contraindicaciones» adaptada al tema y el aviso de consultar con un profesional, en tandas de 5. Ninguno borrado ni despublicado. Copia previa de los 34 en `blog_posts_backup_20261106` (sin acceso público). Detalle en [`kimiko/informes/posts-salud-2026-11-06.md`](kimiko/informes/posts-salud-2026-11-06.md) | `revisarPost` en vivo (API pública) tras cada tanda: 22 → 12 → 7 → 2 → **0 fallan, 0 promesas** (6-nov); `/blog/silicio-…/` muestra «Precauciones y contraindicaciones» |
