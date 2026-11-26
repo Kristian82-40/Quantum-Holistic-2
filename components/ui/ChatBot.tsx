@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import styles from './ChatBot.module.css'
 import { renderText } from '@/lib/render-links'
 
@@ -18,6 +19,7 @@ const SUGGESTIONS = [
 ]
 
 export default function ChatBot() {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [showDot, setShowDot] = useState(true)
   const [messages, setMessages] = useState<Message[]>([{ role: 'assistant', text: WELCOME }])
@@ -64,6 +66,8 @@ export default function ChatBot() {
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() }
   }
+
+  if (pathname.startsWith('/chat')) return null
 
   return (
     <>
