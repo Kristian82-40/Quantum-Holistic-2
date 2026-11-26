@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 26-nov-2026 (Madrid) · Claude (Code): **PR chat-pulido abierto** (rama `claude/chat-pulido`, esperando ✅ Kristian). Cambio: `/terapeutas/papu` pasa de texto plano a enlace clicable `[consulta con Papu](/terapeutas/papu)` en el CIERRE de riesgo (`route.ts`) + mini-parser `renderText` en `chat/page.tsx` que convierte `[texto](/ruta)` en `<a>`. Pruebas 16/16 ✅. Build ✅. **Pasiflora en Supabase: no existe** — 0 filas con nombre_es/nombre_latino/slug que coincidan con "pasiflora" o "passiflora" en la tabla `plants` (57 filas totales); por eso el chat no la nombra. Anterior: PR #109 fusionado y verificado en producción. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 26-nov-2026 (Madrid) · Claude (Code): **PR #118 fusionado y en producción** (commit `49d6981`, main). `/terapeutas/papu` es ahora enlace clicable en el chat flotante y en la página de chat: `lib/render-links.tsx` centraliza `renderText`, usado en `ChatBot.tsx` y `app/chat/page.tsx` solo en mensajes del asistente; regex bloquea `//dominio`. Verificado: `curl -sI` → `age: 0` + `x-vercel-id` presente. Pruebas 16/16 seguridad + 4/4 renderText ✅. **Pasiflora: no existe en `plants`** (0 filas); el chat no la nombra por eso. Anterior: PR #109 fusionado y verificado. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
