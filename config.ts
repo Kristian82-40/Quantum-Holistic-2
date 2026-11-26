@@ -53,21 +53,6 @@ export const PLANS = [
     ],
     cta: 'Próximamente',
   },
-  {
-    id:       'plan_crypto',
-    name:     'Quantum Crypto',
-    price:    9,
-    priceAnnual: 90,
-    period:   '/ mes',
-    note:     'Pago soberano · En desarrollo',
-    featured: false,
-    features: [
-      { text: 'Pago con Bitcoin / Lightning (BTCPay)',  highlight: true },
-      { text: 'Sin intermediarios financieros',         highlight: true },
-      { text: 'Privacidad reforzada',                   highlight: false },
-    ],
-    cta: 'Próximamente',
-  },
 ] as const;
 
 // ─── Pillars ─────────────────────────────────────────────────

@@ -196,6 +196,42 @@
 
 .proCard .highlight { color: #fff !important; }
 
+.waitlistForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.waitlistInput {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid rgba(168, 184, 154, 0.5);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.waitlistInput:focus {
+  border-color: var(--gold, #c9a84c);
+}
+
+.waitlistInput::placeholder {
+  color: rgba(168, 184, 154, 0.6);
+}
+
+.waitlistConfirm {
+  text-align: center;
+  font-size: 13px;
+  color: var(--sage);
+  padding: 12px 0;
+  font-weight: 500;
+}
+
 .note {
   text-align: center;
   font-size: 12px;

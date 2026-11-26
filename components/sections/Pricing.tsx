@@ -6,28 +6,25 @@ import Button from '@/components/ui/Button';
 import styles from './Pricing.module.css';
 
 export default function Pricing() {
-  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [proEmail, setProEmail]   = useState('');
+  const [proLeadSent, setProLeadSent] = useState(false);
+  const [proLoading, setProLoading]   = useState(false);
 
-  async function handleCheckout(planId: string) {
-    if (planId !== 'plan_crypto') return;
+  async function handleProWaitlist(e: React.FormEvent) {
+    e.preventDefault();
+    if (!proEmail || proLoading) return;
+    setProLoading(true);
     try {
-      setLoadingId(planId);
-      const res = await fetch('/api/checkout', {
+      await fetch('/api/leads', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          paymentMethod: 'crypto',
-          billingCycle:  'monthly',
-        }),
+        body:    JSON.stringify({ email: proEmail, source: 'pro_waitlist' }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout falló');
-      window.location.href = data.url;
-    } catch (err) {
-      console.error('[checkout/crypto]', err);
-      alert(err instanceof Error ? err.message : 'Error iniciando pago');
-      setLoadingId(null);
+      setProLeadSent(true);
+    } catch {
+      // silent fail — el correo no llega, pero no bloqueamos al usuario
     }
+    setProLoading(false);
   }
 
   return (
@@ -49,8 +46,8 @@ export default function Pricing() {
 
               <ul className={styles.features}>
                 {plan.features.map((f) => {
-                  const text    = typeof f === 'string' ? f : f.text;
-                  const isHigh  = typeof f === 'object' && f.highlight;
+                  const text   = typeof f === 'string' ? f : f.text;
+                  const isHigh = typeof f === 'object' && f.highlight;
                   return (
                     <li key={text} className={isHigh ? styles.highlight : ''}>
                       {text}
@@ -60,17 +57,26 @@ export default function Pricing() {
               </ul>
 
               {plan.featured ? (
-                <Button variant="gold" fullWidth disabled={plan.cta === 'Próximamente'}>
-                  {plan.cta}
-                </Button>
+                proLeadSent ? (
+                  <p className={styles.waitlistConfirm}>✓ Apuntado. Te avisamos cuando abra.</p>
+                ) : (
+                  <form onSubmit={handleProWaitlist} className={styles.waitlistForm}>
+                    <input
+                      type="email"
+                      required
+                      placeholder="tu@correo.com"
+                      value={proEmail}
+                      onChange={e => setProEmail(e.target.value)}
+                      className={styles.waitlistInput}
+                    />
+                    <Button variant="gold" fullWidth type="submit" disabled={proLoading}>
+                      {proLoading ? 'Enviando…' : 'Unirme a la lista de espera'}
+                    </Button>
+                  </form>
+                )
               ) : (
-                <Button
-                  variant="outline"
-                  fullWidth
-                  onClick={() => handleCheckout(plan.id)}
-                  disabled={loadingId === plan.id || plan.cta === 'Próximamente'}
-                >
-                  {loadingId === plan.id ? 'Procesando…' : plan.cta}
+                <Button as="a" href="/chat" variant="outline" fullWidth>
+                  Empezar gratis
                 </Button>
               )}
             </div>
