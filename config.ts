@@ -1,10 +1,10 @@
 // ─── Site Config ───────────────────────────────────────────
 export const SITE_CONFIG = {
   name:        'Quantum Holistic',
-  tagline:     'Nutrición KM0, Herbología & Bienestar con IA',
+  tagline:     'Nutrición KM0, Herbología & Bienestar',
   url:         'https://quantum-holistic.com',
-  description: 'Planes nutricionales km0 personalizados, herbología y bienestar holístico potenciados por inteligencia artificial.',
-  email:       'kristiantroncoso@gmail.com', // provisional hasta tener correo en quantum-holistic.com (dominio sin MX)
+  description: 'Herbología y nutrición de kilómetro cero arraigadas en la sabiduría de la tierra.',
+  email:       'hola@quantum-holistic.com', // correo del dominio, activo desde 20-nov-2026
   social: {
     instagram: 'https://instagram.com/kris.biozen',
     youtube:   'https://youtube.com/@quantumholistic',
@@ -32,10 +32,8 @@ export const PLANS = [
     note:     'Sin tarjeta de crédito',
     featured: false,
     features: [
-      'Perfil holístico básico',
-      'Plan semanal generado por IA',
-      'Recetas km0 estacionales',
-      'Biblioteca de plantas medicinales',
+      'Chat holístico (5 mensajes/día)',
+      'Diccionario de plantas medicinales',
       'Blog y recursos gratuitos',
     ],
     cta: 'Empezar gratis',
@@ -46,35 +44,14 @@ export const PLANS = [
     price:    9,
     priceAnnual: 79,
     period:   '/ mes',
-    note:     'o €79/año — 2 meses gratis',
+    note:     'Lista de espera · Acceso próximamente',
     featured: true,
     features: [
-      { text: 'Protocolo depurativo mes a mes',         highlight: true },
-      { text: 'Optimización según tu perfil único',     highlight: true },
-      { text: 'Seguimiento adaptativo con IA',          highlight: false },
-      { text: 'Potenciación de habilidades específicas',highlight: false },
-      { text: 'Guías PDF descargables',                 highlight: false },
-      { text: 'Plan nutricional avanzado',              highlight: false },
-      { text: 'Herbología y rituales personalizados',   highlight: false },
+      { text: 'Sesión 1:1 con el especialista (65 €, aparte)', highlight: true },
+      { text: 'Protocolo depurativo mes a mes (próximamente)', highlight: false },
+      { text: 'Guías PDF descargables (próximamente)',         highlight: false },
     ],
-    cta: 'Activar Quantum Pro',
-  },
-  {
-    id:       'plan_crypto',
-    name:     'Quantum Crypto',
-    price:    9,
-    priceAnnual: 90,
-    period:   '/ mes',
-    note:     'Pago soberano · Bitcoin / Lightning',
-    featured: false,
-    features: [
-      { text: 'Todo lo de Quantum Pro',                 highlight: true },
-      { text: 'Pago con Bitcoin / Lightning (BTCPay)',  highlight: true },
-      { text: 'Sin intermediarios financieros',         highlight: true },
-      { text: 'Privacidad reforzada',                   highlight: false },
-      { text: 'Confirmación on-chain instantánea',      highlight: false },
-    ],
-    cta: 'Pagar con Crypto',
+    cta: 'Próximamente',
   },
 ] as const;
 
@@ -88,9 +65,9 @@ export const PILLARS = [
   },
   {
     num:   '02',
-    title: 'Perfil holístico personalizado',
-    desc:  'Biométrica, hábitos, energía y objetivos. Un sistema de bienestar único construido desde tus datos reales.',
-    tag:   'IA · Biométrica',
+    title: 'Dosha y constitución vital',
+    desc:  'Vata, Pitta o Kapha: conoce tu tipo de energía y adapta tu alimentación a tu constitución según el Ayurveda.',
+    tag:   'Ayurveda · Dosha',
   },
   {
     num:   '03',
@@ -103,40 +80,22 @@ export const PILLARS = [
 // ─── Pro Detail Items ─────────────────────────────────────────
 export const PRO_ITEMS = [
   {
-    icon:  '◈',
-    title: 'Protocolo depurativo mes a mes',
-    desc:  'Cada mes un ciclo diferente: depuración, refuerzo inmune, regeneración. Adaptado a tu estado, no a un calendario genérico.',
-    tag:   'Detox · Regeneración',
-  },
-  {
-    icon:  '◉',
-    title: 'Optimización según tu perfil',
-    desc:  'Deportista de élite, rendimiento cognitivo o equilibrio vital. Las técnicas se segmentan exactamente donde tú necesitas.',
-    tag:   'Élite · Rendimiento',
-  },
-  {
     icon:  '◎',
     title: 'Sesión 1:1 con el especialista',
-    desc:  'Opcional y aparte del plan (65 €): revisamos tu evolución, ajustamos el protocolo y resolvemos lo que ninguna IA puede gestionar sola.',
-    tag:   '1:1 · Aparte',
+    desc:  'Opcional y aparte del plan (65 €): revisamos tu contexto, ajustamos las recomendaciones y resolvemos lo que necesitas en persona.',
+    tag:   '1:1 · 65 € aparte',
   },
   {
-    icon:  '◇',
-    title: 'Seguimiento adaptativo',
-    desc:  'El sistema detecta si estás en fase de estrés, fatiga o pico de forma. Ajusta el protocolo de forma automática.',
-    tag:   'IA · Adaptativo',
-  },
-  {
-    icon:  '✦',
-    title: 'Potenciación de habilidades únicas',
-    desc:  'Músico, atleta, emprendedor o investigador: el plan potencia las capacidades específicas que tu vida requiere.',
-    tag:   'Personalizado · Enfocado',
+    icon:  '◈',
+    title: 'Protocolo depurativo mes a mes',
+    desc:  'Ciclos de depuración, refuerzo inmune y regeneración. En desarrollo — disponible pronto.',
+    tag:   'Próximamente',
   },
   {
     icon:  '◐',
-    title: 'Guías descargables & recursos',
-    desc:  'PDFs depurativos, recetarios estacionales, guías de plantas medicinales. Generados con IA y revisados por el especialista.',
-    tag:   'PDF · Recursos',
+    title: 'Guías descargables',
+    desc:  'Recetarios estacionales y guías de plantas medicinales. En desarrollo — disponible pronto.',
+    tag:   'Próximamente',
   },
 ] as const;
 
@@ -144,5 +103,5 @@ export const PRO_ITEMS = [
 export const MARQUEE_ITEMS = [
   'Nutrición km0', 'Herbología local', 'Depuración & detox',
   'Alto rendimiento', 'Potenciación cognitiva', 'Macrobiótica consciente',
-  'Plantas medicinales', 'Bienestar personalizado',
+  'Plantas medicinales', 'Bienestar holístico',
 ] as const;

@@ -8,7 +8,6 @@ import MarqueeBand from '@/components/sections/MarqueeBand';
 import Pillars from '@/components/sections/Pillars';
 import HowItWorks from '@/components/sections/HowItWorks';
 import ProDetail from '@/components/sections/ProDetail';
-import ProfileCTA from '@/components/sections/ProfileCTA';
 import Pricing from '@/components/sections/Pricing';
 import BlogPreview from '@/components/sections/BlogPreview';
 import ScrollReveal from '@/components/ui/ScrollReveal';
@@ -16,7 +15,7 @@ import RomeroPopup from '@/components/ui/RomeroPopup';
 import QuoteRail from '@/components/ui/QuoteRail';
 
 export const metadata: Metadata = {
-  title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar con IA',
+  title: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar',
 };
 
 export default function HomePage() {
@@ -37,7 +36,6 @@ export default function HomePage() {
         <ScrollReveal>
           <ProDetail />
         </ScrollReveal>
-        <ProfileCTA />
         <ScrollReveal>
           <Pricing />
         </ScrollReveal>

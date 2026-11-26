@@ -40,11 +40,11 @@ export default function TerminosPage() {
 
             <h2>2. El servicio</h2>
             <p>
-              Quantum Holistic ofrece planes de bienestar holístico, nutrición km0 y herbología personalizados con apoyo de inteligencia artificial. El servicio incluye:
+              Quantum Holistic ofrece servicios de bienestar holístico, nutrición km0 y herbología. El servicio incluye:
             </p>
             <ul>
-              <li><strong>Plan Freemium:</strong> perfil holístico básico, plan semanal generado por IA, recetas estacionales y acceso al blog. Gratuito, sin tarjeta requerida.</li>
-              <li><strong>Quantum Pro (mensual/anual):</strong> protocolo depurativo mensual, optimización de perfil avanzada, seguimiento adaptativo y guías descargables. La consulta individual con el especialista no está incluida y se reserva aparte.</li>
+              <li><strong>Plan Freemium:</strong> chat holístico (5 mensajes/día), acceso al diccionario de plantas medicinales y al blog. Gratuito, sin tarjeta requerida.</li>
+              <li><strong>Quantum Pro (próximamente):</strong> sesión 1:1 con el especialista (65 €, aparte), protocolo depurativo mensual y guías PDF descargables. En desarrollo — acceso próximamente.</li>
             </ul>
 
             <h2>3. Naturaleza del servicio — aviso importante</h2>

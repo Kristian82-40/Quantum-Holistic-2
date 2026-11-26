@@ -6,29 +6,28 @@ import Button from '@/components/ui/Button';
 import styles from './Pricing.module.css';
 
 export default function Pricing() {
-  const [annual, setAnnual] = useState(false);
-  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [proEmail, setProEmail]     = useState('');
+  const [proLeadSent, setProLeadSent] = useState(false);
+  const [proLoading, setProLoading]   = useState(false);
+  const [proError, setProError]       = useState('');
 
-  async function handleCheckout(planId: string) {
-    if (planId !== 'plan_crypto') return;
+  async function handleProWaitlist(e: React.FormEvent) {
+    e.preventDefault();
+    if (!proEmail || proLoading) return;
+    setProLoading(true);
+    setProError('');
     try {
-      setLoadingId(planId);
-      const res = await fetch('/api/checkout', {
+      const res = await fetch('/api/leads', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          paymentMethod: 'crypto',
-          billingCycle:  annual ? 'annual' : 'monthly',
-        }),
+        body:    JSON.stringify({ email: proEmail, source: 'pro_waitlist' }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error || 'Checkout falló');
-      window.location.href = data.url;
-    } catch (err) {
-      console.error('[checkout/crypto]', err);
-      alert(err instanceof Error ? err.message : 'Error iniciando pago');
-      setLoadingId(null);
+      if (!res.ok) throw new Error();
+      setProLeadSent(true);
+    } catch {
+      setProError('No se pudo guardar, inténtalo de nuevo');
     }
+    setProLoading(false);
   }
 
   return (
@@ -39,57 +38,24 @@ export default function Pricing() {
           Elige tu <em>camino</em>
         </h2>
 
-        {/* Toggle */}
-        <div className={styles.toggle}>
-          <span className={!annual ? styles.toggleActive : ''}>Mensual</span>
-          <button
-            className={styles.toggleBtn}
-            onClick={() => setAnnual((v) => !v)}
-            aria-label="Alternar facturación anual"
-          >
-            <span className={`${styles.toggleKnob} ${annual ? styles.toggleKnobOn : ''}`} />
-          </button>
-          <span className={annual ? styles.toggleActive : ''}>
-            Anual <em className={styles.saveBadge}>2 meses gratis</em>
-          </span>
-        </div>
-
-        {/* Cards */}
         <div className={styles.grid}>
           {PLANS.map((plan) => (
             <div
               key={plan.id}
               className={`${styles.card} ${plan.featured ? styles.proCard : ''} reveal`}
             >
-              {plan.featured && (
-                <span className={styles.badge}>Recomendado</span>
-              )}
-
               <p className={styles.tier}>{plan.name}</p>
 
               <div className={styles.priceRow}>
-                <span className={styles.amount}>
-                  €{plan.featured && annual && 'priceAnnual' in plan
-                    ? Math.round((plan.priceAnnual as number) / 12)
-                    : plan.price}
-                </span>
-                <span className={styles.period}>
-                  {plan.price === 0 ? 'para siempre' : '/ mes'}
-                </span>
+                <span className={styles.amount}>€{plan.price}</span>
+                <span className={styles.period}>{plan.period}</span>
               </div>
-
-              {'priceAnnual' in plan && (
-                <p className={styles.annualNote}>
-                  {annual
-                    ? `Facturado €${plan.priceAnnual}/año`
-                    : `o €${plan.priceAnnual}/año — ahorra €${plan.price * 12 - (plan.priceAnnual as number)}`}
-                </p>
-              )}
+              {plan.note && <p className={styles.annualNote}>{plan.note}</p>}
 
               <ul className={styles.features}>
                 {plan.features.map((f) => {
-                  const text    = typeof f === 'string' ? f : f.text;
-                  const isHigh  = typeof f === 'object' && f.highlight;
+                  const text   = typeof f === 'string' ? f : f.text;
+                  const isHigh = typeof f === 'object' && f.highlight;
                   return (
                     <li key={text} className={isHigh ? styles.highlight : ''}>
                       {text}
@@ -99,17 +65,36 @@ export default function Pricing() {
               </ul>
 
               {plan.featured ? (
-                <Button variant="gold" fullWidth>
-                  {plan.cta}
-                </Button>
+                proLeadSent ? (
+                  <p className={styles.waitlistConfirm}>✓ Apuntado. Te avisamos cuando abra.</p>
+                ) : (
+                  <form onSubmit={handleProWaitlist} className={styles.waitlistForm}>
+                    <label htmlFor="pro-email" className={styles.srOnly}>
+                      Tu correo electrónico
+                    </label>
+                    <input
+                      id="pro-email"
+                      type="email"
+                      required
+                      placeholder="tu@correo.com"
+                      value={proEmail}
+                      onChange={e => { setProEmail(e.target.value); setProError(''); }}
+                      className={styles.waitlistInput}
+                    />
+                    <p className={styles.rgpd}>
+                      Usaremos tu correo solo para avisarte cuando abra Quantum Pro.
+                      Puedes darte de baja cuando quieras.{' '}
+                      Más en <a href="/privacidad" className={styles.rgpdLink}>Privacidad</a>.
+                    </p>
+                    <Button variant="gold" fullWidth type="submit" disabled={proLoading}>
+                      {proLoading ? 'Enviando…' : 'Unirme a la lista de espera'}
+                    </Button>
+                    {proError && <p className={styles.waitlistError}>{proError}</p>}
+                  </form>
+                )
               ) : (
-                <Button
-                  variant="outline"
-                  fullWidth
-                  onClick={() => handleCheckout(plan.id)}
-                  disabled={loadingId === plan.id}
-                >
-                  {loadingId === plan.id ? 'Procesando…' : plan.cta}
+                <Button as="a" href="/chat" variant="outline" fullWidth>
+                  Empezar gratis
                 </Button>
               )}
             </div>
@@ -117,7 +102,6 @@ export default function Pricing() {
         </div>
 
         <p className={styles.note}>
-          Sin permanencia · Cancela cuando quieras ·{' '}
           <strong>Sin tarjeta para empezar</strong>
         </p>
       </div>

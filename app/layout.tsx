@@ -9,19 +9,18 @@ const SITE_URL = 'https://quantum-holistic.com';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar con IA',
+    default: 'Quantum Holistic — Nutrición KM0, Herbología & Bienestar',
     template: '%s | Quantum Holistic',
   },
   description:
-    'Planes nutricionales km0 personalizados, herbología y bienestar holístico potenciados por inteligencia artificial. Descubre tu perfil y transforma tu salud.',
+    'Herbología y nutrición de kilómetro cero arraigadas en la sabiduría de la tierra. Blog, diccionario de plantas y asesoramiento con el especialista.',
   keywords: [
     'nutrición km0',
     'bienestar holístico',
     'herbología',
-    'plan nutricional personalizado',
+    'plan nutricional',
     'macrobiótica',
     'plantas medicinales',
-    'inteligencia artificial salud',
     'detox depuracion',
   ],
   authors: [{ name: 'Kristian Troncoso', url: SITE_URL }],
@@ -31,15 +30,15 @@ export const metadata: Metadata = {
     locale: 'es_ES',
     url: SITE_URL,
     siteName: 'Quantum Holistic',
-    title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
+    title: 'Quantum Holistic — Nutrición KM0 & Bienestar',
     description:
-      'Tu cuerpo tiene su propia inteligencia. Planes nutricionales km0 y bienestar holístico personalizados con IA.',
+      'Herbología, nutrición km0 y bienestar holístico arraigados en la sabiduría de la tierra.',
     images: [{ url: '/images/og-default.jpg', width: 1059, height: 556 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quantum Holistic — Nutrición KM0 & Bienestar con IA',
-    description: 'Tu cuerpo tiene su propia inteligencia. Descubre tu perfil holístico.',
+    title: 'Quantum Holistic — Nutrición KM0 & Bienestar',
+    description: 'Tu cuerpo tiene su propia inteligencia. Herbología y nutrición km0 arraigadas en la sabiduría de la tierra.',
     images: ['/images/og-default.jpg'],
   },
   robots: {

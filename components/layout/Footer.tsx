@@ -17,7 +17,7 @@ const FOOTER_COLS = [
       { label: 'Método',   href: '/#pillars' },
       { label: 'Proceso',  href: '/#how' },
       { label: 'Contacto', href: `mailto:${SITE_CONFIG.email}` },
-      { label: 'Chat IA',  href: '/chat' },
+      { label: 'Chat',  href: '/chat' },
     ],
   },
   {

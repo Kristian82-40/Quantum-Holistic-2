@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 
 type Message = { role: 'user' | 'assistant'; text: string };
 
@@ -41,7 +40,7 @@ function hasSubmittedEmail(): boolean {
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: '¡Hola! Soy papu-pro, tu asistente holístico. ¿En qué te puedo ayudar hoy?' },
+    { role: 'assistant', text: '¡Hola! Soy el asistente de Quantum Holistic. Consulta sobre plantas, nutrición y bienestar. ¿En qué te puedo ayudar hoy?' },
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -127,10 +126,10 @@ export default function ChatPage() {
                   Antes de continuar
                 </p>
                 <p style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: '1.3rem', marginBottom: '8px', lineHeight: 1.3 }}>
-                  Guarda tus consultas sin límite
+                  Deja tu email para recibir novedades
                 </p>
                 <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px', fontWeight: 300, lineHeight: 1.6 }}>
-                  Déjanos tu email y te enviamos una guía de plantas para tu dosha + acceso anticipado a Quantum Pro.
+                  Te avisaremos cuando haya nuevas secciones y contenidos.
                 </p>
                 <form onSubmit={submitLead} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <input
@@ -142,7 +141,7 @@ export default function ChatPage() {
                     style={{ padding: '10px 14px', border: '1px solid var(--border)', background: 'var(--bg-secondary)', outline: 'none', fontSize: '14px', color: 'var(--text-primary)', fontFamily: 'var(--font-sans)' }}
                   />
                   <button type="submit" disabled={leadLoading} style={{ padding: '10px', background: 'var(--sage)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: 'var(--font-serif)' }}>
-                    {leadLoading ? '…' : 'Quiero la guía gratis'}
+                    {leadLoading ? '…' : 'Recibir novedades'}
                   </button>
                   <button type="button" onClick={() => setShowLeadModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: 'var(--text-muted)' }}>
                     No, continuar sin guardar
@@ -158,7 +157,7 @@ export default function ChatPage() {
       <div style={s.header}>
         <a href="/" style={s.back}>← Inicio</a>
         <div>
-          <p style={s.headerTitle}>papu-pro</p>
+          <p style={s.headerTitle}>Asistente Quantum</p>
           <p style={s.headerSub}>Asistente holístico · Quantum Holistic</p>
         </div>
         <div style={{ ...s.dot, background: loading ? 'var(--gold)' : '#4caf50' }} />
@@ -168,9 +167,6 @@ export default function ChatPage() {
       {!isBlocked && remaining <= 2 && (
         <div style={s.warnBanner}>
           <span>Te quedan {remaining} mensaje{remaining !== 1 ? 's' : ''} gratuitos hoy.</span>
-          <Link href="/#pricing" style={{ color: 'var(--sage)', fontWeight: 500, textDecoration: 'none', marginLeft: '8px' }}>
-            Hazte Pro →
-          </Link>
         </div>
       )}
 
@@ -196,18 +192,8 @@ export default function ChatPage() {
             Has usado tus {FREE_LIMIT} mensajes gratuitos de hoy
           </p>
           <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px', fontWeight: 300, lineHeight: 1.6 }}>
-            Vuelve mañana · o hazte Pro para conversaciones ilimitadas, planes personalizados y acceso prioritario.
+            Vuelve mañana para seguir explorando.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/#pricing" style={{ padding: '12px 28px', background: 'var(--sage)', color: '#fff', textDecoration: 'none', fontSize: '13px', letterSpacing: '0.1em', fontFamily: 'var(--font-serif)' }}>
-              Ver planes Pro
-            </Link>
-            {!hasSubmittedEmail() && (
-              <button onClick={() => setShowLeadModal(true)} style={{ padding: '12px 20px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'inherit' }}>
-                Avísame cuando sea gratuito →
-              </button>
-            )}
-          </div>
         </div>
       ) : (
         <form onSubmit={send} style={s.form}>

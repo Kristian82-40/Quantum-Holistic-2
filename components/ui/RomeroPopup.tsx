@@ -63,13 +63,9 @@ export default function RomeroPopup() {
         </span>
 
         <p className={styles.body}>
-          El romero silvestre es una de las plantas más estudiadas para la memoria
-          y la circulación cerebral. Su aceite esencial activa el sistema nervioso
-          simpático mejorando la concentración en solo 20 minutos de exposición.
-          <br /><br />
-          Este mes, los planes <em>Quantum Pro</em> incluyen un protocolo completo
-          de aromaterapia y tintura de romero, adaptado a tu perfil metabólico
-          y al ritmo estacional de tu zona.
+          El romero silvestre es una de las plantas más presentes en la tradición
+          herbolaria mediterránea. Se emplea en infusión, aceite esencial y tintura
+          en el contexto de la herbología clásica y la aromaterapia.
         </p>
 
         <div className={styles.actions}>
@@ -80,7 +76,7 @@ export default function RomeroPopup() {
               setTimeout(() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' }), 400)
             }}
           >
-            Ver mi plan personalizado →
+            Ver los planes →
           </button>
           <button className={styles.btnSecondary} onClick={close}>
             Solo estoy explorando

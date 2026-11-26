@@ -7,7 +7,7 @@ interface Message {
   text: string
 }
 
-const WELCOME = 'Bienvenido a Quantum Holistic. Soy tu asistente especializado en nutrición km0, herbología y bienestar personalizado. ¿En qué puedo orientarte hoy?'
+const WELCOME = 'Bienvenido a Quantum Holistic. Soy tu asistente especializado en nutrición km0, herbología y bienestar holístico. ¿En qué puedo orientarte hoy?'
 
 const SUGGESTIONS = [
   'Plantas para la digestión',
@@ -97,7 +97,7 @@ export default function ChatBot() {
               <p className={styles.headerName}>Asistente Quantum Holistic</p>
               <p className={styles.headerStatus}>
                 <span className={styles.statusDot} />
-                IA local · papu-pro · Nutrición & Herbología
+                Asistente · Nutrición & Herbología
               </p>
             </div>
             <button className={styles.closeBtn} onClick={() => setOpen(false)} aria-label="Cerrar">×</button>
@@ -152,7 +152,7 @@ export default function ChatBot() {
             </button>
           </div>
 
-          <p className={styles.panelFooter}>QUANTUM HOLISTIC · IA LOCAL · PRIVACIDAD GARANTIZADA</p>
+          <p className={styles.panelFooter}>QUANTUM HOLISTIC · NUTRICIÓN & HERBOLOGÍA</p>
         </div>
       )}
     </>

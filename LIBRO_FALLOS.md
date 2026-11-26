@@ -65,3 +65,19 @@ Formato de cada entrada:
 > Nunca desplegar código que llame a rutas locales (`/Volumes/`, `localhost`, `127.0.0.1`) desde funciones de servidor en producción. `gitleaks` no detecta esto; añadir un grep de `/Volumes/` y `localhost` en `vigilancia.yml` como check de CI.
 
 ---
+
+## F-005 · Grep parcial: informe de «4 referencias» incompleto · 25-nov-2026
+
+**Qué falló:** La sesión anterior reportó "4 referencias quedan" al hacer el grep final de términos prohibidos. En realidad había más: `app/api/chat/route.ts` tenía dos líneas de SYSTEM_PROMPT con "personalizado/planes personalizados" (usuario no ve el texto, pero es incorrecto) y el archivo activo `messages/en.json` (raíz) tenía todo el contenido viejo sin corregir — las ediciones se habían aplicado a `app/messages/en.json` que nadie importa.
+
+**Causa:** Tres errores combinados:
+1. El grep se ejecutó sobre `app/ components/ lib/ messages/ config.ts` (relativo), no desde la raíz con `.` — omitió `supabase/` y confundió `messages/` con `app/messages/`.
+2. No se incluyeron extensiones `.js` y `.mjs` (Edge Functions de Kimiko).
+3. El informe resumió y clasificó resultados en vez de listar la salida completa del grep, ocultando líneas reales.
+
+**Arreglo:** PR `claude/v2-f1-paso-0` — grep desde raíz con todas las extensiones, `messages/en.json` raíz corregido, `app/messages/` borrado (cero imports, alias `@/*` resuelve a raíz), SYSTEM_PROMPT corregido.
+
+**Regla / receta:**
+> El grep de términos prohibidos siempre corre desde la raíz del repo (`.`) con `--exclude-dir=node_modules --exclude-dir=.next --exclude="package-lock.json"` e incluye `*.ts *.tsx *.js *.mjs *.json`. El informe entrega la salida completa sin filtrar; la clasificación (interno / user-facing) va debajo como análisis, no como sustitución de la salida. El script canónico está en `.claude/skills/qh-seguridad/`.
+
+---

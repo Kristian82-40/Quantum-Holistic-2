@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      notifyN8n('checkout.session.completed', { email, subscriptionId, billingCycle, sessionId: session.id });
       break;
     }
 
@@ -56,7 +55,6 @@ export async function POST(req: NextRequest) {
         plan: 'free',
         plan_expires_at: null,
       });
-      notifyN8n('subscription.deleted', { subscriptionId: sub.id, customerId });
       break;
     }
 
@@ -77,11 +75,6 @@ export async function POST(req: NextRequest) {
           err => console.error('[webhook] Email pago fallido no enviado:', err)
         );
       }
-      notifyN8n('invoice.payment_failed', {
-        invoiceId: invoice.id,
-        customerEmail,
-        attemptCount: invoice.attempt_count ?? 0,
-      });
       break;
     }
 
@@ -128,12 +121,3 @@ async function updateProfileByCustomerId(customerId: string, fields: Record<stri
   if (!res.ok) console.error('[Stripe webhook] Error actualizando perfil por customer ID:', await res.text());
 }
 
-function notifyN8n(eventType: string, payload: Record<string, unknown>) {
-  const url = process.env.N8N_STRIPE_WEBHOOK_URL;
-  if (!url || url.includes('REEMPLAZA')) return;
-  fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ event: eventType, ...payload, timestamp: new Date().toISOString() }),
-  }).catch(err => console.error('[Stripe webhook] n8n error:', err));
-}

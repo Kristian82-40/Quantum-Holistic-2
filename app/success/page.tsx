@@ -43,10 +43,10 @@ export default async function SuccessPage({
           <p className={styles.text}>
             Tu suscripción está activa.
             {email && (
-              <> En menos de 24h recibirás un email en <strong>{email}</strong> con tu protocolo personalizado y acceso a todas las funcionalidades Pro.</>
+              <> En menos de 24h recibirás un email en <strong>{email}</strong> con los detalles de tu acceso a Quantum Pro.</>
             )}
             {!email && (
-              <> En menos de 24h recibirás un email con tu protocolo personalizado y acceso a todas las funcionalidades Pro.</>
+              <> En menos de 24h recibirás un email con los detalles de tu acceso a Quantum Pro.</>
             )}
           </p>
           <a href="/" className={styles.back}>
