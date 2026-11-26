@@ -34,6 +34,16 @@ const RIESGO_REGEXPS: RegExp[] = [
   /hipertiroid|hipotiroid/,                            // tiroides
   /\bepileps/,                                         // epilepsia
   /tomo.{1,25}(pastilla|medicamento|farmaco|tratamiento)/, // "tomo medicamentos"
+  /\bsintrom\b/,                                        // Sintrom (marca de acenocumarol)
+  /dand[oa].{0,8}pecho|\bdoy.{0,8}pecho/,              // dando/doy el pecho (lactancia)
+  /\bdiabet/,                                           // diabetes, diabético/a y variantes
+  /\binsulina\b/,                                       // insulina (diabetes)
+  /\bmetformin/,                                        // metformina (diabetes)
+  /eliquis|xarelto|apixaban|rivaroxaban/,               // anticoagulantes de nueva generación
+  /\bcriando\b/,                                        // "estoy criando" (lactancia coloquial)
+  /\bhipertens/,                                        // hipertenso/a, hipertensión
+  /\btiroides\b/,                                       // "tengo tiroides" (sin especificar hiper/hipo)
+  /\bceliac/,                                           // celíaco/a, celiaquía
 ];
 
 /** Devuelve true si el mensaje contiene un contexto de riesgo conocido. */

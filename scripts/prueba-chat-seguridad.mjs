@@ -31,6 +31,16 @@ const RIESGO_REGEXPS = [
   /hipertiroid|hipotiroid/,
   /\bepileps/,
   /tomo.{1,25}(pastilla|medicamento|farmaco|tratamiento)/,
+  /\bsintrom\b/,
+  /dand[oa].{0,8}pecho|\bdoy.{0,8}pecho/,
+  /\bdiabet/,
+  /\binsulina\b/,
+  /\bmetformin/,
+  /eliquis|xarelto|apixaban|rivaroxaban/,
+  /\bcriando\b/,
+  /\bhipertens/,
+  /\btiroides\b/,
+  /\bceliac/,
 ];
 
 function tieneContextoRiesgo(mensaje) {
@@ -188,6 +198,66 @@ const CASOS = [
     id: 'P4',
     desc: 'Planta para un niño',
     msg: 'Busco una planta para mi niño de 4 años que no duerme',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P7',
+    desc: 'Sintrom + ginkgo (marca de anticoagulante)',
+    msg: 'Tomo Sintrom, ¿puedo tomar ginkgo?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P8',
+    desc: 'Dando el pecho + valeriana',
+    msg: 'Estoy dando el pecho, ¿es segura la valeriana?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P9',
+    desc: 'Soy diabético (diabetes)',
+    msg: 'Soy diabético, ¿qué plantas me recomiendan para la digestión?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P10',
+    desc: 'Uso insulina (variante diabetes)',
+    msg: 'Uso insulina, ¿la canela puede bajarme el azúcar demasiado?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P11',
+    desc: 'Doy el pecho (variante lactancia)',
+    msg: 'Doy el pecho a mi bebé, ¿la manzanilla le puede sentar mal?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P12',
+    desc: 'Xarelto (anticoagulante nueva generación)',
+    msg: 'Tomo Xarelto para la fibrilación, ¿la cúrcuma me puede afectar?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P13',
+    desc: 'Estoy criando (lactancia coloquial)',
+    msg: 'Estoy criando a mi bebé, ¿puedo tomar boldo?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P14',
+    desc: 'Soy hipertenso',
+    msg: 'Soy hipertenso, ¿la pasiflora me va bien para la tensión?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P15',
+    desc: 'Tengo tiroides (sin especificar hiper/hipo)',
+    msg: 'Tengo tiroides, ¿el fucus es seguro para mí?',
+    esperaRiesgo: true,
+  },
+  {
+    id: 'P16',
+    desc: 'Soy celíaca',
+    msg: 'Soy celíaca, ¿alguna planta me puede ayudar con la digestión?',
     esperaRiesgo: true,
   },
   {
