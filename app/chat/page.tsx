@@ -1,24 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { renderText } from '@/lib/render-links';
 
 type Message = { role: 'user' | 'assistant'; text: string };
 
 const FREE_LIMIT = 5;
-
-/** Convierte [texto](/ruta-interna) en <a> clicable. Solo acepta rutas internas (/…). */
-function renderText(text: string): React.ReactNode {
-  const parts = text.split(/(\[[^\]]+\]\(\/[^)]+\))/g);
-  return parts.map((part, i) => {
-    const m = part.match(/^\[([^\]]+)\]\((\/[^)]+)\)$/);
-    if (m) return (
-      <a key={i} href={m[2]} style={{ color: 'var(--sage)', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-        {m[1]}
-      </a>
-    );
-    return part;
-  });
-}
 const LEAD_TRIGGER = 4; // mostrar captura de email al llegar al 4º mensaje
 
 function getSessionId() {
@@ -188,7 +175,9 @@ export default function ChatPage() {
       <div style={s.messages}>
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', marginBottom: '12px' }}>
-            <div style={m.role === 'user' ? s.bubbleUser : s.bubbleBot}>{renderText(m.text)}</div>
+            <div style={m.role === 'user' ? s.bubbleUser : s.bubbleBot}>
+              {m.role === 'assistant' ? renderText(m.text) : m.text}
+            </div>
           </div>
         ))}
         {loading && (
