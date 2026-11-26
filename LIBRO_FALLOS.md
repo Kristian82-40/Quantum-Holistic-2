@@ -66,6 +66,19 @@ Formato de cada entrada:
 
 ---
 
+## F-009 · Commit de ESTADO.md directo en main local · 26-nov-2026
+
+**Qué falló:** Al cerrar la sesión de PR #118, el agente hizo `git add ESTADO.md && git commit` directamente en la rama local `main`. El commit `236a461` quedó en main local por encima de `origin/main`, bloqueando el push (regla `ask` en settings.local.json) y requiriendo un `git reset --hard` manual.
+
+**Causa:** ESTADO.md se trata habitualmente como "documento de estado vivo" y el agente lo editó y committeó como si fuera un cambio de cierre de sesión de bajo riesgo, sin abrir rama primero.
+
+**Arreglo:** Rama `claude/estado-118` creada a partir de `236a461`, main local reseteado a `origin/main`, PR #119 abierto con `--label no-fusionar`.
+
+**Regla / receta:**
+> ESTADO.md también va por rama y PR, sin excepciones. Ningún archivo del repo se commitea directamente en `main` local. La secuencia siempre es: `git checkout -b claude/<nombre>` → editar → commit → push → PR con `--label no-fusionar`.
+
+---
+
 ## F-005 · Grep parcial: informe de «4 referencias» incompleto · 25-nov-2026
 
 **Qué falló:** La sesión anterior reportó "4 referencias quedan" al hacer el grep final de términos prohibidos. En realidad había más: `app/api/chat/route.ts` tenía dos líneas de SYSTEM_PROMPT con "personalizado/planes personalizados" (usuario no ve el texto, pero es incorrecto) y el archivo activo `messages/en.json` (raíz) tenía todo el contenido viejo sin corregir — las ediciones se habían aplicado a `app/messages/en.json` que nadie importa.
