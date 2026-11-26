@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { renderText } from '@/lib/render-links';
 
 type Message = { role: 'user' | 'assistant'; text: string };
 
@@ -174,7 +175,9 @@ export default function ChatPage() {
       <div style={s.messages}>
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', marginBottom: '12px' }}>
-            <div style={m.role === 'user' ? s.bubbleUser : s.bubbleBot}>{m.text}</div>
+            <div style={m.role === 'user' ? s.bubbleUser : s.bubbleBot}>
+              {m.role === 'assistant' ? renderText(m.text) : m.text}
+            </div>
           </div>
         ))}
         {loading && (

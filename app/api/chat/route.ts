@@ -145,7 +145,7 @@ function scoreOverlap(words: string[], haystack: string): number {
  */
 async function respuestaSeguridadRiesgo(mensaje: string): Promise<string> {
   const PRIMERA_FRASE = 'No tomes ninguna planta sin consultar antes con tu médico o farmacéutico.';
-  const CIERRE = 'Para cualquier duda sobre tu situación, habla con tu médico, farmacéutico o visita /terapeutas/papu.';
+  const CIERRE = 'Para cualquier duda sobre tu situación, habla con tu médico, farmacéutico o [consulta con Papu](/terapeutas/papu).';
 
   const words = significantWords(mensaje);
   if (words.length === 0) return `${PRIMERA_FRASE} ${CIERRE}`;

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import styles from './ChatBot.module.css'
+import { renderText } from '@/lib/render-links'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -107,7 +108,7 @@ export default function ChatBot() {
           <div className={styles.messages}>
             {messages.map((m, i) => (
               <div key={i} className={`${styles.msg} ${m.role === 'user' ? styles.msgUser : styles.msgAssistant}`}>
-                {m.text}
+                {m.role === 'assistant' ? renderText(m.text) : m.text}
               </div>
             ))}
             {loading && (

@@ -1,14 +1,13 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 25-nov-2026 (Madrid) · Claude (Code): **PR #109 paso 0 — tercera pasada** — commit `681ff09` (rama `claude/v2-f1-paso-0`): privacidad §2 (dosha desde /cuenta, no chat), §4 (fusión de líneas duplicadas), §6 (texto exacto de Kristian: 30 días perfil, 6 años facturación art. 30 CC, 24 meses email); borrados `app/api/profile/route.ts` (ruta rota, sin caller), `lib/claude.ts` (único importador ya borrado), `app/lib/claude.ts` (cero imports), `app/page.tsx.bak` (backup); `messages/en.json` raíz (el activo, que `@/messages/` resuelve a la raíz, no a `app/messages/`) corregido: sin artificial intelligence, video call, 2 months free, AI-generated, papu-pro. Descubrimiento: `app/messages/` son muertos — ningún componente usa `useTranslations`, el texto visible está hardcoded en TSX. Grep final limpio excepto `app/api/chat/route.ts` (papu-pro env-var, n8n comentarios: interno, no user-facing). **Tarea pendiente: implementar borrados del §6** (cron/Edge Function). Build ✅. Anteriores: 25-nov segunda pasada: A–H; 24-nov: autostart probado sin Papu Ext; 24-nov mañana: agentes migrados. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 26-nov-2026 (Madrid) · Claude (Code): **PR chat-pulido abierto** (rama `claude/chat-pulido`, esperando ✅ Kristian). Cambio: `/terapeutas/papu` pasa de texto plano a enlace clicable `[consulta con Papu](/terapeutas/papu)` en el CIERRE de riesgo (`route.ts`) + mini-parser `renderText` en `chat/page.tsx` que convierte `[texto](/ruta)` en `<a>`. Pruebas 16/16 ✅. Build ✅. **Pasiflora en Supabase: no existe** — 0 filas con nombre_es/nombre_latino/slug que coincidan con "pasiflora" o "passiflora" en la tabla `plants` (57 filas totales); por eso el chat no la nombra. Anterior: PR #109 fusionado y verificado en producción. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
 ## Web quantum-holistic.com
 | | Qué | Prueba |
 |---|---|---|
-| ⏳ | **PR #108** (infraestructura agentes v2): `.claude/agents/`, `LIBRO_FALLOS.md`, semilla V2-F1 → se fusiona solo cuando CI esté verde | rama `claude/v2-setup-infraestructura` |
-| ⏳ | **PR #109** (Step 0 — quitar promesas inexistentes): quitado ProfileCTA («Generar mi plan»), paso «La IA analiza», Quantum Pro protocolos → esperando ✅ de Kristian + CI verde | rama `claude/v2-f1-paso-0`; sin verificar en producción |
+| ✅ | **PR #108** (infraestructura agentes v2) + **PR #109** (Step 0 — quitar promesas): fusionados en main. Portada verificada: «Quantum Crypto», «Generar mi plan» y «La IA analiza» **no aparecen** en producción | `curl … grep … wc -l` → 0 · 26-nov-2026 |
 | ⏳ | **PR #110** (Step 2 — propuesta diseño): esquema portada, mapa 7 áreas, 3 direcciones (A/B/C) → **PARAR, esperando elección de Kristian** | rama `claude/v2-f1-step-2-propuesta` |
 | ✅ | Producción desplegada desde `main` (commit `c4523d2`, PRs #9–#20 fusionados el 8-oct 11:40) | estado `Vercel=success` del commit en la API de GitHub |
 | ✅ | Rutas `/`, `/blog`, `/diccionario`, `/terapeutas`, `/login` responden 200 | Chequeo de `kimiko-diario` del 8-oct 08:13 UTC (`kimiko_updates` tipo `chequeo`) |

@@ -274,6 +274,18 @@ const CASOS = [
   },
 ];
 
+// ── Prueba renderText: solo rutas internas (sin imports de React) ─────────────
+// Replica el mismo regex que lib/render-links.tsx para detectar regresiones.
+
+const INTERNAL_LINK_RE = /^\[([^\]]+)\]\((\/[a-zA-Z0-9][^)]*)\)$/;
+
+const RENDER_CASOS = [
+  { input: '[consulta con Papu](/terapeutas/papu)', esperaMatch: true,  desc: 'ruta interna /terapeutas/papu' },
+  { input: '[x](//evil.com)',                        esperaMatch: false, desc: '[x](//evil.com) → texto plano (doble barra)' },
+  { input: '[blog](/blog)',                           esperaMatch: true,  desc: 'ruta /blog válida' },
+  { input: '[x](/123)',                               esperaMatch: true,  desc: 'ruta que empieza por número /123' },
+];
+
 // ── Ejecutar ─────────────────────────────────────────────────────────────────
 
 let fallos = 0;
@@ -298,9 +310,21 @@ for (const c of CASOS) {
 }
 
 console.log('──────────────────────────────────────────────');
+
+// Pruebas renderText
+console.log('\n── renderText: seguridad de rutas ────────────');
+for (const t of RENDER_CASOS) {
+  const matched = INTERNAL_LINK_RE.test(t.input);
+  const ok = matched === t.esperaMatch;
+  if (!ok) fallos++;
+  console.log(`${ok ? '✅' : '❌'} ${t.desc}`);
+  if (!ok) console.log(`   esperaba match=${t.esperaMatch}, obtuvo match=${matched} ← FALLO`);
+}
+console.log();
+
 if (fallos === 0) {
-  console.log(`✅ Todos los casos pasaron (${CASOS.length}/${CASOS.length})\n`);
+  console.log(`✅ Todos los casos pasaron (${CASOS.length}/${CASOS.length} seguridad + ${RENDER_CASOS.length}/${RENDER_CASOS.length} renderText)\n`);
 } else {
-  console.log(`❌ ${fallos} caso(s) fallaron de ${CASOS.length}\n`);
+  console.log(`❌ ${fallos} caso(s) fallaron\n`);
   process.exit(1);
 }
