@@ -6,6 +6,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 async function getBlogSlugs(): Promise<string[]> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return [];
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/blog_posts?select=slug&status=eq.published&order=created_at.desc`,
@@ -18,6 +19,7 @@ async function getBlogSlugs(): Promise<string[]> {
 }
 
 async function getPlantSlugs(): Promise<string[]> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return [];
   try {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/plants?select=slug&publicada=eq.true&ficha_verificada=eq.true&order=nombre_es`,

@@ -14,6 +14,14 @@ Formato de cada entrada:
 
 ---
 
+## F-010 · Segundo package.json olvidado en app/ · 26-nov-2026
+**Qué falló:** `app/package.json` y `app/package-lock.json` (next 14.2.5, abril) seguían en el repo después de que el proyecto migrara su raíz a la carpeta principal. GitHub los escaneaba con Dependabot y sumaban decenas de alertas de seguridad duplicadas (103 en total frente a las reales del package.json raíz).
+**Causa:** Al reorganizar el proyecto en algún momento (presumiblemente al crear la estructura Next.js en la raíz), los archivos de la carpeta `app/` no se eliminaron. Ningún workflow, script ni vercel.json los referenciaba.
+**Arreglo:** `git rm app/package.json app/package-lock.json` en la rama `claude/seguridad-deps` (PR #120). Grep previo en vercel.json, package.json, .github/, scripts y código: 0 referencias.
+**Regla / receta:** Antes de cerrar cualquier PR de dependencias, comprobar `find . -name "package.json" -not -path "*/node_modules/*"` y verificar que solo existe el raíz (y los de supabase/functions si los hay). Un package.json huérfano infla las alertas y oculta el estado real de seguridad.
+
+---
+
 ## F-001 · Funcionalidades prometidas que no existen · 24-nov-2026
 
 **Qué falló:** La portada prometía un "plan con IA" (sección ProfileCTA con botón "Generar mi plan"), una sección "La IA analiza y conecta" y un "bloque de protocolo de Quantum Pro". Ninguna de estas funcionaba: `/api/profile/` llamaba a un script Python en `/Volumes/PapuExt/` (disco externo ya desconectado) y a n8n/Ollama en localhost. Las tablas `monthly_protocols`, `nutrition_plans` y `recipes` tienen 0 filas.
