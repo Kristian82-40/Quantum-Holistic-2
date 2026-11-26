@@ -1,6 +1,6 @@
 # ESTADO.md — qué funciona hoy y con qué prueba
 
-**Última revisión:** 26-nov-2026 (Madrid) · Claude (Code): **PR #109 fusionado** (commit `cda9cb3`, main). Verificado en producción: `curl -s https://quantum-holistic.com/ | grep -oi "quantum crypto\|generar mi plan\|la ia analiza" | wc -l` → **0**. Las tres frases ya no aparecen en el HTML de la portada. Anterior: 25-nov tercera pasada: privacidad, borrados, messages/en.json corregido. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
+**Última revisión:** 26-nov-2026 (Madrid) · Claude (Code): **PR chat-pulido abierto** (rama `claude/chat-pulido`, esperando ✅ Kristian). Cambio: `/terapeutas/papu` pasa de texto plano a enlace clicable `[consulta con Papu](/terapeutas/papu)` en el CIERRE de riesgo (`route.ts`) + mini-parser `renderText` en `chat/page.tsx` que convierte `[texto](/ruta)` en `<a>`. Pruebas 16/16 ✅. Build ✅. **Pasiflora en Supabase: no existe** — 0 filas con nombre_es/nombre_latino/slug que coincidan con "pasiflora" o "passiflora" en la tabla `plants` (57 filas totales); por eso el chat no la nombra. Anterior: PR #109 fusionado y verificado en producción. Historial: `git log -p ESTADO.md` · reglas en [`CLAUDE.md`](CLAUDE.md)
 
 Leyenda: ✅ funciona (probado) · ⚠️ funciona a medias · ❌ roto · ❓ sin verificar
 
