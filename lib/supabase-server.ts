@@ -2,8 +2,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 // Cliente Supabase para Server Components / Route Handlers (lee cookies de sesión).
-export function getSupabaseServerClient() {
-  const cookieStore = cookies();
+export async function getSupabaseServerClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
